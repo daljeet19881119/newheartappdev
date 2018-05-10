@@ -29,10 +29,10 @@
     <span class="usd-balance">(12,049.01 USD)</span>
     <ion-toolbar color="appColor" class="payment-toolbar">
         <ion-segment [(ngModel)]="icons" color="secondary" (click)="showTabs()">
-            <ion-segment-button value="camera" class="payment-segments">
+            <ion-segment-button value="payments" class="payment-segments">
                 <span>Latest Payments</span>
             </ion-segment-button>
-            <ion-segment-button value="bookmark" class="payment-segments">
+            <ion-segment-button value="donations" class="payment-segments">
                 <span>Latest Donations</span>
             </ion-segment-button>
         </ion-segment>
@@ -42,20 +42,20 @@
         <ion-list *ngFor="let donation of latestDonations" class="donation-lists">
             <ion-item class="donation-items">
                 <ion-avatar item-start class="ngo-avatar">
-                    <img [src]="donation.img" class="ngo-img" (click)="gotoProfile()">
+                    <img [src]="donation.ngo_founder_img" class="ngo-img" (click)="gotoProfilePage(donation.id)">
                 </ion-avatar>
                 <ion-row>
                     <ion-col col-6>
-                        <h2 class="ngo-name">{{donation.name}}</h2>
+                        <h2 class="ngo-name">{{donation.ngo_name}}</h2>
                         <p class="ngo-date">{{donation.date}}</p>
                     </ion-col>
                     <ion-col col-6 style="text-align: right;">
                         <p>
                             <ion-icon name="heart-outline" class="heart-small-icon"></ion-icon> 
-                            <span class="heart-coin">{{donation.heartCoin}}</span> 
-                            <span class="heart-coin">(${{donation.usd}})</span>
+                            <span class="heart-coin">{{donation.heart_amount}}</span> 
+                            <span class="heart-coin">(${{donation.us_amount}})</span>
                         </p>
-                        <p class="ngo-total">{{donation.total}}</p>
+                        <p class="ngo-total">10,048.39</p>
                     </ion-col>
                 </ion-row>                
             </ion-item>

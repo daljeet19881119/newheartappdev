@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { NavController, MenuController } from 'ionic-angular';
+import { NavController, MenuController, NavParams } from 'ionic-angular';
 import { ProfilePage } from '../profile/profile';
-
+import { Http } from '@angular/http';
+import 'rxjs/add/operator/map';
 
 @Component({
   selector: 'page-home',
@@ -10,18 +11,22 @@ import { ProfilePage } from '../profile/profile';
 export class HomePage {
 
   // icons
-  icons: string = 'camera';
+  icons: string = 'donations';
 
   // latestDonations
-  latestDonations: any = [
-    {img: 'assets/imgs/founder_Juccce.jpg', name: 'Juccce', date: '5/05/2018', heartCoin: 100, usd: '25.00', total: '10,048.39'},
-    {img: 'assets/imgs/founder_OpenCity.jpg', name: 'Open City', date: '5/05/2018', heartCoin: 300, usd: '75.00', total: '10,048.39'},
-    {img: 'assets/imgs/founder_ReviveCongo.jpg', name: 'Revive Congo', date: '5/05/2018', heartCoin: 10, usd: '25.00', total: '10,048.39'},
-    {img: 'assets/imgs/founder_SaveTheChildren.png', name: 'Save The Children', date: '5/05/2018', heartCoin: 300, usd: '75.00', total: '10,048.39'}
-  ];
+  latestDonations: any;
 
-  constructor(public navCtrl: NavController, public menuCtrl: MenuController) {
-    
+  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, private http: Http) {
+
+    // request data from server
+    this.http.get('http://ionic.dsl.house/heartAppApi/new-latest-donations.php').map(res => res.json()).subscribe(data => {
+      
+      // store requested data in the latestDonations
+      this.latestDonations = data;
+      // console.log(data);
+    }, err => {
+      console.log('Oops!');
+    });
   }
 
   // showTabs
@@ -29,8 +34,12 @@ export class HomePage {
     console.log('you selected: '+this.icons);
   }
 
-  // gotoProfile
-  gotoProfile() {
-    this.navCtrl.push(ProfilePage);
+  // gotoProfilePage
+  gotoProfilePage(id: number) {
+
+    // send param and goto profile page
+    this.navCtrl.push(ProfilePage, {
+      id: id
+    });
   }
 }
