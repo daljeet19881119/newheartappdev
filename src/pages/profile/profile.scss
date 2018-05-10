@@ -1,0 +1,83 @@
+page-profile {
+    .heart-icon{
+        transform: rotate(270deg);
+        font-size: 30px;
+        color: #fff;
+        font-weight: bold;
+    }
+    .header-pay{
+        position: absolute;
+        float: right;
+        top: 12px;
+        right: 15px;
+        font-weight: 400;
+        color: #fff;
+    }
+    .upper-empty-container{
+        background: #ae0433;
+        min-height: 100px;
+    }
+    .founder-img{
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+    }
+    .founder-img-div{
+        margin-top: -50px;
+    }
+    .founder-name{
+        margin: 10px 0 5px 0; 
+        text-align: center;
+        font-weight: 500;
+        color: #ae0433;
+    }
+    .ngo-name{
+        font-size: 17px;
+        text-align: center;
+        margin: 0px;
+        color: #ae0433;
+    }
+    .lists-part{
+        margin: 20px 0;
+    }
+    .ngo-list{
+        margin: 0px;
+    }
+    .list-item{
+        border: none!important;
+    }
+    .list-item.campaigns{
+        border-top: 2px solid #f3f3f3!important;
+    }
+    .list-item.community{
+        border: 1px solid #f3f3f3!important;
+    }
+    .list-item.contributors{
+        border-bottom: 1px solid #f3f3f3!important;
+    }
+    .list-item.team{
+        border-bottom: 2px solid #f3f3f3!important;
+    }
+    .count{
+        float: right;
+    }
+    .list-text-color{
+        color: #ae0433;
+    }
+    .count-arrow{
+        margin-left: 5px;
+    }
+    iframe{
+        width: 100%;
+        height: 100%;
+    }
+    .media{
+        text-align: center;
+        margin: 0px 0 10px 0;
+        font-size: 17px;
+    }
+    
+}

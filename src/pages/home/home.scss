@@ -1,3 +1,107 @@
 page-home {
-
+    .heart-col{
+        text-align: center;
+    }
+    .heart-icon{
+        transform: rotate(270deg);
+        font-size: 30px;
+        color: #fff;
+        font-weight: bold;
+    }
+    .header-pay{
+        position: absolute;
+        float: right;
+        top: 12px;
+        right: 15px;
+        font-weight: 400;
+        color: #fff;
+    }
+    .heart-balance{
+        transform: rotate(270deg);
+    }
+    .upper-part{
+        background: #ae0433;
+        padding: 25px 0 5px 0px;
+    }
+    span.upper-text{
+        margin: 2px 0;
+        font-weight: 100;
+        font-size: 18px;
+        color: #fff;
+        text-align: center;
+        display: block;
+    }
+    .balance-para{
+        text-align: center;
+        color: #fff;
+        font-size: 30px;
+        display: block;
+        margin: 5px 0px;
+    }
+    .heart-balance{
+        font-size: 25px;
+    }
+    .usd-balance{
+        text-align: center;
+        display: block;
+        color: #fff;
+        margin: 10px 0;
+        font-weight: 100;
+    }
+    .payment-segments{
+        border-color: #fff!important;
+        color: #fff!important;
+    }
+    .payment-segments.segment-button{
+        max-width: 80%!important;
+        margin: 0px 5%;
+    }
+    .payment-segments.segment-activated{
+        background-color: #fff!important;  
+        color: #ae0433!important;      
+    }
+    .payment-toolbar{
+        margin-top: 30px;
+    }
+    .app-header{
+        border-width: 0px!important;
+    }
+    .toolbar-background{
+        border-width: 0px!important;
+    }
+    .donation-lists{
+        margin: 0px!important;
+    }
+    .donation-items{
+        border-top: 0px!important;
+        border-bottom: 2px solid #f3f3f3!important;
+    }
+    .ngo-avatar{
+        border: 2px solid #ae0433;
+        border-radius: 50%;
+    }
+    .ngo-img{
+        width: 50px!important;
+        height: 50px!important;
+    }
+    .ngo-name{
+        color: #ae0433;    
+    }
+    .ngo-date{
+        margin: 5px 0;
+    }
+    .heart-small-icon{
+        transform: rotate(270deg);
+        color: #ae0433;
+        font-size: 14px;
+        font-weight: bold;
+    }
+    .heart-coin{
+        color: #ae0433;
+        font-size: 16px;
+    }
+    .ngo-total{
+        margin: 5px 0;
+    }
+    
 }

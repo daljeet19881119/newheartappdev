@@ -1,14 +1,64 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
+  <ion-navbar color="appColor">
+    <ion-row>
+        <ion-col col-4 class="menu-col">
+            <ion-buttons>
+                <button ion-button icon-only menuToggle>
+                    <ion-icon name="menu"></ion-icon>
+                </button>
+            </ion-buttons>
+        </ion-col>
+        <ion-col col-4 class="heart-col">
+            <ion-icon name="heart-outline" class="heart-icon"></ion-icon>
+        </ion-col>
+        <ion-col col-4 class="pay-col">
+            <span class="header-pay">Pay</span>
+        </ion-col>
+    </ion-row>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+<ion-content no-padding>
+  <div class="upper-part">
+    <span class="upper-text">Good afternoon, Guy!</span>
+    <span class="upper-text">Your account balance is</span>
+    <p class="balance-para">
+        <ion-icon name="heart-outline" class="heart-balance"></ion-icon> 
+        <span class="balance">10,048.39</span>
+    </p>
+    <span class="usd-balance">(12,049.01 USD)</span>
+    <ion-toolbar color="appColor" class="payment-toolbar">
+        <ion-segment [(ngModel)]="icons" color="secondary" (click)="showTabs()">
+            <ion-segment-button value="camera" class="payment-segments">
+                <span>Latest Payments</span>
+            </ion-segment-button>
+            <ion-segment-button value="bookmark" class="payment-segments">
+                <span>Latest Donations</span>
+            </ion-segment-button>
+        </ion-segment>
+    </ion-toolbar>
+  </div>
+  <div class="list-part">
+        <ion-list *ngFor="let donation of latestDonations" class="donation-lists">
+            <ion-item class="donation-items">
+                <ion-avatar item-start class="ngo-avatar">
+                    <img [src]="donation.img" class="ngo-img" (click)="gotoProfile()">
+                </ion-avatar>
+                <ion-row>
+                    <ion-col col-6>
+                        <h2 class="ngo-name">{{donation.name}}</h2>
+                        <p class="ngo-date">{{donation.date}}</p>
+                    </ion-col>
+                    <ion-col col-6 style="text-align: right;">
+                        <p>
+                            <ion-icon name="heart-outline" class="heart-small-icon"></ion-icon> 
+                            <span class="heart-coin">{{donation.heartCoin}}</span> 
+                            <span class="heart-coin">(${{donation.usd}})</span>
+                        </p>
+                        <p class="ngo-total">{{donation.total}}</p>
+                    </ion-col>
+                </ion-row>                
+            </ion-item>
+        </ion-list>
+  </div>
 </ion-content>
