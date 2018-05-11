@@ -1,17 +1,18 @@
 <ion-header>
   <ion-navbar color="appColor">
     <ion-row>
-        <ion-col col-4 class="menu-col">
+        <ion-col col-4 class="menu-col" no-padding>
             <ion-buttons>
                 <button ion-button icon-only menuToggle>
                     <ion-icon name="menu"></ion-icon>
                 </button>
             </ion-buttons>
         </ion-col>
-        <ion-col col-4 class="heart-col">
-            <ion-icon name="heart-outline" class="heart-icon"></ion-icon>
+        <ion-col col-4 class="heart-col" no-padding>
+            <!-- <ion-icon name="heart-outline" class="heart-icon"></ion-icon> -->
+            <div class="logo-div" style="background: url('assets/imgs/logo.png');"></div>
         </ion-col>
-        <ion-col col-4 class="pay-col">
+        <ion-col col-4 class="pay-col" no-padding>
             <span class="header-pay">Pay</span>
         </ion-col>
     </ion-row>
