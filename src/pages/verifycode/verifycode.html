@@ -1,0 +1,15 @@
+<ion-header>
+  <ion-navbar color="appColor">
+    <ion-title style="text-align: center;">Verify Code</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <p>We've sent an SMS with an activation code to your phone <b>+{{country+' '+mobileno}}</b>.</p>
+  <ion-item>
+    <ion-input type="text" placeholder="Code" (ionBlur)="checkVerifyCode(code)" [(ngModel)]="code"></ion-input>
+  </ion-item>
+  <p>This is your verification code <b>{{this.verifyCode}}</b> please enter</p>
+  <p>The verification will show for only testing and development purpose. But when app will live verification will recieved on entered mobile no.</p>
+</ion-content>

@@ -8,12 +8,20 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ProfilePage } from '../pages/profile/profile';
 import { HttpModule } from '@angular/http';
+import { VerifynumberPage } from '../pages/verifynumber/verifynumber';
+import { WelcomePage } from '../pages/welcome/welcome';
+import { VerifycodePage } from '../pages/verifycode/verifycode';
+import { UserinfoPage } from '../pages/userinfo/userinfo';
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    ProfilePage
+    ProfilePage,
+    VerifynumberPage,
+    WelcomePage,
+    VerifycodePage,
+    UserinfoPage
   ],
   imports: [
     BrowserModule,
@@ -24,7 +32,11 @@ import { HttpModule } from '@angular/http';
   entryComponents: [
     MyApp,
     HomePage,
-    ProfilePage
+    ProfilePage,
+    VerifynumberPage,
+    WelcomePage,
+    VerifycodePage,
+    UserinfoPage
   ],
   providers: [
     StatusBar,

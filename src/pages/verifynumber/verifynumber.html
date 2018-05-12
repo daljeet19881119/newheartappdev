@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-navbar color="appColor">
+    <ion-title style="text-align: center;">Phone Verification</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+    <ion-item>
+        <ion-label>Select Country</ion-label>
+        <ion-select [(ngModel)]="country">
+          <ion-option value="91">India</ion-option>
+          <ion-option value="1">USA</ion-option>
+        </ion-select>
+      </ion-item>
+    <ion-grid>
+      <ion-row>
+        <ion-col col-5>
+          <ion-item>
+            <ion-label>+</ion-label>
+            <ion-input type="text" value="{{country}}"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col col-7>
+          <ion-item>
+            <ion-input type="text" [(ngModel)]="mobileno"></ion-input>
+          </ion-item>          
+        </ion-col>
+      </ion-row>
+    </ion-grid>  
+    <button ion-button block style="margin-left: auto;margin-right: auto;display: block;" (click)="validateNumber()" color="appColor">Next</button>
+</ion-content>
