@@ -12,6 +12,7 @@ import { VerifynumberPage } from '../pages/verifynumber/verifynumber';
 import { WelcomePage } from '../pages/welcome/welcome';
 import { VerifycodePage } from '../pages/verifycode/verifycode';
 import { UserinfoPage } from '../pages/userinfo/userinfo';
+import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { UserinfoPage } from '../pages/userinfo/userinfo';
   ],
   providers: [
     StatusBar,
-    SplashScreen,    
+    SplashScreen, 
+    UniqueDeviceID,   
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

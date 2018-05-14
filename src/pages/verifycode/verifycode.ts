@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController, AlertController } from 'ionic-angular';
 import { Http } from '@angular/http';
+import 'rxjs/add/operator/map';
 import { UserinfoPage } from '../userinfo/userinfo';
+import { HomePage } from '../home/home';
 
 /**
  * Generated class for the VerifycodePage page.
@@ -43,8 +45,17 @@ export class VerifycodePage {
         // verify user
         this.verifyUser(code);
 
+        let page: any;
+        // check if userExists
+        if(this.navParams.get('userExists') == 'true')
+        {
+          page = HomePage;
+        }else{
+          page = UserinfoPage;
+        }
+
         // gotoUserinfoPage
-        const modal = this.modalCtrl.create(UserinfoPage, {
+        const modal = this.modalCtrl.create(page, {
                   mobileno: this.mobileno,
                   country: this.country                      
               });
