@@ -98,4 +98,19 @@ page-profile {
     .profile-nav .toolbar-background{
         border-color: #ae0433!important;
     }
+    .iframe-div{
+        height: 150px;
+        background-position: center;
+        background-size: cover;
+        position: relative;
+    }
+    .youtube-img{
+        width: 70px;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+        position: absolute;
+        left: 40%;
+        top: 27%;
+    }
 }

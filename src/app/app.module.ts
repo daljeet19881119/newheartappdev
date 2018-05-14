@@ -13,6 +13,7 @@ import { WelcomePage } from '../pages/welcome/welcome';
 import { VerifycodePage } from '../pages/verifycode/verifycode';
 import { UserinfoPage } from '../pages/userinfo/userinfo';
 import { UniqueDeviceID } from '@ionic-native/unique-device-id';
+import { YtvideoPage } from '../pages/ytvideo/ytvideo';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { UniqueDeviceID } from '@ionic-native/unique-device-id';
     VerifynumberPage,
     WelcomePage,
     VerifycodePage,
-    UserinfoPage
+    UserinfoPage,
+    YtvideoPage
   ],
   imports: [
     BrowserModule,
@@ -37,7 +39,8 @@ import { UniqueDeviceID } from '@ionic-native/unique-device-id';
     VerifynumberPage,
     WelcomePage,
     VerifycodePage,
-    UserinfoPage
+    UserinfoPage,
+    YtvideoPage
   ],
   providers: [
     StatusBar,

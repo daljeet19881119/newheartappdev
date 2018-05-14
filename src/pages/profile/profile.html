@@ -51,7 +51,9 @@
     <div class="media-div" padding>
         <p class="list-text-color media">Media</p>
         <div class="ytvideo">
-            <iframe src="https://www.youtube.com/embed/iJr16_Wwcqg" frameborder="0" allowfullscreen sandbox="allow-same-origin allow-scripts"></iframe>
+            <div class="iframe-div" [style.backgroundImage]="'url('+ getYoutubeVideoImgUrl() +')'">
+                <img src="assets/imgs/youtube.png" alt="Youtube" class="youtube-img" (click)="showFullVideo()">
+            </div>
         </div>
     </div>
 </ion-content>
