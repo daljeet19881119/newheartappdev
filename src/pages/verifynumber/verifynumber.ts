@@ -50,16 +50,21 @@ export class VerifynumberPage {
     if(this.mobileno === null)
     {
       // create alert
-      let errAlert = this.alertCtrl.create({
-        message: 'please enter your number',
-        buttons: ['ok']
-      });
-      errAlert.present();
+      alert('please enter your number');
     }
     else
     {
-      // sendSMS
-      this.sendSMS();
+      let mobileno = Number(this.mobileno);
+      // check if mobileno is not a string then sendSMS
+      if(!isNaN(mobileno))
+      {
+        // sendSMS
+        this.sendSMS();
+      }
+      else{
+        alert('Please enter valid number');
+      }
+      
     }
   }
 
@@ -99,13 +104,6 @@ export class VerifynumberPage {
         });
         modal.present();
         
-      }
-      else
-      {
-          let loader = this.loadingCtrl.create({
-            content: "Please wait..."
-          });
-        loader.present();
       } 
     }, err => {
       console.log('Oops!');

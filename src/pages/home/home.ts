@@ -11,10 +11,14 @@ import 'rxjs/add/operator/map';
 export class HomePage {
 
   // icons
-  icons: string = 'donations';
+  latestTabs: string = 'donations';
 
   // latestDonations
   latestDonations: any;
+
+  // latestPayments array
+  latestPayments: any;
+  heloWish: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, private http: Http) {
 
@@ -27,11 +31,35 @@ export class HomePage {
     }, err => {
       console.log('Oops!');
     });
+
+    // request data from server
+    this.http.get("http://ionic.dsl.house/heartAppApi/new-latest-payments.php").map(res => res.json()).subscribe(data => {
+      this.latestPayments = data;
+      // console.log(this.latestPayments);
+      },
+      err => {
+      console.log('Oops!');
+      });
+
+      // date object to store heloWish
+      let d = new Date();
+      if(d.getHours() < 12){
+       this.heloWish = 'Good morning';
+      }
+      if(d.getHours() >= 12 && d.getHours() < 17){
+        this.heloWish = 'Good afternoon';
+      }
+      if(d.getHours() >= 17 && d.getHours() < 20){
+        this.heloWish = 'Good evening';
+      }
+      if(d.getHours() >= 20 && d.getHours() < 6){
+        this.heloWish = 'Good night';
+      }
   }
 
   // showTabs
   showTabs() {
-    console.log('you selected: '+this.icons);
+    console.log('you selected: '+this.latestTabs);
   }
 
   // gotoProfilePage

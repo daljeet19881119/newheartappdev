@@ -21,7 +21,7 @@
 
 <ion-content no-padding>
   <div class="upper-part">
-    <span class="upper-text">Good afternoon, Guy!</span>
+    <span class="upper-text">{{heloWish}}, Guy!</span>
     <span class="upper-text">Your account balance is</span>
     <p class="balance-para">
         <ion-icon name="heart-outline" class="heart-balance"></ion-icon> 
@@ -29,7 +29,7 @@
     </p>
     <span class="usd-balance">(12,049.01 USD)</span>
     <ion-toolbar color="appColor" class="payment-toolbar">
-        <ion-segment [(ngModel)]="icons" (click)="showTabs()">
+        <ion-segment [(ngModel)]="latestTabs" (click)="showTabs()">
             <ion-segment-button value="payments" class="payment-segments">
                 <span>Latest Payments</span>
             </ion-segment-button>
@@ -39,27 +39,52 @@
         </ion-segment>
     </ion-toolbar>
   </div>
-  <div class="list-part">
-        <ion-list *ngFor="let donation of latestDonations" class="donation-lists">
-            <ion-item class="donation-items">
-                <ion-avatar item-start class="ngo-avatar">
-                    <img [src]="donation.ngo_founder_img" class="ngo-img" (click)="gotoProfilePage(donation.id)">
-                </ion-avatar>
-                <ion-row>
-                    <ion-col col-6>
-                        <h2 class="ngo-name">{{donation.ngo_name}}</h2>
-                        <p class="ngo-date">{{donation.date}}</p>
-                    </ion-col>
-                    <ion-col col-6 style="text-align: right;">
-                        <p>
-                            <ion-icon name="heart-outline" class="heart-small-icon"></ion-icon> 
-                            <span class="heart-coin">{{donation.heart_amount}}</span> 
-                            <span class="heart-coin">(${{donation.us_amount}})</span>
-                        </p>
-                        <p class="ngo-total">10,048.39</p>
-                    </ion-col>
-                </ion-row>                
-            </ion-item>
-        </ion-list>
-  </div>
+    <!-- switch case part -->
+    <div [ngSwitch]="latestTabs">
+        <div class="list-part" *ngSwitchCase="'donations'">
+            <ion-list *ngFor="let donation of latestDonations" class="donation-lists">
+                <ion-item class="donation-items">
+                    <ion-avatar item-start class="ngo-avatar">
+                        <img [src]="donation.ngo_founder_img" class="ngo-img" (click)="gotoProfilePage(donation.id)">
+                    </ion-avatar>
+                    <ion-row>
+                        <ion-col col-6>
+                            <h2 class="ngo-name">{{donation.ngo_name}}</h2>
+                            <p class="ngo-date">{{donation.date}}</p>
+                        </ion-col>
+                        <ion-col col-6 style="text-align: right;">
+                            <p>
+                                <ion-icon name="heart-outline" class="heart-small-icon"></ion-icon> 
+                                <span class="heart-coin">{{donation.heart_amount}}</span> 
+                                <span class="heart-coin">(${{donation.us_amount}})</span>
+                            </p>
+                            <p class="ngo-total">10,048.39</p>
+                        </ion-col>
+                    </ion-row>                
+                </ion-item>
+            </ion-list>
+        </div>
+        <div [ngSwitch]="latestTabs">
+            <div style="overflow-x:auto;" *ngSwitchCase="'payments'">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Bal.</th>
+                            <th>Amount</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let payment of latestPayments">
+                            <td>{{payment.date}}</td>
+                            <td><ion-icon name="heart-outline" class="heart-symbol"></ion-icon> {{payment.balance}}</td>
+                            <td><ion-icon name="heart-outline" class="heart-symbol"></ion-icon> {{payment.heart_amount}} {{'($'+payment.us_amount+')'}}</td>
+                            <td>{{payment.type}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </ion-content>
