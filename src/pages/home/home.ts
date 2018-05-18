@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, MenuController, NavParams } from 'ionic-angular';
+import { NavController, MenuController, NavParams, Platform } from 'ionic-angular';
 import { ProfilePage } from '../profile/profile';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
@@ -20,7 +20,7 @@ export class HomePage {
   latestPayments: any;
   heloWish: string;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, private http: Http) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, private http: Http, public platform: Platform) {
 
     // request data from server
     this.http.get('http://ionic.dsl.house/heartAppApi/new-latest-donations.php').map(res => res.json()).subscribe(data => {
@@ -55,6 +55,11 @@ export class HomePage {
       if(d.getHours() >= 20 && d.getHours() < 6){
         this.heloWish = 'Good night';
       }
+
+      // if user try to go back then exitapp
+      this.platform.registerBackButtonAction(() => {
+        platform.exitApp();
+      });
   }
 
   // showTabs

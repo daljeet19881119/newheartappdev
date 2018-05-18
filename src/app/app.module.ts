@@ -14,6 +14,7 @@ import { VerifycodePage } from '../pages/verifycode/verifycode';
 import { UserinfoPage } from '../pages/userinfo/userinfo';
 import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 import { YtvideoPage } from '../pages/ytvideo/ytvideo';
+import { ScreenOrientation } from '@ionic-native/screen-orientation';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { YtvideoPage } from '../pages/ytvideo/ytvideo';
   providers: [
     StatusBar,
     SplashScreen, 
-    UniqueDeviceID,   
+    UniqueDeviceID,
+    ScreenOrientation,   
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

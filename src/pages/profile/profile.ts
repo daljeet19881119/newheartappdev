@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angu
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { YtvideoPage } from '../ytvideo/ytvideo';
+import { ScreenOrientation } from '@ionic-native/screen-orientation';
 
 @IonicPage()
 @Component({
@@ -22,7 +23,7 @@ export class ProfilePage {
   youtubeUrl: string = 'https://www.youtube.com/embed/';
   ngoYoutubeId: string = 'iJr16_Wwcqg';
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, private modalCtrl: ModalController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, private modalCtrl: ModalController, private screenOrientation: ScreenOrientation) {
   }
 
   ionViewDidLoad() {
@@ -47,6 +48,7 @@ export class ProfilePage {
     }, err => {
       console.log('Oops!');
     });
+
   }
 
   // getYoutubeVideoImgUrl
@@ -57,11 +59,23 @@ export class ProfilePage {
 
   // showFullVideo
   showFullVideo() {
-    // store youtube video url
-    let videoUrl = this.youtubeUrl + this.ngoYoutubeId;
-    console.log(videoUrl);
-    let viewModal = this.modalCtrl.create(YtvideoPage, {videoUrl: videoUrl});
-    viewModal.present();
-  }
 
+     // detect orientation changes
+     this.screenOrientation.onChange().subscribe(
+      () => {
+          // alert("Orientation Changed to : "+this.screenOrientation.type);
+
+          // check if screen is in landscape
+          if(this.screenOrientation.ORIENTATIONS.LANDSCAPE)
+          {
+             // store youtube video url
+            let videoUrl = this.youtubeUrl + this.ngoYoutubeId;
+            let viewModal = this.modalCtrl.create(YtvideoPage, {videoUrl: videoUrl});
+            viewModal.present();
+          }
+      }
+    );
+
+   
+  }
 }

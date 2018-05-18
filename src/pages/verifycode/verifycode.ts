@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, AlertController, Platform } from 'ionic-angular';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { UserinfoPage } from '../userinfo/userinfo';
@@ -12,6 +12,7 @@ import { HomePage } from '../home/home';
  * Ionic pages and navigation.
  */
 
+ 
 @IonicPage()
 @Component({
   selector: 'page-verifycode',
@@ -25,7 +26,12 @@ export class VerifycodePage {
   code: number;
   verifyCode: number;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, private modalCtrl: ModalController, private alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, private modalCtrl: ModalController, private alertCtrl: AlertController, public platform: Platform) {
+
+    // if user try goback then exit app
+    this.platform.registerBackButtonAction(() => {
+      platform.exitApp();
+    });
   }
 
   ionViewDidLoad() {

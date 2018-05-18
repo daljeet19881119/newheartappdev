@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, ModalController, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, ModalController, Platform } from 'ionic-angular';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { HomePage } from '../home/home';
+import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 
 /**
  * Generated class for the UserinfoPage page.
@@ -24,11 +25,20 @@ export class UserinfoPage {
   dob: string = null;
   name: string = null;
   email: string = null;
-  mobileno: number;
-  country: number;
+  mobileno: number = null;
+  country: number = null;
   profileStatus: string = null;
+  uuid: any = null;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private http: Http, private loadingCtrl: LoadingController, private modalCtrl: ModalController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private http: Http, private modalCtrl: ModalController, public platform: Platform, private uniqueDeviceID: UniqueDeviceID) {
+
+    // if user try goback then exit app
+    this.platform.registerBackButtonAction(() => {
+      platform.exitApp();
+    });
+
+    // call getDeviceID
+    this.getDeviceID();
   }
 
   ionViewDidLoad() {
@@ -52,9 +62,29 @@ export class UserinfoPage {
         alert.present();
     }
     else{
-      // make server request
-      this.makeServerRequest();
+
+      // check if mobileno and coutnry not empty then 
+      if(this.mobileno !== null && this.country !== null)
+      {
+        // make server request
+         this.makeServerRequest();
+      }
+      
     }
+  }
+
+  // getDeviceID
+  getDeviceID() {
+    this.uniqueDeviceID.get()
+      .then((uuid: any) => {
+        this.uuid = uuid;  
+        
+        // call requestData
+        this.requestData();
+      })
+      .catch((error: any) => {
+        console.log(error);
+      });
   }
 
   // makeServerRequest
@@ -64,21 +94,27 @@ export class UserinfoPage {
       console.log(data);
 
       // check if profileStatus is null
-      if(this.profileStatus !== null)
+      if(this.profileStatus !== null && this.profileStatus =='verified')
       {
         // gotodashboard
         const modal = this.modalCtrl.create(HomePage);
         modal.present();
       }
-      else{
-          const loader = this.loadingCtrl.create({
-              content: "Please wait..."
-          });
-          loader.present();
-      }
 
     }, error => {
       console.log('Oops!');
+    });
+  }
+
+  // requestData
+  requestData() {
+
+    this.http.get('http://ionic.dsl.house/heartAppApi/get-verified-user.php?uuid='+this.uuid).map(res => res.json()).subscribe(data => {
+      this.mobileno = data.data.mobileno;
+      this.country = data.data.country;
+      
+    }, error => {
+      console.log(error);
     });
   }
 }

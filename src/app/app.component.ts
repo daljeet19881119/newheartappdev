@@ -7,6 +7,7 @@ import 'rxjs/add/operator/map';
 import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 import { WelcomePage } from '../pages/welcome/welcome';
 import { HomePage } from '../pages/home/home';
+import { UserinfoPage } from '../pages/userinfo/userinfo';
 
 
 @Component({
@@ -33,7 +34,8 @@ export class MyApp {
   getDeviceID() {
     this.uniqueDeviceID.get()
       .then((uuid: any) => {
-        this.uuid = uuid; 
+        this.uuid = uuid;  
+        
         // call requestData
         this.requestData();
       })
@@ -46,15 +48,20 @@ export class MyApp {
   requestData() {
 
     this.http.get('http://ionic.dsl.house/heartAppApi/get-verified-user.php?uuid='+this.uuid).map(res => res.json()).subscribe(data => {
-      console.log(data);
-      
-      if(this.uuid === data.data.uuid)
+      // console.log(data);
+
+      if(data.data.verification =='notVerified' && data.data.profile_status=='notVerified'){
+        this.rootPage = WelcomePage;
+      }
+      if(data.data.verification =='verified' && data.data.profile_status=='notVerified') {
+        this.rootPage = UserinfoPage;
+      }
+      if(data.data.verification =='verified' && data.data.profile_status=='verified') 
       {
         this.rootPage = HomePage;
       }
-      else{
-        this.rootPage = WelcomePage;
-      }
+     
+      
       
     }, error => {
       console.log(error);
