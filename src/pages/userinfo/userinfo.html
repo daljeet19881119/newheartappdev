@@ -12,13 +12,10 @@
       <ion-item>
         <ion-label>Type of user</ion-label>
         <ion-select [(ngModel)]="userType">
-          <ion-option value="shopper">Shopper</ion-option>
-          <ion-option value="non-profit member">Non-profit member (Big heart)</ion-option>
-          <ion-option value="volunteer">Volunteer</ion-option>
+          <ion-option value="interested volunteering">I’m interested volunteering</ion-option>
+          <ion-option value="merchant">I’m a merchant</ion-option>
         </ion-select>
       </ion-item>
-    </ion-list>
-    <ion-list>
       <ion-item>
         <ion-label floating>Name</ion-label>
         <ion-input type="text" [(ngModel)]="name"></ion-input>
@@ -27,26 +24,39 @@
         <ion-label floating>Email</ion-label>
         <ion-input type="email" [(ngModel)]="email"></ion-input>
       </ion-item>
-      <ion-item>
-        <ion-label>Gender</ion-label>
-        <ion-select [(ngModel)]="gender">
-          <ion-option value="male">Male</ion-option>
-          <ion-option value="female">Female</ion-option>
-        </ion-select>
-      </ion-item>
+      <ion-row radio-group [(ngModel)]="gender">
+          <ion-col no-padding>
+            <ion-item style="color: #999999;">
+              Gender
+            </ion-item>
+          </ion-col>
+          <ion-col no-padding>
+            <ion-item>
+              <ion-label>Male</ion-label>
+              <ion-radio value="male"></ion-radio>
+            </ion-item>
+          </ion-col>
+          <ion-col no-padding>
+            <ion-item>
+             <ion-label>Female</ion-label>
+              <ion-radio value="female"></ion-radio>
+            </ion-item>
+          </ion-col>
+        </ion-row>
       <ion-item>
           <ion-label>Date of Birth</ion-label>
-          <ion-datetime displayFormat="DD-MM-YYYY" [(ngModel)]="dob"></ion-datetime>
+          <ion-datetime displayFormat="MMM D, YYYY" [(ngModel)]="dob"></ion-datetime>
         </ion-item>
       <ion-item>
         <ion-label>Type of charities</ion-label>
-        <ion-select [(ngModel)]="charityType">
+        <ion-select [(ngModel)]="charityType" multiple="true">
           <ion-option value="animal charities">Animal Charities</ion-option>
           <ion-option value="environmental charities">Environmental Charities</ion-option>
           <ion-option value="international ngos">International NGOs</ion-option>
           <ion-option value="health charities">Health Charities</ion-option>
           <ion-option value="education charities">Education Charities</ion-option>
           <ion-option value="art and culture charities">Arts & Culture Charties</ion-option>
+          <ion-option value="geographic preference">Geographic Preference(s)</ion-option>
         </ion-select>
       </ion-item>
     </ion-list>

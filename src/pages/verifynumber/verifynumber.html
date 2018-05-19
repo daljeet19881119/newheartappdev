@@ -18,12 +18,12 @@
         <ion-col col-5>
           <ion-item>
             <ion-label>+</ion-label>
-            <ion-input type="text" value="{{country}}"></ion-input>
+            <ion-input type="text" value="{{country}}" [readonly]="true"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col col-7>
           <ion-item>
-            <ion-input type="text" [(ngModel)]="mobileno"></ion-input>
+            <ion-input type="number" [(ngModel)]="mobileno"></ion-input>
           </ion-item>          
         </ion-col>
       </ion-row>

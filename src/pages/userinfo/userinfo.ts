@@ -19,7 +19,7 @@ import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 })
 export class UserinfoPage {
 
-  userType: string = 'shopper';
+  userType: string = 'interested volunteering';
   charityType: string = 'health charities';
   gender: string = 'male';
   dob: string = null;
@@ -55,8 +55,7 @@ export class UserinfoPage {
     if(this.dob ===null || this.name ===null || this.email ===null)
     {
         const alert = this.alertCtrl.create({
-          title: 'Heart App',
-          message: 'Please fill all fields',
+          message: 'We need a little more information about you. Please fill out all fields before continuing. <p>Thanks.</p>',
           buttons: ['ok']
         });
         alert.present();
