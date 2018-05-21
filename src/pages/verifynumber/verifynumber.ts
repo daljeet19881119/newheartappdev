@@ -4,6 +4,7 @@ import { VerifycodePage } from '../verifycode/verifycode';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { UniqueDeviceID } from '@ionic-native/unique-device-id';
+import { UserProvider } from '../../providers/user/user';
 
 /**
  * Generated class for the VerifynumberPage page.
@@ -24,8 +25,9 @@ export class VerifynumberPage {
   mobileno: number = null;
   verficationCode: any;
   uuid: any;
+  allCountries: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private alertCtrl: AlertController, private http: Http, private modalCtrl: ModalController, public loadingCtrl: LoadingController, private uniqueDeviceID: UniqueDeviceID, public platform: Platform) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private alertCtrl: AlertController, private http: Http, private modalCtrl: ModalController, public loadingCtrl: LoadingController, private uniqueDeviceID: UniqueDeviceID, public platform: Platform, public userService: UserProvider) {
 
     // call getuniqueDeviceID
     this.getuniqueDeviceID();
@@ -38,6 +40,14 @@ export class VerifynumberPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad VerifynumberPage');
+
+    // call user service provider
+    this.userService.getAllCountries().subscribe((country) => {
+      this.allCountries = country;
+      // console.log(country);
+    }, error => {
+      console.log('Oops!');
+    });
 
     // create alert on page load
     const alert = this.alertCtrl.create({

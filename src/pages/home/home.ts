@@ -3,6 +3,7 @@ import { NavController, MenuController, NavParams, Platform } from 'ionic-angula
 import { ProfilePage } from '../profile/profile';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
+import { UserProvider } from '../../providers/user/user';
 
 @Component({
   selector: 'page-home',
@@ -19,8 +20,9 @@ export class HomePage {
   // latestPayments array
   latestPayments: any;
   heloWish: string;
+  name: string = 'Loading...';
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, private http: Http, public platform: Platform) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, private http: Http, public platform: Platform, public userService: UserProvider) {
 
     // request data from server
     this.http.get('http://ionic.dsl.house/heartAppApi/new-latest-donations.php').map(res => res.json()).subscribe(data => {
@@ -59,6 +61,13 @@ export class HomePage {
       // if user try to go back then exitapp
       this.platform.registerBackButtonAction(() => {
         platform.exitApp();
+      });
+  }
+
+  ionViewDidLoad() {
+      // get login user data
+      this.userService.getUserByDeviceId().subscribe((data) => {
+        this.name = data.fname+' '+data.lname;
       });
   }
 

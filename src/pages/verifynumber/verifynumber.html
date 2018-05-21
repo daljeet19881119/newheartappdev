@@ -9,8 +9,9 @@
     <ion-item>
         <ion-label>Select Country</ion-label>
         <ion-select [(ngModel)]="country">
-          <ion-option value="91">India</ion-option>
-          <ion-option value="1">USA</ion-option>
+          <div class="countries-div" *ngFor="let countryName of allCountries">
+            <ion-option value="{{ countryName.dial_code }}">{{ countryName.name }}</ion-option>
+          </div>          
         </ion-select>
       </ion-item>
     <ion-grid>

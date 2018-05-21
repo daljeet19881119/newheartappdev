@@ -12,14 +12,18 @@
       <ion-item>
         <ion-label>Type of user</ion-label>
         <ion-select [(ngModel)]="userType">
-          <ion-option value="interested volunteering">I’m interested volunteering</ion-option>
-          <ion-option value="merchant">I’m a merchant</ion-option>
+          <ion-option value="shopper">Shopper</ion-option>
+          <ion-option value="non-profit member">Non-profit member (Big heart)</ion-option>
         </ion-select>
       </ion-item>
       <ion-item>
-        <ion-label floating>Name</ion-label>
-        <ion-input type="text" [(ngModel)]="name"></ion-input>
+        <ion-label floating>First Name</ion-label>
+        <ion-input type="text" [(ngModel)]="firstName"></ion-input>
       </ion-item>
+      <ion-item>
+          <ion-label floating>Last Name</ion-label>
+          <ion-input type="text" [(ngModel)]="lastName"></ion-input>
+        </ion-item>
       <ion-item>
         <ion-label floating>Email</ion-label>
         <ion-input type="email" [(ngModel)]="email"></ion-input>

@@ -23,7 +23,8 @@ export class UserinfoPage {
   charityType: string = 'health charities';
   gender: string = 'male';
   dob: string = null;
-  name: string = null;
+  firstName: string = null;
+  lastName: string = null;
   email: string = null;
   mobileno: number = null;
   country: number = null;
@@ -52,7 +53,7 @@ export class UserinfoPage {
   registerUser() {
 
     // check if all fields are not empty then register user
-    if(this.dob ===null || this.name ===null || this.email ===null)
+    if(this.dob ===null || this.firstName ===null || this.lastName ===null || this.email ===null)
     {
         const alert = this.alertCtrl.create({
           message: 'We need a little more information about you. Please fill out all fields before continuing. <p>Thanks.</p>',
@@ -88,7 +89,7 @@ export class UserinfoPage {
 
   // makeServerRequest
   makeServerRequest() {
-    this.http.get('http://ionic.dsl.house/heartAppApi/verify-users.php?profile_status=verified&user_type='+this.userType+'&name='+this.name+'&email='+this.email+'&gender='+this.gender+'&dob='+this.dob+'&charity_type='+this.charityType+'&c_code='+this.country+'&m_no='+this.mobileno).map(res => res.json()).subscribe(data => {
+    this.http.get('http://ionic.dsl.house/heartAppApi/verify-users.php?profile_status=verified&user_type='+this.userType+'&fname='+this.firstName+'&lname='+this.lastName+'&email='+this.email+'&gender='+this.gender+'&dob='+this.dob+'&charity_type='+this.charityType+'&c_code='+this.country+'&m_no='+this.mobileno).map(res => res.json()).subscribe(data => {
       this.profileStatus = data.data.profile_status;
       console.log(data);
 

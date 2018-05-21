@@ -15,6 +15,8 @@ import { UserinfoPage } from '../pages/userinfo/userinfo';
 import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 import { YtvideoPage } from '../pages/ytvideo/ytvideo';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
+import { UserProvider } from '../providers/user/user';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,7 @@ import { ScreenOrientation } from '@ionic-native/screen-orientation';
   imports: [
     BrowserModule,
     HttpModule,
+    HttpClientModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
@@ -48,7 +51,8 @@ import { ScreenOrientation } from '@ionic-native/screen-orientation';
     SplashScreen, 
     UniqueDeviceID,
     ScreenOrientation,   
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    UserProvider    
   ]
 })
 export class AppModule {}
