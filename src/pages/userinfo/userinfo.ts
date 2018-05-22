@@ -19,7 +19,7 @@ import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 })
 export class UserinfoPage {
 
-  userType: string = 'interested volunteering';
+  userType: string = 'shopper';
   charityType: string = 'health charities';
   gender: string = 'male';
   dob: string = null;

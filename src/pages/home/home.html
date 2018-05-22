@@ -18,7 +18,7 @@
         </ion-row>
     </ion-navbar>
     <div class="upper-part">
-        <span class="upper-text">{{heloWish}}, {{ name }}!</span>
+        <span class="upper-text">{{heloWish}}, {{ name }}</span>
         <span class="upper-text">Your account balance is</span>
         <p class="balance-para">
             <ion-icon name="heart-outline" class="heart-balance"></ion-icon> 
@@ -32,6 +32,9 @@
                 </ion-segment-button>
                 <ion-segment-button value="donations" class="payment-segments">
                     <span>Latest Donations</span>
+                </ion-segment-button>
+                <ion-segment-button value="big-hearts" class="payment-segments">
+                    <span>Recommended BigHearts</span>
                 </ion-segment-button>
             </ion-segment>
         </ion-toolbar>
@@ -59,7 +62,10 @@
                                     <span class="heart-coin">{{donation.heart_amount}}</span> 
                                     <span class="heart-coin">(${{donation.us_amount}})</span>
                                 </p>
-                                <p class="ngo-total">10,048.39</p>
+                                <p class="play-para">
+                                    <ion-icon name="play" class="play-icon"></ion-icon>
+                                    <span>Thankyou Message</span>
+                                </p>
                             </ion-col>
                         </ion-row>                
                     </ion-item>

@@ -17,6 +17,7 @@ import { YtvideoPage } from '../pages/ytvideo/ytvideo';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { UserProvider } from '../providers/user/user';
 import { HttpClientModule } from '@angular/common/http';
+import { PhotoViewer } from '@ionic-native/photo-viewer';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { HttpClientModule } from '@angular/common/http';
     UniqueDeviceID,
     ScreenOrientation,   
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    UserProvider    
+    UserProvider,
+    PhotoViewer    
   ]
 })
 export class AppModule {}

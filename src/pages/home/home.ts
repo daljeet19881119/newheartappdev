@@ -4,6 +4,7 @@ import { ProfilePage } from '../profile/profile';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { UserProvider } from '../../providers/user/user';
+import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 
 @Component({
   selector: 'page-home',
@@ -22,7 +23,7 @@ export class HomePage {
   heloWish: string;
   name: string = 'Loading...';
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, private http: Http, public platform: Platform, public userService: UserProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, private http: Http, public platform: Platform, public userService: UserProvider, private uniqueDeviceID: UniqueDeviceID) {
 
     // request data from server
     this.http.get('http://ionic.dsl.house/heartAppApi/new-latest-donations.php').map(res => res.json()).subscribe(data => {
@@ -62,13 +63,22 @@ export class HomePage {
       this.platform.registerBackButtonAction(() => {
         platform.exitApp();
       });
+
   }
 
   ionViewDidLoad() {
-      // get login user data
-      this.userService.getUserByDeviceId().subscribe((data) => {
-        this.name = data.fname+' '+data.lname;
-      });
+      // call func getDeviceID
+      this.uniqueDeviceID.get()
+      .then((uuid: any) => {
+
+        // get login user data
+        this.userService.getUserByDeviceId(uuid).subscribe((data) => {
+          this.name = data.data.fname+' '+data.data.lname;        
+        });
+      })
+      .catch((error: any) => {
+        console.log(error);
+      });    
   }
 
   // showTabs

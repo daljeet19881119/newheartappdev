@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 
 /*
   Generated class for the UserProvider provider.
@@ -13,10 +12,7 @@ import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 @Injectable()
 export class UserProvider {
 
-  uuid: any = null;
-
-  constructor(public httpClient: HttpClient, private _http: Http, private uniqueDeviceID: UniqueDeviceID) {
-    console.log('Hello UserProvider Provider');
+  constructor(public httpClient: HttpClient, private _http: Http) {
   }
 
   
@@ -26,18 +22,7 @@ export class UserProvider {
   }
 
   // getUserByDeviceId
-  getUserByDeviceId() {
-    return this._http.get('http://ionic.dsl.house/heartAppApi/get-verified-user.php?uuid='+this.uuid).map(res => res.json());
-  }
-
-  // getDeviceID
-  getDeviceID() {
-    this.uniqueDeviceID.get()
-      .then((uuid: any) => {
-        this.uuid = uuid;  
-      })
-      .catch((error: any) => {
-        console.log(error);
-      });
+  getUserByDeviceId(uuid: any) {
+    return this._http.get('http://ionic.dsl.house/heartAppApi/get-verified-user.php?uuid='+uuid).map(res => res.json());
   }
 }

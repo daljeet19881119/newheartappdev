@@ -21,7 +21,8 @@
     <div class="profile-info">
         <h2 class="founder-name">{{ ngoFounderName }}</h2>
         <p class="ngo-name">Co-Founder of {{ ngoName }}</p>
-    </div>
+        <p class="ngo-desc">{{ getWords()+'.....' }}</p>
+    </div>    
     <div class="lists-part">
         <ion-list class="ngo-list">
             <ion-item class="list-item campaigns">
@@ -51,9 +52,19 @@
     <div class="media-div" padding>
         <p class="list-text-color media">Media</p>
         <div class="ytvideo">
+            <!-- <div class="iframe-div" [style.backgroundImage]="'url('+ getYoutubeVideoImgUrl() +')'">
+                <img src="assets/imgs/youtube.png" alt="Youtube" class="youtube-img" (click)="showFullVideo()" *ngIf="ngoYoutubeId !==''">
+            </div> -->
             <div class="iframe-div" [style.backgroundImage]="'url('+ getYoutubeVideoImgUrl() +')'">
-                <img src="assets/imgs/youtube.png" alt="Youtube" class="youtube-img" (click)="showFullVideo()">
-            </div>
+                <iframe [src]="getIframeUrl()" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen *ngIf="ngoYoutubeId !==''"></iframe>
+            </div>       
         </div>
+        <ion-row>
+            <ng-container *ngFor="let familyImg of ngoFamilyImgs">
+                <ion-col col-3 class="family-imgs" *ngIf="ngoFamilyImgs?.length > 0">
+                    <div [style.backgroundImage]="'url('+ familyImg +')'" (click)="showFullImg(familyImg)"></div>
+                </ion-col>
+            </ng-container>
+        </ion-row>
     </div>
 </ion-content>
