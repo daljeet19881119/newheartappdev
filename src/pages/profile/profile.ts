@@ -27,6 +27,7 @@ export class ProfilePage {
   ngoDesc: string = 'Loading...';
   ngoFamilyImgs: string;
   ngoFamilyFirstImg: string = '';
+  showMore: string = 'true';
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, private modalCtrl: ModalController, private screenOrientation: ScreenOrientation, private photoViewer: PhotoViewer, private dom: DomSanitizer) {
   }
@@ -101,7 +102,18 @@ export class ProfilePage {
     // return this.ngoDesc.split(/\s+/).slice(0,16).join(" ");
 
     // return only 30 character
-    return this.ngoDesc.slice(0,100);
+    return this.ngoDesc.slice(0,80);
+  }
+
+  // show all words
+  showAllWords() {
+    document.getElementById('ngo-desc').innerHTML = this.ngoDesc;  
+    this.showMore = 'false';  
+  }
+
+  showLessWords() {
+    document.getElementById('ngo-desc').innerHTML = this.ngoDesc.slice(0,80)+'.....';
+    this.showMore = 'true'; 
   }
 
   // showFullImg

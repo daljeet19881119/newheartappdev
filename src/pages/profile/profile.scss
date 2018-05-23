@@ -123,4 +123,11 @@ page-profile {
         background-position: center;
         background-size: cover;
     }
+    span.read-more, span.read-less{
+        float: right;
+        margin-right: 20px;
+        margin-top: -15px;
+        font-size: 15px;
+        color: #ae0433;
+    }
 }

@@ -21,7 +21,13 @@
     <div class="profile-info">
         <h2 class="founder-name">{{ ngoFounderName }}</h2>
         <p class="ngo-name">Co-Founder of {{ ngoName }}</p>
-        <p class="ngo-desc">{{ getWords()+'.....' }}</p>
+        <p class="ngo-desc" id="ngo-desc">{{ getWords()+'.....' }}</p>
+        <span class="read-more" (click)="showAllWords()" *ngIf="showMore == 'true'">
+            <ion-icon name="arrow-dropdown"></ion-icon>
+        </span>
+        <span class="read-less" (click)="showLessWords()" *ngIf="showMore == 'false'">
+            <ion-icon name="arrow-dropup"></ion-icon> 
+        </span>  
     </div>    
     <div class="lists-part">
         <ion-list class="ngo-list">

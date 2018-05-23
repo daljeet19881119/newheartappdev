@@ -22,19 +22,19 @@
         <span class="upper-text">Your account balance is</span>
         <p class="balance-para">
             <ion-icon name="heart-outline" class="heart-balance"></ion-icon> 
-            <span class="balance">10,048.39</span>
+            <span class="balance">0.00</span>
         </p>
-        <span class="usd-balance">(12,049.01 USD)</span>
+        <span class="usd-balance">(0.00 USD)</span>
         <ion-toolbar color="appColor" class="payment-toolbar">
             <ion-segment [(ngModel)]="latestTabs" (click)="showTabs()">
                 <ion-segment-button value="payments" class="payment-segments">
-                    <span>Latest Payments</span>
+                    <span>Latest <span class="segment-span">Payments</span></span>
                 </ion-segment-button>
                 <ion-segment-button value="donations" class="payment-segments">
-                    <span>Latest Donations</span>
+                    <span>Latest <span class="segment-span">Donations</span></span>
                 </ion-segment-button>
                 <ion-segment-button value="big-hearts" class="payment-segments">
-                    <span>Recommended BigHearts</span>
+                    <span>Recommended <span class="segment-span">BigHearts</span></span>
                 </ion-segment-button>
             </ion-segment>
         </ion-toolbar>
