@@ -6,6 +6,7 @@ import { YtvideoPage } from '../ytvideo/ytvideo';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { PhotoViewer } from '@ionic-native/photo-viewer';
 import { DomSanitizer } from '@angular/platform-browser';
+import { elementAttribute } from '@angular/core/src/render3';
 
 @IonicPage()
 @Component({
@@ -27,7 +28,7 @@ export class ProfilePage {
   ngoDesc: string = 'Loading...';
   ngoFamilyImgs: string;
   ngoFamilyFirstImg: string = '';
-  showMore: string = 'true';
+  showMore: boolean = true;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, private modalCtrl: ModalController, private screenOrientation: ScreenOrientation, private photoViewer: PhotoViewer, private dom: DomSanitizer) {
   }
@@ -108,12 +109,25 @@ export class ProfilePage {
   // show all words
   showAllWords() {
     document.getElementById('ngo-desc').innerHTML = this.ngoDesc;  
-    this.showMore = 'false';  
+    this.showMore = false;  
   }
 
+    // showLessWords
   showLessWords() {
     document.getElementById('ngo-desc').innerHTML = this.ngoDesc.slice(0,80)+'.....';
-    this.showMore = 'true'; 
+    this.showMore = true; 
+  } 
+
+  // showWords
+  showWords() {
+    this.showMore = !this.showMore;
+
+    // check if showmore is true
+    if(this.showMore === true) {
+      this.showLessWords();
+    }else{
+      this.showAllWords();
+    }
   }
 
   // showFullImg
@@ -123,7 +137,22 @@ export class ProfilePage {
 
   // getIframeUrl
   getIframeUrl() {
-    let controlls = '?theme=dark&autohide=2&modestbranding=1';
+    let controlls = '?theme=dark&autohide=2&modestbranding=1&showinfo=0';
     return this.dom.bypassSecurityTrustResourceUrl(this.youtubeUrl+this.ngoYoutubeId+controlls);
+  }
+
+  // interchangeImg
+  interchangeImg(url: string) {
+     
+    // select youtube div
+     let youtube = document.getElementById('iframe-div');
+
+     // get image of youtube video block
+     let youtubeImgUrl = youtube.style.backgroundImage;
+     console.log('current image url: '+url);
+     console.log('youtube img url: '+youtubeImgUrl);
+
+     // set small in video image block
+     youtube.style.backgroundImage = "url('"+url+"')";
   }
 }

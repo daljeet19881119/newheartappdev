@@ -21,11 +21,11 @@
     <div class="profile-info">
         <h2 class="founder-name">{{ ngoFounderName }}</h2>
         <p class="ngo-name">Co-Founder of {{ ngoName }}</p>
-        <p class="ngo-desc" id="ngo-desc">{{ getWords()+'.....' }}</p>
-        <span class="read-more" (click)="showAllWords()" *ngIf="showMore == 'true'">
+        <p class="ngo-desc" id="ngo-desc" (click)="showWords()">{{ getWords()+'.....' }}</p>
+        <span class="read-more" (click)="showAllWords()" *ngIf="showMore">
             <ion-icon name="arrow-dropdown"></ion-icon>
         </span>
-        <span class="read-less" (click)="showLessWords()" *ngIf="showMore == 'false'">
+        <span class="read-less" (click)="showLessWords()" *ngIf="!showMore">
             <ion-icon name="arrow-dropup"></ion-icon> 
         </span>  
     </div>    
@@ -58,17 +58,17 @@
     <div class="media-div" padding>
         <p class="list-text-color media">Media</p>
         <div class="ytvideo">
+            <div class="iframe-div" id="iframe-div" [style.backgroundImage]="'url('+ getYoutubeVideoImgUrl() +')'">
+                <!-- <img src="assets/imgs/youtube.png" alt="Youtube" class="youtube-img" (click)="showFullVideo()" *ngIf="ngoYoutubeId !==''"> -->
+            </div>
             <!-- <div class="iframe-div" [style.backgroundImage]="'url('+ getYoutubeVideoImgUrl() +')'">
-                <img src="assets/imgs/youtube.png" alt="Youtube" class="youtube-img" (click)="showFullVideo()" *ngIf="ngoYoutubeId !==''">
-            </div> -->
-            <div class="iframe-div" [style.backgroundImage]="'url('+ getYoutubeVideoImgUrl() +')'">
                 <iframe [src]="getIframeUrl()" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen *ngIf="ngoYoutubeId !==''"></iframe>
-            </div>       
+            </div>        -->
         </div>
         <ion-row>
             <ng-container *ngFor="let familyImg of ngoFamilyImgs">
                 <ion-col col-3 class="family-imgs" *ngIf="ngoFamilyImgs?.length > 0">
-                    <div [style.backgroundImage]="'url('+ familyImg +')'" (click)="showFullImg(familyImg)"></div>
+                    <div [style.backgroundImage]="'url('+ familyImg +')'" (click)="showFullImg(familyImg);interchangeImg(familyImg);"></div>
                 </ion-col>
             </ng-container>
         </ion-row>
