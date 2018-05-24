@@ -68,7 +68,7 @@
         <ion-row>
             <ng-container *ngFor="let familyImg of ngoFamilyImgs">
                 <ion-col col-3 class="family-imgs" *ngIf="ngoFamilyImgs?.length > 0">
-                    <div [style.backgroundImage]="'url('+ familyImg +')'" (click)="showFullImg(familyImg);interchangeImg(familyImg);"></div>
+                    <div [style.backgroundImage]="'url('+ familyImg +')'" (click)="interchangeImg(familyImg);"></div>
                 </ion-col>
             </ng-container>
         </ion-row>
