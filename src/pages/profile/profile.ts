@@ -6,7 +6,6 @@ import { YtvideoPage } from '../ytvideo/ytvideo';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { PhotoViewer } from '@ionic-native/photo-viewer';
 import { DomSanitizer } from '@angular/platform-browser';
-import { elementAttribute } from '@angular/core/src/render3';
 
 @IonicPage()
 @Component({
