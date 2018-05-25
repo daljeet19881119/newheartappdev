@@ -58,7 +58,7 @@
     <div class="media-div" padding>
         <p class="list-text-color media">Media</p>
         <div class="ytvideo">
-            <div class="iframe-div" id="iframe-div" [style.backgroundImage]="'url('+ getYoutubeVideoImgUrl() +')'">
+            <div class="iframe-div" id="iframe-div" [style.backgroundImage]="'url('+ getYoutubeVideoImgUrl() +')'"  (click)="showFullImg(centerImgUrl)">
                 <!-- <img src="assets/imgs/youtube.png" alt="Youtube" class="youtube-img" (click)="showFullVideo()" *ngIf="ngoYoutubeId !==''"> -->
             </div>
             <!-- <div class="iframe-div" [style.backgroundImage]="'url('+ getYoutubeVideoImgUrl() +')'">

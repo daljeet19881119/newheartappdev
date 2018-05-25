@@ -28,6 +28,7 @@ export class ProfilePage {
   ngoFamilyImgs: string;
   ngoFamilyFirstImg: string = '';
   showMore: boolean = true;
+  centerImgUrl: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, private modalCtrl: ModalController, private screenOrientation: ScreenOrientation, private photoViewer: PhotoViewer, private dom: DomSanitizer) {
   }
@@ -53,11 +54,26 @@ export class ProfilePage {
       this.ngoDesc = data.ngo_desc;
       this.ngoFamilyImgs = data.ngo_family_img;
       this.ngoFamilyFirstImg = data.ngo_family_img[0];
+
+      let url;
+
+      // check youtube video url is not empty
+      if(this.ngoYoutubeId === ''){
+        url = this.ngoFamilyFirstImg;
+      }
+      else{
+        url = 'https://img.youtube.com/vi/'+ this.ngoYoutubeId +'/hqdefault.jpg';
+      }
+
+      // also store url in centerImgUrl
+      this.centerImgUrl = url;
+
       console.log(data);
     }, err => {
       console.log('Oops!');
     });
 
+    
   }
 
   // getYoutubeVideoImgUrl
@@ -72,7 +88,7 @@ export class ProfilePage {
     else{
       url = 'https://img.youtube.com/vi/'+ this.ngoYoutubeId +'/hqdefault.jpg';
     }
-    
+
     return url;
   }
 
@@ -153,5 +169,8 @@ export class ProfilePage {
 
      // set small in video image block
      youtube.style.backgroundImage = "url('"+url+"')";
+
+     // store new url in center img
+     this.centerImgUrl = url;
   }
 }
