@@ -28,7 +28,6 @@ export class ProfilePage {
   ngoFamilyImgs: string;
   ngoFamilyFirstImg: string = '';
   showMore: boolean = true;
-  centerImgUrl: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, private modalCtrl: ModalController, private screenOrientation: ScreenOrientation, private photoViewer: PhotoViewer, private dom: DomSanitizer) {
   }
@@ -54,20 +53,6 @@ export class ProfilePage {
       this.ngoDesc = data.ngo_desc;
       this.ngoFamilyImgs = data.ngo_family_img;
       this.ngoFamilyFirstImg = data.ngo_family_img[0];
-
-      let url;
-
-      // check youtube video url is not empty
-      if(this.ngoYoutubeId === ''){
-        url = this.ngoFamilyFirstImg;
-      }
-      else{
-        url = 'https://img.youtube.com/vi/'+ this.ngoYoutubeId +'/hqdefault.jpg';
-      }
-
-      // also store url in centerImgUrl
-      this.centerImgUrl = url;
-
       console.log(data);
     }, err => {
       console.log('Oops!');
@@ -146,7 +131,11 @@ export class ProfilePage {
   }
 
   // showFullImg
-  showFullImg(url: string) {
+  showFullImg(event) {
+    // get current image url and replace url(" ") from url("imageurl")
+    let url = event.srcElement.style.backgroundImage.split('("')[1]
+    .split('")')[0];;
+
     this.photoViewer.show(url, '', {share: false});
   }
 
@@ -157,20 +146,21 @@ export class ProfilePage {
   }
 
   // interchangeImg
-  interchangeImg(url: string) {
+  interchangeImg(event) {
      
     // select youtube div
      let youtube = document.getElementById('iframe-div');
 
+     // get current small img url
+     let imgurl = event.srcElement.style['background-image'];
+
      // get image of youtube video block
      let youtubeImgUrl = youtube.style.backgroundImage;
-     console.log('current image url: '+url);
-     console.log('youtube img url: '+youtubeImgUrl);
-
+     
      // set small in video image block
-     youtube.style.backgroundImage = "url('"+url+"')";
+     youtube.style.backgroundImage = imgurl;
 
-     // store new url in center img
-     this.centerImgUrl = url;
+     // set youtube image into small block
+     event.srcElement.style.backgroundImage = youtubeImgUrl;
   }
 }
