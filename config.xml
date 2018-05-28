@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="org.heartcash.heartapp" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Heart App</name>
+    <name>HeartApp</name>
     <description>A global currency specifically deisgned to give back by helping those in need! And you are invited...</description>
     <author email="daljeet19881119@gmail.com" href="http://nxgenso.com/">Daljeet</author>
     <content src="index.html" />
@@ -89,4 +89,5 @@
     <plugin name="cordova-plugin-screen-orientation" spec="^3.0.1" />
     <plugin name="com-sarriaroman-photoviewer" spec="^1.1.16" />
     <engine name="android" spec="7.0.0" />
+    <plugin name="cordova-plugin-youtube-video-player" spec="^1.0.6" />
 </widget>

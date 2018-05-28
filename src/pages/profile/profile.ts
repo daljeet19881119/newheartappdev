@@ -134,8 +134,12 @@ export class ProfilePage {
   showFullImg(event) {
     // get current image url and replace url(" ") from url("imageurl")
     let url = event.srcElement.style.backgroundImage.split('("')[1]
-    .split('")')[0];;
+    .split('")')[0];
 
+    var s = url.search(this.ngoYoutubeId);
+    console.log(s);
+    console.log('url is: '+ url);
+    console.log('youtubeid: '+ this.ngoYoutubeId);
     this.photoViewer.show(url, '', {share: false});
   }
 
