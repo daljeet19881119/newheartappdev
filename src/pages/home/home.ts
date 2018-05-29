@@ -84,6 +84,9 @@ export class HomePage {
   // showTabs
   showTabs() {
     console.log('you selected: '+this.latestTabs);
+
+    // show view all button
+    document.getElementById('view-all').style.display = 'block';
   }
 
   // gotoProfilePage
@@ -93,5 +96,19 @@ export class HomePage {
     this.navCtrl.push(ProfilePage, {
       id: id
     });
+  }
+
+  // viewAll
+  viewAll() {
+    
+    // select the donation list
+    let donationList = document.getElementById('donation-list');
+
+    // make scrollable donation list
+    donationList.style.overflow = 'scroll';
+    donationList.style.height = '275px';
+
+    // hide view all button
+    document.getElementById('view-all').style.display = 'none';
   }
 }

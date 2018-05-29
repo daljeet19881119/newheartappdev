@@ -146,7 +146,7 @@ export class ProfilePage {
     // check if youtube id found
     if(strSearch !== -1)
     {
-      console.log('found id');
+      // showIframe true
       this.showIframe = true;
 
       // hide youtube image div
@@ -155,12 +155,13 @@ export class ProfilePage {
       // trigger click on iframe video
     }
     else{
-      console.log('not found id');
+      
+      // showIframe false
       this.showIframe = false;
-    }
-    console.log('url is: '+ url);
-    console.log('youtubeid: '+ this.ngoYoutubeId);
-    this.photoViewer.show(url, '', {share: false});
+
+      // if it is image then show in full view
+      this.photoViewer.show(url, '', {share: false});
+    }    
   }
 
   // getIframeUrl
