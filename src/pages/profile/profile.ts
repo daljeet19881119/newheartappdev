@@ -28,6 +28,7 @@ export class ProfilePage {
   ngoFamilyImgs: string;
   ngoFamilyFirstImg: string = '';
   showMore: boolean = true;
+  showIframe: boolean = false;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, private modalCtrl: ModalController, private screenOrientation: ScreenOrientation, private photoViewer: PhotoViewer, private dom: DomSanitizer) {
   }
@@ -136,8 +137,27 @@ export class ProfilePage {
     let url = event.srcElement.style.backgroundImage.split('("')[1]
     .split('")')[0];
 
-    var s = url.search(this.ngoYoutubeId);
-    console.log(s);
+    // store selector of iframe-video
+    // var iframeVideo = document.getElementById('iframe-video');
+
+    // serach youtube id from url
+    var strSearch = url.search(this.ngoYoutubeId);    
+
+    // check if youtube id found
+    if(strSearch !== -1)
+    {
+      console.log('found id');
+      this.showIframe = true;
+
+      // hide youtube image div
+      event.srcElement.style.display = 'none';
+
+      // trigger click on iframe video
+    }
+    else{
+      console.log('not found id');
+      this.showIframe = false;
+    }
     console.log('url is: '+ url);
     console.log('youtubeid: '+ this.ngoYoutubeId);
     this.photoViewer.show(url, '', {share: false});
@@ -166,5 +186,18 @@ export class ProfilePage {
 
      // set youtube image into small block
      event.srcElement.style.backgroundImage = youtubeImgUrl;
+
+     // serach youtube id from url
+    var strSearch = imgurl.search(this.ngoYoutubeId);
+    
+    // check if youtube id not found
+    if(strSearch === -1)
+    {
+      // set iframe value to flase
+      this.showIframe = false;
+
+      // show youtube image div
+      youtube.style.display = 'block';
+    }
   }
 }

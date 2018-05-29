@@ -61,9 +61,9 @@
             <div class="iframe-div" id="iframe-div" [style.backgroundImage]="'url('+ getYoutubeVideoImgUrl() +')'"  (click)="showFullImg($event)">
                 <!-- <img src="assets/imgs/youtube.png" alt="Youtube" class="youtube-img" (click)="showFullVideo()" *ngIf="ngoYoutubeId !==''"> -->
             </div>
-            <!-- <div class="iframe-div" [style.backgroundImage]="'url('+ getYoutubeVideoImgUrl() +')'">
-                <iframe [src]="getIframeUrl()" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen *ngIf="ngoYoutubeId !==''"></iframe>
-            </div>        -->
+            <div class="iframe-div" *ngIf="showIframe">
+                <iframe  id="iframe-video" [src]="getIframeUrl()" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            </div>
         </div>
         <ion-row>
             <ng-container *ngFor="let familyImg of ngoFamilyImgs">
