@@ -29,6 +29,7 @@ export class ProfilePage {
   ngoFamilyFirstImg: string = '';
   showMore: boolean = true;
   showIframe: boolean = false;
+  showIframediv: boolean;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, private modalCtrl: ModalController, private screenOrientation: ScreenOrientation, private photoViewer: PhotoViewer, private dom: DomSanitizer) {
   }
@@ -54,6 +55,15 @@ export class ProfilePage {
       this.ngoDesc = data.ngo_desc;
       this.ngoFamilyImgs = data.ngo_family_img;
       this.ngoFamilyFirstImg = data.ngo_family_img[0];
+
+      // check if youtube id not empty
+      if(this.ngoYoutubeId !== '')
+      {
+        this.showIframediv = true;
+
+        // hide youtube image div
+        document.getElementById('iframe-div').style.display = 'none';
+      }
       console.log(data);
     }, err => {
       console.log('Oops!');
@@ -137,31 +147,8 @@ export class ProfilePage {
     let url = event.srcElement.style.backgroundImage.split('("')[1]
     .split('")')[0];
 
-    // store selector of iframe-video
-    // var iframeVideo = document.getElementById('iframe-video');
-
-    // serach youtube id from url
-    var strSearch = url.search(this.ngoYoutubeId);    
-
-    // check if youtube id found
-    if(strSearch !== -1)
-    {
-      // showIframe true
-      this.showIframe = true;
-
-      // hide youtube image div
-      event.srcElement.style.display = 'none';
-
-      // trigger click on iframe video
-    }
-    else{
-      
-      // showIframe false
-      this.showIframe = false;
-
-      // if it is image then show in full view
-      this.photoViewer.show(url, '', {share: false});
-    }    
+    // show image in viewer
+    this.photoViewer.show(url, '', {share: false});        
   }
 
   // getIframeUrl
@@ -187,18 +174,63 @@ export class ProfilePage {
 
      // set youtube image into small block
      event.srcElement.style.backgroundImage = youtubeImgUrl;
-
-     // serach youtube id from url
-    var strSearch = imgurl.search(this.ngoYoutubeId);
-    
-    // check if youtube id not found
-    if(strSearch === -1)
+      
+     // search only if this.ngoYoutubeId is not empty
+    if(this.ngoYoutubeId !== '')
     {
-      // set iframe value to flase
-      this.showIframe = false;
+        // serach youtube id from url
+        let strSearch = imgurl.search(this.ngoYoutubeId);
+        
+        // check if youtube id not found
+        if(strSearch === -1)
+        {
+          // set iframe value to flase
+          this.showIframe = false;
 
-      // show youtube image div
-      youtube.style.display = 'block';
+          // hide youtube iframe div
+          this.showIframediv = false;
+
+          // show youtube image div
+          youtube.style.display = 'block';  
+
+        }
+        else
+        {
+          // show youtube iframe div
+          this.showIframediv = true;
+
+          // hide youtube image div
+          youtube.style.display = 'none'; 
+        } 
+
+        // search youtube id from big image url
+        let idSearch = youtubeImgUrl.search(this.ngoYoutubeId);
+        
+        // store id of current clicked img
+        let currentId = event.srcElement.getAttribute('id');
+        
+        // get the current clicked image previous element
+        let youtubeBtn = document.getElementById(currentId).previousElementSibling;
+
+        // check if youtube id found
+        if(idSearch !== -1) 
+        {
+          // show the youtube btn on video image  
+           youtubeBtn.setAttribute('data-show-img','show');
+        }
+        else{
+
+          // hide youtubebtn for non youtube image
+          youtubeBtn.setAttribute('data-show-img','hide');
+        }
+
     }
+
+  }
+
+  // changeImage
+  changeImage(event) {
+    let imgUrl = event.srcElement.getAttribute('id');
+    console.log('imgUrl '+imgUrl);
   }
 }

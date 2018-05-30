@@ -105,13 +105,13 @@ page-profile {
         position: relative;
     }
     .youtube-img{
-        width: 70px;
+        width: 30px;
         margin-left: auto;
         margin-right: auto;
         display: block;
         position: absolute;
-        left: 40%;
-        top: 27%;
+        left: 33%;
+        top: 30%;
     }
     .ngo-desc{
         font-size: 14px;
@@ -129,5 +129,11 @@ page-profile {
         margin-top: -15px;
         font-size: 15px;
         color: #ae0433;
+    }
+    .youtube-img[data-show-img="show"]{
+        display: block;
+    }
+    .youtube-img[data-show-img="hide"]{
+        display: none;
     }
 }
