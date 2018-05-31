@@ -18,6 +18,7 @@ import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { UserProvider } from '../providers/user/user';
 import { HttpClientModule } from '@angular/common/http';
 import { PhotoViewer } from '@ionic-native/photo-viewer';
+import { CampaignsPage } from '../pages/campaigns/campaigns';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { PhotoViewer } from '@ionic-native/photo-viewer';
     WelcomePage,
     VerifycodePage,
     UserinfoPage,
-    YtvideoPage
+    YtvideoPage,
+    CampaignsPage
   ],
   imports: [
     BrowserModule,
@@ -45,7 +47,8 @@ import { PhotoViewer } from '@ionic-native/photo-viewer';
     WelcomePage,
     VerifycodePage,
     UserinfoPage,
-    YtvideoPage
+    YtvideoPage,
+    CampaignsPage
   ],
   providers: [
     StatusBar,

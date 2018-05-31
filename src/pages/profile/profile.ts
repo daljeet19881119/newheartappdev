@@ -6,6 +6,7 @@ import { YtvideoPage } from '../ytvideo/ytvideo';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { PhotoViewer } from '@ionic-native/photo-viewer';
 import { DomSanitizer } from '@angular/platform-browser';
+import { CampaignsPage } from '../campaigns/campaigns';
 
 @IonicPage()
 @Component({
@@ -232,5 +233,10 @@ export class ProfilePage {
   changeImage(event) {
     let imgUrl = event.srcElement.getAttribute('id');
     console.log('imgUrl '+imgUrl);
+  }
+
+  // gotoCampignsPage
+  gotoCampignPage() {
+    this.navCtrl.push(CampaignsPage, {founderName: this.ngoFounderName});
   }
 }
