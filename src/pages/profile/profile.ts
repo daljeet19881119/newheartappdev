@@ -231,8 +231,14 @@ export class ProfilePage {
 
   // changeImage
   changeImage(event) {
-    let imgUrl = event.srcElement.getAttribute('id');
-    console.log('imgUrl '+imgUrl);
+    // get current element id
+    let btnId = event.srcElement.getAttribute('id');
+
+    // get next element id
+    let nextElmId = document.getElementById(btnId).nextElementSibling.getAttribute('id');
+
+    // trigger click on next element
+    document.getElementById(nextElmId).click();
   }
 
   // gotoCampignsPage

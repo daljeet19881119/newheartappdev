@@ -68,7 +68,7 @@
         <ion-row>
             <ng-container *ngFor="let familyImg of ngoFamilyImgs; let i = index">
                 <ion-col col-3 class="family-imgs" *ngIf="ngoFamilyImgs?.length > 0">
-                    <img src="assets/imgs/youtube.png" alt="Youtube" class="youtube-img" data-show-img="hide" (click)="changeImage($event);"> 
+                    <img src="assets/imgs/youtube.png" alt="Youtube" class="youtube-img" data-show-img="hide" id="{{ i }}" (click)="changeImage($event);"> 
                     <div [style.backgroundImage]="'url('+ familyImg +')'" (click)="interchangeImg($event);" id="{{ i+'-small' }}"></div>
                 </ion-col>
             </ng-container>
