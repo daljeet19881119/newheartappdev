@@ -5,6 +5,7 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { UserProvider } from '../../providers/user/user';
 import { UniqueDeviceID } from '@ionic-native/unique-device-id';
+import { StreamingMedia, StreamingVideoOptions } from '@ionic-native/streaming-media';
 
 @Component({
   selector: 'page-home',
@@ -23,7 +24,7 @@ export class HomePage {
   heloWish: string;
   name: string = 'Loading...';
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, private http: Http, public platform: Platform, public userService: UserProvider, private uniqueDeviceID: UniqueDeviceID) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, private http: Http, public platform: Platform, public userService: UserProvider, private uniqueDeviceID: UniqueDeviceID, private streamingMedia: StreamingMedia) {
 
     // request data from server
     this.http.get('http://ionic.dsl.house/heartAppApi/new-latest-donations.php').map(res => res.json()).subscribe(data => {
@@ -110,5 +111,16 @@ export class HomePage {
 
     // hide view all button
     document.getElementById('view-all').style.display = 'none';
+  }
+
+  // playVideo
+  async playVideo() {
+    let options: StreamingVideoOptions = {
+      successCallback: () => { console.log('Video played') },
+      errorCallback: (e) => { console.log('Error streaming') },
+      orientation: 'portrait'
+    };
+    
+    this.streamingMedia.playVideo('http://ionic.dsl.house/heartAppApi/videos/small.mp4', options);
   }
 }

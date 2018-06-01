@@ -63,7 +63,7 @@
                                         <span class="heart-coin">{{donation.heart_amount}}</span> 
                                         <span class="heart-coin">(${{donation.us_amount}})</span>
                                     </p>
-                                    <p class="play-para">
+                                    <p class="play-para" (click)="playVideo()">
                                         <ion-icon name="play" class="play-icon"></ion-icon>
                                         <span>Thankyou Message</span>
                                     </p>
@@ -107,7 +107,7 @@
             <p class="para-footer">Recomended BigHearts</p>
             <ion-slides loop="true" slidesPerView="3">
                 <ion-slide *ngFor="let donation of latestDonations">
-                    <div class="ngo-img-div" [style.backgroundImage]="'url('+donation.ngo_founder_img+')'"></div>                    
+                    <div class="ngo-img-div" [style.backgroundImage]="'url('+donation.ngo_founder_img+')'"  (click)="gotoProfilePage(donation.id)"></div>                    
                     <p class="ngo-founder">{{donation.ngo_founder}}</p>
                 </ion-slide>
             </ion-slides>

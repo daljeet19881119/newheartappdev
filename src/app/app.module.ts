@@ -19,6 +19,7 @@ import { UserProvider } from '../providers/user/user';
 import { HttpClientModule } from '@angular/common/http';
 import { PhotoViewer } from '@ionic-native/photo-viewer';
 import { CampaignsPage } from '../pages/campaigns/campaigns';
+import { StreamingMedia } from '@ionic-native/streaming-media';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import { CampaignsPage } from '../pages/campaigns/campaigns';
     ScreenOrientation,   
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     UserProvider,
-    PhotoViewer    
+    PhotoViewer,
+    StreamingMedia    
   ]
 })
 export class AppModule {}
