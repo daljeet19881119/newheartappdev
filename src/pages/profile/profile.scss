@@ -136,4 +136,24 @@ page-profile {
     .youtube-img[data-show-img="hide"]{
         display: none;
     }
+    .add-to-bighearts{
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+        margin-bottom: 15px;
+        margin-top: 10px;
+    }
+    .added-bighearts{
+        color: #ae0433;
+        background-color: #ffffff;
+        border: 1px solid #ae0433;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+        margin-bottom: 15px;
+        margin-top: 10px;
+    }
+    .add-checkmark{
+        font-weight: 600;
+    }
 }

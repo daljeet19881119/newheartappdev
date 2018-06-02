@@ -21,6 +21,13 @@
     <div class="profile-info">
         <h2 class="founder-name">{{ ngoFounderName }}</h2>
         <p class="ngo-name">Co-Founder of {{ ngoName }}</p>
+        <button ion-button small [ngClass]="addBigHeartsClass" color="appColor" (click)="addToUserBigHearts()"  *ngIf="addBigHeartsClass === 'add-to-bighearts'">
+                {{ addBigHeartText }}
+        </button>
+        <button ion-button small [ngClass]="addBigHeartsClass" color="appColor" *ngIf="addBigHeartsClass === 'added-bighearts'">
+            <ion-icon name="checkmark" class="add-checkmark"></ion-icon>&nbsp;
+            {{ addBigHeartText }}
+        </button>
         <p class="ngo-desc" id="ngo-desc" (click)="showWords()">{{ getWords()+'.....' }}</p>
         <span class="read-more" (click)="showAllWords()" *ngIf="showMore">
             <ion-icon name="arrow-dropdown"></ion-icon>
@@ -37,7 +44,7 @@
             </ion-item>  
         </ion-list>
         <ion-list class="ngo-list">
-            <ion-item class="list-item community">
+            <ion-item class="list-item community" (click)="gotoCharityPage()">
                 <span class="list-text-color">Community</span> 
                 <span class="count list-text-color">{{ ngoCommunity }} <ion-icon name="arrow-forward" class="count-arrow"></ion-icon></span>
             </ion-item>  

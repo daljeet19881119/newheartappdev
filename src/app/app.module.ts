@@ -20,6 +20,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { PhotoViewer } from '@ionic-native/photo-viewer';
 import { CampaignsPage } from '../pages/campaigns/campaigns';
 import { StreamingMedia } from '@ionic-native/streaming-media';
+import { CharitiesPage } from '../pages/charities/charities';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { StreamingMedia } from '@ionic-native/streaming-media';
     VerifycodePage,
     UserinfoPage,
     YtvideoPage,
-    CampaignsPage
+    CampaignsPage,
+    CharitiesPage
   ],
   imports: [
     BrowserModule,
@@ -49,7 +51,8 @@ import { StreamingMedia } from '@ionic-native/streaming-media';
     VerifycodePage,
     UserinfoPage,
     YtvideoPage,
-    CampaignsPage
+    CampaignsPage,
+    CharitiesPage
   ],
   providers: [
     StatusBar,

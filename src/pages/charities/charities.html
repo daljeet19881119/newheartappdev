@@ -1,0 +1,45 @@
+
+<ion-header>
+    <ion-navbar color="appColor" class="profile-nav">
+        <ion-row>
+            <ion-col col-3 offset-3  class="heart-col" no-padding>
+                <!-- <ion-icon name="heart-outline" class="heart-icon"></ion-icon> -->
+                <div class="logo-div" style="background: url('assets/imgs/logo.png');"></div>
+            </ion-col>
+        </ion-row>
+    </ion-navbar>
+</ion-header>
+
+
+<ion-content no-padding style="background-color:#ae0433;">
+    <ion-list>
+        <ion-item>
+            <ion-label>Animal Charities</ion-label>
+            <ion-toggle [(ngModel)]="name"></ion-toggle>
+        </ion-item>
+        <ion-item>
+            <ion-label>Economic Development</ion-label>
+            <ion-toggle [(ngModel)]="name"></ion-toggle>
+        </ion-item>
+        <ion-item>
+            <ion-label>Environment</ion-label>
+            <ion-toggle [(ngModel)]="name"></ion-toggle>
+        </ion-item>
+        <ion-item>
+            <ion-label>Human Rights</ion-label>
+            <ion-toggle [(ngModel)]="name"></ion-toggle>
+        </ion-item>
+        <ion-item>
+            <ion-label>Poverty and Hunger</ion-label>
+            <ion-toggle [(ngModel)]="name"></ion-toggle>
+        </ion-item>
+        <ion-item>
+            <ion-label>Education</ion-label>
+            <ion-toggle [(ngModel)]="name"></ion-toggle>
+        </ion-item>
+        <ion-item>
+            <ion-label>Geographic Preference(s)</ion-label>
+            <ion-toggle [(ngModel)]="name"></ion-toggle>
+        </ion-item>
+    </ion-list>
+</ion-content>

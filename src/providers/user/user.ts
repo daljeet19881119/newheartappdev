@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
 
 /*
@@ -24,5 +24,29 @@ export class UserProvider {
   // getUserByDeviceId
   getUserByDeviceId(uuid: any) {
     return this._http.get('http://ionic.dsl.house/heartAppApi/get-verified-user.php?uuid='+uuid).map(res => res.json());
+  }
+
+  // addToMyBigHearts
+  addToMyBigHearts(uuid: any, ngo_id: any) {
+    
+    // set headers
+    let headers = new Headers();    
+    headers.append("Accept", 'application/json');
+    
+    // set request option
+    let options = new RequestOptions({ headers: headers });
+
+    // set data to be send
+    let data = JSON.stringify({
+        uuid: uuid,
+        ngo_id: ngo_id
+    });
+
+    return this._http.post('http://ionic.dsl.house/heartAppApi/users-bighearts.php', data, options).map(res => res.json());
+  }
+
+  // checkInMyBigHearts
+  checkInMyBigHearts(uuid: any, ngo_id: any) {
+    return this._http.get('http://ionic.dsl.house/heartAppApi/get-users-bighearts.php?uuid='+uuid+'&ngo_id='+ngo_id).map(res => res.json());
   }
 }

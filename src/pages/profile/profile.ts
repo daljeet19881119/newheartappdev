@@ -7,6 +7,9 @@ import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { PhotoViewer } from '@ionic-native/photo-viewer';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CampaignsPage } from '../campaigns/campaigns';
+import { UserProvider } from '../../providers/user/user';
+import { UniqueDeviceID } from '@ionic-native/unique-device-id';
+import { CharitiesPage } from '../charities/charities';
 
 @IonicPage()
 @Component({
@@ -32,7 +35,18 @@ export class ProfilePage {
   showIframe: boolean = false;
   showIframediv: boolean;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, private modalCtrl: ModalController, private screenOrientation: ScreenOrientation, private photoViewer: PhotoViewer, private dom: DomSanitizer) {
+  // addBigHearts class added-bighearts
+  addBigHeartsClass: string = 'add-to-bighearts';
+  addBigHeartText: string = 'Add to my BigHearts';
+  uuid: any = [];
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, private modalCtrl: ModalController, private screenOrientation: ScreenOrientation, private photoViewer: PhotoViewer, private dom: DomSanitizer, private userProvider: UserProvider, private uniqueDeviceID: UniqueDeviceID) {
+
+    // call function to get device id
+    this.getDeviceID();
+
+    // call function
+    this.checkInUserBigHearts();
   }
 
   ionViewDidLoad() {
@@ -65,12 +79,10 @@ export class ProfilePage {
         // hide youtube image div
         document.getElementById('iframe-div').style.display = 'none';
       }
-      console.log(data);
+      // console.log(data);
     }, err => {
       console.log('Oops!');
-    });
-
-    
+    });    
   }
 
   // getYoutubeVideoImgUrl
@@ -244,5 +256,80 @@ export class ProfilePage {
   // gotoCampignsPage
   gotoCampignPage() {
     this.navCtrl.push(CampaignsPage, {founderName: this.ngoFounderName});
+  }
+
+  // gotoCampignsPage
+  gotoCharityPage() {
+    this.navCtrl.push(CharitiesPage);
+  }
+
+  // add ngo's to user list
+  addToUserBigHearts() {
+      // store ngoid
+      let ngo_id = this.navParams.get('id');
+
+      // store uuid
+      let uuid;
+
+      if(this.uuid !== '')
+      {
+        uuid = 'undefined';
+      }else{
+        uuid = this.uuid;
+      }
+
+      // save ngo_id to users list
+      this.userProvider.addToMyBigHearts(uuid,ngo_id).subscribe(data => {
+        
+        // store added class to btn
+        this.addBigHeartsClass = 'added-bighearts';
+        this.addBigHeartText = 'Added BigHearts';    
+        console.log(data);     
+      }, err => {
+        console.log('Oops!');
+      });
+  }
+
+  // check ngo's in the user list
+  checkInUserBigHearts() {
+
+    // store ngoid
+    let ngo_id = this.navParams.get('id');
+
+    // store uuid
+    let uuid;
+
+    if(this.uuid !== '')
+    {
+      uuid = 'undefined';
+    }else{
+      uuid = this.uuid;
+    }
+
+    // request data from server
+    this.userProvider.checkInMyBigHearts(uuid,ngo_id).subscribe(data => {
+        
+      if(data.found =='true')
+      {
+        // store added class to btn
+        this.addBigHeartsClass = 'added-bighearts';  
+        this.addBigHeartText = 'Added BigHearts';  
+      }
+          
+      console.log(data);  
+    }, err => {
+      console.log('Oops!');
+    });
+  }
+
+  // getDeviceID
+  getDeviceID() {
+    this.uniqueDeviceID.get()
+      .then((uuid: any) => {
+        this.uuid = uuid;  
+      })
+      .catch((error: any) => {
+        this.uuid = null;
+      });
   }
 }
