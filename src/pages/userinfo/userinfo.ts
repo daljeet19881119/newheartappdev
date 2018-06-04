@@ -4,6 +4,7 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { HomePage } from '../home/home';
 import { UniqueDeviceID } from '@ionic-native/unique-device-id';
+import { CharitiesPage } from '../charities/charities';
 
 /**
  * Generated class for the UserinfoPage page.
@@ -29,6 +30,10 @@ export class UserinfoPage {
   profileStatus: string = null;
   uuid: any = null;
 
+  // variable to store charities
+  charities: any = [];
+  checkCharity: boolean = false;
+
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private http: Http, private modalCtrl: ModalController, public platform: Platform, private uniqueDeviceID: UniqueDeviceID) {
 
     // if user try goback then exit app
@@ -38,13 +43,35 @@ export class UserinfoPage {
 
     // call getDeviceID
     this.getDeviceID();
+
+    // get params from previous opened page
+    this.mobileno = this.navParams.get('mobileno');
+    this.country = this.navParams.get('country');
+    this.firstName = this.navParams.get('fname');
+    this.lastName = this.navParams.get('lname');
+    this.email = this.navParams.get('email');
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad UserinfoPage');
 
-    this.mobileno = this.navParams.get('mobileno');
-    this.country = this.navParams.get('country');
+    // check if charities comes
+    if(this.navParams.get('charities'))
+    { 
+      // store charities object that are send from the charities page
+      let charities = this.navParams.get('charities');
+
+      // loop all charities
+      charities.forEach(element => {
+
+        // sotore only selected charities in array
+        if(element.value == true)
+        {
+          this.charities.push(element.name);
+        }
+      });
+      this.checkCharity = true;
+    }
   }
 
   // registerUser
@@ -66,8 +93,7 @@ export class UserinfoPage {
       {
         // make server request
          this.makeServerRequest();
-      }
-      
+      }      
     }
   }
 
@@ -87,7 +113,7 @@ export class UserinfoPage {
 
   // makeServerRequest
   makeServerRequest() {
-    this.http.get('http://ionic.dsl.house/heartAppApi/verify-users.php?profile_status=verified&fname='+this.firstName+'&lname='+this.lastName+'&email='+this.email+'&gender='+this.gender+'&charity_type='+this.charityType+'&c_code='+this.country+'&m_no='+this.mobileno).map(res => res.json()).subscribe(data => {
+    this.http.get('http://ionic.dsl.house/heartAppApi/verify-users.php?profile_status=verified&fname='+this.firstName+'&lname='+this.lastName+'&email='+this.email+'&gender='+this.gender+'&charity_type='+this.charities+'&c_code='+this.country+'&m_no='+this.mobileno).map(res => res.json()).subscribe(data => {
       this.profileStatus = data.data.profile_status;
       console.log(data);
 
@@ -114,5 +140,11 @@ export class UserinfoPage {
     }, error => {
       console.log(error);
     });
+  }
+
+  // gotoCharityPage
+  gotoCharityPage() {
+    console.log('selected charities: '+this.charities);
+    this.navCtrl.push(CharitiesPage, {charities: this.charities, mobileno: this.mobileno, c_code: this.country, fname: this.firstName, lname: this.lastName, email: this.email});
   }
 }

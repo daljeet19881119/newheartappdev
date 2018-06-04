@@ -90,5 +90,5 @@
     <plugin name="com-sarriaroman-photoviewer" spec="^1.1.16" />
     <plugin name="com.moust.cordova.videoplayer" spec="https://github.com/moust/cordova-plugin-videoplayer.git" />
     <plugin name="com.hutchind.cordova.plugins.streamingmedia" spec="~0.1.4" />
-    <engine name="android" spec="7.1.0" />
+    <engine name="android" spec="7.0.0" />
 </widget>

@@ -47,15 +47,14 @@ $colors: (
 // App iOS Variables
 // --------------------------------------------------
 // iOS only Sass variables can go here
-
-
+$toggle-ios-background-color-on:	color($colors, secondary);
 
 
 // App Material Design Variables
 // --------------------------------------------------
 // Material Design only Sass variables can go here
-
-
+// $toggle-md-track-background-color-on:	color($colors, secondary);
+// $toggle-md-active-color: color($colors, secondary);
 
 
 // App Windows Variables

@@ -48,16 +48,16 @@ export class HomePage {
       // date object to store heloWish
       let d = new Date();
       if(d.getHours() < 12){
-       this.heloWish = 'Good morning';
+       this.heloWish = 'Good morning,';
       }
       if(d.getHours() >= 12 && d.getHours() < 17){
-        this.heloWish = 'Good afternoon';
+        this.heloWish = 'Good afternoon,';
       }
       if(d.getHours() >= 17 && d.getHours() < 20){
-        this.heloWish = 'Good evening';
+        this.heloWish = 'Good evening,';
       }
       if(d.getHours() >= 20 && d.getHours() < 6){
-        this.heloWish = 'Good night';
+        this.heloWish = 'Good night,';
       }
 
       // if user try to go back then exitapp

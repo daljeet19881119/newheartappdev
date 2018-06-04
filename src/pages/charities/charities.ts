@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { UserinfoPage } from '../userinfo/userinfo';
 
 /**
  * Generated class for the CharitiesPage page.
@@ -15,12 +16,114 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class CharitiesPage {
 
-  name: string = 'yogender';
+  
+  animal_charity: string = 'Animal Charities';
+  economic_development: string = 'Economic Development';
+  environment: string = 'Environment';
+  human_right: string = 'Human Rights';
+  poverty_hunger: string = 'Poverty and Hunger';
+  education: string = 'Education';
+  geographic_preference: string = 'Geographic Preference(s)';
+
+  animal_charity_val: boolean = false;
+  economic_development_val: boolean = false;
+  environment_val: boolean = false;
+  human_right_val: boolean = false;
+  poverty_hunger_val: boolean = false;
+  education_val: boolean = false;
+  geographic_preference_val: boolean = false;
+
+  // mobileno and ccode from userinfo page
+  mobileNo: any;
+  c_code: any;
+  fname: string;
+  lname: string;
+  email: string;
+  charities: any;
+
   constructor(public navCtrl: NavController, public navParams: NavParams) {
+
+    // get data from nav params
+    this.mobileNo = this.navParams.get('mobileno');
+    this.c_code = this.navParams.get('c_code');
+    this.fname = this.navParams.get('fname');
+    this.lname = this.navParams.get('lname');
+    this.email = this.navParams.get('email');
+    this.charities = this.navParams.get('charities');
+    
+    if(this.charities !== null)
+    {
+      // convert from object string into simple string
+      let charities = JSON.stringify(this.charities);
+
+      // replace brackets and then convert into an array
+      let charityArr = charities.replace('[','').replace(']','').split(',');
+      
+      // start loop of array
+      charityArr.forEach(element => {
+          // check if charity found then show acitve
+          if(element == '"'+this.animal_charity+'"')
+          {
+            this.animal_charity_val = true;
+          }
+          if(element == '"'+this.economic_development+'"')
+          {
+            this.economic_development_val = true;
+          }
+          if(element == '"'+this.environment+'"')
+          {
+            this.environment_val = true;
+          }
+          if(element == '"'+this.human_right+'"')
+          {
+            this.human_right_val = true;
+          }
+          if(element == '"'+this.poverty_hunger+'"')
+          {
+            this.poverty_hunger_val = true;
+          }
+          if(element == '"'+this.education+'"')
+          {
+            this.education_val = true;
+          }
+          if(element == '"'+this.geographic_preference+'"')
+          {
+            this.geographic_preference_val = true;
+          }
+      });
+      
+    }
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CharitiesPage');
   }
 
+  // getSelectedCharity
+  getSelectedCharity(name: string, value: boolean) {
+    let switchVal;
+
+    if(value == true){
+      switchVal = 'on';
+    }else{
+      switchVal = 'off';
+    }
+
+    console.log(name+' is '+switchVal);
+  }
+
+  // gotoUserinfoPage
+  gotoUserinfoPage() {
+    // send charities to userinfo page
+    let charities = [
+      {name: this.animal_charity, value: this.animal_charity_val},
+      {name: this.economic_development, value: this.economic_development_val},
+      {name: this.environment, value: this.environment_val},
+      {name: this.human_right, value: this.human_right_val},
+      {name: this.poverty_hunger, value: this.poverty_hunger_val},
+      {name: this.education, value: this.education_val},
+      {name: this.geographic_preference, value: this.geographic_preference_val}
+    ];
+    this.navCtrl.push(UserinfoPage, {charities: charities, mobileno: this.mobileNo, country: this.c_code, fname: this.fname, lname: this.lname, email: this.email});
+  }
 }

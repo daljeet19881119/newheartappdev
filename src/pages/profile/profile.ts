@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, LoadingController } from 'ionic-angular';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { YtvideoPage } from '../ytvideo/ytvideo';
@@ -40,7 +40,10 @@ export class ProfilePage {
   addBigHeartText: string = 'Add to my BigHearts';
   uuid: any = [];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, private modalCtrl: ModalController, private screenOrientation: ScreenOrientation, private photoViewer: PhotoViewer, private dom: DomSanitizer, private userProvider: UserProvider, private uniqueDeviceID: UniqueDeviceID) {
+  // loader
+  loader: any;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, private modalCtrl: ModalController, private screenOrientation: ScreenOrientation, private photoViewer: PhotoViewer, private dom: DomSanitizer, private userProvider: UserProvider, private uniqueDeviceID: UniqueDeviceID, public loadingCtrl: LoadingController) {
 
     // call function to get device id
     this.getDeviceID();
@@ -82,7 +85,10 @@ export class ProfilePage {
       // console.log(data);
     }, err => {
       console.log('Oops!');
-    });    
+    });  
+    
+    // call loader function
+    this.createLoader();
   }
 
   // getYoutubeVideoImgUrl
@@ -265,6 +271,10 @@ export class ProfilePage {
 
   // add ngo's to user list
   addToUserBigHearts() {
+
+    // call func createLoader
+    // this.createLoader();
+
       // store ngoid
       let ngo_id = this.navParams.get('id');
 
@@ -280,14 +290,19 @@ export class ProfilePage {
 
       // save ngo_id to users list
       this.userProvider.addToMyBigHearts(uuid,ngo_id).subscribe(data => {
-        
-        // store added class to btn
-        this.addBigHeartsClass = 'added-bighearts';
-        this.addBigHeartText = 'Added BigHearts';    
+                
+        if(data.found =='true')
+        {
+          // store added class to btn
+          this.addBigHeartsClass = 'added-bighearts';
+          this.addBigHeartText = 'Added BigHearts'; 
+          // this.loader.dismiss(); 
+        }  
         console.log(data);     
       }, err => {
         console.log('Oops!');
       });
+      
   }
 
   // check ngo's in the user list
@@ -309,6 +324,7 @@ export class ProfilePage {
     // request data from server
     this.userProvider.checkInMyBigHearts(uuid,ngo_id).subscribe(data => {
         
+      this.loader.dismiss();
       if(data.found =='true')
       {
         // store added class to btn
@@ -331,5 +347,15 @@ export class ProfilePage {
       .catch((error: any) => {
         this.uuid = null;
       });
+  }
+
+  // createLoader
+  createLoader() {
+    this.loader = this.loadingCtrl.create({
+      spinner: 'dots',
+      content: 'Please wait...'
+    });
+
+    this.loader.present();
   }
 }
