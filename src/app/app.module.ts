@@ -21,6 +21,7 @@ import { PhotoViewer } from '@ionic-native/photo-viewer';
 import { CampaignsPage } from '../pages/campaigns/campaigns';
 import { StreamingMedia } from '@ionic-native/streaming-media';
 import { CharitiesPage } from '../pages/charities/charities';
+import { HomePageProvider } from '../providers/home-page/home-page';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { CharitiesPage } from '../pages/charities/charities';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     UserProvider,
     PhotoViewer,
-    StreamingMedia    
+    StreamingMedia,
+    HomePageProvider    
   ]
 })
 export class AppModule {}

@@ -5,14 +5,14 @@
 </ion-header>
 
 
-<ion-content padding>
-  <p>We've sent an SMS with an activation code to your phone <b>+{{country+' '+mobileno}}</b>.</p>
-  <ion-item>
+<ion-content padding class="body-color">
+  <p class="para">We've sent an SMS with an activation code to your phone <b>+{{country+' '+mobileno}}</b>.</p>
+  <ion-item class="input-item">
     <ion-input type="number" placeholder="Code" [(ngModel)]="code"></ion-input>
   </ion-item>
-  <p>This is your verification code <b>{{this.verifyCode}}</b> please enter</p>
-  <p>The verification will show for only testing and development purpose. But when app will live verification will recieved on entered mobile no.</p>
+  <p class="para">This is your verification code <b>{{this.verifyCode}}</b> please enter</p>
+  <p class="para">The verification will show for only testing and development purpose. But when app will live verification will recieved on entered mobile no.</p>
   <div class="btn-div">
-    <button ion-button color="appColor" (click)="checkVerifyCode(code)">Continue</button>
+    <button ion-button color="light" (click)="checkVerifyCode(code)">Continue</button>
   </div>
 </ion-content>

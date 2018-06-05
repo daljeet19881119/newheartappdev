@@ -172,18 +172,21 @@ page-home {
         color: #ae0433;
     }
     .donation-list{
-        height: 215px;
-        overflow: hidden;
+        height: 151px;
+        overflow: scroll;
     }
-    .view-all{
-        margin-bottom: 10px;
+    .scroll-content{
+        margin-bottom: 192px;
     }
     .view-all button{
-        margin-left: auto;
         display: block;
-        margin-right: auto;
+        margin: 0 auto;
     }
     .home-footer::before{
         height: 0px;
+    }
+    .bottom-part.tab-donations{
+        height: 148px;
+        overflow: scroll;
     }
 }

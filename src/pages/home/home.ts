@@ -6,6 +6,7 @@ import 'rxjs/add/operator/map';
 import { UserProvider } from '../../providers/user/user';
 import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 import { StreamingMedia, StreamingVideoOptions } from '@ionic-native/streaming-media';
+import { HomePageProvider } from '../../providers/home-page/home-page';
 
 @Component({
   selector: 'page-home',
@@ -15,6 +16,7 @@ export class HomePage {
 
   // icons
   latestTabs: string = 'donations';
+  tabClass: string = 'tab-'+this.latestTabs;
 
   // latestDonations
   latestDonations: any;
@@ -23,21 +25,38 @@ export class HomePage {
   latestPayments: any;
   heloWish: string;
   name: string = 'Loading...';
+  uuid: any;
+  showDonationBtn: boolean = true;
+  limit: number = 5;
+  paging: number = 1;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, private http: Http, public platform: Platform, public userService: UserProvider, private uniqueDeviceID: UniqueDeviceID, private streamingMedia: StreamingMedia) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, private http: Http, public platform: Platform, public userService: UserProvider, private uniqueDeviceID: UniqueDeviceID, private streamingMedia: StreamingMedia, private homeService: HomePageProvider) {
+
+    // call function to get device id
+    this.getDeviceID();
 
     // request data from server
-    this.http.get('http://ionic.dsl.house/heartAppApi/new-latest-donations.php').map(res => res.json()).subscribe(data => {
+    this.homeService.getLatestDonations().subscribe(data => {
       
       // store requested data in the latestDonations
-      this.latestDonations = data;
+      this.latestDonations = data.res;
+
+      let count = parseInt(data.count);
+      let paging = Math.ceil(count / this.limit);
+
+      // hide button if count is <= 5
+      if(paging <= 1)
+      {
+        this.showDonationBtn = false;
+      }
+
       // console.log(data);
     }, err => {
       console.log('Oops!');
     });
 
     // request data from server
-    this.http.get("http://ionic.dsl.house/heartAppApi/new-latest-payments.php").map(res => res.json()).subscribe(data => {
+    this.homeService.getLatestPayments().subscribe(data => {
       this.latestPayments = data;
       // console.log(this.latestPayments);
       },
@@ -85,9 +104,6 @@ export class HomePage {
   // showTabs
   showTabs() {
     console.log('you selected: '+this.latestTabs);
-
-    // show view all button
-    document.getElementById('view-all').style.display = 'block';
   }
 
   // gotoProfilePage
@@ -95,22 +111,52 @@ export class HomePage {
 
     // send param and goto profile page
     this.navCtrl.push(ProfilePage, {
-      id: id
+      id: id,
+      uuid: this.uuid
     });
   }
 
   // viewAll
   viewAll() {
     
+    // increment paging
+    this.paging++;
+
     // select the donation list
-    let donationList = document.getElementById('donation-list');
+    // let donationList = document.getElementById('donation-list');
+    let donationList = document.getElementsByClassName('donation-lists');
+    let offset = donationList.length;
+
+    // request data from server
+    this.homeService.getLatestDonations(offset).subscribe(data => {
+
+      // loop of data
+      data.res.forEach(element => {
+        
+        // push data into latestDonations
+        this.latestDonations.push(element);
+      });
+
+      let count = parseInt(data.count);
+      let paging = Math.ceil(count / this.limit);
+
+      // hide button if count is <= 5
+      if(this.paging >= paging)
+      {
+        this.showDonationBtn = false;
+      }
+
+      console.log(data);
+    }, err => {
+      console.log('Oops!');
+    });
 
     // make scrollable donation list
-    donationList.style.overflow = 'scroll';
-    donationList.style.height = '275px';
+    // donationList.style.overflow = 'scroll';
+    // donationList.style.height = '275px';
 
     // hide view all button
-    document.getElementById('view-all').style.display = 'none';
+    // document.getElementById('view-all').style.display = 'none';
   }
 
   // playVideo
@@ -122,5 +168,17 @@ export class HomePage {
     };
     
     this.streamingMedia.playVideo('http://ionic.dsl.house/heartAppApi/videos/small.mp4', options);
+  }
+
+  
+  // getDeviceID
+  getDeviceID() {
+    this.uniqueDeviceID.get()
+      .then((uuid: any) => {
+        this.uuid = uuid;  
+      })
+      .catch((error: any) => {
+        this.uuid = 'undefined';
+      });
   }
 }

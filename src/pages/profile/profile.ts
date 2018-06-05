@@ -283,14 +283,15 @@ export class ProfilePage {
 
       if(this.uuid !== '')
       {
-        uuid = 'undefined';
+        uuid = this.navParams.get('uuid');
       }else{
-        uuid = this.uuid;
+        uuid = 'undefined';
       }
 
       // save ngo_id to users list
       this.userProvider.addToMyBigHearts(uuid,ngo_id).subscribe(data => {
-                
+        
+        // alert('uuid: '+uuid+' and ngo_id: '+ngo_id);
         if(data.found =='true')
         {
           // store added class to btn
@@ -315,16 +316,17 @@ export class ProfilePage {
     let uuid;
 
     if(this.uuid !== '')
-    {
-      uuid = 'undefined';
+    {      
+      uuid =  this.navParams.get('uuid');
     }else{
-      uuid = this.uuid;
+      uuid = 'undefined';
     }
 
     // request data from server
     this.userProvider.checkInMyBigHearts(uuid,ngo_id).subscribe(data => {
         
       this.loader.dismiss();
+      // alert('uuid is: '+uuid+' and ngo_id is: '+ngo_id);
       if(data.found =='true')
       {
         // store added class to btn
@@ -345,7 +347,7 @@ export class ProfilePage {
         this.uuid = uuid;  
       })
       .catch((error: any) => {
-        this.uuid = null;
+        this.uuid = 'undefined';
       });
   }
 

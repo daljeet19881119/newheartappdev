@@ -42,7 +42,7 @@
 </ion-header>
 
 <ion-content no-padding>
-    <div class="bottom-part">
+    <div class="bottom-part" [ngClass]="tabClass">
         <!-- switch case part -->
         <div [ngSwitch]="latestTabs">
             <div class="list-part" *ngSwitchCase="'donations'">
@@ -99,9 +99,12 @@
     </div>    
 </ion-content>
 <ion-footer class="home-footer">
-    <div class="view-all" (click)="viewAll()" id="view-all">
+    <div class="view-all" (click)="viewAll()" id="view-all" *ngIf="latestTabs == 'donations' && showDonationBtn">
         <button ion-button color="appColor" small>View All</button>
-    </div>   
+    </div> 
+    <div class="view-all" id="view-all-payments" *ngIf="latestTabs == 'payments'">
+        <button ion-button color="appColor" small>View All</button>
+    </div>  
     <ion-toolbar no-padding>       
         <div class="recomended-hearts">
             <p class="para-footer">Recomended BigHearts</p>
