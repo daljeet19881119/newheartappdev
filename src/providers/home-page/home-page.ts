@@ -22,7 +22,12 @@ export class HomePageProvider {
   }
 
   // getLatestPayments
-  getLatestPayments() {
-    return this.http.get("http://ionic.dsl.house/heartAppApi/new-latest-payments.php").map(res => res.json());
+  getLatestPayments(offset: number = 0) {
+    return this.http.get("http://ionic.dsl.house/heartAppApi/new-latest-payments.php?offset="+offset).map(res => res.json());
+  }
+
+  // getRecommendedBigHearts()
+  getRecommendedBigHearts(uuid: any) {
+      return this.http.get("http://ionic.dsl.house/heartAppApi/get-recommended-bighearts.php?uuid="+uuid).map(res => res.json());
   }
 }

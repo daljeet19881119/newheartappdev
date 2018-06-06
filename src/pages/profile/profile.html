@@ -24,7 +24,7 @@
         <button ion-button small [ngClass]="addBigHeartsClass" color="appColor" (click)="addToUserBigHearts()"  *ngIf="addBigHeartsClass === 'add-to-bighearts'">
                 {{ addBigHeartText }}
         </button>
-        <button ion-button small [ngClass]="addBigHeartsClass" color="appColor" *ngIf="addBigHeartsClass === 'added-bighearts'">
+        <button ion-button small [ngClass]="addBigHeartsClass" color="appColor" *ngIf="addBigHeartsClass === 'added-bighearts'" (click)="removeFromUserBigHearts()">
             <ion-icon name="checkmark" class="add-checkmark"></ion-icon>&nbsp;
             {{ addBigHeartText }}
         </button>

@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, MenuController, NavParams, Platform } from 'ionic-angular';
 import { ProfilePage } from '../profile/profile';
-import { Http } from '@angular/http';
-import 'rxjs/add/operator/map';
 import { UserProvider } from '../../providers/user/user';
 import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 import { StreamingMedia, StreamingVideoOptions } from '@ionic-native/streaming-media';
@@ -27,10 +25,13 @@ export class HomePage {
   name: string = 'Loading...';
   uuid: any;
   showDonationBtn: boolean = true;
+  showPaymentBtn: boolean = true;
   limit: number = 5;
   paging: number = 1;
+  paymentPaging: number = 1;
+  recommendedBigHearts: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, private http: Http, public platform: Platform, public userService: UserProvider, private uniqueDeviceID: UniqueDeviceID, private streamingMedia: StreamingMedia, private homeService: HomePageProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private uniqueDeviceID: UniqueDeviceID, private streamingMedia: StreamingMedia, private homeService: HomePageProvider) {
 
     // call function to get device id
     this.getDeviceID();
@@ -57,7 +58,18 @@ export class HomePage {
 
     // request data from server
     this.homeService.getLatestPayments().subscribe(data => {
-      this.latestPayments = data;
+      
+        // store requested data in the latestPayments
+        this.latestPayments = data.res;
+
+        let count = parseInt(data.count);
+        let paging = Math.ceil(count / this.limit);
+
+        // hide button if count is <= 5
+        if(paging <= 1)
+        {
+          this.showPaymentBtn = false;
+        }
       // console.log(this.latestPayments);
       },
       err => {
@@ -98,7 +110,14 @@ export class HomePage {
       })
       .catch((error: any) => {
         console.log(error);
-      });    
+      }); 
+
+  }
+
+  ionViewWillEnter() {
+
+      // call function getRecommendedBigHearts
+      this.getRecommendedBigHearts();
   }
 
   // showTabs
@@ -124,7 +143,7 @@ export class HomePage {
 
     // select the donation list
     // let donationList = document.getElementById('donation-list');
-    let donationList = document.getElementsByClassName('donation-lists');
+    let donationList = document.getElementsByClassName('donations-lists');
     let offset = donationList.length;
 
     // request data from server
@@ -150,13 +169,41 @@ export class HomePage {
     }, err => {
       console.log('Oops!');
     });
+  }
 
-    // make scrollable donation list
-    // donationList.style.overflow = 'scroll';
-    // donationList.style.height = '275px';
+  // viewAllPayments
+  viewAllPayments() {
+    
+    // increment paging
+    this.paymentPaging++;
 
-    // hide view all button
-    // document.getElementById('view-all').style.display = 'none';
+    // select the donation list
+    let paymentList = document.getElementsByClassName('payments-lists');
+    let offset = paymentList.length;
+
+    // request data from server
+    this.homeService.getLatestPayments(offset).subscribe(data => {
+
+      // loop of data
+      data.res.forEach(element => {
+        
+        // push data into latestDonations
+        this.latestPayments.push(element);
+      });
+
+      let count = parseInt(data.count);
+      let paging = Math.ceil(count / this.limit);
+
+      // hide button if count is <= 5
+      if(this.paymentPaging >= paging)
+      {
+        this.showPaymentBtn = false;
+      }
+
+      console.log(data);
+    }, err => {
+      console.log('Oops!');
+    });
   }
 
   // playVideo
@@ -180,5 +227,30 @@ export class HomePage {
       .catch((error: any) => {
         this.uuid = 'undefined';
       });
+  }
+
+  // getRecommendedBigHearts
+  getRecommendedBigHearts() {
+
+    // store uuid
+    let uuid;
+
+    if(this.uuid !== '')
+    {      
+      uuid =  this.navParams.get('uuid');
+    }
+    else{
+      uuid = 'undefined';
+    }
+
+    // get all recommended bighearts
+    this.homeService.getRecommendedBigHearts(uuid).subscribe(data => {
+
+      // store data
+      this.recommendedBigHearts = data;
+      console.log(data);
+    }, err => {
+      console.log('Oops!');
+    });
   }
 }

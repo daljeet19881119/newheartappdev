@@ -112,6 +112,33 @@ export class CharitiesPage {
     console.log(name+' is '+switchVal);
   }
 
+  // toggleValue() 
+  toggleValue(name: string, value: boolean) {
+
+    // check if matched then toggle value
+    if(this.animal_charity == name){
+      this.animal_charity_val = !value;
+    }
+    if(this.economic_development == name){
+      this.economic_development_val = !value;
+    }
+    if(this.environment == name){
+      this.environment_val = !value;
+    }
+    if(this.human_right == name){
+      this.human_right_val = !value;
+    }
+    if(this.poverty_hunger == name){
+      this.poverty_hunger_val = !value;
+    }
+    if(this.education == name){
+      this.education_val = !value;
+    }
+    if(this.geographic_preference == name){
+      this.geographic_preference_val= !value;
+    }
+  }
+
   // gotoUserinfoPage
   gotoUserinfoPage() {
     // send charities to userinfo page

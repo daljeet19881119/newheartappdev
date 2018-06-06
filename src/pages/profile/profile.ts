@@ -273,7 +273,7 @@ export class ProfilePage {
   addToUserBigHearts() {
 
     // call func createLoader
-    // this.createLoader();
+    this.createLoader();
 
       // store ngoid
       let ngo_id = this.navParams.get('id');
@@ -291,7 +291,10 @@ export class ProfilePage {
       // save ngo_id to users list
       this.userProvider.addToMyBigHearts(uuid,ngo_id).subscribe(data => {
         
-        // alert('uuid: '+uuid+' and ngo_id: '+ngo_id);
+        // dismiss the loader
+        this.loader.dismiss();
+
+        // check if found true
         if(data.found =='true')
         {
           // store added class to btn
@@ -324,9 +327,11 @@ export class ProfilePage {
 
     // request data from server
     this.userProvider.checkInMyBigHearts(uuid,ngo_id).subscribe(data => {
-        
+      
+      // dismiss the loader
       this.loader.dismiss();
-      // alert('uuid is: '+uuid+' and ngo_id is: '+ngo_id);
+
+      // check if found true
       if(data.found =='true')
       {
         // store added class to btn
@@ -335,6 +340,45 @@ export class ProfilePage {
       }
           
       console.log(data);  
+    }, err => {
+      console.log('Oops!');
+    });
+  }
+
+  // remove ngo from user list
+  removeFromUserBigHearts() {
+    
+    // call func createLoader
+    this.createLoader();
+
+    // store ngoid
+    let ngo_id = this.navParams.get('id');
+
+    // store uuid
+    let uuid;
+
+    if(this.uuid !== '')
+    {      
+      uuid =  this.navParams.get('uuid');
+    }else{
+      uuid = 'undefined';
+    }
+
+    // request to server
+    this.userProvider.removeFromMyBigHearts(uuid,ngo_id).subscribe(data => {
+
+      // dismiss the loader
+      this.loader.dismiss();
+
+      // check if found true
+      if(data.found =='true')
+      {
+        // store added class to btn
+        this.addBigHeartsClass = 'add-to-bighearts';  
+        this.addBigHeartText = 'Add to my BigHearts';  
+      }
+
+      console.log(data);
     }, err => {
       console.log('Oops!');
     });
