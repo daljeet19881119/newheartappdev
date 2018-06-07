@@ -1,0 +1,43 @@
+page-contributors {
+    .main_color_body{
+        background: #ae0433;
+    }
+    .ionic_style_item{
+        border-radius: 6px;
+    }
+    .image_section{
+        margin: 5px 12px 5px -10px !important;
+    }
+    .image_section img{
+        width: 70px; 
+        height: 70px;
+    }
+    .right-arrow{
+        font-size: 30px; 
+        color:#ae0433!important;
+    }
+    .label.label-md h2{
+        color:#ae0433; 
+        margin-top: 0.7rem; 
+        font-size:1.4rem; 
+    }
+    .label.label-md p{
+        font-size:1rem; 
+    }
+    p.title {
+        color: #fff; 
+        font-weight: normal; 
+        text-align: center;
+        font-size: 18px;
+        margin: 0px 0 10px;
+    }
+    .ionic_list_style{
+        margin: 0px 0 11px!important;
+    }
+    .founder-name{
+        text-align: center;
+        margin: 0px 0 20px;
+        color: #fff;
+        font-size: 20px;
+    }
+}

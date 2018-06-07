@@ -7,73 +7,42 @@
 </ion-header>
 
 
-<ion-content padding class="body-color">
+<ion-content padding class="body-color" style="background-color: #ae0433;">
     <ion-list>
-      <ion-item no-padding>
+      <ion-item no-padding class="item-feilds">
         <ion-label floating>First Name</ion-label>
         <ion-input type="text" [(ngModel)]="firstName"></ion-input>
       </ion-item>
-      <ion-item no-padding>
+      <ion-item no-padding class="item-feilds">
           <ion-label floating>Last Name</ion-label>
           <ion-input type="text" [(ngModel)]="lastName"></ion-input>
         </ion-item>
-      <ion-item no-padding>
+      <ion-item no-padding class="item-feilds">
         <ion-label floating>Email</ion-label>
         <ion-input type="email" [(ngModel)]="email"></ion-input>
       </ion-item>
-      <!-- <ion-row radio-group [(ngModel)]="gender">
-          <ion-col no-padding>
-            <ion-item style="color: #999999;" no-padding>
-              Gender
-            </ion-item>
-          </ion-col>
-          <ion-col no-padding>
-            <ion-item no-padding>
-              <ion-label>Male</ion-label>
-              <ion-radio value="male"></ion-radio>
-            </ion-item>
-          </ion-col>
-          <ion-col no-padding>
-            <ion-item no-padding>
-             <ion-label>Female</ion-label>
-              <ion-radio value="female"></ion-radio>
-            </ion-item>
-          </ion-col>
-      </ion-row> -->
-      <ion-item no-padding>
+      <ion-item no-padding class="item-feilds">
           <ion-label>Gender</ion-label>
           <ion-select [(ngModel)]="gender" interface="action-sheet">
             <ion-option value="male">Male</ion-option>
             <ion-option value="female">Female</ion-option>
           </ion-select>
         </ion-item>
-      <!-- <ion-item>
-          <ion-label>Date of Birth</ion-label>
-          <ion-datetime displayFormat="MMM D, YYYY" [(ngModel)]="dob"></ion-datetime>
-        </ion-item> -->
-      <ion-item no-padding (click)="gotoCharityPage()" *ngIf="!checkCharity"> 
-        <ion-label style="color: #999999;">Type of charities <ion-icon name="arrow-forward" class="next-arrow"></ion-icon></ion-label>
-        
-        <!-- <ion-select [(ngModel)]="charityType" multiple="true">
-          <ion-option value="animal charities">Animal Charities</ion-option>
-          <ion-option value="economic development">Economic Development</ion-option>
-          <ion-option value="environment">Environment</ion-option>
-          <ion-option value="human rights">Human Rights</ion-option>
-          <ion-option value="poverty and hunger">Poverty and Hunger</ion-option>
-          <ion-option value="education">Education</ion-option>
-          <ion-option value="geographic preference">Geographic Preference(s)</ion-option>
-        </ion-select> -->
+      <ion-item no-padding (click)="gotoCharityPage()" *ngIf="!checkCharity || charities?.length == 0" class="item-feilds"> 
+        <ion-label style="color: #999999;">Type of charities <ion-icon name="arrow-forward" class="next-arrow"></ion-icon></ion-label>        
       </ion-item>
       <ion-row *ngIf="charities?.length > 0">
           <ion-col col-10 no-padding>
-            <ion-item no-padding>
-                <ion-textarea [(ngModel)]="charities" readonly text-wrap></ion-textarea>
+            <ion-item no-padding class="item-feild-textarea">
+                <ion-textarea [(ngModel)]="charities" readonly text-wrap class="text-area"></ion-textarea>
             </ion-item>
           </ion-col>
-          <ion-col col-2 (click)="gotoCharityPage()">
-              <ion-label style="color: #999999;"><ion-icon name="arrow-forward" class="next-arrow"></ion-icon></ion-label>
+          <ion-col col-2 no-padding (click)="gotoCharityPage()">
+            <ion-item class="item-feild-arrow">
+              <ion-label style="color: #999999;margin:20px 8px 20px 0;"><ion-icon name="arrow-forward" class="next-arrow"></ion-icon></ion-label>
+            </ion-item>
           </ion-col>
       </ion-row>
     </ion-list>
-    <button ion-button block (click)="registerUser()" color="appColor">Register</button>
+    <button ion-button block (click)="registerUser()" color="white" class="register-btn">Register</button>
 </ion-content>

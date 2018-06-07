@@ -9,7 +9,9 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { CampaignsPage } from '../campaigns/campaigns';
 import { UserProvider } from '../../providers/user/user';
 import { UniqueDeviceID } from '@ionic-native/unique-device-id';
-import { CharitiesPage } from '../charities/charities';
+import { CommunityPage } from '../community/community';
+import { TeamPage } from '../team/team';
+import { ContributorsPage } from '../contributors/contributors';
 
 @IonicPage()
 @Component({
@@ -264,11 +266,20 @@ export class ProfilePage {
     this.navCtrl.push(CampaignsPage, {founderName: this.ngoFounderName});
   }
 
-  // gotoCampignsPage
-  gotoCharityPage() {
-    this.navCtrl.push(CharitiesPage);
+  // gotoCommunityPage
+  gotoCommunityPage() {
+    this.navCtrl.push(CommunityPage, {founderName: this.ngoFounderName});
   }
 
+  // gotoContributorPage
+  gotoContributorPage() {
+    this.navCtrl.push(ContributorsPage, {founderName: this.ngoFounderName});
+  }
+
+  // gotoTeamPage
+  gotoTeamPage() {
+    this.navCtrl.push(TeamPage, {founderName: this.ngoFounderName});
+  }
   // add ngo's to user list
   addToUserBigHearts() {
 

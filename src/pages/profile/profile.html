@@ -44,19 +44,19 @@
             </ion-item>  
         </ion-list>
         <ion-list class="ngo-list">
-            <ion-item class="list-item community" (click)="gotoCharityPage()">
+            <ion-item class="list-item community" (click)="gotoCommunityPage()">
                 <span class="list-text-color">Community</span> 
                 <span class="count list-text-color">{{ ngoCommunity }} <ion-icon name="arrow-forward" class="count-arrow"></ion-icon></span>
             </ion-item>  
         </ion-list>
         <ion-list class="ngo-list">
-            <ion-item class="list-item contributors">
+            <ion-item class="list-item contributors" (click)="gotoContributorPage()">
                 <span class="list-text-color">Contributors</span> 
                 <span class="count list-text-color">{{ ngoContributors }} <ion-icon name="arrow-forward" class="count-arrow"></ion-icon></span>
             </ion-item>  
         </ion-list>
         <ion-list class="ngo-list">
-            <ion-item class="list-item team">
+            <ion-item class="list-item team" (click)="gotoTeamPage()">
                 <span class="list-text-color">Team</span> 
                 <span class="count list-text-color">{{ ngoTeam }} <ion-icon name="arrow-forward" class="count-arrow"></ion-icon></span>
             </ion-item>  

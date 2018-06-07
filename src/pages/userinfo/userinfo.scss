@@ -2,4 +2,35 @@ page-userinfo {
     .next-arrow{
         float: right;
     }
+    .register-btn{
+        height: 3em;
+        color: #ae0433;
+        font-size: 18px;
+        font-weight: 400;
+        border-radius: 5px;
+    }
+    .item-feilds{
+        border-radius: 5px;
+        margin: 5px 0;
+        padding: 0 10px;
+    }
+    .text-area textarea{
+        margin: 10px 0;
+    }
+    .item-feild-textarea{
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        margin: 5px 0; 
+        padding: 0px 10px; 
+    }
+    .item-feild-arrow{
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin: 5px 0; 
+        padding: 0px 10px; 
+    }
 }

@@ -5,29 +5,27 @@
 </ion-header>
 
 
-<ion-content padding>
-    <ion-item>
-        <ion-label>Select Country</ion-label>
-        <ion-select [(ngModel)]="country">
-          <div class="countries-div" *ngFor="let countryName of allCountries">
-            <ion-option value="{{ countryName.dial_code }}">{{ countryName.name }}</ion-option>
-          </div>          
-        </ion-select>
-      </ion-item>
-    <ion-grid>
-      <ion-row>
-        <ion-col col-5>
-          <ion-item>
-            <ion-label>+</ion-label>
-            <ion-input type="text" value="{{country}}" [readonly]="true"></ion-input>
-          </ion-item>
-        </ion-col>
-        <ion-col col-7>
-          <ion-item>
-            <ion-input type="number" [(ngModel)]="mobileno"></ion-input>
-          </ion-item>          
-        </ion-col>
-      </ion-row>
-    </ion-grid>  
-    <button ion-button block style="margin-left: auto;margin-right: auto;display: block;" (click)="validateNumber()" color="appColor">Next</button>
+<ion-content padding style="background-color: #ae0433;">
+    <ion-item class="item-radious">
+      <ion-label>Select Country</ion-label>
+      <ion-select [(ngModel)]="country">
+        <div class="countries-div" *ngFor="let countryName of allCountries">
+          <ion-option value="{{ countryName.dial_code }}">{{ countryName.name }}</ion-option>
+        </div>          
+      </ion-select>
+    </ion-item>
+    <ion-row class="number-row">
+      <ion-col col-5 class="col-5-number">
+        <ion-item class="item-radious">
+          <ion-label>+</ion-label>
+          <ion-input type="text" value="{{country}}" [readonly]="true"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col col-7 class="col-7-number">
+        <ion-item class="item-radious">
+          <ion-input type="number" [(ngModel)]="mobileno"></ion-input>
+        </ion-item>          
+      </ion-col>
+    </ion-row>
+    <button ion-button block class="next-btn" (click)="validateNumber()" color="white">Next</button>
 </ion-content>

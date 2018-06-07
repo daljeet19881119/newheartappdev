@@ -22,6 +22,9 @@ import { CampaignsPage } from '../pages/campaigns/campaigns';
 import { StreamingMedia } from '@ionic-native/streaming-media';
 import { CharitiesPage } from '../pages/charities/charities';
 import { HomePageProvider } from '../providers/home-page/home-page';
+import { CommunityPage } from '../pages/community/community';
+import { ContributorsPage } from '../pages/contributors/contributors';
+import { TeamPage } from '../pages/team/team';
 
 @NgModule({
   declarations: [
@@ -34,7 +37,10 @@ import { HomePageProvider } from '../providers/home-page/home-page';
     UserinfoPage,
     YtvideoPage,
     CampaignsPage,
-    CharitiesPage
+    CharitiesPage,
+    CommunityPage,
+    ContributorsPage,
+    TeamPage
   ],
   imports: [
     BrowserModule,
@@ -53,7 +59,10 @@ import { HomePageProvider } from '../providers/home-page/home-page';
     UserinfoPage,
     YtvideoPage,
     CampaignsPage,
-    CharitiesPage
+    CharitiesPage,
+    CommunityPage,
+    ContributorsPage,
+    TeamPage
   ],
   providers: [
     StatusBar,

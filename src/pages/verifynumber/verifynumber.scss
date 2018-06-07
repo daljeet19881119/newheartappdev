@@ -1,3 +1,21 @@
 page-verifynumber {
-    
+    .next-btn{
+        border-radius: 5px;
+        height: 3em;
+        color: #ae0433;
+        font-size: 18px;
+        font-weight: 400;
+    }
+    .number-row{
+        margin: 10px 0;
+    }
+    .col-5-number{
+        padding-left: 0px;
+    }
+    .col-7-number{
+        padding-right: 0px;
+    }
+    .item-radious{
+        border-radius: 5px;
+    }
 }

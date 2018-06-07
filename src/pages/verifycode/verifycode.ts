@@ -4,6 +4,7 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { UserinfoPage } from '../userinfo/userinfo';
 import { HomePage } from '../home/home';
+import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 
 /**
  * Generated class for the VerifycodePage page.
@@ -25,8 +26,10 @@ export class VerifycodePage {
   country: number;
   code: number;
   verifyCode: number;
+  uuid: any;
+  btnDisable: boolean = true;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, private modalCtrl: ModalController, private alertCtrl: AlertController, public platform: Platform) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, private modalCtrl: ModalController, private alertCtrl: AlertController, public platform: Platform, private uniqueDeviceID: UniqueDeviceID) {
 
     // if user try goback then exit app
     this.platform.registerBackButtonAction(() => {
@@ -41,6 +44,20 @@ export class VerifycodePage {
     this.mobileno = this.navParams.get('phone');
     this.country = this.navParams.get('country');
     this.verifyCode = this.navParams.get('code');
+  }
+
+  // checkCode
+  checkCode(code: number) {
+    console.log('verify code is: '+code);
+    
+    // check if code matched to verification code then enable next button
+    if(code == this.verifyCode)
+    {
+      this.btnDisable = false;
+    }
+    else{
+      this.btnDisable = true;
+    }
   }
 
   // checkVerifyCode
@@ -87,8 +104,30 @@ export class VerifycodePage {
       this.http.get('http://ionic.dsl.house/heartAppApi/verify-users.php?verify=verified&phoneno='+this.mobileno+'&country_code='+this.country+'&verify_code='+verifyCode).map(res => res.json()).subscribe(data => {
         console.log(data);
       }, err => {
-        console.log('Oops!');
+        console.log('Oops!'+err);
       });
   }
 
+  // resendVerifcationCode
+  resendVerificationCode() {
+    console.log('resend verification code');
+    console.log('country code: '+this.country);
+    console.log('mobile no: '+this.mobileno);
+
+     // request data from server
+     this.http.get('http://ionic.dsl.house/heartAppApi/verify-users.php?country='+this.country+'&mobileno='+this.mobileno+'&uuid='+this.uuid).map(res => res.json()).subscribe(data => {
+       
+        this.verifyCode = data.data.verification_code;
+        console.log(data);
+    }, err => {
+      console.log(err);
+    });
+  }
+
+  // getuniqueDeviceID
+  getuniqueDeviceID() {
+    this.uniqueDeviceID.get()
+      .then((uuid: any) => {this.uuid = uuid;})
+      .catch((error: any) => console.log(error));
+  }
 }

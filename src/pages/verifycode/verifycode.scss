@@ -1,13 +1,4 @@
 page-verifycode {
-    .btn-div{
-        margin-top: 50px;
-    }
-    .btn-div button{
-        margin-left: auto; 
-        margin-right: auto; 
-        display: block; 
-        color: #ae0433;
-    }
     .body-color{
         background-color: #ae0433;
     }
@@ -15,6 +6,30 @@ page-verifycode {
         color: #fff;
     }
     .input-item{
-        border-radius: 8px;
+        border-radius: 5px;
+    }
+    .resend-btn{
+        border-radius: 5px;
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+        color: #ae0433;
+        height: 3em;
+        font-size: 18px;
+        font-weight: 400;
+    }
+    .next-btn{
+        border-radius: 5px;
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+        color: #ae0433;
+        height: 3em;
+        font-size: 18px;
+        font-weight: 400;
+    }
+    .btn-col{
+        padding: 2px;
+    }
+    .btn-row{
+        margin: 100px 0;
     }
 }

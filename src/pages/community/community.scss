@@ -1,0 +1,27 @@
+page-community {
+    .card-img{
+        width: 80%;
+        border-radius: 50%;
+        margin: 10%;
+    }
+    .card-para{
+        text-align: center;
+        font-size: 13px;
+        margin-bottom: 10px;
+    }
+    .card-title{
+        font-size: 17px;
+        text-align: center;
+        font-weight: 500;
+        color: #ae0433;
+    }
+    .card-tag{
+        border-radius: 6px;
+    }
+    .founder-name{
+        text-align: center;
+        margin: 20px 0;
+        color: #fff;
+        font-size: 20px;
+    }
+}
