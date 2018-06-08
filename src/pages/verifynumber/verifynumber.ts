@@ -26,6 +26,7 @@ export class VerifynumberPage {
   verficationCode: any;
   uuid: any;
   allCountries: any;
+  loader: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private alertCtrl: AlertController, private http: Http, private modalCtrl: ModalController, public loadingCtrl: LoadingController, private uniqueDeviceID: UniqueDeviceID, public platform: Platform, public userService: UserProvider) {
 
@@ -92,6 +93,10 @@ export class VerifynumberPage {
   
   // sendSMS
   sendSMS() {
+
+    // call createLoader
+    this.createLoader();
+
     // request data from server
     this.http.get('http://ionic.dsl.house/heartAppApi/verify-users.php?country='+this.country+'&mobileno='+this.mobileno+'&uuid='+this.uuid).map(res => res.json()).subscribe(data => {
       this.verficationCode = data.data.verification_code;
@@ -119,10 +124,20 @@ export class VerifynumberPage {
         });
         modal.present();
         
+        this.loader.dismiss();
       } 
     }, err => {
       console.log('Oops!');
     });
   }
 
+  // createLoader
+  createLoader() {
+    this.loader = this.loadingCtrl.create({
+      spinner: 'dots',
+      content: 'Please wait...'
+    });
+
+    this.loader.present();
+  }
 }

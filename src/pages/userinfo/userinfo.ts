@@ -145,6 +145,24 @@ export class UserinfoPage {
   // gotoCharityPage
   gotoCharityPage() {
     console.log('selected charities: '+this.charities);
-    this.navCtrl.push(CharitiesPage, {charities: this.charities, mobileno: this.mobileno, c_code: this.country, fname: this.firstName, lname: this.lastName, email: this.email});
+    // this.navCtrl.push(CharitiesPage, {
+    //         charities: this.charities, 
+    //         mobileno: this.mobileno, 
+    //         c_code: this.country, 
+    //         fname: this.firstName, 
+    //         lname: this.lastName, 
+    //         email: this.email
+    // });
+
+    // create modal
+     const modal = this.modalCtrl.create(CharitiesPage, {
+                          charities: this.charities, 
+                          mobileno: this.mobileno, 
+                          c_code: this.country, 
+                          fname: this.firstName, 
+                          lname: this.lastName, 
+                          email: this.email
+                  });
+                  modal.present();
   }
 }

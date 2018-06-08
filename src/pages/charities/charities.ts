@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 import { UserinfoPage } from '../userinfo/userinfo';
 
 /**
@@ -41,7 +41,7 @@ export class CharitiesPage {
   email: string;
   charities: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController) {
 
     // get data from nav params
     this.mobileNo = this.navParams.get('mobileno');
@@ -151,6 +151,24 @@ export class CharitiesPage {
       {name: this.education, value: this.education_val},
       {name: this.geographic_preference, value: this.geographic_preference_val}
     ];
-    this.navCtrl.push(UserinfoPage, {charities: charities, mobileno: this.mobileNo, country: this.c_code, fname: this.fname, lname: this.lname, email: this.email});
+    // this.navCtrl.push(UserinfoPage, {
+    //       charities: charities, 
+    //       mobileno: this.mobileNo, 
+    //       country: this.c_code, 
+    //       fname: this.fname, 
+    //       lname: this.lname, 
+    //       email: this.email
+    // });
+    
+    // create modal
+    const modal = this.modalCtrl.create(UserinfoPage, {
+                        charities: charities, 
+                        mobileno: this.mobileNo, 
+                        country: this.c_code, 
+                        fname: this.fname, 
+                        lname: this.lname, 
+                        email: this.email
+                  });
+          modal.present();
   }
 }

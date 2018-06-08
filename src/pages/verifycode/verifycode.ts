@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, AlertController, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, AlertController, Platform, LoadingController } from 'ionic-angular';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { UserinfoPage } from '../userinfo/userinfo';
@@ -28,8 +28,9 @@ export class VerifycodePage {
   verifyCode: number;
   uuid: any;
   btnDisable: boolean = true;
+  loader: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, private modalCtrl: ModalController, private alertCtrl: AlertController, public platform: Platform, private uniqueDeviceID: UniqueDeviceID) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, private modalCtrl: ModalController, private alertCtrl: AlertController, public platform: Platform, private uniqueDeviceID: UniqueDeviceID, public loadingCtrl: LoadingController) {
 
     // if user try goback then exit app
     this.platform.registerBackButtonAction(() => {
@@ -62,6 +63,10 @@ export class VerifycodePage {
 
   // checkVerifyCode
   checkVerifyCode(code: number) {
+
+      // call createLoader
+      this.createLoader();
+
       // check if code matched to verifyCode
       if(code == this.verifyCode)
       {
@@ -83,6 +88,8 @@ export class VerifycodePage {
                   country: this.country                      
               });
         modal.present();
+
+        this.loader.dismiss();
       }
       else
       {
@@ -94,6 +101,7 @@ export class VerifycodePage {
         });
         alert.present();
 
+        this.loader.dismiss();
         console.log('Oops code not matched!');
       }
   }
@@ -110,15 +118,18 @@ export class VerifycodePage {
 
   // resendVerifcationCode
   resendVerificationCode() {
-    console.log('resend verification code');
-    console.log('country code: '+this.country);
-    console.log('mobile no: '+this.mobileno);
+    // console.log('resend verification code');
+    
+    // call createLader
+    this.createLoader();
 
      // request data from server
      this.http.get('http://ionic.dsl.house/heartAppApi/verify-users.php?country='+this.country+'&mobileno='+this.mobileno+'&uuid='+this.uuid).map(res => res.json()).subscribe(data => {
        
         this.verifyCode = data.data.verification_code;
         console.log(data);
+
+        this.loader.dismiss();
     }, err => {
       console.log(err);
     });
@@ -129,5 +140,15 @@ export class VerifycodePage {
     this.uniqueDeviceID.get()
       .then((uuid: any) => {this.uuid = uuid;})
       .catch((error: any) => console.log(error));
+  }
+
+  // createLoader
+  createLoader() {
+    this.loader = this.loadingCtrl.create({
+      spinner: 'dots',
+      content: 'Please wait...'
+    });
+
+    this.loader.present();
   }
 }
