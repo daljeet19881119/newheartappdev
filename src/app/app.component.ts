@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { Platform } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { Platform, Nav } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Http } from '@angular/http';
@@ -8,13 +8,20 @@ import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 import { WelcomePage } from '../pages/welcome/welcome';
 import { HomePage } from '../pages/home/home';
 import { UserinfoPage } from '../pages/userinfo/userinfo';
+import { CauseFormPage } from '../pages/cause-form/cause-form';
+import { MerchantFormPage } from '../pages/merchant-form/merchant-form';
+import { VolunteerFormPage } from '../pages/volunteer-form/volunteer-form';
 
 
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
+
   rootPage:any = WelcomePage;
+
+  @ViewChild(Nav) nav: Nav;
+
   uuid: any = null;
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private http: Http, private uniqueDeviceID: UniqueDeviceID) {
@@ -66,6 +73,21 @@ export class MyApp {
     }, error => {
       console.log(error);
     });
+  }
+
+  // gotoCauseFormPage
+  gotoCauseFormPage() {
+    this.nav.push(CauseFormPage);
+  }
+
+  // gotoMerchantFormPage
+  gotoMerchantFormPage() {
+    this.nav.push(MerchantFormPage);
+  }
+
+  // gotoVolunteerFormPage
+  gotoVolunteerFormPage() {
+    this.nav.push(VolunteerFormPage);
   }
 }
 

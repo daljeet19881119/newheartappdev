@@ -25,6 +25,9 @@ import { HomePageProvider } from '../providers/home-page/home-page';
 import { CommunityPage } from '../pages/community/community';
 import { ContributorsPage } from '../pages/contributors/contributors';
 import { TeamPage } from '../pages/team/team';
+import { CauseFormPage } from '../pages/cause-form/cause-form';
+import { MerchantFormPage } from '../pages/merchant-form/merchant-form';
+import { VolunteerFormPage } from '../pages/volunteer-form/volunteer-form';
 
 @NgModule({
   declarations: [
@@ -40,7 +43,10 @@ import { TeamPage } from '../pages/team/team';
     CharitiesPage,
     CommunityPage,
     ContributorsPage,
-    TeamPage
+    TeamPage,
+    CauseFormPage,
+    MerchantFormPage,
+    VolunteerFormPage
   ],
   imports: [
     BrowserModule,
@@ -62,7 +68,10 @@ import { TeamPage } from '../pages/team/team';
     CharitiesPage,
     CommunityPage,
     ContributorsPage,
-    TeamPage
+    TeamPage,
+    CauseFormPage,
+    MerchantFormPage,
+    VolunteerFormPage
   ],
   providers: [
     StatusBar,

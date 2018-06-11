@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-navbar color="appColor">
+    <ion-title style="text-align: center;">Upload Team members</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding style="background-color: #ae0433;">
+    <ion-list>
+      <ion-item no-padding class="item-feilds">
+        <ion-label floating>First Name</ion-label>
+        <ion-input type="text"></ion-input>
+      </ion-item>
+      <ion-item no-padding class="item-feilds">
+        <ion-label floating>Last Name</ion-label>
+        <ion-input type="text"></ion-input>
+      </ion-item>
+      <ion-item no-padding class="item-feilds">
+        <ion-label>Short Description</ion-label>
+        <ion-textarea></ion-textarea>
+      </ion-item>
+      <ion-item no-padding class="item-feilds">
+        <ion-label>Tell more about this team member</ion-label>
+        <ion-textarea></ion-textarea>
+      </ion-item>
+      <ion-row>
+          <ion-col col-8>
+            <p class="upload-para">Upload a profile photo</p>
+            <button ion-button small color="white" class="upload-btn">From storage</button>
+            <button ion-button small color="white" class="upload-btn">Camera</button>
+          </ion-col>
+          <ion-col col-3>
+            <img src="assets/imgs/background.png"/>
+          </ion-col>
+      </ion-row>
+    </ion-list>
+    <button ion-button block color="white" class="save-btn">Save</button>
+  </ion-content>

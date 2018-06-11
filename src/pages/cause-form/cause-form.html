@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-navbar color="appColor">
+    <ion-title style="text-align: center;">Registration of a BigHeart</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding style="background-color: #ae0433;">
+  <ion-list>
+    <ion-item no-padding class="item-feilds">
+      <ion-label floating>First Name</ion-label>
+      <ion-input type="text"></ion-input>
+    </ion-item>
+    <ion-item no-padding class="item-feilds">
+      <ion-label floating>Last Name</ion-label>
+      <ion-input type="text"></ion-input>
+    </ion-item>    
+    <ion-item no-padding class="item-feilds">
+      <ion-label>Cause Categories</ion-label>
+      <ion-select interface="action-sheet">
+        <ion-option value="male">Male</ion-option>
+        <ion-option value="female">Female</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item no-padding class="item-feilds">
+      <ion-label>Select Country</ion-label>
+      <ion-select interface="action-sheet">
+        <ion-option value="male">usa</ion-option>
+        <ion-option value="female">india</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item no-padding class="item-feilds">
+      <ion-label floating>Enter City</ion-label>
+      <ion-input type="text"></ion-input>
+    </ion-item>
+    <ion-item no-padding class="item-feilds">
+      <ion-label>Short Description</ion-label>
+      <ion-textarea></ion-textarea>
+    </ion-item>
+    <ion-item no-padding class="item-feilds">
+      <ion-label>Tell about yourself</ion-label>
+      <ion-textarea></ion-textarea>
+    </ion-item>
+    <ion-item no-padding class="item-feilds">
+      <ion-label>Tell about the cause that you represent</ion-label>
+      <ion-textarea></ion-textarea>
+    </ion-item>
+    <ion-row>
+        <ion-col col-8>
+          <p class="upload-para">Upload your profile photo</p>
+          <button ion-button small color="white" class="upload-btn">From storage</button>
+          <button ion-button small color="white" class="upload-btn">Camera</button>
+        </ion-col>
+        <ion-col col-3>
+          <img src="assets/imgs/background.png"/>
+        </ion-col>
+    </ion-row>
+    <ion-row>
+        <ion-col col-8>
+          <p class="upload-para">Upload 5 video's/pics</p>
+          <button ion-button small color="white" class="upload-btn">From storage</button>
+          <button ion-button small color="white" class="upload-btn">Camera</button>
+        </ion-col>
+        <ion-col col-3>
+          <img src="assets/imgs/background.png"/>
+        </ion-col>
+    </ion-row>
+  </ion-list>
+  <button ion-button block color="white" class="register-btn">Register</button>
+</ion-content>

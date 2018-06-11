@@ -13,7 +13,7 @@ import { HomePageProvider } from '../../providers/home-page/home-page';
 export class HomePage {
 
   // icons
-  latestTabs: string = 'donations';
+  latestTabs: string = 'payments';
   tabClass: string = 'tab-'+this.latestTabs;
 
   // latestDonations

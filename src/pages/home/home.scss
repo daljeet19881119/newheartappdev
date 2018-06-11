@@ -92,6 +92,11 @@ page-home {
     }
     .donations-lists{
         margin: 0px!important;
+        border-bottom: 1px solid #e1e1e1;
+    }
+    .payments-lists{
+        margin: 0px!important;
+        border-bottom: 1px solid #e1e1e1;
     }
     .donation-items{
         border-top: 0px!important;
@@ -172,11 +177,15 @@ page-home {
         color: #ae0433;
     }
     .donation-list{
-        height: 151px;
+        height: 370px;
         overflow: scroll;
     }
     .scroll-content{
         margin-bottom: 192px;
+    }
+    #payment-list{
+        height: 450px;
+        overflow: scroll;
     }
     .view-all button{
         display: block;
