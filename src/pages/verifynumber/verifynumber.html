@@ -8,9 +8,9 @@
 <ion-content padding style="background-color: #ae0433;">
     <ion-item class="item-radious">
       <ion-label>Select Country</ion-label>
-      <ion-select [(ngModel)]="country">
+      <ion-select [(ngModel)]="code" interface="popover" (ionChange)="getCountryCode(code)">
         <div class="countries-div" *ngFor="let countryName of allCountries">
-          <ion-option value="{{ countryName.dial_code }}">{{ countryName.name }}</ion-option>
+          <ion-option value="{{ countryName.code }}">{{ countryName.name }}</ion-option>
         </div>          
       </ion-select>
     </ion-item>

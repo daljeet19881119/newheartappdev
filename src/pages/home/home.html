@@ -33,9 +33,6 @@
                 <ion-segment-button value="donations" class="payment-segments">
                     <span>Latest <span class="segment-span">Donations</span></span>
                 </ion-segment-button>
-                <!-- <ion-segment-button value="big-hearts" class="payment-segments">
-                    <span>Recommended <span class="segment-span">BigHearts</span></span>
-                </ion-segment-button> -->
             </ion-segment>
         </ion-toolbar>
     </div>
@@ -111,10 +108,13 @@
         <div class="recomended-hearts">
             <p class="para-footer">Recommended BigHearts</p>
             <ion-slides loop="true" slidesPerView="3">
-                <ion-slide *ngFor="let recommendHearts of recommendedBigHearts">
-                    <div class="ngo-img-div" [style.backgroundImage]="'url('+recommendHearts.ngo_founder_img+')'"  (click)="gotoProfilePage(recommendHearts.id)"></div>                    
-                    <p class="ngo-founder">{{ recommendHearts.ngo_founder}}</p>
-                </ion-slide>
+                <ng-container  *ngFor="let recommendHearts of recommendedBigHearts">
+                    <ion-slide>
+                        <div class="ngo-img-div" [style.backgroundImage]="'url('+recommendHearts.ngo_founder_img+')'"  (click)="gotoProfilePage(recommendHearts.id)"></div>                    
+                        <p class="ngo-founder">{{ recommendHearts.ngo_founder}}</p>
+                        <p class="ngo-category">{{ recommendHearts.category}}</p>
+                    </ion-slide>
+                </ng-container>
             </ion-slides>
         </div>
     </ion-toolbar>

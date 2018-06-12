@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, AlertController } from 'ionic-angular';
 import { UserinfoPage } from '../userinfo/userinfo';
 
 /**
@@ -41,7 +41,7 @@ export class CharitiesPage {
   email: string;
   charities: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController) {
 
     // get data from nav params
     this.mobileNo = this.navParams.get('mobileno');
@@ -141,34 +141,42 @@ export class CharitiesPage {
 
   // gotoUserinfoPage
   gotoUserinfoPage() {
-    // send charities to userinfo page
-    let charities = [
-      {name: this.animal_charity, value: this.animal_charity_val},
-      {name: this.economic_development, value: this.economic_development_val},
-      {name: this.environment, value: this.environment_val},
-      {name: this.human_right, value: this.human_right_val},
-      {name: this.poverty_hunger, value: this.poverty_hunger_val},
-      {name: this.education, value: this.education_val},
-      {name: this.geographic_preference, value: this.geographic_preference_val}
-    ];
-    // this.navCtrl.push(UserinfoPage, {
-    //       charities: charities, 
-    //       mobileno: this.mobileNo, 
-    //       country: this.c_code, 
-    //       fname: this.fname, 
-    //       lname: this.lname, 
-    //       email: this.email
-    // });
-    
-    // create modal
-    const modal = this.modalCtrl.create(UserinfoPage, {
-                        charities: charities, 
-                        mobileno: this.mobileNo, 
-                        country: this.c_code, 
-                        fname: this.fname, 
-                        lname: this.lname, 
-                        email: this.email
-                  });
-          modal.present();
+
+    // check if none of charities selected then show alert
+    if(this.animal_charity_val === false && this.economic_development_val === false && this.environment_val === false && this.human_right_val === false && this.poverty_hunger_val === false && this.education_val === false && this.geographic_preference_val === false)
+    {
+        // create alert
+        const alert = this.alertCtrl.create({
+            title: 'HeartApp',
+            message: 'Please select at least one charity.',
+            buttons: ['ok']
+        });
+        alert.present();
+    }
+    else
+    {
+
+        // send charities to userinfo page
+        let charities = [
+          {name: this.animal_charity, value: this.animal_charity_val},
+          {name: this.economic_development, value: this.economic_development_val},
+          {name: this.environment, value: this.environment_val},
+          {name: this.human_right, value: this.human_right_val},
+          {name: this.poverty_hunger, value: this.poverty_hunger_val},
+          {name: this.education, value: this.education_val},
+          {name: this.geographic_preference, value: this.geographic_preference_val}
+        ];
+        
+        // create modal
+        const modal = this.modalCtrl.create(UserinfoPage, {
+                            charities: charities, 
+                            mobileno: this.mobileNo, 
+                            country: this.c_code, 
+                            fname: this.fname, 
+                            lname: this.lname, 
+                            email: this.email
+                      });
+              modal.present();
+    }
   }
 }

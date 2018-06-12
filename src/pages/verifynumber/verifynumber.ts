@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, ModalController, LoadingController, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, LoadingController, Platform } from 'ionic-angular';
 import { VerifycodePage } from '../verifycode/verifycode';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
@@ -21,14 +21,15 @@ import { UserProvider } from '../../providers/user/user';
 export class VerifynumberPage {
 
   // country
-  country: number = 91;
+  code: string = 'US';
+  country: number = null;
   mobileno: number = null;
   verficationCode: any;
   uuid: any;
   allCountries: any;
   loader: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private alertCtrl: AlertController, private http: Http, private modalCtrl: ModalController, public loadingCtrl: LoadingController, private uniqueDeviceID: UniqueDeviceID, public platform: Platform, public userService: UserProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, private modalCtrl: ModalController, public loadingCtrl: LoadingController, private uniqueDeviceID: UniqueDeviceID, public platform: Platform, public userService: UserProvider) {
 
     // call getuniqueDeviceID
     this.getuniqueDeviceID();
@@ -37,6 +38,9 @@ export class VerifynumberPage {
     this.platform.registerBackButtonAction(() => {
       platform.exitApp();
     });
+
+    // call function createLoader
+    this.createLoader();
   }
 
   ionViewDidLoad() {
@@ -49,14 +53,24 @@ export class VerifynumberPage {
     }, error => {
       console.log('Oops!');
     });
+    
+    // call function getCountryCode
+    this.getCountryCode(this.code);
 
-    // create alert on page load
-    const alert = this.alertCtrl.create({
-      title: 'Heart App',
-      message: 'Please select country and enter phone number to get verification code.',
-      buttons: ['ok']
+  }
+
+  // function to getCountryCode
+  getCountryCode(code: string) {
+
+      // call user service provider to get country code
+      this.userService.getCountryCodeByCode(code).subscribe(data => {
+        this.country = data.dial_code;
+
+        // dismiss laoder
+        this.loader.dismiss();
+    }, err => {
+      console.log('Oops!'+err);
     });
-    alert.present();
   }
 
   // validateNumber

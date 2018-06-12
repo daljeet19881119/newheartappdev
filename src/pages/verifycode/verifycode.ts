@@ -49,10 +49,10 @@ export class VerifycodePage {
 
   // checkCode
   checkCode(code: number) {
-    console.log('verify code is: '+code);
+    // console.log('verify code is: '+code);
     
     // check if code matched to verification code then enable next button
-    if(code == this.verifyCode)
+    if(code.toString().length >= 4)
     {
       this.btnDisable = false;
     }

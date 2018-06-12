@@ -21,6 +21,11 @@ export class UserProvider {
     return this._http.get('http://ionic.dsl.house/heartAppApi/all-countries.php').map(res => res.json());
   }
 
+  // getCountryCodeByCode
+  getCountryCodeByCode(code: string) {
+    return this._http.get('http://ionic.dsl.house/heartAppApi/all-countries.php?code='+code).map(res => res.json());
+  }
+
   // getUserByDeviceId
   getUserByDeviceId(uuid: any) {
     return this._http.get('http://ionic.dsl.house/heartAppApi/get-verified-user.php?uuid='+uuid).map(res => res.json());

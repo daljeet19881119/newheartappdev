@@ -78,7 +78,7 @@ export class UserinfoPage {
   registerUser() {
 
     // check if all fields are not empty then register user
-    if(this.firstName ===null || this.lastName ===null || this.email ===null)
+    if(this.firstName ===null || this.lastName ===null || this.email ===null || this.charities.length === 0)
     {
         const alert = this.alertCtrl.create({
           message: 'We need a little more information about you. Please fill out all fields before continuing. <p>Thanks.</p>',
