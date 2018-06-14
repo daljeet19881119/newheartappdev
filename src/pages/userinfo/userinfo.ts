@@ -67,17 +67,10 @@ export class UserinfoPage {
         // sotore only selected charities in array
         if(element.value == true)
         {
-          this.charities.push(' '+element.name);
+          this.charities.push(element.name);
         }
       });
       this.checkCharity = true;
-
-      
-      let charityArr = '';
-      this.charities.forEach(element => {
-          charityArr += element;
-      });
-      console.log('charityArr :: '+charityArr);
     }
   }
 
