@@ -115,6 +115,7 @@ page-home {
     }
     .ngo-date{
         margin: 5px 0;
+        font-size: 13px;
     }
     .heart-small-icon{
         transform: rotate(270deg);
@@ -122,15 +123,25 @@ page-home {
         font-size: 14px;
         font-weight: bold;
     }
+    .play-para .heart-small-icon {
+        transform: rotate(270deg);
+        font-size: 12px;
+        font-weight: bold;
+        color: #666;
+    }
     .heart-coin{
         color: #ae0433;
         font-size: 16px;
+    }
+    .heart-coin-dollor{
+        font-size: 13px;
+        color: #ae0433;
     }
     .ngo-total{
         margin: 5px 0;
     }
     .label{
-        margin: 11px 0!important;
+        margin: 5px 0!important;
     }
     table {
         border-collapse: collapse;

@@ -20,7 +20,7 @@ export class HomePage {
   latestDonations: any;
 
   // latestPayments array
-  latestPayments: any;
+  latestPayments: any = [];
   heloWish: string;
   name: string = 'Loading...';
   uuid: any;

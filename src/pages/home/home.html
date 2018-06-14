@@ -1,5 +1,5 @@
 <ion-header>
-    <ion-navbar color="appColor">
+    <ion-navbar color="appColor" hideBackButton>
         <ion-row>
             <ion-col col-4 class="menu-col" no-padding>
                 <ion-buttons>
@@ -22,7 +22,10 @@
         <span class="upper-text">Your account balance is</span>
         <p class="balance-para">
             <ion-icon name="heart-outline" class="heart-balance"></ion-icon> 
-            <span class="balance">0.00</span>
+            <ng-container *ngFor="let payment of latestPayments">
+                <span class="balance" *ngIf="payment.id == 1">{{ payment.balance }}</span>
+            </ng-container>
+            
         </p>
         <span class="usd-balance">(0.00 USD)</span>
         <ion-toolbar color="appColor" class="payment-toolbar">
@@ -83,9 +86,10 @@
                                     <p>
                                         <ion-icon name="heart-outline" class="heart-small-icon"></ion-icon> 
                                         <span class="heart-coin">{{ payment.heart_amount }}</span> 
-                                        <span class="heart-coin">(${{ payment.us_amount }})</span>
+                                        <span class="heart-coin-dollor">(${{ payment.us_amount }})</span>
                                     </p>
                                     <p class="play-para">
+                                        <ion-icon name="heart-outline" class="heart-small-icon"></ion-icon> 
                                         <span>{{ payment.balance }}</span>
                                     </p>
                                 </ion-col>

@@ -17,7 +17,7 @@ import { UserinfoPage } from '../userinfo/userinfo';
 export class CharitiesPage {
 
   
-  animal_charity: string = 'Animal Charities';
+  animal_charity: string = 'Animal Support';
   economic_development: string = 'Economic Development';
   environment: string = 'Environment';
   human_right: string = 'Human Rights';

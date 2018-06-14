@@ -96,7 +96,7 @@ export class VerifycodePage {
         // show alert
         const alert = this.alertCtrl.create({
           title: 'Heart App',
-          message: 'Your verification code does not matched.',
+          message: 'Your verification code does not match.',
           buttons: ['ok']
         });
         alert.present();

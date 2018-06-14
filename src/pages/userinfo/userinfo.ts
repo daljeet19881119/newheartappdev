@@ -67,10 +67,17 @@ export class UserinfoPage {
         // sotore only selected charities in array
         if(element.value == true)
         {
-          this.charities.push(element.name);
+          this.charities.push(' '+element.name);
         }
       });
       this.checkCharity = true;
+
+      
+      let charityArr = '';
+      this.charities.forEach(element => {
+          charityArr += element;
+      });
+      console.log('charityArr :: '+charityArr);
     }
   }
 
@@ -144,15 +151,7 @@ export class UserinfoPage {
 
   // gotoCharityPage
   gotoCharityPage() {
-    console.log('selected charities: '+this.charities);
-    // this.navCtrl.push(CharitiesPage, {
-    //         charities: this.charities, 
-    //         mobileno: this.mobileno, 
-    //         c_code: this.country, 
-    //         fname: this.firstName, 
-    //         lname: this.lastName, 
-    //         email: this.email
-    // });
+    console.log('selected charities: '+this.charities);   
 
     // create modal
      const modal = this.modalCtrl.create(CharitiesPage, {
