@@ -18,7 +18,7 @@ import { VolunteerFormPage } from '../pages/volunteer-form/volunteer-form';
 })
 export class MyApp {
 
-  rootPage:any = WelcomePage;
+  rootPage:any = HomePage;
 
   @ViewChild(Nav) nav: Nav;
 

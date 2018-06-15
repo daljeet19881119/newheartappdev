@@ -18,5 +18,18 @@ page-cause-form {
         border-radius: 5px;
         color: #ae0433;
     }
-    
+    .contacts-card{
+        margin: 0px;
+        width: 100%;
+    }
+    .contacts-card-content{
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+    .contact-row{
+        padding: 0 16px;
+    }
+    .contact-div{
+        border-bottom: 2px solid #ddd;
+    }
 }

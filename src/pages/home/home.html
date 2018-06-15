@@ -116,9 +116,14 @@
                     <ion-slide>
                         <div class="ngo-img-div" [style.backgroundImage]="'url('+recommendHearts.ngo_founder_img+')'"  (click)="gotoProfilePage(recommendHearts.id)"></div>                    
                         <p class="ngo-founder">{{ recommendHearts.ngo_founder}}</p>
-                        <p class="ngo-category">{{ recommendHearts.category}}</p>
+                        <!-- <p class="ngo-category">{{ recommendHearts.category}}</p> -->
                     </ion-slide>
                 </ng-container>
+            </ion-slides>
+            <ion-slides [loop]="charityLoop" [autoplay]="charityAutoplay" *ngIf="charities.length > 0">
+                <ion-slide *ngFor="let charity of charities">
+                    <p class="cat-text">{{ charity }}</p>
+                </ion-slide>
             </ion-slides>
         </div>
     </ion-toolbar>

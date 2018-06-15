@@ -310,7 +310,7 @@ export class ProfilePage {
         {
           // store added class to btn
           this.addBigHeartsClass = 'added-bighearts';
-          this.addBigHeartText = 'Added BigHearts'; 
+          this.addBigHeartText = 'Unselect from My BigHearts'; 
           // this.loader.dismiss(); 
         }  
         console.log(data);     
@@ -347,7 +347,7 @@ export class ProfilePage {
       {
         // store added class to btn
         this.addBigHeartsClass = 'added-bighearts';  
-        this.addBigHeartText = 'Added BigHearts';  
+        this.addBigHeartText = 'Unselect from My BigHearts';  
       }
           
       console.log(data);  

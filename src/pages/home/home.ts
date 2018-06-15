@@ -31,6 +31,11 @@ export class HomePage {
   paymentPaging: number = 1;
   recommendedBigHearts: any;
 
+  // user selected charities
+  charities: any = [];
+  charityAutoplay: number = null;
+  charityLoop: boolean = false;
+
   constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private uniqueDeviceID: UniqueDeviceID, private streamingMedia: StreamingMedia, private homeService: HomePageProvider) {
 
     // call function to get device id
@@ -96,6 +101,8 @@ export class HomePage {
         platform.exitApp();
       });
 
+      // call func getCharity
+      this.getCharity();
   }
 
   ionViewDidLoad() {
@@ -110,8 +117,7 @@ export class HomePage {
       })
       .catch((error: any) => {
         console.log(error);
-      }); 
-
+      });       
   }
 
   ionViewWillEnter() {
@@ -251,6 +257,28 @@ export class HomePage {
       console.log(data);
     }, err => {
       console.log('Oops!');
+    });
+  }
+
+  // getCharity
+  getCharity() {
+    // call func to get user charities
+    this.userService.getUserByDeviceId(this.uuid).subscribe(data => {
+        
+      // store all user charities
+      let charities = data.data.charity_type;
+
+      // convert charities string to array
+      this.charities = charities.split(',');
+
+      // check if charities length is 1
+      if(this.charities.length > 1)
+      {
+         this.charityAutoplay = 3000;
+         this.charityLoop = true;
+      }
+    }, err => {
+      console.log('Oops!'+err);
     });
   }
 }
