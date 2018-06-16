@@ -262,8 +262,20 @@ export class HomePage {
 
   // getCharity
   getCharity() {
+
+    // store uuid
+    let uuid;
+
+    if(this.uuid !== '')
+    {      
+      uuid =  this.navParams.get('uuid');
+    }
+    else{
+      uuid = 'undefined';
+    }
+
     // call func to get user charities
-    this.userService.getUserByDeviceId(this.uuid).subscribe(data => {
+    this.userService.getUserByDeviceId(uuid).subscribe(data => {
         
       // store all user charities
       let charities = data.data.charity_type;
