@@ -32,7 +32,7 @@ export class HomePage {
   recommendedBigHearts: any;
 
   // user selected charities
-  charities: any = [];
+  charities: any;
   charityAutoplay: number = null;
   charityLoop: boolean = false;
 
