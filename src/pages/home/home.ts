@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { NavController, MenuController, NavParams, Platform } from 'ionic-angular';
+import { NavController, MenuController, NavParams, Platform, LoadingController } from 'ionic-angular';
 import { ProfilePage } from '../profile/profile';
 import { UserProvider } from '../../providers/user/user';
 import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 import { StreamingMedia, StreamingVideoOptions } from '@ionic-native/streaming-media';
 import { HomePageProvider } from '../../providers/home-page/home-page';
+
 
 @Component({
   selector: 'page-home',
@@ -35,8 +36,9 @@ export class HomePage {
   charities: any;
   charityAutoplay: number = null;
   charityLoop: boolean = false;
+  loader: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private uniqueDeviceID: UniqueDeviceID, private streamingMedia: StreamingMedia, private homeService: HomePageProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private uniqueDeviceID: UniqueDeviceID, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, public loadingCtrl: LoadingController) {
 
     // call function to get device id
     this.getDeviceID();
@@ -101,8 +103,12 @@ export class HomePage {
         platform.exitApp();
       });
 
-      // call func getCharity
-      this.getCharity();
+      this.createLoader();
+
+      // // dismis loader afet 3 sec
+      setTimeout(() => {
+        this.loader.dismiss();
+      }, 3000);
   }
 
   ionViewDidLoad() {
@@ -117,7 +123,10 @@ export class HomePage {
       })
       .catch((error: any) => {
         console.log(error);
-      });       
+      });     
+      
+      // call func getCharity
+      this.getCharity();
   }
 
   ionViewWillEnter() {
@@ -283,6 +292,8 @@ export class HomePage {
       // convert charities string to array
       this.charities = charities.split(',');
 
+      // alert(this.charities);
+      
       // check if charities length is 1
       if(this.charities.length > 1)
       {
@@ -292,5 +303,15 @@ export class HomePage {
     }, err => {
       console.log('Oops!'+err);
     });
+  }
+
+  // createLoader
+  createLoader() {
+    this.loader = this.loadingCtrl.create({
+      spinner: 'dots',
+      content: 'Please wait...'
+    });
+
+    this.loader.present();
   }
 }

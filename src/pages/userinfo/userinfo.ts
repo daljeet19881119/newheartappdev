@@ -113,7 +113,7 @@ export class UserinfoPage {
 
   // makeServerRequest
   makeServerRequest() {
-    this.http.get('http://ionic.dsl.house/heartAppApi/verify-users.php?profile_status=verified&fname='+this.firstName+'&lname='+this.lastName+'&email='+this.email+'&gender=""&charity_type='+this.charities+'&c_code='+this.country+'&m_no='+this.mobileno).map(res => res.json()).subscribe(data => {
+    this.http.get('http://ionic.dsl.house/heartAppApi/verify-users.php?profile_status=verified&fname='+this.firstName+'&lname='+this.lastName+'&email='+this.email+'&charity_type='+this.charities+'&c_code='+this.country+'&m_no='+this.mobileno).map(res => res.json()).subscribe(data => {
       this.profileStatus = data.data.profile_status;
       console.log(data);
 

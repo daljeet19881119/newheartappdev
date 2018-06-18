@@ -5,6 +5,7 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 import { UserProvider } from '../../providers/user/user';
+import { Storage } from '@ionic/storage';
 
 /**
  * Generated class for the VerifynumberPage page.
@@ -29,7 +30,7 @@ export class VerifynumberPage {
   allCountries: any;
   loader: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, private modalCtrl: ModalController, public loadingCtrl: LoadingController, private uniqueDeviceID: UniqueDeviceID, public platform: Platform, public userService: UserProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, private modalCtrl: ModalController, public loadingCtrl: LoadingController, private uniqueDeviceID: UniqueDeviceID, public platform: Platform, public userService: UserProvider, private storage: Storage) {
 
     // call getuniqueDeviceID
     this.getuniqueDeviceID();
@@ -49,6 +50,10 @@ export class VerifynumberPage {
     // call user service provider
     this.userService.getAllCountries().subscribe((country) => {
       this.allCountries = country;
+
+      // set a countries in storage
+      this.storage.set('countries', this.allCountries);
+      
       // console.log(country);
     }, error => {
       console.log('Oops!');

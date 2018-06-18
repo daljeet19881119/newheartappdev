@@ -28,6 +28,7 @@ import { TeamPage } from '../pages/team/team';
 import { CauseFormPage } from '../pages/cause-form/cause-form';
 import { MerchantFormPage } from '../pages/merchant-form/merchant-form';
 import { VolunteerFormPage } from '../pages/volunteer-form/volunteer-form';
+import { IonicStorageModule } from '@ionic/storage';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { VolunteerFormPage } from '../pages/volunteer-form/volunteer-form';
     BrowserModule,
     HttpModule,
     HttpClientModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
