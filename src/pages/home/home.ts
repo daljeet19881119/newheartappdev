@@ -103,12 +103,9 @@ export class HomePage {
         platform.exitApp();
       });
 
-      this.createLoader();
-
-      // // dismis loader afet 3 sec
-      setTimeout(() => {
-        this.loader.dismiss();
-      }, 3000);
+      
+      // call func getCharity
+      this.getCharity();
   }
 
   ionViewDidLoad() {
@@ -125,8 +122,6 @@ export class HomePage {
         console.log(error);
       });     
       
-      // call func getCharity
-      this.getCharity();
   }
 
   ionViewWillEnter() {

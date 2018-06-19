@@ -29,6 +29,7 @@ import { CauseFormPage } from '../pages/cause-form/cause-form';
 import { MerchantFormPage } from '../pages/merchant-form/merchant-form';
 import { VolunteerFormPage } from '../pages/volunteer-form/volunteer-form';
 import { IonicStorageModule } from '@ionic/storage';
+import { UserProfilePage } from '../pages/user-profile/user-profile';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { IonicStorageModule } from '@ionic/storage';
     TeamPage,
     CauseFormPage,
     MerchantFormPage,
-    VolunteerFormPage
+    VolunteerFormPage,
+    UserProfilePage
   ],
   imports: [
     BrowserModule,
@@ -73,7 +75,8 @@ import { IonicStorageModule } from '@ionic/storage';
     TeamPage,
     CauseFormPage,
     MerchantFormPage,
-    VolunteerFormPage
+    VolunteerFormPage,
+    UserProfilePage
   ],
   providers: [
     StatusBar,

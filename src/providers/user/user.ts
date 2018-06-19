@@ -105,4 +105,49 @@ export class UserProvider {
 
     return this._http.post("http://ionic.dsl.house/heartAppApi/cause-form.php", data, options).map(res => res.json());
   }
+
+  // saveMerchantFormData
+  saveMerchantFormData(userid: number, fname: string, lname: string, short_desc: string, aboutTeam: string) {
+
+      // set headers
+      let headers = new Headers();
+      headers.append("Accept", "application/json");
+
+      // set request option
+      let options = new RequestOptions({headers: headers});
+
+      // set data to be send
+      let data = JSON.stringify({
+          userid: userid,
+          fname: fname,
+          lname: lname,
+          short_desc: short_desc,
+          about_team: aboutTeam
+      });
+
+      return this._http.post("http://ionic.dsl.house/heartAppApi/merchant-form.php", data, options).map(res => res.json());
+  }
+
+  // saveVolunteerFormData
+  saveVolunteerFormData(userid: number, campName: string, country: string, city: string, short_desc: string, aboutCamp: string) {
+
+      // set headers
+      let headers = new Headers();
+      headers.append("Accept", "application/json");
+
+      // set request option
+      let options = new RequestOptions({headers: headers});
+
+      // set data to be send
+      let data = JSON.stringify({
+          userid: userid,
+          campaign_name: campName,
+          country: country,
+          city: city,
+          short_desc: short_desc,
+          about_campaign: aboutCamp,
+      });
+
+      return this._http.post("http://ionic.dsl.house/heartAppApi/volunteer-form.php", data, options).map(res => res.json());
+  }
 }

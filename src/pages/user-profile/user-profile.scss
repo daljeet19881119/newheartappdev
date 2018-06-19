@@ -1,0 +1,60 @@
+page-user-profile {
+    .edit_profile_header{
+        text-align: center;
+    }
+    .edit_profile_header img{ 
+        height: 100px; border-radius: 50%;
+    }
+    p.second_title{
+        text-align: center; 
+        font-size: 15px; 
+        color: #fff;
+    }
+    p.first_title{
+        text-align: center; 
+        font-size: 13px; 
+        color: #fff;  
+        text-decoration: underline;
+    }
+    .body_section_color{
+        background:#f7f7f7;
+    }
+    .heading_text { 
+        float: left; 
+        margin: 0px; 
+        color:#ae0433;
+    }
+    .icon_menu_show{
+        float: right; 
+        color:#ae0433;
+    }
+    .icon_menu_arrow{
+        float: right;  
+        color:#ae0433;
+    }
+    .footer_new_menu p.footer_title{
+        text-align: center;    
+        font-size: 17px; 
+        color: #fff;
+        letter-spacing: 1px;
+    }
+    p.footer_footer {
+        text-align: center;
+    }
+    p.footer_footer a{
+        color: #8f8f8f; 
+        text-decoration: underline;
+    }
+    p.last_footer{
+        text-align: center; 
+        color: #8f8f8f;
+    }
+    h4.text_show{
+        color: #8f8f8f; 
+        padding:0 10px;
+    }
+    .setting_width{
+        margin: 0px; 
+        width: 100%!important;
+    }
+}

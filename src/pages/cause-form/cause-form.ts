@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { UserProvider } from '../../providers/user/user';
 
@@ -49,7 +49,7 @@ export class CauseFormPage {
 
   loader: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private userService: UserProvider, public loadingCtrl: LoadingController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private userService: UserProvider, public loadingCtrl: LoadingController, public alertCtrl: AlertController) {
 
     // store all countries
     this.storage.get('countries').then((val) => {
@@ -64,8 +64,6 @@ export class CauseFormPage {
   // saveData
   saveData() {
 
-    // call func createLoader
-    this.createLoader();
 
     let contact1 = this.contactName1+','+this.contactEmail1+','+this.contactDesc1;
     let contact2 = this.contactName2+','+this.contactEmail2+','+this.contactDesc2;
@@ -74,21 +72,30 @@ export class CauseFormPage {
     let contact5 = this.contactName5+','+this.contactEmail5+','+this.contactDesc5;
     let userid = 1;
 
+    if(this.fname != null && this.lname != null && this.causeCat != null && this.country != null && this.city != null && this.shortDesc != null && this.aboutYourself != null && this.aboutCause != null)
+    {
+            
+        // call func createLoader
+        this.createLoader();
 
-    // request user provider
-    this.userService.saveCauseFormData(userid, this.fname, this.lname, this.causeCat, this.country, this.city, this.shortDesc, this.aboutYourself, this.aboutCause, contact1, contact2, contact3, contact4, contact5).subscribe(data => {
-      
-      if(data.msg == 'success')
-      {
-        this.loader.dismiss();
-      }
-      if(data.msg == 'err')
-      {
-        this.loader.dismiss();
-      }
-    }, err => {
-      console.log('error: '+err);
-    });
+        // request user provider
+        this.userService.saveCauseFormData(userid, this.fname, this.lname, this.causeCat, this.country, this.city, this.shortDesc, this.aboutYourself, this.aboutCause, contact1, contact2, contact3, contact4, contact5).subscribe(data => {
+          
+          if(data.msg == 'success')
+          {
+            this.loader.dismiss();
+          }
+          if(data.msg == 'err')
+          {
+            this.loader.dismiss();
+          }
+        }, err => {
+          console.log('error: '+err);
+        });
+    }
+    else{
+      this.createAlert();
+    }
   }
 
   // createLoader
@@ -99,5 +106,15 @@ export class CauseFormPage {
     });
 
     this.loader.present();
+  }
+
+  // createAlert
+  createAlert() {
+    const alert = this.alertCtrl.create({
+          message: 'Please fill all fields.',
+          buttons: ['ok']
+    });
+
+    alert.present();
   }
 }

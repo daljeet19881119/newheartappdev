@@ -9,26 +9,27 @@
     <ion-list>
       <ion-item no-padding class="item-feilds">
         <ion-label floating>Name of campaign</ion-label>
-        <ion-input type="text"></ion-input>
+        <ion-input type="text" [(ngModel)]="campName"></ion-input>
       </ion-item>
       <ion-item no-padding class="item-feilds">
         <ion-label>Select Country</ion-label>
-        <ion-select interface="action-sheet">
-          <ion-option value="male">usa</ion-option>
-          <ion-option value="female">india</ion-option>
+        <ion-select interface="action-sheet" [(ngModel)]="country">
+          <ng-container *ngFor="let coutryName of countries">
+              <ion-option value="{{ coutryName.code }}">{{ coutryName.name }}</ion-option>
+          </ng-container>
         </ion-select>
       </ion-item>
       <ion-item no-padding class="item-feilds">
         <ion-label floating>Enter City</ion-label>
-        <ion-input type="text"></ion-input>
+        <ion-input type="text" [(ngModel)]="city"></ion-input>
       </ion-item>
       <ion-item no-padding class="item-feilds">
         <ion-label>Short Description</ion-label>
-        <ion-textarea></ion-textarea>
+        <ion-textarea [(ngModel)]="shortDesc"></ion-textarea>
       </ion-item>
       <ion-item no-padding class="item-feilds">
         <ion-label>Tell more about the campaign</ion-label>
-        <ion-textarea></ion-textarea>
+        <ion-textarea [(ngModel)]="aboutCamp"></ion-textarea>
       </ion-item>
       <ion-row>
           <ion-col col-8>
@@ -41,5 +42,5 @@
           </ion-col>
       </ion-row>
     </ion-list>
-    <button ion-button block color="white" class="save-btn">Save</button>
+    <button ion-button block color="white" class="save-btn" (click)="saveData()">Save</button>
   </ion-content>

@@ -11,6 +11,7 @@ import { UserinfoPage } from '../pages/userinfo/userinfo';
 import { CauseFormPage } from '../pages/cause-form/cause-form';
 import { MerchantFormPage } from '../pages/merchant-form/merchant-form';
 import { VolunteerFormPage } from '../pages/volunteer-form/volunteer-form';
+import { UserProfilePage } from '../pages/user-profile/user-profile';
 
 
 @Component({
@@ -88,6 +89,11 @@ export class MyApp {
   // gotoVolunteerFormPage
   gotoVolunteerFormPage() {
     this.nav.push(VolunteerFormPage);
+  }
+
+  // gotoUserProfile
+  gotoUserProfile() {
+    this.nav.push(UserProfilePage);
   }
 }
 
