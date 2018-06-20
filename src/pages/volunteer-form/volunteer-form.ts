@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
 import { UserProvider } from '../../providers/user/user';
 import { Storage } from '@ionic/storage';
+import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 
 /**
  * Generated class for the VolunteerFormPage page.
@@ -25,8 +26,10 @@ export class VolunteerFormPage {
 
   countries: any;
   loader: any;
+  userid: any;
+  uuid: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private userService: UserProvider, private storage: Storage, public loadingCtrl: LoadingController, public alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private userService: UserProvider, private storage: Storage, public loadingCtrl: LoadingController, public alertCtrl: AlertController, private uniqueDeviceID: UniqueDeviceID) {
     
     // get countries from storage
     this.storage.get('countries').then((country) => {
@@ -35,16 +38,38 @@ export class VolunteerFormPage {
       console.log('error: '+err);
     });
     
+    // get device id
+    this.getDeviceID();
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad VolunteerFormPage');
+
+    
+  }
+
+   // getDeviceID
+   getDeviceID() {
+    this.uniqueDeviceID.get()
+      .then((uuid: any) => {
+        this.uuid = uuid;  
+
+        // request to userProvide
+        this.userService.getUserByDeviceId(this.uuid).subscribe(data => {
+          this.userid = data.data.id;
+        }, err => {
+          console.log(err);
+        });
+      })
+      .catch((error: any) => {
+        this.uuid = 'undefined';
+      });
   }
 
   // saveData
   saveData() {
 
-      let userid = 1;
+      let userid = this.userid;
     
     if(this.campName != null && this.country != null && this.shortDesc != null && this.aboutCamp != null)
     {

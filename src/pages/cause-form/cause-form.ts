@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { UserProvider } from '../../providers/user/user';
+import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 
 /**
  * Generated class for the CauseFormPage page.
@@ -48,17 +49,42 @@ export class CauseFormPage {
   contactDesc5: string;
 
   loader: any;
+  userid: any;
+  uuid: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private userService: UserProvider, public loadingCtrl: LoadingController, public alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private userService: UserProvider, public loadingCtrl: LoadingController, public alertCtrl: AlertController, private uniqueDeviceID: UniqueDeviceID) {
 
     // store all countries
     this.storage.get('countries').then((val) => {
         this.countries = val;
     });
+
+    // get device id
+    this.getDeviceID();
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CauseFormPage');
+
+    
+  }
+
+  // getDeviceID
+  getDeviceID() {
+    this.uniqueDeviceID.get()
+      .then((uuid: any) => {
+        this.uuid = uuid;  
+
+        // request to userProvide
+          this.userService.getUserByDeviceId(this.uuid).subscribe(data => {
+            this.userid = data.data.id;
+        }, err => {
+          console.log(err);
+        });
+      })
+      .catch((error: any) => {
+        this.uuid = 'undefined';
+      });
   }
 
   // saveData
@@ -70,7 +96,7 @@ export class CauseFormPage {
     let contact3 = this.contactName3+','+this.contactEmail3+','+this.contactDesc3;
     let contact4 = this.contactName4+','+this.contactEmail4+','+this.contactDesc4;
     let contact5 = this.contactName5+','+this.contactEmail5+','+this.contactDesc5;
-    let userid = 1;
+    let userid = this.userid;
 
     if(this.fname != null && this.lname != null && this.causeCat != null && this.country != null && this.city != null && this.shortDesc != null && this.aboutYourself != null && this.aboutCause != null)
     {

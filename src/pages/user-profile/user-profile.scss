@@ -1,20 +1,31 @@
 page-user-profile {
-    .edit_profile_header{
-        text-align: center;
+    .navbar-top{
+        padding-bottom: 0px;
+        min-height: 40px;
     }
-    .edit_profile_header img{ 
-        height: 100px; border-radius: 50%;
+    .profile-header{
+        background-color: #ae0433;
+        padding: 10px 0;
+    }
+    .profile-header img{ 
+        border-radius: 50%;
+        width: 70px;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
     }
     p.second_title{
         text-align: center; 
         font-size: 15px; 
         color: #fff;
+        margin: 10px 0px;
     }
     p.first_title{
         text-align: center; 
         font-size: 13px; 
         color: #fff;  
         text-decoration: underline;
+        margin: 0 0 5px;
     }
     .body_section_color{
         background:#f7f7f7;

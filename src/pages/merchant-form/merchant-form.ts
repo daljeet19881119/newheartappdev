@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
 import { UserProvider } from '../../providers/user/user';
+import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 
 /**
  * Generated class for the MerchantFormPage page.
@@ -22,19 +23,42 @@ export class MerchantFormPage {
   aboutTeam: string;
 
   loader: any;
+  userid: any;
+  uuid: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private userService: UserProvider, public alertCtrl: AlertController, public loadingCtrl: LoadingController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private userService: UserProvider, public alertCtrl: AlertController, public loadingCtrl: LoadingController, private uniqueDeviceID: UniqueDeviceID) {
+
+    // get device id
+    this.getDeviceID();
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad MerchantFormPage');
 
+   
+  }
+
+  // getDeviceID
+  getDeviceID() {
+    this.uniqueDeviceID.get()
+      .then((uuid: any) => {
+        this.uuid = uuid; 
+         // request to userProvide
+          this.userService.getUserByDeviceId(this.uuid).subscribe(data => {
+            this.userid = data.data.id;
+        }, err => {
+          console.log(err);
+        }); 
+      })
+      .catch((error: any) => {
+        this.uuid = 'undefined';
+      });
   }
 
   // saveData
   saveData() {
 
-    let userid = 1;
+    let userid = this.userid;
 
     if(this.fname != null && this.lname != null && this.shortDesc != null && this.aboutTeam != null)
     {
