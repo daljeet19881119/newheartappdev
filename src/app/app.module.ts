@@ -30,6 +30,8 @@ import { MerchantFormPage } from '../pages/merchant-form/merchant-form';
 import { VolunteerFormPage } from '../pages/volunteer-form/volunteer-form';
 import { IonicStorageModule } from '@ionic/storage';
 import { UserProfilePage } from '../pages/user-profile/user-profile';
+import { SocialSharing } from '@ionic-native/social-sharing';
+
 
 @NgModule({
   declarations: [
@@ -87,7 +89,8 @@ import { UserProfilePage } from '../pages/user-profile/user-profile';
     UserProvider,
     PhotoViewer,
     StreamingMedia,
-    HomePageProvider    
+    HomePageProvider  ,
+    SocialSharing  
   ]
 })
 export class AppModule {}

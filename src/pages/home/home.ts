@@ -5,6 +5,7 @@ import { UserProvider } from '../../providers/user/user';
 import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 import { StreamingMedia, StreamingVideoOptions } from '@ionic-native/streaming-media';
 import { HomePageProvider } from '../../providers/home-page/home-page';
+import { SocialSharing } from '@ionic-native/social-sharing';
 
 
 @Component({
@@ -38,7 +39,7 @@ export class HomePage {
   charityLoop: boolean = false;
   loader: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private uniqueDeviceID: UniqueDeviceID, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, public loadingCtrl: LoadingController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private uniqueDeviceID: UniqueDeviceID, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, public loadingCtrl: LoadingController, private sharing: SocialSharing) {
 
     // call function to get device id
     this.getDeviceID();
@@ -308,5 +309,19 @@ export class HomePage {
     });
 
     this.loader.present();
+  }
+
+  // shareInfo
+  shareInfo(ngoName: string, ngoFounderImg: string, ngoFounderName: string, ngoFounderDesc: string) {
+
+    let message = ngoFounderDesc;
+    let subject = ngoFounderName+' founder of '+ngoName;
+    let file = ngoFounderImg;
+
+    this.sharing.share(message, subject, file).then(() => {
+      console.log('shared successfully');
+    }).catch((err) => {
+      console.log(err);
+    });
   }
 }

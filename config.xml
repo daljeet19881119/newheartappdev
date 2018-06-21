@@ -91,5 +91,6 @@
     <plugin name="com.moust.cordova.videoplayer" spec="https://github.com/moust/cordova-plugin-videoplayer.git" />
     <plugin name="com.hutchind.cordova.plugins.streamingmedia" spec="~0.1.4" />
     <plugin name="cordova-sqlite-storage" spec="^2.3.2" />
+    <plugin name="cordova-plugin-x-socialsharing" spec="^5.4.0" />
     <engine name="android" spec="7.0.0" />
 </widget>

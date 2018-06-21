@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
 import { UserProvider } from '../../providers/user/user';
 import { UniqueDeviceID } from '@ionic-native/unique-device-id';
+import { Storage } from '@ionic/storage';
 
 /**
  * Generated class for the MerchantFormPage page.
@@ -26,7 +27,17 @@ export class MerchantFormPage {
   userid: any;
   uuid: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private userService: UserProvider, public alertCtrl: AlertController, public loadingCtrl: LoadingController, private uniqueDeviceID: UniqueDeviceID) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private userService: UserProvider, public alertCtrl: AlertController, public loadingCtrl: LoadingController, private uniqueDeviceID: UniqueDeviceID, private storage: Storage) {
+
+    // get data from storage
+    this.storage.get('merchantForm').then((val) => {
+        this.fname = val.fname;
+        this.lname = val.lname;
+        this.shortDesc = val.shortDesc;
+        this.aboutTeam = val.aboutTeam;
+    }).catch((err) => {
+      console.log(err);
+    });
 
     // get device id
     this.getDeviceID();
@@ -66,7 +77,8 @@ export class MerchantFormPage {
 
         // request to server
         this.userService.saveMerchantFormData(userid, this.fname, this.lname, this.shortDesc, this.aboutTeam).subscribe(data => {
-          alert(data.msg);
+          // alert(data.msg);
+          this.setDataToStorage(userid, this.fname, this.lname, this.shortDesc, this.aboutTeam);
           this.loader.dismiss();
       }, err => {
         console.log('error: '+err);
@@ -95,5 +107,19 @@ export class MerchantFormPage {
           content: 'Please wait...'
      });
      this.loader.present();
+  }
+
+  // setDataToStorage
+  setDataToStorage(userid: number, fname: string, lname: string, shortDesc: string, aboutTeam: string) {
+    
+    let data = {
+        userid: userid,
+        fname: fname,
+        lname: lname,
+        shortDesc: shortDesc,
+        aboutTeam: aboutTeam
+    };
+
+    this.storage.set('merchantForm', data);
   }
 } 

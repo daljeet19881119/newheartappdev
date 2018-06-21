@@ -21,8 +21,8 @@ export class CauseFormPage {
   countries: any;
   fname: string;
   lname: string;
-  causeCat: string;
-  country: string;
+  causeCat: string = 'Animal Support';
+  country: string = 'US';
   city: string;
   shortDesc: string;
   aboutYourself: string;
@@ -57,6 +57,62 @@ export class CauseFormPage {
     // store all countries
     this.storage.get('countries').then((val) => {
         this.countries = val;
+    });
+
+    // get data from storage
+    this.storage.get('causeForm').then((val) => {
+      this.fname = val.fname;
+      this.lname = val.lname;
+      this.causeCat = val.causeCat;
+      this.country = val.country;
+      this.city = val.city;
+      this.shortDesc = val.shortDesc;
+      this.aboutYourself = val.aboutYourself;
+      this.aboutCause = val.aboutCause;
+
+      if(val.contact1 != '')
+      {
+        // convert string into an array
+        let contact1 = val.contact1.split(",");
+        this.contactName1 = contact1[0];
+        this.contactEmail1 = contact1[1];
+        this.contactDesc1 = contact1[2];
+      }
+      
+      if(val.contact2 != '')
+      {
+        let contact2 = val.contact2.split(",");
+        this.contactName2 = contact2[0];
+        this.contactEmail2 = contact2[1];
+        this.contactDesc2 = contact2[2];
+      }
+      
+      if(val.contact3 != '')
+      {
+        let contact3 = val.contact3.split(",");
+        this.contactName3 = contact3[0];
+        this.contactEmail3 = contact3[1];
+        this.contactDesc3 = contact3[2];
+      }
+
+      if(val.contact4 != '')
+      {
+        let contact4 = val.contact4.split(",");
+        this.contactName4 = contact4[0];
+        this.contactEmail4 = contact4[1];
+        this.contactDesc4 = contact4[2];
+      }
+
+      if(val.contact5 != '')
+      {
+        let contact5 = val.contact5.split(",");
+        this.contactName5 = contact5[0];
+        this.contactEmail5 = contact5[1];
+        this.contactDesc5 = contact5[2];
+      }      
+
+    }).catch((err) => {
+      console.log(err);
     });
 
     // get device id
@@ -109,6 +165,7 @@ export class CauseFormPage {
           
           if(data.msg == 'success')
           {
+            this.setDataToStorage(userid, this.fname, this.lname, this.causeCat, this.country, this.city, this.shortDesc, this.aboutYourself, this.aboutCause, contact1, contact2, contact3, contact4, contact5);
             this.loader.dismiss();
           }
           if(data.msg == 'err')
@@ -143,4 +200,27 @@ export class CauseFormPage {
 
     alert.present();
   }
+
+  // setDataToStorage
+  setDataToStorage(userid: number, fname: string, lname: string, causeCat: string, country: string, city: string, shortDesc: string, aboutYourself: string, aboutCause: string, contact1: string, contact2: string, contact3: string, contact4: string, contact5: string) {
+    let data = {
+        userid: userid,
+        fname: fname,
+        lname: lname,
+        causeCat: causeCat,
+        country: country,
+        city: city,
+        shortDesc: shortDesc,
+        aboutYourself: aboutYourself,
+        aboutCause: aboutCause,
+        contact1: contact1,
+        contact2: contact2,
+        contact3: contact3,
+        contact4: contact4,
+        contact5: contact5
+    };
+
+    this.storage.set('causeForm', data);
+  }
+
 }

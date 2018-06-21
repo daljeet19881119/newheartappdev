@@ -19,7 +19,7 @@ import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 export class VolunteerFormPage {
 
   campName: string;
-  country: string;
+  country: string = 'US';
   city: string;
   shortDesc: string;
   aboutCamp: string;
@@ -38,6 +38,18 @@ export class VolunteerFormPage {
       console.log('error: '+err);
     });
     
+    // get volunteer form data from storage
+    this.storage.get('volunteerForm').then((val) => {      
+      this.campName = val.campName;
+      this.country = val.country;
+      this.city = val.city;
+      this.shortDesc = val.shortDesc;
+      this.aboutCamp = val.aboutCamp;
+
+    }).catch((err) => {
+      console.log(err);
+    });
+
     // get device id
     this.getDeviceID();
   }
@@ -77,7 +89,8 @@ export class VolunteerFormPage {
           
       // request to server
       this.userService.saveVolunteerFormData(userid, this.campName, this.country, this.city, this.shortDesc, this.aboutCamp).subscribe(data => {
-        alert(data.msg);
+        // alert(data.msg);
+        this.setDataToStorage(userid, this.campName, this.country, this.city, this.shortDesc, this.aboutCamp);
         this.loader.dismiss();
       }, err => {
         console.log('error: '+err);
@@ -106,5 +119,19 @@ export class VolunteerFormPage {
           content: 'Please wait...'
      });
      this.loader.present();
+  }
+
+  // setDataToStorage
+  setDataToStorage(userid: number, campName: string, country: string, city: string, shortDesc: string, aboutCamp: string) {
+    let data = {
+        userid: userid,
+        campName: campName,
+        country: country,
+        city: city,
+        shortDesc: shortDesc,
+        aboutCamp: aboutCamp
+    };
+
+    this.storage.set('volunteerForm', data);
   }
 }
