@@ -3,7 +3,7 @@
         <ion-row>
             <ion-col col-4 class="menu-col" no-padding>
                 <ion-buttons>
-                    <button ion-button icon-only menuToggle class="menu-btn">
+                    <button ion-button icon-only class="menu-btn" menuToggle>
                         <ion-icon name="menu"></ion-icon>
                     </button>
                 </ion-buttons>
@@ -27,7 +27,9 @@
             </ng-container>
             
         </p>
-        <span class="usd-balance">(0.00 USD)</span>
+        <ng-container *ngFor="let payment of latestPayments">
+            <span class="usd-balance" *ngIf="payment.id == 1">{{ '('+ payment.us_balance +'USD)' }}</span>
+        </ng-container>
         <ion-toolbar color="appColor" class="payment-toolbar">
             <ion-segment [(ngModel)]="latestTabs" (click)="showTabs()">
                 <ion-segment-button value="payments" class="payment-segments">
@@ -67,7 +69,7 @@
                                         <ion-icon name="play" class="play-icon"></ion-icon>
                                         <span>Thankyou Message</span>
                                     </p>
-                                    <span  class="share-icon" (click)="shareInfo(donation.ngo_name, donation.ngo_founder_img, donation.ngo_founder, donation.ngo_desc)">
+                                    <span  class="share-icon" (click)="shareInfo(donation.ngo_name, donation.ngo_founder_img, donation.ngo_founder, donation.ngo_desc, donation.youtube_id)">
                                         <ion-icon name="share"></ion-icon>
                                     </span>
                                 </ion-col>
@@ -122,7 +124,7 @@
                     </ion-slide>
                 </ng-container>
             </ion-slides>
-            <ion-slides [loop]="charityLoop" [autoplay]="charityAutoplay" *ngIf="charities">
+            <ion-slides [loop]="charityLoop" [autoplay]="charityAutoplay" *ngIf="charities" slidesPerView="1">
                 <ng-container *ngFor="let charity of charities">
                     <ion-slide>
                         <p class="cat-text">{{ charity }}</p>

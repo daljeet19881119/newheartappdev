@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar color="appColor">
-    <ion-title style="text-align: center;">Upload Campaigns</ion-title>
+    <ion-title style="text-align: center;">Apply to become a Volunteer</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -8,39 +8,158 @@
 <ion-content padding style="background-color: #ae0433;">
     <ion-list>
       <ion-item no-padding class="item-feilds">
-        <ion-label floating>Name of campaign</ion-label>
-        <ion-input type="text" [(ngModel)]="campName"></ion-input>
+        <ion-label floating>First Name</ion-label>
+        <ion-input type="text" [(ngModel)]="fname"></ion-input>
       </ion-item>
       <ion-item no-padding class="item-feilds">
-        <ion-label>Select Country</ion-label>
-        <ion-select interface="action-sheet" [(ngModel)]="country">
-          <ng-container *ngFor="let coutryName of countries">
-              <ion-option value="{{ coutryName.code }}">{{ coutryName.name }}</ion-option>
-          </ng-container>
-        </ion-select>
+        <ion-label floating>Last Name</ion-label>
+        <ion-input type="text" [(ngModel)]="lname"></ion-input>
       </ion-item>
       <ion-item no-padding class="item-feilds">
-        <ion-label floating>Enter City</ion-label>
-        <ion-input type="text" [(ngModel)]="city"></ion-input>
+        <ion-label floating>Email</ion-label>
+        <ion-input type="email" [(ngModel)]="email"></ion-input>
       </ion-item>
-      <ion-item no-padding class="item-feilds">
-        <ion-label>Short Description</ion-label>
-        <ion-textarea [(ngModel)]="shortDesc"></ion-textarea>
-      </ion-item>
-      <ion-item no-padding class="item-feilds">
-        <ion-label>Tell more about the campaign</ion-label>
-        <ion-textarea [(ngModel)]="aboutCamp"></ion-textarea>
-      </ion-item>
+      <div class="textarea-div">
+        <ion-row>
+          <ion-label>Select the Charity(ies) you are engaged in</ion-label>
+        </ion-row>
+        <ion-row>
+            <ion-item no-padding class="item-feilds">
+              <ion-label>Tap here to select</ion-label>
+              <ion-select interface="action-sheet" [(ngModel)]="charity">
+                  <ion-option value="Animal Support">Animal Support</ion-option>
+                  <ion-option value="Economic Development">Economic Development</ion-option>
+                  <ion-option value="Environment">Environment</ion-option>
+                  <ion-option value="Human Rights">Human Rights</ion-option>
+                  <ion-option value="Poverty and Hunger">Poverty and Hunger</ion-option>
+                  <ion-option value="Education">Education</ion-option>
+                  <ion-option value="Geographic Preference(s)">Geographic Preference(s)</ion-option>
+              </ion-select>
+            </ion-item>
+        </ion-row>
+      </div>
+      <div class="textarea-div">
+        <ion-row>
+          <ion-label>Enter the location you're interested volunteering in</ion-label>
+        </ion-row>
+        <ion-row>
+          <ion-textarea [(ngModel)]="volunteerLocation" class="contact-inputs"></ion-textarea>
+        </ion-row>
+      </div>
+      <div class="textarea-div">
+        <ion-row>
+          <ion-label>Tell in a few words about yourself (max 40 char)</ion-label>
+        </ion-row>
+        <ion-row>
+          <ion-textarea [(ngModel)]="fewAboutYourself" class="contact-inputs"></ion-textarea>
+        </ion-row>
+      </div>
+      <div class="textarea-div">
+        <ion-row>
+          <ion-label>Tell in more details about yourself (max 500 char)</ion-label>
+        </ion-row>
+        <ion-row>
+          <ion-textarea [(ngModel)]="moreAboutYourself" class="contact-inputs"></ion-textarea>
+        </ion-row>
+      </div>
+      <div class="textarea-div">
+        <ion-row>
+            <ion-col col-12>
+              <p class="upload-para">Upload an image of yourself or take a picture</p>
+              <button ion-button small color="white" class="upload-btn">Choose file</button>
+              <button ion-button small color="white" class="upload-btn">
+                  <ion-icon name="camera"></ion-icon>
+              </button>
+            </ion-col>
+        </ion-row>
+      </div>
       <ion-row>
-          <ion-col col-8>
-            <p class="upload-para">Upload 5 video's/pics</p>
-            <button ion-button small color="white" class="upload-btn">From storage</button>
-            <button ion-button small color="white" class="upload-btn">Camera</button>
-          </ion-col>
-          <ion-col col-3>
-            <img src="assets/imgs/background.png"/>
-          </ion-col>
-      </ion-row>
+          <ion-card class="contacts-card">
+            <ion-card-header class="contacts-card-header">List upto 5 contacts that can us more about you</ion-card-header>
+            <ion-card-content class="contacts-card-content">
+              <div class="contact-div">
+                <ion-item class="contact-item">
+                  <ion-label>Contact name</ion-label>
+                  <ion-input type="text" class="contact-inputs" [(ngModel)]="contactName1"></ion-input>
+                </ion-item>
+                <ion-item class="contact-item">
+                    <ion-label>Contact email</ion-label>
+                    <ion-input type="email" class="contact-inputs" [(ngModel)]="contactEmail1"></ion-input>
+                </ion-item>
+                <ion-row class="contact-row">
+                  <ion-label class="textarea-label">How have they been working with you</ion-label>
+                </ion-row>
+                <ion-row class="contact-row">
+                  <ion-textarea class="contact-inputs" [(ngModel)]="contactDesc1"></ion-textarea>
+                </ion-row>
+              </div>  
+              <div class="contact-div">
+                <ion-item class="contact-item">
+                  <ion-label>Contact name</ion-label>
+                  <ion-input type="text" class="contact-inputs" [(ngModel)]="contactName2"></ion-input>
+                </ion-item>
+                <ion-item class="contact-item">
+                    <ion-label>Contact email</ion-label>
+                    <ion-input type="email" class="contact-inputs" [(ngModel)]="contactEmail2"></ion-input>
+                </ion-item>
+                <ion-row class="contact-row">
+                  <ion-label class="textarea-label">How have they been working with you</ion-label>
+                </ion-row>
+                <ion-row class="contact-row">
+                  <ion-textarea class="contact-inputs" [(ngModel)]="contactDesc2"></ion-textarea>
+                </ion-row>
+              </div> 
+              <div class="contact-div">
+                <ion-item class="contact-item">
+                  <ion-label>Contact name</ion-label>
+                  <ion-input type="text" class="contact-inputs" [(ngModel)]="contactName3"></ion-input>
+                </ion-item>
+                <ion-item class="contact-item">
+                    <ion-label>Contact email</ion-label>
+                    <ion-input type="email" class="contact-inputs" [(ngModel)]="contactEmail3"></ion-input>
+                </ion-item>
+                <ion-row class="contact-row">
+                  <ion-label class="textarea-label">How have they been working with you</ion-label>
+                </ion-row>
+                <ion-row class="contact-row">
+                  <ion-textarea class="contact-inputs" [(ngModel)]="contactDesc3"></ion-textarea>
+                </ion-row>
+              </div> 
+              <div class="contact-div">
+                <ion-item class="contact-item">
+                  <ion-label>Contact name</ion-label>
+                  <ion-input type="text" class="contact-inputs" [(ngModel)]="contactName4"></ion-input>
+                </ion-item>
+                <ion-item class="contact-item">
+                    <ion-label>Contact email</ion-label>
+                    <ion-input type="email" class="contact-inputs" [(ngModel)]="contactEmail4"></ion-input>
+                </ion-item>
+                <ion-row class="contact-row">
+                  <ion-label class="textarea-label">How have they been working with you</ion-label>
+                </ion-row>
+                <ion-row class="contact-row">
+                  <ion-textarea class="contact-inputs" [(ngModel)]="contactDesc4"></ion-textarea>
+                </ion-row>
+              </div> 
+              <div class="contact-div">
+                <ion-item class="contact-item">
+                  <ion-label>Contact name</ion-label>
+                  <ion-input type="text" class="contact-inputs" [(ngModel)]="contactName5"></ion-input>
+                </ion-item>
+                <ion-item class="contact-item">
+                    <ion-label>Contact email</ion-label>
+                    <ion-input type="email" class="contact-inputs" [(ngModel)]="contactEmail5"></ion-input>
+                </ion-item>
+                <ion-row class="contact-row">
+                  <ion-label class="textarea-label">How have they been working with you</ion-label>
+                </ion-row>
+                <ion-row class="contact-row">
+                  <ion-textarea class="contact-inputs" [(ngModel)]="contactDesc5"></ion-textarea>
+                </ion-row>
+              </div>           
+            </ion-card-content>
+          </ion-card>
+        </ion-row>
     </ion-list>
     <button ion-button block color="white" class="save-btn" (click)="saveData()">Save</button>
   </ion-content>

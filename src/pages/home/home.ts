@@ -103,10 +103,9 @@ export class HomePage {
       this.platform.registerBackButtonAction(() => {
         platform.exitApp();
       });
-
-      
       // call func getCharity
       this.getCharity();
+
   }
 
   ionViewDidLoad() {
@@ -126,9 +125,10 @@ export class HomePage {
   }
 
   ionViewWillEnter() {
-
+      
       // call function getRecommendedBigHearts
       this.getRecommendedBigHearts();
+
   }
 
   // showTabs
@@ -149,6 +149,8 @@ export class HomePage {
   // viewAll
   viewAll() {
     
+    this.createLoader();
+
     // increment paging
     this.paging++;
 
@@ -159,6 +161,8 @@ export class HomePage {
 
     // request data from server
     this.homeService.getLatestDonations(offset).subscribe(data => {
+
+      this.loader.dismiss();
 
       // loop of data
       data.res.forEach(element => {
@@ -185,6 +189,8 @@ export class HomePage {
   // viewAllPayments
   viewAllPayments() {
     
+    this.createLoader();
+
     // increment paging
     this.paymentPaging++;
 
@@ -194,6 +200,8 @@ export class HomePage {
 
     // request data from server
     this.homeService.getLatestPayments(offset).subscribe(data => {
+
+      this.loader.dismiss();
 
       // loop of data
       data.res.forEach(element => {
@@ -312,13 +320,23 @@ export class HomePage {
   }
 
   // shareInfo
-  shareInfo(ngoName: string, ngoFounderImg: string, ngoFounderName: string, ngoFounderDesc: string) {
+  shareInfo(ngoName: string, ngoFounderImg: string, ngoFounderName: string, ngoFounderDesc: string, videoUrl: string = null) {
 
     let message = ngoFounderDesc;
     let subject = ngoFounderName+' founder of '+ngoName;
     let file = ngoFounderImg;
+    let url;
 
-    this.sharing.share(message, subject, file).then(() => {
+    // check if videoUlr not empty
+    if(videoUrl != null)
+    {
+      url = 'https://www.youtube.com/embed/'+videoUrl;
+    }
+    else{
+      url = videoUrl;
+    }
+
+    this.sharing.share(message, subject, file, url).then(() => {
       console.log('shared successfully');
     }).catch((err) => {
       console.log(err);

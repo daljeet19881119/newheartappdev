@@ -11,11 +11,44 @@ page-volunteer-form {
         color: #ae0433;
     }
     .upload-para{
-        color: #fff;
+        color: #999;
         font-size: 16px;
     }
     .upload-btn{
         border-radius: 5px;
+        color: #000;
+        background: #999;
+    }
+    .textarea-div {
+        background: #fff;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        padding: 0 10px;
+        color: #999;
+        font-size: 15px;
+    }
+    .contacts-card{
+        width: 100%;
+        margin: 0px;
+        border-radius: 5px;
+    }
+    .contact-item{
+        padding-left: 0px;
+    }
+    .textarea-label{
+        color: #999999;
+        font-size: 16px;
+    }
+    .contact-div{
+        border-bottom: 1px solid #ddd;
+    }
+    .contact-div:nth-child(5){
+        border-bottom: 0px;
+    }
+    .contacts-card-header{
+        color: #999999;
+    }
+    .contact-inputs{
         color: #ae0433;
     }
 }

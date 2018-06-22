@@ -18,16 +18,39 @@ import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 })
 export class VolunteerFormPage {
 
-  campName: string;
-  country: string = 'US';
-  city: string;
-  shortDesc: string;
-  aboutCamp: string;
-
   countries: any;
   loader: any;
-  userid: any;
   uuid: any;
+
+  // form variables
+  userid: any;
+  fname: string;
+  lname: string;
+  email: string;
+  charity: string;
+  volunteerLocation: string;
+  fewAboutYourself: string;
+  moreAboutYourself: string;
+  
+  contactName1: string;
+  contactEmail1: string;
+  contactDesc1: string;
+
+  contactName2: string;
+  contactEmail2: string;
+  contactDesc2: string;
+
+  contactName3: string;
+  contactEmail3: string;
+  contactDesc3: string;
+
+  contactName4: string;
+  contactEmail4: string;
+  contactDesc4: string;
+
+  contactName5: string;
+  contactEmail5: string;
+  contactDesc5: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private userService: UserProvider, private storage: Storage, public loadingCtrl: LoadingController, public alertCtrl: AlertController, private uniqueDeviceID: UniqueDeviceID) {
     
@@ -39,13 +62,56 @@ export class VolunteerFormPage {
     });
     
     // get volunteer form data from storage
-    this.storage.get('volunteerForm').then((val) => {      
-      this.campName = val.campName;
-      this.country = val.country;
-      this.city = val.city;
-      this.shortDesc = val.shortDesc;
-      this.aboutCamp = val.aboutCamp;
+    this.storage.get('volunteerForm').then((val) => {   
+      
+      this.fname = val.fname;
+      this.lname = val.lname;
+      this.email = val.email;
+      this.charity = val.charity;
+      this.volunteerLocation = val.volunteerLocation;
+      this.fewAboutYourself = val.fewAboutYourself;
+      this.moreAboutYourself = val.moreAboutYourself;
 
+      if(val.contact1 != '')
+      {
+        // convert string into an array
+        let contact1 = val.contact1.split(",");
+        this.contactName1 = contact1[0];
+        this.contactEmail1 = contact1[1];
+        this.contactDesc1 = contact1[2];
+      }
+      
+      if(val.contact2 != '')
+      {
+        let contact2 = val.contact2.split(",");
+        this.contactName2 = contact2[0];
+        this.contactEmail2 = contact2[1];
+        this.contactDesc2 = contact2[2];
+      }
+      
+      if(val.contact3 != '')
+      {
+        let contact3 = val.contact3.split(",");
+        this.contactName3 = contact3[0];
+        this.contactEmail3 = contact3[1];
+        this.contactDesc3 = contact3[2];
+      }
+
+      if(val.contact4 != '')
+      {
+        let contact4 = val.contact4.split(",");
+        this.contactName4 = contact4[0];
+        this.contactEmail4 = contact4[1];
+        this.contactDesc4 = contact4[2];
+      }
+
+      if(val.contact5 != '')
+      {
+        let contact5 = val.contact5.split(",");
+        this.contactName5 = contact5[0];
+        this.contactEmail5 = contact5[1];
+        this.contactDesc5 = contact5[2];
+      }  
     }).catch((err) => {
       console.log(err);
     });
@@ -81,16 +147,22 @@ export class VolunteerFormPage {
   // saveData
   saveData() {
 
-      let userid = this.userid;
-    
-    if(this.campName != null && this.country != null && this.shortDesc != null && this.aboutCamp != null)
+    let contact1 = this.contactName1+','+this.contactEmail1+','+this.contactDesc1;
+    let contact2 = this.contactName2+','+this.contactEmail2+','+this.contactDesc2;
+    let contact3 = this.contactName3+','+this.contactEmail3+','+this.contactDesc3;
+    let contact4 = this.contactName4+','+this.contactEmail4+','+this.contactDesc4;
+    let contact5 = this.contactName5+','+this.contactEmail5+','+this.contactDesc5;
+    let userid = this.userid;
+
+    if(this.fname != null && this.lname != null && this.email != null && this.charity != null && this.volunteerLocation != null && this.fewAboutYourself != null && this.moreAboutYourself != null)
     {
       this.createLoader();
           
       // request to server
-      this.userService.saveVolunteerFormData(userid, this.campName, this.country, this.city, this.shortDesc, this.aboutCamp).subscribe(data => {
+      this.userService.saveVolunteerFormData(userid, this.fname, this.lname, this.email, this.charity, this.volunteerLocation, this.fewAboutYourself, this.moreAboutYourself, contact1, contact2, contact3, contact4, contact5).subscribe(data => {
         // alert(data.msg);
-        this.setDataToStorage(userid, this.campName, this.country, this.city, this.shortDesc, this.aboutCamp);
+        this.setDataToStorage(userid, this.fname, this.lname, this.email, this.charity, this.volunteerLocation, this.fewAboutYourself, this.moreAboutYourself, contact1, contact2, contact3, contact4, contact5);
+
         this.loader.dismiss();
       }, err => {
         console.log('error: '+err);
@@ -122,14 +194,21 @@ export class VolunteerFormPage {
   }
 
   // setDataToStorage
-  setDataToStorage(userid: number, campName: string, country: string, city: string, shortDesc: string, aboutCamp: string) {
+  setDataToStorage(userid: number, fname: string, lname: string, email: string, charity: string, volunteerLocation: string, fewAboutYourself: string, moreAboutYourself: string, contact1: string, contact2: string, contact3: string, contact4: string, contact5: string) {
     let data = {
         userid: userid,
-        campName: campName,
-        country: country,
-        city: city,
-        shortDesc: shortDesc,
-        aboutCamp: aboutCamp
+        fname: fname,
+        lname: lname,
+        email: email,
+        charity: charity,
+        volunteerLocation: volunteerLocation,
+        fewAboutYourself: fewAboutYourself,
+        moreAboutYourself: moreAboutYourself,
+        contact1: contact1,
+        contact2: contact2,
+        contact3: contact3,
+        contact4: contact4,
+        contact5: contact5
     };
 
     this.storage.set('volunteerForm', data);

@@ -129,7 +129,7 @@ export class UserProvider {
   }
 
   // saveVolunteerFormData
-  saveVolunteerFormData(userid: number, campName: string, country: string, city: string, short_desc: string, aboutCamp: string) {
+  saveVolunteerFormData(userid: number, fname: string, lname: string, email: string, charity: string, volunteerLocation: string, fewAboutYourself: string, moreAboutYourself: string, contact1: string, contact2: string, contact3: string, contact4: string, contact5: string) {
 
       // set headers
       let headers = new Headers();
@@ -140,12 +140,19 @@ export class UserProvider {
 
       // set data to be send
       let data = JSON.stringify({
-          userid: userid,
-          campaign_name: campName,
-          country: country,
-          city: city,
-          short_desc: short_desc,
-          about_campaign: aboutCamp,
+        userid: userid,
+        fname: fname,
+        lname: lname,
+        email: email,
+        charity: charity,
+        volunteerLocation: volunteerLocation,
+        fewAboutYourself: fewAboutYourself,
+        moreAboutYourself: moreAboutYourself,
+        contact1: contact1,
+        contact2: contact2,
+        contact3: contact3,
+        contact4: contact4,
+        contact5: contact5
       });
 
       return this._http.post("http://ionic.dsl.house/heartAppApi/volunteer-form.php", data, options).map(res => res.json());

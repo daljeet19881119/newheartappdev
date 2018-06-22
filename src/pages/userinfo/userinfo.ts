@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, ModalController, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, ModalController, Platform, LoadingController } from 'ionic-angular';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { HomePage } from '../home/home';
 import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 import { CharitiesPage } from '../charities/charities';
+import { SplashScreen } from '@ionic-native/splash-screen';
 
 /**
  * Generated class for the UserinfoPage page.
@@ -29,12 +30,13 @@ export class UserinfoPage {
   country: number = null;
   profileStatus: string = null;
   uuid: any = null;
+  loader: any;
 
   // variable to store charities
   charities: any = [];
   checkCharity: boolean = false;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private http: Http, private modalCtrl: ModalController, public platform: Platform, private uniqueDeviceID: UniqueDeviceID) {
+  constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private http: Http, private modalCtrl: ModalController, public platform: Platform, private uniqueDeviceID: UniqueDeviceID, private loadingCtrl: LoadingController) {
 
     // if user try goback then exit app
     this.platform.registerBackButtonAction(() => {
@@ -93,6 +95,12 @@ export class UserinfoPage {
       {
         // make server request
          this.makeServerRequest();
+         this.reload();
+        //  this.createLoader();
+
+        //  setTimeout(() => {
+        //    this.loader.dismiss();
+        //  }, 3000);
       }      
     }
   }
@@ -113,6 +121,7 @@ export class UserinfoPage {
 
   // makeServerRequest
   makeServerRequest() {
+
     this.http.get('http://ionic.dsl.house/heartAppApi/verify-users.php?profile_status=verified&fname='+this.firstName+'&lname='+this.lastName+'&email='+this.email+'&charity_type='+this.charities+'&c_code='+this.country+'&m_no='+this.mobileno).map(res => res.json()).subscribe(data => {
       this.profileStatus = data.data.profile_status;
       console.log(data);
@@ -156,5 +165,22 @@ export class UserinfoPage {
                           email: this.email
                   });
                   modal.present();
+  }
+
+  // createLoader
+  createLoader() {
+    this.loader = this.loadingCtrl.create({
+      spinner: 'dots',
+      content: 'Please wait...'
+    });
+
+    this.loader.present();
+  }
+
+  
+  // reload
+  reload(){
+    this.splashScreen.show();
+    window.location.reload();
   }
 }
