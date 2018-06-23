@@ -28,7 +28,7 @@ export class HomePage {
   uuid: any;
   showDonationBtn: boolean = true;
   showPaymentBtn: boolean = true;
-  limit: number = 5;
+  limit: number = 6;
   paging: number = 1;
   paymentPaging: number = 1;
   recommendedBigHearts: any;

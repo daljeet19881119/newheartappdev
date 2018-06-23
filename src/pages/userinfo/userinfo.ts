@@ -69,7 +69,7 @@ export class UserinfoPage {
         // sotore only selected charities in array
         if(element.value == true)
         {
-          this.charities.push(element.name);
+          this.charities.push('  '+element.name);
         }
       });
       this.checkCharity = true;
@@ -92,15 +92,9 @@ export class UserinfoPage {
 
       // check if mobileno and coutnry not empty then 
       if(this.mobileno !== null && this.country !== null)
-      {
+      {        
         // make server request
          this.makeServerRequest();
-         this.reload();
-        //  this.createLoader();
-
-        //  setTimeout(() => {
-        //    this.loader.dismiss();
-        //  }, 3000);
       }      
     }
   }
@@ -122,13 +116,26 @@ export class UserinfoPage {
   // makeServerRequest
   makeServerRequest() {
 
-    this.http.get('http://ionic.dsl.house/heartAppApi/verify-users.php?profile_status=verified&fname='+this.firstName+'&lname='+this.lastName+'&email='+this.email+'&charity_type='+this.charities+'&c_code='+this.country+'&m_no='+this.mobileno).map(res => res.json()).subscribe(data => {
+    // declare empty array for charity
+    let charities = [];
+
+    // loop of selected charity
+    this.charities.forEach(element => {
+
+      // remove starting space from each element and push into charity array
+      charities.push(element.replace('  ',''));
+    }); 
+
+    this.http.get('http://ionic.dsl.house/heartAppApi/verify-users.php?profile_status=verified&fname='+this.firstName+'&lname='+this.lastName+'&email='+this.email+'&charity_type='+charities+'&c_code='+this.country+'&m_no='+this.mobileno).map(res => res.json()).subscribe(data => {
       this.profileStatus = data.data.profile_status;
       console.log(data);
 
       // check if profileStatus is null
       if(this.profileStatus !== null && this.profileStatus =='verified')
       {
+        
+        this.reload();
+
         // gotodashboard
         const modal = this.modalCtrl.create(HomePage);
         modal.present();
@@ -153,11 +160,20 @@ export class UserinfoPage {
 
   // gotoCharityPage
   gotoCharityPage() {
-    console.log('selected charities: '+this.charities);   
+
+    // declare empty array for charity
+    let charities = [];
+
+    // loop of selected charity
+    this.charities.forEach(element => {
+
+      // remove starting space from each element and push into charity array
+      charities.push(element.replace('  ',''));
+    }); 
 
     // create modal
      const modal = this.modalCtrl.create(CharitiesPage, {
-                          charities: this.charities, 
+                          charities: charities, 
                           mobileno: this.mobileno, 
                           c_code: this.country, 
                           fname: this.firstName, 

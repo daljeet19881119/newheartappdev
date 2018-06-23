@@ -64,12 +64,15 @@
       </div>
       <div class="textarea-div">
         <ion-row>
-            <ion-col col-12>
-              <p class="upload-para">Upload an image of yourself or take a picture</p>
-              <button ion-button small color="white" class="upload-btn">Choose file</button>
-              <button ion-button small color="white" class="upload-btn">
+            <p class="upload-para">Upload an image of yourself or take a picture</p>
+            <ion-col col-6 class="profile-col">              
+              <button ion-button small color="white" class="upload-btn" (click)="uploadPicture()">Choose file</button>
+              <button ion-button small color="white" class="upload-btn" (click)="tackPicture()">
                   <ion-icon name="camera"></ion-icon>
               </button>
+            </ion-col>
+            <ion-col col-3>
+              <img [src]="profilePic" *ngIf="profilePic" class="profile-pic">
             </ion-col>
         </ion-row>
       </div>

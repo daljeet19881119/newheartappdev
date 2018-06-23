@@ -33,7 +33,7 @@ page-home {
     }
     .upper-part{
         background: #ae0433;
-        padding: 5px 0 0px 0px;
+        padding: 10px 0 0px 0px;
     }
     span.upper-text{
         margin: 2px 0;
@@ -194,18 +194,24 @@ page-home {
         color: #ae0433;
         margin: 3px 0 5px;
     }
-    .donation-list{
-        height: 300px;
-        overflow: scroll;        
-        margin-top: 30px;
-    }
     .scroll-content{
         margin-bottom: 192px;
     }
+    .list-part{
+        height: 400px;
+        // overflow: scroll;
+    }
+    .donation-list{
+        height: 100%;
+        overflow: scroll;        
+        margin-top: 30px;
+        margin-bottom: 50px;
+    }
     #payment-list{
-        height: 450px;
+        height: 100%;
         overflow: scroll;
         margin-top: 30px;
+        margin-bottom: 50px;
     }
     .view-all button{
         display: block;

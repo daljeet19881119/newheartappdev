@@ -31,6 +31,9 @@ import { VolunteerFormPage } from '../pages/volunteer-form/volunteer-form';
 import { IonicStorageModule } from '@ionic/storage';
 import { UserProfilePage } from '../pages/user-profile/user-profile';
 import { SocialSharing } from '@ionic-native/social-sharing';
+import { Camera } from '@ionic-native/camera';
+import { FileTransfer } from '@ionic-native/file-transfer';
+import { File } from '@ionic-native/file';
 
 
 @NgModule({
@@ -90,7 +93,10 @@ import { SocialSharing } from '@ionic-native/social-sharing';
     PhotoViewer,
     StreamingMedia,
     HomePageProvider  ,
-    SocialSharing  
+    SocialSharing,
+    Camera,
+    File,
+    FileTransfer      
   ]
 })
 export class AppModule {}

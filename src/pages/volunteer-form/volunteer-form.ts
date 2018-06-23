@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, LoadingController, AlertController
 import { UserProvider } from '../../providers/user/user';
 import { Storage } from '@ionic/storage';
 import { UniqueDeviceID } from '@ionic-native/unique-device-id';
+import { Camera, CameraOptions } from '@ionic-native/camera';
 
 /**
  * Generated class for the VolunteerFormPage page.
@@ -31,7 +32,8 @@ export class VolunteerFormPage {
   volunteerLocation: string;
   fewAboutYourself: string;
   moreAboutYourself: string;
-  
+  profilePic: any;
+
   contactName1: string;
   contactEmail1: string;
   contactDesc1: string;
@@ -52,7 +54,7 @@ export class VolunteerFormPage {
   contactEmail5: string;
   contactDesc5: string;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private userService: UserProvider, private storage: Storage, public loadingCtrl: LoadingController, public alertCtrl: AlertController, private uniqueDeviceID: UniqueDeviceID) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private userService: UserProvider, private storage: Storage, public loadingCtrl: LoadingController, public alertCtrl: AlertController, private uniqueDeviceID: UniqueDeviceID, private camera: Camera) {
     
     // get countries from storage
     this.storage.get('countries').then((country) => {
@@ -212,5 +214,54 @@ export class VolunteerFormPage {
     };
 
     this.storage.set('volunteerForm', data);
+  }
+
+  // take picture
+  tackPicture() {
+    
+    this.createLoader();
+
+    const options: CameraOptions = {
+      quality: 100,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE
+    }
+    
+    this.camera.getPicture(options).then((imageData) => {
+     // imageData is either a base64 encoded string or a file URI
+     // If it's base64:
+     let base64Image = 'data:image/jpeg;base64,' + imageData;
+     this.profilePic = base64Image;
+     this.loader.dismiss();
+    }, (err) => {
+     // Handle error
+     console.log(err);
+    });
+  }
+
+  // take picture
+  uploadPicture() {
+    
+    this.createLoader();
+
+    const options: CameraOptions = {
+      quality: 100,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
+      saveToPhotoAlbum: false
+    }
+    
+    this.camera.getPicture(options).then((imageData) => {
+     // imageData is either a base64 encoded string or a file URI
+     // If it's base64:
+     let base64Image = 'data:image/jpeg;base64,' + imageData;
+     this.profilePic = base64Image;
+     this.loader.dismiss();
+    }, (err) => {
+     // Handle error
+     console.log(err);
+    });
+    
   }
 }
