@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, AlertController, ModalController } from 'ionic-angular';
 import { UserProvider } from '../../providers/user/user';
 import { Storage } from '@ionic/storage';
 import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 import { Camera, CameraOptions } from '@ionic-native/camera';
+import { CharitiesPage } from '../charities/charities';
 
 /**
  * Generated class for the VolunteerFormPage page.
@@ -34,27 +35,31 @@ export class VolunteerFormPage {
   moreAboutYourself: string;
   profilePic: any;
 
-  contactName1: string;
-  contactEmail1: string;
-  contactDesc1: string;
+  contactName1: string = null;
+  contactEmail1: string = null;
+  contactDesc1: string = null;
 
-  contactName2: string;
-  contactEmail2: string;
-  contactDesc2: string;
+  contactName2: string = null;
+  contactEmail2: string = null;
+  contactDesc2: string = null;
 
-  contactName3: string;
-  contactEmail3: string;
-  contactDesc3: string;
+  contactName3: string = null;
+  contactEmail3: string = null;
+  contactDesc3: string = null;
 
-  contactName4: string;
-  contactEmail4: string;
-  contactDesc4: string;
+  contactName4: string = null;
+  contactEmail4: string = null;
+  contactDesc4: string = null;
 
-  contactName5: string;
-  contactEmail5: string;
-  contactDesc5: string;
+  contactName5: string = null;
+  contactEmail5: string = null;
+  contactDesc5: string = null;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private userService: UserProvider, private storage: Storage, public loadingCtrl: LoadingController, public alertCtrl: AlertController, private uniqueDeviceID: UniqueDeviceID, private camera: Camera) {
+  // variable to store charities
+  charities: any = [];
+  checkCharity: boolean = false;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, private userService: UserProvider, private storage: Storage, public loadingCtrl: LoadingController, public alertCtrl: AlertController, private uniqueDeviceID: UniqueDeviceID, private camera: Camera, public modalCtrl: ModalController) {
     
     // get countries from storage
     this.storage.get('countries').then((country) => {
@@ -125,7 +130,37 @@ export class VolunteerFormPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad VolunteerFormPage');
 
-    
+    // check if charities comes
+    if(this.navParams.get('charities'))
+    { 
+      // store charities object that are send from the charities page
+      let charities = this.navParams.get('charities');
+
+      // loop all charities
+      charities.forEach(element => {
+
+        // sotore only selected charities in array
+        if(element.value == true)
+        {
+          this.charities.push('  '+element.name);
+        }
+      });
+      this.checkCharity = true;
+    }    
+  }
+
+  //validateEmail
+  validateEmail(mail: string) 
+  {
+      if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail))
+      {
+        return (true);
+      }
+      else
+      {
+        alert("You have entered an invalid email address!");
+        return (true);
+      }     
   }
 
    // getDeviceID
@@ -196,7 +231,7 @@ export class VolunteerFormPage {
   }
 
   // setDataToStorage
-  setDataToStorage(userid: number, fname: string, lname: string, email: string, charity: string, volunteerLocation: string, fewAboutYourself: string, moreAboutYourself: string, contact1: string, contact2: string, contact3: string, contact4: string, contact5: string) {
+  setDataToStorage(userid: number, fname: string, lname: string, email: string, charity: string, volunteerLocation: string, fewAboutYourself: string, moreAboutYourself: string, contact1: string = '', contact2: string = '', contact3: string = '', contact4: string = '', contact5: string = '') {
     let data = {
         userid: userid,
         fname: fname,
@@ -263,5 +298,26 @@ export class VolunteerFormPage {
      console.log(err);
     });
     
+  }
+
+  // gotoCharityPage
+  gotoCharityPage() {
+
+    // declare empty array for charity
+    let charities = [];
+
+    // loop of selected charity
+    this.charities.forEach(element => {
+
+      // remove starting space from each element and push into charity array
+      charities.push(element.replace('  ',''));
+    }); 
+
+    // create modal
+     const modal = this.modalCtrl.create(CharitiesPage, {
+                          charities: charities,
+                          page: 'volunteer-form'
+                  });
+                  modal.present();
   }
 }

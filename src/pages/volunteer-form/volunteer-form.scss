@@ -1,6 +1,6 @@
 page-volunteer-form {
     .item-feilds{
-        color: #ae0433;
+        color: #000000;
         border-radius: 5px;
         margin-bottom: 10px;
         padding: 0 10px;
@@ -49,7 +49,7 @@ page-volunteer-form {
         color: #999999;
     }
     .contact-inputs{
-        color: #ae0433;
+        color: #000000;
     }
     .profile-pic{
         width: 60px;
@@ -58,5 +58,8 @@ page-volunteer-form {
     }
     .profile-col{
         padding: 17px 0;
+    }
+    .next-arrow{
+        float: right;
     }
 }

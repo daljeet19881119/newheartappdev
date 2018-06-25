@@ -174,6 +174,7 @@ export class UserinfoPage {
     // create modal
      const modal = this.modalCtrl.create(CharitiesPage, {
                           charities: charities, 
+                          page: 'userinfo',
                           mobileno: this.mobileno, 
                           c_code: this.country, 
                           fname: this.firstName, 

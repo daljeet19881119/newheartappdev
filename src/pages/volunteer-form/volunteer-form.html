@@ -17,26 +17,27 @@
       </ion-item>
       <ion-item no-padding class="item-feilds">
         <ion-label floating>Email</ion-label>
-        <ion-input type="email" [(ngModel)]="email"></ion-input>
+        <ion-input type="email" [(ngModel)]="email" (ionBlur)="validateEmail(email)"></ion-input>
       </ion-item>
       <div class="textarea-div">
-        <ion-row>
-          <ion-label>Select the Charity(ies) you are engaged in</ion-label>
-        </ion-row>
-        <ion-row>
-            <ion-item no-padding class="item-feilds">
-              <ion-label>Tap here to select</ion-label>
-              <ion-select interface="action-sheet" [(ngModel)]="charity">
-                  <ion-option value="Animal Support">Animal Support</ion-option>
-                  <ion-option value="Economic Development">Economic Development</ion-option>
-                  <ion-option value="Environment">Environment</ion-option>
-                  <ion-option value="Human Rights">Human Rights</ion-option>
-                  <ion-option value="Poverty and Hunger">Poverty and Hunger</ion-option>
-                  <ion-option value="Education">Education</ion-option>
-                  <ion-option value="Geographic Preference(s)">Geographic Preference(s)</ion-option>
-              </ion-select>
-            </ion-item>
-        </ion-row>
+          <ion-row>
+            <ion-label>Select the Charity(ies) you are engaged in</ion-label>
+          </ion-row>
+          <ion-item no-padding (click)="gotoCharityPage()" *ngIf="!checkCharity || charities?.length == 0" class="item-feilds"> 
+            <ion-label style="color: #999999;">Tap here to select <ion-icon name="arrow-forward" class="next-arrow"></ion-icon></ion-label>       
+          </ion-item>
+          <ion-row *ngIf="charities?.length > 0">
+              <ion-col col-10 no-padding>
+                <ion-item no-padding class="item-feild-textarea">
+                    <ion-textarea [(ngModel)]="charities" readonly text-wrap class="text-area"></ion-textarea>
+                </ion-item>
+              </ion-col>
+              <ion-col col-2 no-padding (click)="gotoCharityPage()">
+                <ion-item class="item-feild-arrow">
+                  <ion-label style="color: #999999;margin:20px 8px 20px 0;"><ion-icon name="arrow-forward" class="next-arrow"></ion-icon></ion-label>
+                </ion-item>
+              </ion-col>
+          </ion-row>
       </div>
       <div class="textarea-div">
         <ion-row>
@@ -51,7 +52,7 @@
           <ion-label>Tell in a few words about yourself (max 40 char)</ion-label>
         </ion-row>
         <ion-row>
-          <ion-textarea [(ngModel)]="fewAboutYourself" class="contact-inputs"></ion-textarea>
+          <ion-textarea [(ngModel)]="fewAboutYourself" class="contact-inputs" maxlength="40"></ion-textarea>
         </ion-row>
       </div>
       <div class="textarea-div">
@@ -59,7 +60,7 @@
           <ion-label>Tell in more details about yourself (max 500 char)</ion-label>
         </ion-row>
         <ion-row>
-          <ion-textarea [(ngModel)]="moreAboutYourself" class="contact-inputs"></ion-textarea>
+          <ion-textarea [(ngModel)]="moreAboutYourself" class="contact-inputs" maxlength="500"></ion-textarea>
         </ion-row>
       </div>
       <div class="textarea-div">
@@ -87,7 +88,7 @@
                 </ion-item>
                 <ion-item class="contact-item">
                     <ion-label>Contact email</ion-label>
-                    <ion-input type="email" class="contact-inputs" [(ngModel)]="contactEmail1"></ion-input>
+                    <ion-input type="email" class="contact-inputs" [(ngModel)]="contactEmail1" (ionBlur)="validateEmail(contactEmail1)"></ion-input>
                 </ion-item>
                 <ion-row class="contact-row">
                   <ion-label class="textarea-label">How have they been working with you</ion-label>
@@ -103,7 +104,7 @@
                 </ion-item>
                 <ion-item class="contact-item">
                     <ion-label>Contact email</ion-label>
-                    <ion-input type="email" class="contact-inputs" [(ngModel)]="contactEmail2"></ion-input>
+                    <ion-input type="email" class="contact-inputs" [(ngModel)]="contactEmail2" (ionBlur)="validateEmail(contactEmail2)"></ion-input>
                 </ion-item>
                 <ion-row class="contact-row">
                   <ion-label class="textarea-label">How have they been working with you</ion-label>
@@ -119,7 +120,7 @@
                 </ion-item>
                 <ion-item class="contact-item">
                     <ion-label>Contact email</ion-label>
-                    <ion-input type="email" class="contact-inputs" [(ngModel)]="contactEmail3"></ion-input>
+                    <ion-input type="email" class="contact-inputs" [(ngModel)]="contactEmail3" (ionBlur)="validateEmail(contactEmail3)"></ion-input>
                 </ion-item>
                 <ion-row class="contact-row">
                   <ion-label class="textarea-label">How have they been working with you</ion-label>
@@ -135,7 +136,7 @@
                 </ion-item>
                 <ion-item class="contact-item">
                     <ion-label>Contact email</ion-label>
-                    <ion-input type="email" class="contact-inputs" [(ngModel)]="contactEmail4"></ion-input>
+                    <ion-input type="email" class="contact-inputs" [(ngModel)]="contactEmail4" (ionBlur)="validateEmail(contactEmail4)"></ion-input>
                 </ion-item>
                 <ion-row class="contact-row">
                   <ion-label class="textarea-label">How have they been working with you</ion-label>
@@ -151,7 +152,7 @@
                 </ion-item>
                 <ion-item class="contact-item">
                     <ion-label>Contact email</ion-label>
-                    <ion-input type="email" class="contact-inputs" [(ngModel)]="contactEmail5"></ion-input>
+                    <ion-input type="email" class="contact-inputs" [(ngModel)]="contactEmail5" (ionBlur)="validateEmail(contactEmail5)"></ion-input>
                 </ion-item>
                 <ion-row class="contact-row">
                   <ion-label class="textarea-label">How have they been working with you</ion-label>

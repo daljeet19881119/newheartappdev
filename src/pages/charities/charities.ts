@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController, AlertController } from 'ionic-angular';
 import { UserinfoPage } from '../userinfo/userinfo';
+import { CauseFormPage } from '../cause-form/cause-form';
+import { VolunteerFormPage } from '../volunteer-form/volunteer-form';
 
 /**
  * Generated class for the CharitiesPage page.
@@ -167,16 +169,40 @@ export class CharitiesPage {
           {name: this.geographic_preference, value: this.geographic_preference_val}
         ];
         
-        // create modal
-        const modal = this.modalCtrl.create(UserinfoPage, {
-                            charities: charities, 
-                            mobileno: this.mobileNo, 
-                            country: this.c_code, 
-                            fname: this.fname, 
-                            lname: this.lname, 
-                            email: this.email
-                      });
+        // check if request from userinfo page then gotouserinfo page
+        if(this.navParams.get('page') == 'userinfo')
+        {
+            // create modal
+            const modal = this.modalCtrl.create(UserinfoPage, {
+                    charities: charities, 
+                    mobileno: this.mobileNo, 
+                    country: this.c_code, 
+                    fname: this.fname, 
+                    lname: this.lname, 
+                    email: this.email
+              });
               modal.present();
+        }
+
+        // check if request from causeForm page then gotocauseform page
+        if(this.navParams.get('page') == 'cause-form')
+        {
+            // create modal
+            const modal = this.modalCtrl.create(CauseFormPage, {
+                  charities: charities
+            });
+            modal.present();
+        }
+        
+        // check if request from volunteerform page then gotovolunteerform page
+        if(this.navParams.get('page') == 'volunteer-form')
+        {
+            // create modal
+            const modal = this.modalCtrl.create(VolunteerFormPage, {
+                  charities: charities
+            });
+            modal.present();
+        }
     }
   }
 }

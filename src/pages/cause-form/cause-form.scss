@@ -1,6 +1,6 @@
 page-cause-form {
     .item-feilds{
-        color: #ae0433;
+        color: #000000;
         border-radius: 5px;
         margin-bottom: 10px;
         padding: 0 10px;
@@ -39,7 +39,7 @@ page-cause-form {
         color: #999999;
     }
     .contact-inputs{
-        color: #ae0433;
+        color: #000;
     }
     .textarea-div{
         background: #fff;
@@ -60,5 +60,8 @@ page-cause-form {
     .textarea-label{
         color: #999999;
         font-size: 16px;
+    }
+    .next-arrow{
+        float: right;
     }
 }

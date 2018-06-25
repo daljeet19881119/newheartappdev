@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, AlertController, ModalController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { UserProvider } from '../../providers/user/user';
 import { UniqueDeviceID } from '@ionic-native/unique-device-id';
+import { Camera, CameraOptions } from '@ionic-native/camera';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import { CharitiesPage } from '../charities/charities';
 
 /**
  * Generated class for the CauseFormPage page.
@@ -28,31 +31,37 @@ export class CauseFormPage {
   moreAboutYourself: string;
   email: string;
 
-  contactName1: string;
-  contactEmail1: string;
-  contactDesc1: string;
+  contactName1: string = null;
+  contactEmail1: string = null;
+  contactDesc1: string = null;
 
-  contactName2: string;
-  contactEmail2: string;
-  contactDesc2: string;
+  contactName2: string = null;
+  contactEmail2: string = null;
+  contactDesc2: string = null;
 
   contactName3: string;
-  contactEmail3: string;
-  contactDesc3: string;
+  contactEmail3: string = null;
+  contactDesc3: string = null;
 
-  contactName4: string;
-  contactEmail4: string;
-  contactDesc4: string;
+  contactName4: string = null;
+  contactEmail4: string = null;
+  contactDesc4: string = null;
 
-  contactName5: string;
-  contactEmail5: string;
-  contactDesc5: string;
+  contactName5: string = null;
+  contactEmail5: string = null;
+  contactDesc5: string = null;
 
   loader: any;
   userid: any;
   uuid: any;
+  profilePic: any;
+  multiplePics: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private userService: UserProvider, public loadingCtrl: LoadingController, public alertCtrl: AlertController, private uniqueDeviceID: UniqueDeviceID) {
+  // variable to store charities
+  charities: any = [];
+  checkCharity: boolean = false;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private userService: UserProvider, public loadingCtrl: LoadingController, public alertCtrl: AlertController, private uniqueDeviceID: UniqueDeviceID, private camera: Camera,private transfer: FileTransfer, public modalCtrl: ModalController) {
 
     // store all countries
     this.storage.get('countries').then((val) => {
@@ -122,7 +131,23 @@ export class CauseFormPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad CauseFormPage');
 
-    
+    // check if charities comes
+    if(this.navParams.get('charities'))
+    { 
+      // store charities object that are send from the charities page
+      let charities = this.navParams.get('charities');
+
+      // loop all charities
+      charities.forEach(element => {
+
+        // sotore only selected charities in array
+        if(element.value == true)
+        {
+          this.charities.push('  '+element.name);
+        }
+      });
+      this.checkCharity = true;
+    }
   }
 
   // getDeviceID
@@ -202,11 +227,12 @@ export class CauseFormPage {
   }
 
   // setDataToStorage
-  setDataToStorage(userid: number, fname: string, lname: string, email: string, causeCat: string, country: string, city: string, fewAboutYourself: string, moreAboutYourself: string, contact1: string, contact2: string, contact3: string, contact4: string, contact5: string) {
+  setDataToStorage(userid: number, fname: string, lname: string, email: string, causeCat: string, country: string, city: string, fewAboutYourself: string, moreAboutYourself: string, contact1: string = '', contact2: string = '', contact3: string = '', contact4: string = '', contact5: string = '') {
     let data = {
         userid: userid,
         fname: fname,
         lname: lname,
+        email: email,
         causeCat: causeCat,
         country: country,
         city: city,
@@ -222,4 +248,136 @@ export class CauseFormPage {
     this.storage.set('causeForm', data);
   }
 
+   // take picture
+   tackPicture() {
+    
+    this.createLoader();
+
+    const options: CameraOptions = {
+      quality: 100,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE
+    }
+    
+    this.camera.getPicture(options).then((imageData) => {
+     // imageData is either a base64 encoded string or a file URI
+     // If it's base64:
+     let base64Image = 'data:image/jpeg;base64,' + imageData;
+     this.profilePic = base64Image;
+     this.loader.dismiss();
+    }, (err) => {
+     // Handle error
+     console.log(err);
+     this.loader.dismiss();
+    });
+  }
+
+  // take picture
+  choosePicture() {
+    
+    this.createLoader();
+
+    const options: CameraOptions = {
+      quality: 100,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
+      saveToPhotoAlbum: false
+    }
+    
+    this.camera.getPicture(options).then((imageData) => {
+     // imageData is either a base64 encoded string or a file URI
+     // If it's base64:
+     let base64Image = 'data:image/jpeg;base64,' + imageData;
+     this.profilePic = base64Image;
+     this.loader.dismiss();
+    }, (err) => {
+     // Handle error
+     console.log(err);
+     this.loader.dismiss();
+    });
+    
+  }
+
+  // chooseMultiplePicture
+  chooseMultiplePicture() {
+      this.createLoader();
+
+      const options: CameraOptions = {
+        quality: 100,
+        destinationType: this.camera.DestinationType.DATA_URL,
+        sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
+        saveToPhotoAlbum: false
+      }
+      
+      this.camera.getPicture(options).then((imageData) => {
+      // imageData is either a base64 encoded string or a file URI
+      // If it's base64:
+      let base64Image = 'data:image/jpeg;base64,' + imageData;
+      this.multiplePics = base64Image;
+      this.loader.dismiss();
+      }, (err) => {
+      // Handle error
+      console.log(err);
+      this.loader.dismiss();
+      });
+  }
+
+  // uploadPicture
+  uploadPicture() {
+    this.createLoader();
+    const fileTransfer: FileTransferObject = this.transfer.create();
+
+    let options: FileUploadOptions = {
+        fileKey: 'file',
+        fileName: 'volunteer.jpg',
+        chunkedMode: false,
+        httpMethod: 'post',
+        mimeType: "image/jpeg",
+        headers: {}
+    }
+ 
+   fileTransfer.upload(this.profilePic, 'http://ionic.dsl.house/heartAppApi/image-upload.php', options)
+      .then((data) => {
+        // success
+        this.loader.dismiss();
+      }, (err) => {
+        // error
+        this.loader.dismiss();
+      });
+  }
+
+  validateEmail(mail: string) 
+  {
+      if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail))
+      {
+        return (true);
+      }
+      else
+      {
+        alert("You have entered an invalid email address!");
+        return (true);
+      }     
+  }
+
+  // gotoCharityPage
+  gotoCharityPage() {
+
+    // declare empty array for charity
+    let charities = [];
+
+    // loop of selected charity
+    this.charities.forEach(element => {
+
+      // remove starting space from each element and push into charity array
+      charities.push(element.replace('  ',''));
+    }); 
+
+    // create modal
+     const modal = this.modalCtrl.create(CharitiesPage, {
+                          charities: charities,
+                          page: 'cause-form'
+                  });
+                  modal.present();
+  }
 }
