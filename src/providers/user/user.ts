@@ -76,7 +76,7 @@ export class UserProvider {
   }
 
   // saveCauseFormData
-  saveCauseFormData(userid: number, fname: string, lname: string, email: string, cause_category: string, country: string, city: string, fewAboutYourself: string, moreAboutYourself: string, contact1: string, contact2: string, contact3: string, contact4: string, contact5: string) {
+  saveCauseFormData(userid: number, fname: string, lname: string, email: string, cause_category: any, country: string, city: string, fewAboutYourself: string, moreAboutYourself: string, contact1: string, contact2: string, contact3: string, contact4: string, contact5: string) {
 
     // set headers
     let headers = new Headers();
@@ -129,7 +129,7 @@ export class UserProvider {
   }
 
   // saveVolunteerFormData
-  saveVolunteerFormData(userid: number, fname: string, lname: string, email: string, charity: string, volunteerLocation: string, fewAboutYourself: string, moreAboutYourself: string, contact1: string, contact2: string, contact3: string, contact4: string, contact5: string) {
+  saveVolunteerFormData(userid: number, fname: string, lname: string, email: string, charity: any, volunteerLocation: string, fewAboutYourself: string, moreAboutYourself: string, contact1: string, contact2: string, contact3: string, contact4: string, contact5: string) {
 
       // set headers
       let headers = new Headers();

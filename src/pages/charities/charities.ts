@@ -189,7 +189,10 @@ export class CharitiesPage {
         {
             // create modal
             const modal = this.modalCtrl.create(CauseFormPage, {
-                  charities: charities
+                  charities: charities,
+                  fname: this.navParams.get('fname'),
+                  lname: this.navParams.get('lname'),
+                  email: this.navParams.get('email')
             });
             modal.present();
         }

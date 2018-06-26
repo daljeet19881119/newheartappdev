@@ -29,31 +29,30 @@ export class VolunteerFormPage {
   fname: string;
   lname: string;
   email: string;
-  charity: string;
   volunteerLocation: string;
   fewAboutYourself: string;
   moreAboutYourself: string;
   profilePic: any;
 
-  contactName1: string = null;
-  contactEmail1: string = null;
-  contactDesc1: string = null;
+  contactName1: string = '';
+  contactEmail1: string = '';
+  contactDesc1: string = '';
 
-  contactName2: string = null;
-  contactEmail2: string = null;
-  contactDesc2: string = null;
+  contactName2: string = '';
+  contactEmail2: string = '';
+  contactDesc2: string = '';
 
-  contactName3: string = null;
-  contactEmail3: string = null;
-  contactDesc3: string = null;
+  contactName3: string = '';
+  contactEmail3: string = '';
+  contactDesc3: string = '';
 
-  contactName4: string = null;
-  contactEmail4: string = null;
-  contactDesc4: string = null;
+  contactName4: string = '';
+  contactEmail4: string = '';
+  contactDesc4: string = '';
 
-  contactName5: string = null;
-  contactEmail5: string = null;
-  contactDesc5: string = null;
+  contactName5: string = '';
+  contactEmail5: string = '';
+  contactDesc5: string = '';
 
   // variable to store charities
   charities: any = [];
@@ -74,7 +73,8 @@ export class VolunteerFormPage {
       this.fname = val.fname;
       this.lname = val.lname;
       this.email = val.email;
-      this.charity = val.charity;
+      this.charities = val.charity;
+      this.checkCharity = true;
       this.volunteerLocation = val.volunteerLocation;
       this.fewAboutYourself = val.fewAboutYourself;
       this.moreAboutYourself = val.moreAboutYourself;
@@ -184,6 +184,16 @@ export class VolunteerFormPage {
   // saveData
   saveData() {
 
+    // declare empty array for charity
+    let charities = [];
+
+    // loop of selected charity
+    this.charities.forEach(element => {
+
+      // remove starting space from each element and push into charity array
+      charities.push(element.replace('  ',''));
+    }); 
+
     let contact1 = this.contactName1+','+this.contactEmail1+','+this.contactDesc1;
     let contact2 = this.contactName2+','+this.contactEmail2+','+this.contactDesc2;
     let contact3 = this.contactName3+','+this.contactEmail3+','+this.contactDesc3;
@@ -191,14 +201,14 @@ export class VolunteerFormPage {
     let contact5 = this.contactName5+','+this.contactEmail5+','+this.contactDesc5;
     let userid = this.userid;
 
-    if(this.fname != null && this.lname != null && this.email != null && this.charity != null && this.volunteerLocation != null && this.fewAboutYourself != null && this.moreAboutYourself != null)
+    if(this.fname != null && this.lname != null && this.email != null && this.volunteerLocation != null && this.fewAboutYourself != null && this.moreAboutYourself != null)
     {
       this.createLoader();
           
       // request to server
-      this.userService.saveVolunteerFormData(userid, this.fname, this.lname, this.email, this.charity, this.volunteerLocation, this.fewAboutYourself, this.moreAboutYourself, contact1, contact2, contact3, contact4, contact5).subscribe(data => {
+      this.userService.saveVolunteerFormData(userid, this.fname, this.lname, this.email, charities, this.volunteerLocation, this.fewAboutYourself, this.moreAboutYourself, contact1, contact2, contact3, contact4, contact5).subscribe(data => {
         // alert(data.msg);
-        this.setDataToStorage(userid, this.fname, this.lname, this.email, this.charity, this.volunteerLocation, this.fewAboutYourself, this.moreAboutYourself, contact1, contact2, contact3, contact4, contact5);
+        this.setDataToStorage(userid, this.fname, this.lname, this.email, charities, this.volunteerLocation, this.fewAboutYourself, this.moreAboutYourself, contact1, contact2, contact3, contact4, contact5);
 
         this.loader.dismiss();
       }, err => {
@@ -231,7 +241,7 @@ export class VolunteerFormPage {
   }
 
   // setDataToStorage
-  setDataToStorage(userid: number, fname: string, lname: string, email: string, charity: string, volunteerLocation: string, fewAboutYourself: string, moreAboutYourself: string, contact1: string = '', contact2: string = '', contact3: string = '', contact4: string = '', contact5: string = '') {
+  setDataToStorage(userid: number, fname: string, lname: string, email: string, charity: any, volunteerLocation: string, fewAboutYourself: string, moreAboutYourself: string, contact1: string = '', contact2: string = '', contact3: string = '', contact4: string = '', contact5: string = '') {
     let data = {
         userid: userid,
         fname: fname,

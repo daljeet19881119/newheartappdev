@@ -24,7 +24,7 @@
         <ion-label>Select the Charity(ies) you are engaged in</ion-label>
       </ion-row>
       <ion-item no-padding (click)="gotoCharityPage()" *ngIf="!checkCharity || charities?.length == 0" class="item-feilds"> 
-        <ion-label style="color: #999999;">Tap here to select <ion-icon name="arrow-forward" class="next-arrow"></ion-icon></ion-label>       
+        <ion-label style="color: #999999;">Tap here to select <ion-icon name="arrow-forward" class="next-arrow"></ion-icon></ion-label>
       </ion-item>
       <ion-row *ngIf="charities?.length > 0">
           <ion-col col-10 no-padding>

@@ -24,32 +24,31 @@ export class CauseFormPage {
   countries: any;
   fname: string;
   lname: string;
-  causeCat: string = 'Animal Support';
   country: string = 'US';
   city: string;
   fewAboutYourself: string;
   moreAboutYourself: string;
   email: string;
 
-  contactName1: string = null;
-  contactEmail1: string = null;
-  contactDesc1: string = null;
+  contactName1: string = '';
+  contactEmail1: string = '';
+  contactDesc1: string = '';
 
-  contactName2: string = null;
-  contactEmail2: string = null;
-  contactDesc2: string = null;
+  contactName2: string = '';
+  contactEmail2: string = '';
+  contactDesc2: string = '';
 
-  contactName3: string;
-  contactEmail3: string = null;
-  contactDesc3: string = null;
+  contactName3: string = '';
+  contactEmail3: string = '';
+  contactDesc3: string = '';
 
-  contactName4: string = null;
-  contactEmail4: string = null;
-  contactDesc4: string = null;
+  contactName4: string = '';
+  contactEmail4: string = '';
+  contactDesc4: string = '';
 
-  contactName5: string = null;
-  contactEmail5: string = null;
-  contactDesc5: string = null;
+  contactName5: string = '';
+  contactEmail5: string = '';
+  contactDesc5: string = '';
 
   loader: any;
   userid: any;
@@ -73,7 +72,8 @@ export class CauseFormPage {
       this.fname = val.fname;
       this.lname = val.lname;
       this.email = val.email;
-      this.causeCat = val.causeCat;
+      this.charities = val.causeCat;
+      this.checkCharity = true;
       this.country = val.country;
       this.city = val.city;
       this.fewAboutYourself = val.fewAboutYourself;
@@ -148,6 +148,10 @@ export class CauseFormPage {
       });
       this.checkCharity = true;
     }
+
+    this.fname = this.navParams.get('fname');
+    this.lname = this.navParams.get('lname');
+    this.email = this.navParams.get('email');
   }
 
   // getDeviceID
@@ -171,6 +175,15 @@ export class CauseFormPage {
   // saveData
   saveData() {
 
+    // declare empty array for charity
+    let charities = [];
+
+    // loop of selected charity
+    this.charities.forEach(element => {
+
+      // remove starting space from each element and push into charity array
+      charities.push(element.replace('  ',''));
+    }); 
 
     let contact1 = this.contactName1+','+this.contactEmail1+','+this.contactDesc1;
     let contact2 = this.contactName2+','+this.contactEmail2+','+this.contactDesc2;
@@ -179,18 +192,18 @@ export class CauseFormPage {
     let contact5 = this.contactName5+','+this.contactEmail5+','+this.contactDesc5;
     let userid = this.userid;
 
-    if(this.fname != null && this.lname != null && this.causeCat != null && this.country != null && this.city != null)
+    if(this.fname != null && this.lname != null && this.country != null && this.city != null)
     {
             
         // call func createLoader
         this.createLoader();
 
         // request user provider
-        this.userService.saveCauseFormData(userid, this.fname, this.lname, this.email, this.causeCat, this.country, this.city, this.fewAboutYourself, this.moreAboutYourself, contact1, contact2, contact3, contact4, contact5).subscribe(data => {
+        this.userService.saveCauseFormData(userid, this.fname, this.lname, this.email, charities, this.country, this.city, this.fewAboutYourself, this.moreAboutYourself, contact1, contact2, contact3, contact4, contact5).subscribe(data => {
           
           if(data.msg == 'success')
           {
-            this.setDataToStorage(userid, this.fname, this.lname, this.email, this.causeCat, this.country, this.city, this.fewAboutYourself, this.moreAboutYourself, contact1, contact2, contact3, contact4, contact5);
+            this.setDataToStorage(userid, this.fname, this.lname, this.email, charities, this.country, this.city, this.fewAboutYourself, this.moreAboutYourself, contact1, contact2, contact3, contact4, contact5);
             this.loader.dismiss();
           }
           if(data.msg == 'err')
@@ -227,13 +240,13 @@ export class CauseFormPage {
   }
 
   // setDataToStorage
-  setDataToStorage(userid: number, fname: string, lname: string, email: string, causeCat: string, country: string, city: string, fewAboutYourself: string, moreAboutYourself: string, contact1: string = '', contact2: string = '', contact3: string = '', contact4: string = '', contact5: string = '') {
+  setDataToStorage(userid: number, fname: string, lname: string, email: string, charities: any, country: string, city: string, fewAboutYourself: string, moreAboutYourself: string, contact1: string = '', contact2: string = '', contact3: string = '', contact4: string = '', contact5: string = '') {
     let data = {
         userid: userid,
         fname: fname,
         lname: lname,
         email: email,
-        causeCat: causeCat,
+        causeCat: charities,
         country: country,
         city: city,
         fewAboutYourself: fewAboutYourself,
@@ -376,7 +389,10 @@ export class CauseFormPage {
     // create modal
      const modal = this.modalCtrl.create(CharitiesPage, {
                           charities: charities,
-                          page: 'cause-form'
+                          page: 'cause-form',
+                          fname: this.fname,
+                          lname: this.lname,
+                          email: this.email
                   });
                   modal.present();
   }
