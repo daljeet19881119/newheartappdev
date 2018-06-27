@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 import { UserinfoPage } from '../userinfo/userinfo';
 import { HomePage } from '../home/home';
 import { UniqueDeviceID } from '@ionic-native/unique-device-id';
+import { SplashScreen } from '@ionic-native/splash-screen';
 
 /**
  * Generated class for the VerifycodePage page.
@@ -30,7 +31,7 @@ export class VerifycodePage {
   btnDisable: boolean = true;
   loader: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, private modalCtrl: ModalController, private alertCtrl: AlertController, public platform: Platform, private uniqueDeviceID: UniqueDeviceID, public loadingCtrl: LoadingController) {
+  constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, private http: Http, private modalCtrl: ModalController, private alertCtrl: AlertController, public platform: Platform, private uniqueDeviceID: UniqueDeviceID, public loadingCtrl: LoadingController) {
 
     // if user try goback then exit app
     this.platform.registerBackButtonAction(() => {
@@ -78,6 +79,7 @@ export class VerifycodePage {
         if(this.navParams.get('userExists') == 'true')
         {
           page = HomePage;
+          this.reload();
         }else{
           page = UserinfoPage;
         }
@@ -150,5 +152,11 @@ export class VerifycodePage {
     });
 
     this.loader.present();
+  }
+
+  // reload
+  reload(){
+    this.splashScreen.show();
+    window.location.reload();
   }
 }

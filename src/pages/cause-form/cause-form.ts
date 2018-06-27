@@ -194,25 +194,32 @@ export class CauseFormPage {
 
     if(this.fname != null && this.lname != null && this.country != null && this.city != null)
     {
-            
-        // call func createLoader
-        this.createLoader();
+         
+        // check if valid mail
+        if(this.validateEmail(this.email)==true)
+        {
+          // call func createLoader
+          this.createLoader();
 
-        // request user provider
-        this.userService.saveCauseFormData(userid, this.fname, this.lname, this.email, charities, this.country, this.city, this.fewAboutYourself, this.moreAboutYourself, contact1, contact2, contact3, contact4, contact5).subscribe(data => {
-          
-          if(data.msg == 'success')
-          {
-            this.setDataToStorage(userid, this.fname, this.lname, this.email, charities, this.country, this.city, this.fewAboutYourself, this.moreAboutYourself, contact1, contact2, contact3, contact4, contact5);
-            this.loader.dismiss();
-          }
-          if(data.msg == 'err')
-          {
-            this.loader.dismiss();
-          }
-        }, err => {
-          console.log('error: '+err);
-        });
+          // request user provider
+          this.userService.saveCauseFormData(userid, this.fname, this.lname, this.email, charities, this.country, this.city, this.fewAboutYourself, this.moreAboutYourself, contact1, contact2, contact3, contact4, contact5).subscribe(data => {
+            
+            if(data.msg == 'success')
+            {
+              this.setDataToStorage(userid, this.fname, this.lname, this.email, charities, this.country, this.city, this.fewAboutYourself, this.moreAboutYourself, contact1, contact2, contact3, contact4, contact5);
+              this.loader.dismiss();
+            }
+            if(data.msg == 'err')
+            {
+              this.loader.dismiss();
+            }
+          }, err => {
+            console.log('error: '+err);
+          });
+        }
+        else{
+          alert("please enter valid email");
+        }
     }
     else{
       this.createAlert();
@@ -360,16 +367,16 @@ export class CauseFormPage {
       });
   }
 
+  // validateEmail
   validateEmail(mail: string) 
   {
       if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail))
       {
-        return (true);
+        return true;
       }
       else
       {
-        alert("You have entered an invalid email address!");
-        return (true);
+        return false;
       }     
   }
 

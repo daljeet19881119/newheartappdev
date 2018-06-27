@@ -150,7 +150,7 @@ export class CharitiesPage {
         // create alert
         const alert = this.alertCtrl.create({
             title: 'HeartApp',
-            message: 'Please select at least one charity.',
+            message: 'Please select at least one charity type.',
             buttons: ['ok']
         });
         alert.present();

@@ -80,7 +80,7 @@ export class UserinfoPage {
   registerUser() {
 
     // check if all fields are not empty then register user
-    if(this.firstName ===null || this.lastName ===null || this.email ===null || this.charities.length === 0)
+    if(this.firstName ==null || this.lastName ==null || this.email ==null || this.charities.length == 0)
     {
         const alert = this.alertCtrl.create({
           message: 'We need a little more information about you. Please fill out all fields before continuing. <p>Thanks.</p>',
@@ -90,12 +90,19 @@ export class UserinfoPage {
     }
     else{
 
-      // check if mobileno and coutnry not empty then 
-      if(this.mobileno !== null && this.country !== null)
-      {        
-        // make server request
-         this.makeServerRequest();
-      }      
+      if(this.validateEmail(this.email) == true)
+      {
+
+        // check if mobileno and coutnry not empty then 
+        if(this.mobileno !== null && this.country !== null)
+        {        
+          // make server request
+          this.makeServerRequest();
+        }    
+      }  
+      else{
+        alert("please fill valid email");
+      } 
     }
   }
 
@@ -199,5 +206,18 @@ export class UserinfoPage {
   reload(){
     this.splashScreen.show();
     window.location.reload();
+  }
+
+  // validateEmail
+  validateEmail(mail: string) 
+  {
+      if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail))
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }     
   }
 }

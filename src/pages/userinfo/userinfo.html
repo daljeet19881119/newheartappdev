@@ -33,7 +33,7 @@
       </ion-item>
       <ion-row *ngIf="charities?.length > 0">
           <ion-col col-10 no-padding>
-            <ion-item no-padding class="item-feild-textarea">
+            <ion-item no-padding class="item-feild-textarea" (click)="gotoCharityPage()">
                 <ion-textarea [(ngModel)]="charities" readonly text-wrap class="text-area"></ion-textarea>
             </ion-item>
           </ion-col>

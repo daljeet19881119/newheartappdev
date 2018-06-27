@@ -115,7 +115,7 @@ export class HomePage {
 
         // get login user data
         this.userService.getUserByDeviceId(uuid).subscribe((data) => {
-          this.name = data.data.fname+' '+data.data.lname;        
+          this.name = data.data.fname;        
         });
       })
       .catch((error: any) => {

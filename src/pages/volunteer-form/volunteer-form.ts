@@ -159,7 +159,7 @@ export class VolunteerFormPage {
       else
       {
         alert("You have entered an invalid email address!");
-        return (true);
+        return (false);
       }     
   }
 
