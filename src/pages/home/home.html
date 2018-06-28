@@ -106,14 +106,14 @@
         </div>
     </div>    
 </ion-content>
-<ion-footer class="home-footer">     
-    <ion-toolbar no-padding> 
-        <div class="view-all" (click)="viewAll()" id="view-all" *ngIf="latestTabs == 'donations' && showDonationBtn">
-            <button ion-button color="appColor" small>View All</button>
-        </div> 
-        <div class="view-all" id="view-all-payments" *ngIf="latestTabs == 'payments' && showPaymentBtn" (click)="viewAllPayments()">
-            <button ion-button color="appColor" small>View All</button>
-        </div>       
+<ion-footer class="home-footer">   
+    <div class="view-all" (click)="viewAll()" id="view-all" *ngIf="latestTabs == 'donations' && showDonationBtn">
+        <button ion-button color="appColor" small>View All</button>
+    </div> 
+    <div class="view-all" id="view-all-payments" *ngIf="latestTabs == 'payments' && showPaymentBtn" (click)="viewAllPayments()">
+        <button ion-button color="appColor" small>View All</button>
+    </div>     
+    <ion-toolbar no-padding>             
         <div class="recomended-hearts">
             <p class="para-footer">Recommended BigHearts</p>
             <ion-slides loop="true" slidesPerView="3">

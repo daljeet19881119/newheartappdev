@@ -21,20 +21,13 @@
         <ion-label floating>Email</ion-label>
         <ion-input type="email" [(ngModel)]="email"></ion-input>
       </ion-item>
-      <!-- <ion-item no-padding class="item-feilds">
-          <ion-label>Gender</ion-label>
-          <ion-select [(ngModel)]="gender" interface="action-sheet">
-            <ion-option value="male">Male</ion-option>
-            <ion-option value="female">Female</ion-option>
-          </ion-select>
-        </ion-item> -->
       <ion-item no-padding (click)="gotoCharityPage()" *ngIf="!checkCharity || charities?.length == 0" class="item-feilds"> 
         <ion-label style="color: #999999;">Type of charities <ion-icon name="arrow-forward" class="next-arrow"></ion-icon></ion-label>        
       </ion-item>
       <ion-row *ngIf="charities?.length > 0">
           <ion-col col-10 no-padding>
-            <ion-item no-padding class="item-feild-textarea" (click)="gotoCharityPage()">
-                <ion-textarea [(ngModel)]="charities" readonly text-wrap class="text-area"></ion-textarea>
+            <ion-item no-padding class="item-feild-textarea">
+                <ion-textarea [(ngModel)]="charities" readonly text-wrap class="text-area"  (focus)="gotoCharityPage()"></ion-textarea>
             </ion-item>
           </ion-col>
           <ion-col col-2 no-padding (click)="gotoCharityPage()">

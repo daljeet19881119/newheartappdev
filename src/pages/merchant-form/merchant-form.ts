@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, LoadingController, Platform } from 'ionic-angular';
 import { UserProvider } from '../../providers/user/user';
 import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 import { Storage } from '@ionic/storage';
+import { HomePage } from '../home/home';
 
 /**
  * Generated class for the MerchantFormPage page.
@@ -27,7 +28,7 @@ export class MerchantFormPage {
   userid: any;
   uuid: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private userService: UserProvider, public alertCtrl: AlertController, public loadingCtrl: LoadingController, private uniqueDeviceID: UniqueDeviceID, private storage: Storage) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private userService: UserProvider, public alertCtrl: AlertController, public loadingCtrl: LoadingController, private uniqueDeviceID: UniqueDeviceID, private storage: Storage, private platform: Platform) {
 
     // get data from storage
     this.storage.get('merchantForm').then((val) => {
@@ -41,6 +42,11 @@ export class MerchantFormPage {
 
     // get device id
     this.getDeviceID();
+
+    // if user try goback then go to homepage
+    this.platform.registerBackButtonAction(() => {
+      this.navCtrl.push(HomePage);
+    });
   }
 
   ionViewDidLoad() {
@@ -93,7 +99,7 @@ export class MerchantFormPage {
   // createAlert
   createAlert() {
     const alert = this.alertCtrl.create({
-          message: 'Please fill all fields.',
+          message: 'Please fill out the required fields.',
           buttons: ['ok']
     });
 

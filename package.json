@@ -25,6 +25,7 @@
     "@ionic-native/core": "4.7.0",
     "@ionic-native/file": "^4.8.0",
     "@ionic-native/file-transfer": "^4.8.0",
+    "@ionic-native/native-storage": "^4.8.0",
     "@ionic-native/photo-viewer": "^4.7.0",
     "@ionic-native/screen-orientation": "^4.7.0",
     "@ionic-native/social-sharing": "^4.7.0",
@@ -45,6 +46,7 @@
     "cordova-plugin-file-transfer": "^1.7.1",
     "cordova-plugin-ionic-keyboard": "^2.1.2",
     "cordova-plugin-ionic-webview": "^1.2.1",
+    "cordova-plugin-nativestorage": "^2.3.1",
     "cordova-plugin-screen-orientation": "^3.0.1",
     "cordova-plugin-splashscreen": "^5.0.2",
     "cordova-plugin-streaming-media": "^1.0.2",
@@ -82,7 +84,8 @@
       "cordova-plugin-x-socialsharing": {},
       "cordova-plugin-camera": {},
       "cordova-plugin-file-transfer": {},
-      "cordova-plugin-file": {}
+      "cordova-plugin-file": {},
+      "cordova-plugin-nativestorage": {}
     },
     "platforms": [
       "android"

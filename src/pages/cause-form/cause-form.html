@@ -8,20 +8,20 @@
 <ion-content padding style="background-color: #ae0433;">
   <ion-list>
     <ion-item no-padding class="item-feilds">
-      <ion-label floating>First Name</ion-label>
+      <ion-label floating>First Name*</ion-label>
       <ion-input type="text" [(ngModel)]="fname"></ion-input>
     </ion-item>
     <ion-item no-padding class="item-feilds">
-      <ion-label floating>Last Name</ion-label>
+      <ion-label floating>Last Name*</ion-label>
       <ion-input type="text" [(ngModel)]="lname"></ion-input>
     </ion-item>  
     <ion-item no-padding class="item-feilds">
-      <ion-label floating>Email</ion-label>
+      <ion-label floating>Email*</ion-label>
       <ion-input type="text" [(ngModel)]="email" (ionBlur)="validateEmail(email)"></ion-input>
     </ion-item>
     <div class="textarea-div">
       <ion-row>
-        <ion-label>Select the Charity(ies) you are engaged in</ion-label>
+        <ion-label>Select the Charity(ies) you are engaged in*</ion-label>
       </ion-row>
       <ion-item no-padding (click)="gotoCharityPage()" *ngIf="!checkCharity || charities?.length == 0" class="item-feilds"> 
         <ion-label style="color: #999999;">Tap here to select <ion-icon name="arrow-forward" class="next-arrow"></ion-icon></ion-label>
@@ -29,7 +29,7 @@
       <ion-row *ngIf="charities?.length > 0">
           <ion-col col-10 no-padding>
             <ion-item no-padding class="item-feild-textarea">
-                <ion-textarea [(ngModel)]="charities" readonly text-wrap class="text-area"></ion-textarea>
+                <ion-textarea [(ngModel)]="charities" readonly text-wrap class="text-area" (focus)="gotoCharityPage()"></ion-textarea>
             </ion-item>
           </ion-col>
           <ion-col col-2 no-padding (click)="gotoCharityPage()">
@@ -41,7 +41,7 @@
     </div> 
     <div class="textarea-div">
       <ion-row>
-        <ion-label>Select the Country you are mainly active in</ion-label>
+        <ion-label>Select the Country you are mainly active in*</ion-label>
       </ion-row>
       <ion-row>
         <ion-item no-padding class="item-feilds">
@@ -55,12 +55,12 @@
       </ion-row>
     </div>    
     <ion-item no-padding class="item-feilds">
-      <ion-label floating>Enter the City you are mainly active in</ion-label>
+      <ion-label floating>Enter the City you are mainly active in*</ion-label>
       <ion-input type="text" [(ngModel)]="city"></ion-input>
     </ion-item>
     <div class="textarea-div">
       <ion-row>
-        <ion-label>Tell in a few words about yourself (max 40 char)</ion-label>
+        <p>Tell in a few words about yourself (max 40 char)*</p>
       </ion-row>
       <ion-row>
         <ion-textarea [(ngModel)]="fewAboutYourself" class="contact-inputs" maxlength="40"></ion-textarea>
@@ -68,7 +68,7 @@
     </div>
     <div class="textarea-div">
       <ion-row>
-        <ion-label>Tell in more details about yourself (max 500 char)</ion-label>
+        <p>Tell in more details about yourself (max 500 char)*</p>
       </ion-row>
       <ion-row>
         <ion-textarea [(ngModel)]="moreAboutYourself" class="contact-inputs" maxlength="500"></ion-textarea>
@@ -101,7 +101,7 @@
     </div>
     <ion-row>
       <ion-card class="contacts-card">
-        <ion-card-header class="contacts-card-header">List upto 5 contacts that can tell us more about you</ion-card-header>
+        <p class="contacts-card-header">List up to 5 contacts that can tell us more about you</p>
         <ion-card-content class="contacts-card-content">
           <div class="contact-div">
             <ion-item>

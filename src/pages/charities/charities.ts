@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, AlertController, Platform } from 'ionic-angular';
 import { UserinfoPage } from '../userinfo/userinfo';
 import { CauseFormPage } from '../cause-form/cause-form';
 import { VolunteerFormPage } from '../volunteer-form/volunteer-form';
@@ -43,7 +43,7 @@ export class CharitiesPage {
   email: string;
   charities: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController, public platform: Platform) {
 
     // get data from nav params
     this.mobileNo = this.navParams.get('mobileno');
@@ -95,6 +95,11 @@ export class CharitiesPage {
       });
       
     }
+
+    // if user click on  goback btn then go back
+    this.platform.registerBackButtonAction(() => {
+      this.navCtrl.pop();
+    });
   }
 
   ionViewDidLoad() {
@@ -202,7 +207,10 @@ export class CharitiesPage {
         {
             // create modal
             const modal = this.modalCtrl.create(VolunteerFormPage, {
-                  charities: charities
+                  charities: charities,
+                  fname: this.navParams.get('fname'),
+                  lname: this.navParams.get('lname'),
+                  email: this.navParams.get('email')
             });
             modal.present();
         }

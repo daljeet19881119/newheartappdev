@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 import { VerifynumberPage } from '../verifynumber/verifynumber';
+import { UserProvider } from '../../providers/user/user';
 
 /**
  * Generated class for the WelcomePage page.
@@ -16,7 +17,7 @@ import { VerifynumberPage } from '../verifynumber/verifynumber';
 })
 export class WelcomePage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private modalCtrl: ModalController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private modalCtrl: ModalController, private userService: UserProvider) {
   }
 
   ionViewDidLoad() {
@@ -29,4 +30,9 @@ export class WelcomePage {
     modal.present();
   }
 
+  
+  // clean storage
+  cleanStorage() {
+    this.userService.cleanStorage();
+  }
 }

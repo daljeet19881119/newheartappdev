@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
+import { Storage } from '@ionic/storage';
 
 /*
   Generated class for the UserProvider provider.
@@ -12,7 +13,7 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class UserProvider {
 
-  constructor(public httpClient: HttpClient, private _http: Http) {
+  constructor(public httpClient: HttpClient, private _http: Http, private storage: Storage) {
   }
 
   
@@ -156,5 +157,12 @@ export class UserProvider {
       });
 
       return this._http.post("http://ionic.dsl.house/heartAppApi/volunteer-form.php", data, options).map(res => res.json());
+  }
+
+  // clean storage
+  cleanStorage() {
+    this.storage.clear().then(() => {
+      console.log('all keys cleared');
+    });
   }
 }

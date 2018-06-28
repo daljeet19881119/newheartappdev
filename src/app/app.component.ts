@@ -58,7 +58,7 @@ export class MyApp {
     this.http.get('http://ionic.dsl.house/heartAppApi/get-verified-user.php?uuid='+this.uuid).map(res => res.json()).subscribe(data => {
       // console.log(data);
 
-      if(data.data.verification =='notVerified' && data.data.profile_status=='notVerified'){
+      if(data.data.verification =='notVerified' && data.data.profile_status=='notVerified') {
         this.rootPage = WelcomePage;
       }
       if(data.data.verification =='verified' && data.data.profile_status=='notVerified') {
@@ -95,5 +95,6 @@ export class MyApp {
   gotoUserProfile() {
     this.nav.push(UserProfilePage);
   }
+
 }
 

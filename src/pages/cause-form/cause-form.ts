@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, AlertController, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, AlertController, ModalController, Platform } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { UserProvider } from '../../providers/user/user';
 import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { CharitiesPage } from '../charities/charities';
+import { HomePage } from '../home/home';
 
 /**
  * Generated class for the CauseFormPage page.
@@ -60,7 +61,7 @@ export class CauseFormPage {
   charities: any = [];
   checkCharity: boolean = false;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private userService: UserProvider, public loadingCtrl: LoadingController, public alertCtrl: AlertController, private uniqueDeviceID: UniqueDeviceID, private camera: Camera,private transfer: FileTransfer, public modalCtrl: ModalController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private userService: UserProvider, public loadingCtrl: LoadingController, public alertCtrl: AlertController, private uniqueDeviceID: UniqueDeviceID, private camera: Camera,private transfer: FileTransfer, public modalCtrl: ModalController, private platform: Platform) {
 
     // store all countries
     this.storage.get('countries').then((val) => {
@@ -126,6 +127,11 @@ export class CauseFormPage {
 
     // get device id
     this.getDeviceID();
+
+    // if user try goback then go to homepage
+    this.platform.registerBackButtonAction(() => {
+      this.navCtrl.push(HomePage);
+    });
   }
 
   ionViewDidLoad() {
@@ -239,7 +245,7 @@ export class CauseFormPage {
   // createAlert
   createAlert() {
     const alert = this.alertCtrl.create({
-          message: 'Please fill all fields.',
+          message: 'Please fill out the required fields.',
           buttons: ['ok']
     });
 

@@ -140,7 +140,7 @@ export class UserinfoPage {
       // check if profileStatus is null
       if(this.profileStatus !== null && this.profileStatus =='verified')
       {
-        
+        // reload the app
         this.reload();
 
         // gotodashboard
@@ -148,7 +148,7 @@ export class UserinfoPage {
         modal.present();
       }
 
-    }, error => {
+    }, err => {
       console.log('Oops!');
     });
   }
