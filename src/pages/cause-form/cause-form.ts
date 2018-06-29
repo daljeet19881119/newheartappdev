@@ -70,6 +70,7 @@ export class CauseFormPage {
 
     // get data from storage
     this.storage.get('causeForm').then((val) => {
+      this.userid = val.userid;
       this.fname = val.fname;
       this.lname = val.lname;
       this.email = val.email;
@@ -198,7 +199,7 @@ export class CauseFormPage {
     let contact5 = this.contactName5+','+this.contactEmail5+','+this.contactDesc5;
     let userid = this.userid;
 
-    if(this.fname != null && this.lname != null && this.country != null && this.city != null)
+    if(this.fname != null && this.lname != null && this.email != null && this.country != null && this.city != null && this.fewAboutYourself != null && this.moreAboutYourself != null && charities.length != 0)
     {
          
         // check if valid mail

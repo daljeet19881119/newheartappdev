@@ -6,6 +6,7 @@ import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { CharitiesPage } from '../charities/charities';
 import { HomePage } from '../home/home';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 
 /**
  * Generated class for the VolunteerFormPage page.
@@ -34,6 +35,7 @@ export class VolunteerFormPage {
   fewAboutYourself: string;
   moreAboutYourself: string;
   profilePic: any;
+  profilePicName: any;
 
   contactName1: string = '';
   contactEmail1: string = '';
@@ -59,7 +61,7 @@ export class VolunteerFormPage {
   charities: any = [];
   checkCharity: boolean = false;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private userService: UserProvider, private storage: Storage, public loadingCtrl: LoadingController, public alertCtrl: AlertController, private uniqueDeviceID: UniqueDeviceID, private camera: Camera, public modalCtrl: ModalController, private platform: Platform) {
+  constructor(private transfer: FileTransfer, public navCtrl: NavController, public navParams: NavParams, private userService: UserProvider, private storage: Storage, public loadingCtrl: LoadingController, public alertCtrl: AlertController, private uniqueDeviceID: UniqueDeviceID, private camera: Camera, public modalCtrl: ModalController, private platform: Platform) {
     
     // get countries from storage
     this.storage.get('countries').then((country) => {
@@ -71,6 +73,7 @@ export class VolunteerFormPage {
     // get volunteer form data from storage
     this.storage.get('volunteerForm').then((val) => {   
       
+      this.userid = val.userid;
       this.fname = val.fname;
       this.lname = val.lname;
       this.email = val.email;
@@ -79,6 +82,7 @@ export class VolunteerFormPage {
       this.volunteerLocation = val.volunteerLocation;
       this.fewAboutYourself = val.fewAboutYourself;
       this.moreAboutYourself = val.moreAboutYourself;
+      this.profilePic = val.profilePic;
 
       if(val.contact1 != '')
       {
@@ -164,12 +168,11 @@ export class VolunteerFormPage {
   {
       if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail))
       {
-        return (true);
+        return true;
       }
       else
       {
-        alert("You have entered an invalid email address!");
-        return (false);
+        return false;
       }     
   }
 
@@ -211,20 +214,28 @@ export class VolunteerFormPage {
     let contact5 = this.contactName5+','+this.contactEmail5+','+this.contactDesc5;
     let userid = this.userid;
 
-    if(this.fname != null && this.lname != null && this.email != null && this.volunteerLocation != null && this.fewAboutYourself != null && this.moreAboutYourself != null)
+    if(this.fname != null && this.lname != null && this.email != null && this.volunteerLocation != null && this.fewAboutYourself != null && this.moreAboutYourself != null && charities.length != 0)
     {
-      this.createLoader();
-          
-      // request to server
-      this.userService.saveVolunteerFormData(userid, this.fname, this.lname, this.email, charities, this.volunteerLocation, this.fewAboutYourself, this.moreAboutYourself, contact1, contact2, contact3, contact4, contact5).subscribe(data => {
-        // alert(data.msg);
-        this.setDataToStorage(userid, this.fname, this.lname, this.email, charities, this.volunteerLocation, this.fewAboutYourself, this.moreAboutYourself, contact1, contact2, contact3, contact4, contact5);
+      // check if email is valid
+      if(this.validateEmail(this.email) == true)
+      {
+        this.createLoader();
+            
+        // request to server
+        this.userService.saveVolunteerFormData(userid, this.fname, this.lname, this.email, charities, this.volunteerLocation, this.fewAboutYourself, this.moreAboutYourself, this.profilePicName, contact1, contact2, contact3, contact4, contact5).subscribe(data => {
+          // alert(data.msg);
+          this.setDataToStorage(userid, this.fname, this.lname, this.email, charities, this.volunteerLocation, this.fewAboutYourself, this.moreAboutYourself, this.profilePic, contact1, contact2, contact3, contact4, contact5);
 
-        this.loader.dismiss();
-      }, err => {
-        console.log('error: '+err);
-        alert(err);
-      });
+          this.loader.dismiss();
+        }, err => {
+          console.log('error: '+err);
+          alert(err);
+        });
+      }
+      else
+      {
+        alert("please enter valid email.");
+      }
     }
     else{
       this.createAlert();
@@ -251,7 +262,7 @@ export class VolunteerFormPage {
   }
 
   // setDataToStorage
-  setDataToStorage(userid: number, fname: string, lname: string, email: string, charity: any, volunteerLocation: string, fewAboutYourself: string, moreAboutYourself: string, contact1: string = '', contact2: string = '', contact3: string = '', contact4: string = '', contact5: string = '') {
+  setDataToStorage(userid: number, fname: string, lname: string, email: string, charity: any, volunteerLocation: string, fewAboutYourself: string, moreAboutYourself: string, profilePic: string, contact1: string = '', contact2: string = '', contact3: string = '', contact4: string = '', contact5: string = '') {
     let data = {
         userid: userid,
         fname: fname,
@@ -261,6 +272,7 @@ export class VolunteerFormPage {
         volunteerLocation: volunteerLocation,
         fewAboutYourself: fewAboutYourself,
         moreAboutYourself: moreAboutYourself,
+        profilePic: profilePic,
         contact1: contact1,
         contact2: contact2,
         contact3: contact3,
@@ -274,6 +286,9 @@ export class VolunteerFormPage {
   // take picture
   tackPicture() {
     
+    // empty testpic
+    this.profilePic = '';
+
     this.createLoader();
 
     const options: CameraOptions = {
@@ -283,12 +298,32 @@ export class VolunteerFormPage {
       mediaType: this.camera.MediaType.PICTURE
     }
     
+    let date = new Date();
+    let timeStr = date.getTime();
+
+    const fileTransfer: FileTransferObject = this.transfer.create();
+    let uploadOptions: FileUploadOptions = {
+      fileKey: 'file',
+      fileName: timeStr+'_volunteer.jpg',
+      headers: {}
+   }
+
     this.camera.getPicture(options).then((imageData) => {
      // imageData is either a base64 encoded string or a file URI
      // If it's base64:
      let base64Image = 'data:image/jpeg;base64,' + imageData;
-     this.profilePic = base64Image;
-     this.loader.dismiss();
+      this.profilePicName = 'user'+this.userid+'_volunteer.jpg';
+
+     // send file to server
+     fileTransfer.upload(base64Image, 'http://ionic.dsl.house/heartAppApi/image-upload.php', uploadOptions).then((data) => {
+        // alert('data'+data.response);
+        this.profilePic = 'http://ionic.dsl.house/heartAppApi/imgs/volunteer-form/'+timeStr+'_volunteer.jpg';
+        this.loader.dismiss();
+     }).catch((err) => {
+        alert('err: '+err);
+        this.loader.dismiss();
+     });
+     
     }, (err) => {
      // Handle error
      console.log(err);
@@ -299,6 +334,9 @@ export class VolunteerFormPage {
   // take picture
   uploadPicture() {
     
+    // empty testpic
+    this.profilePic = '';
+
     this.createLoader();
 
     const options: CameraOptions = {
@@ -308,12 +346,31 @@ export class VolunteerFormPage {
       saveToPhotoAlbum: false
     }
     
+    let date = new Date();
+    let timeStr = date.getTime();
+
+    const fileTransfer: FileTransferObject = this.transfer.create();
+    let uploadOptions: FileUploadOptions = {
+      fileKey: 'file',
+      fileName: timeStr+'_volunteer.jpg',
+      headers: {}
+   }
+
     this.camera.getPicture(options).then((imageData) => {
      // imageData is either a base64 encoded string or a file URI
      // If it's base64:
      let base64Image = 'data:image/jpeg;base64,' + imageData;
-     this.profilePic = base64Image;
-     this.loader.dismiss();
+     this.profilePicName = 'user'+this.userid+'_volunteer.jpg';
+
+     // send file to server
+     fileTransfer.upload(base64Image, 'http://ionic.dsl.house/heartAppApi/image-upload.php', uploadOptions).then((data) => {
+        // alert('data'+data.response);
+        this.profilePic = 'http://ionic.dsl.house/heartAppApi/imgs/volunteer-form/'+timeStr+'_volunteer.jpg';
+        this.loader.dismiss();
+     }).catch((err) => {
+        alert('err: '+err);
+        this.loader.dismiss();
+     });
     }, (err) => {
      // Handle error
      console.log(err);

@@ -101,7 +101,7 @@ export class UserinfoPage {
         }    
       }  
       else{
-        alert("please fill valid email");
+        alert("please enter valid email");
       } 
     }
   }
