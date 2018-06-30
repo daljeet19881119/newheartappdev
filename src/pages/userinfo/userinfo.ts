@@ -6,6 +6,8 @@ import { HomePage } from '../home/home';
 import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 import { CharitiesPage } from '../charities/charities';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { UserProvider } from '../../providers/user/user';
+import { Storage } from '@ionic/storage';
 
 /**
  * Generated class for the UserinfoPage page.
@@ -31,12 +33,16 @@ export class UserinfoPage {
   profileStatus: string = null;
   uuid: any = null;
   loader: any;
+  preference: any;
+  allRegions: any;
+  countries: any;
+  location: any;
 
   // variable to store charities
   charities: any = [];
   checkCharity: boolean = false;
 
-  constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private http: Http, private modalCtrl: ModalController, public platform: Platform, private uniqueDeviceID: UniqueDeviceID, private loadingCtrl: LoadingController) {
+  constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private http: Http, private modalCtrl: ModalController, public platform: Platform, private uniqueDeviceID: UniqueDeviceID, private loadingCtrl: LoadingController, private userService: UserProvider, private storage: Storage) {
 
     // if user try goback then exit app
     this.platform.registerBackButtonAction(() => {
@@ -52,6 +58,7 @@ export class UserinfoPage {
     this.firstName = this.navParams.get('fname');
     this.lastName = this.navParams.get('lname');
     this.email = this.navParams.get('email');
+
   }
 
   ionViewDidLoad() {
@@ -80,7 +87,7 @@ export class UserinfoPage {
   registerUser() {
 
     // check if all fields are not empty then register user
-    if(this.firstName ==null || this.lastName ==null || this.email ==null || this.charities.length == 0)
+    if(this.firstName ==null || this.lastName ==null || this.email ==null || this.charities.length == 0 || this.location == null || this.preference == null)
     {
         const alert = this.alertCtrl.create({
           message: 'We need a little more information about you. Please fill out all fields before continuing. <p>Thanks.</p>',
@@ -133,7 +140,7 @@ export class UserinfoPage {
       charities.push(element.replace('  ',''));
     }); 
 
-    this.http.get('http://ionic.dsl.house/heartAppApi/verify-users.php?profile_status=verified&fname='+this.firstName+'&lname='+this.lastName+'&email='+this.email+'&charity_type='+charities+'&c_code='+this.country+'&m_no='+this.mobileno).map(res => res.json()).subscribe(data => {
+    this.http.get('http://ionic.dsl.house/heartAppApi/verify-users.php?profile_status=verified&fname='+this.firstName+'&lname='+this.lastName+'&email='+this.email+'&charity_type='+charities+'&preference_type='+this.preference+'&location='+this.location+'&c_code='+this.country+'&m_no='+this.mobileno).map(res => res.json()).subscribe(data => {
       this.profileStatus = data.data.profile_status;
       console.log(data);
 
@@ -219,5 +226,39 @@ export class UserinfoPage {
       {
         return false;
       }     
+  }
+
+  // getPreference
+  getPreference() {
+
+    // if user select region then get all region
+    if(this.preference == 'region')
+    {        
+      this.createLoader();
+
+        // request region from server
+        this.userService.getAllRegions().subscribe(data => {
+          this.allRegions = data;
+          this.loader.dismiss();
+        }, err => {
+          console.log('err: '+err);
+          this.loader.dismiss();
+        });
+    }
+
+    // if user select country then get all countries
+    if(this.preference == 'country')
+    {
+      this.createLoader();
+
+      // get countries from storage
+      this.storage.get('countries').then((country) => {
+        this.countries = country;
+        this.loader.dismiss();
+      }).catch((err) => {
+        console.log('error: '+err);
+        this.loader.dismiss();
+      });
+    }
   }
 }

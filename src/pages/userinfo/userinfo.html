@@ -36,6 +36,45 @@
             </ion-item>
           </ion-col>
       </ion-row>
+      <div class="geographic-div">
+        <ion-row class="label-row">
+          <p>Geographic Preference(s)</p>
+        </ion-row>
+        <ion-row radio-group [(ngModel)]="preference" (ionChange)="getPreference()">
+          <ion-col>
+            <ion-item class="item-radio">
+              <ion-label>Select a specific country</ion-label>
+              <ion-radio value="country"></ion-radio>
+            </ion-item>
+          </ion-col>
+          <ion-col>
+            <ion-item class="item-radio">
+              <ion-label>Select a region</ion-label>
+              <ion-radio value="region"></ion-radio>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </div>
+      <ion-item *ngIf="preference == 'country'" no-padding class="item-feilds">
+        <ion-label>
+          Tap here to select country
+        </ion-label>
+        <ion-select interface="popover" *ngIf="countries" [(ngModel)]="location">
+          <ng-container *ngFor="let country of countries">
+            <ion-option value="{{ country.code }}">{{ country.name }}</ion-option>
+          </ng-container>
+        </ion-select>
+      </ion-item>
+      <ion-item *ngIf="preference == 'region'" no-padding class="item-feilds">
+        <ion-label>
+          Tap here to select region
+        </ion-label>
+        <ion-select interface="popover" *ngIf="allRegions" [(ngModel)]="location">
+          <ng-container *ngFor="let region of allRegions">
+            <ion-option value="{{ region.name }}">{{ region.name }}</ion-option>
+          </ng-container>
+        </ion-select>
+      </ion-item>
     </ion-list>
     <button ion-button block (click)="registerUser()" color="white" class="register-btn">Register</button>
 </ion-content>

@@ -22,6 +22,11 @@ export class UserProvider {
     return this._http.get('http://ionic.dsl.house/heartAppApi/all-countries.php').map(res => res.json());
   }
 
+  // getAllRegions
+  getAllRegions() {
+    return this._http.get('http://ionic.dsl.house/heartAppApi/all-regions.php').map(res => res.json());
+  }
+
   // getCountryCodeByCode
   getCountryCodeByCode(code: string) {
     return this._http.get('http://ionic.dsl.house/heartAppApi/all-countries.php?code='+code).map(res => res.json());
