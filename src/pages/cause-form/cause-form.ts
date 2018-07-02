@@ -25,7 +25,7 @@ export class CauseFormPage {
   countries: any;
   fname: string;
   lname: string;
-  country: string = 'US';
+  country: string;
   city: string;
   fewAboutYourself: string;
   moreAboutYourself: string;
@@ -56,6 +56,12 @@ export class CauseFormPage {
   uuid: any;
   profilePic: any;
   multiplePics: any;
+  
+  // varibale for checking that what the user have selected
+  prefType: any;
+  region: any;
+  regionId: any;
+
 
   // variable to store charities
   charities: any = [];
@@ -170,6 +176,29 @@ export class CauseFormPage {
         // request to userProvide
           this.userService.getUserByDeviceId(this.uuid).subscribe(data => {
             this.userid = data.data.id;
+            this.prefType = data.data.preference_type;
+
+            // put value if it is country
+            if(this.prefType == 'country')
+            {
+                this.country = data.data.preference_location;
+            }
+
+            // put value if it is region
+            if(this.prefType == 'region')
+            {
+              this.regionId = data.data.preference_location;
+              this.createLoader();
+
+              // get region name
+             this.userService.getRegionNameById(this.regionId).subscribe(data => {
+               this.region = data;
+               this.loader.dismiss();
+             }, err => {
+               console.log('err');
+               this.loader.dismiss();
+             });
+            }
         }, err => {
           console.log(err);
         });
@@ -199,22 +228,28 @@ export class CauseFormPage {
     let contact5 = this.contactName5+','+this.contactEmail5+','+this.contactDesc5;
     let userid = this.userid;
 
-    if(this.fname != null && this.lname != null && this.email != null && this.country != null && this.city != null && this.fewAboutYourself != null && this.moreAboutYourself != null && charities.length != 0)
+
+    if(this.fname != null && this.lname != null && this.email != null && this.city != null && this.fewAboutYourself != null && this.moreAboutYourself != null && charities.length != 0)
     {
          
         // check if valid mail
         if(this.validateEmail(this.email)==true)
         {
+
           // call func createLoader
           this.createLoader();
 
           // request user provider
-          this.userService.saveCauseFormData(userid, this.fname, this.lname, this.email, charities, this.country, this.city, this.fewAboutYourself, this.moreAboutYourself, contact1, contact2, contact3, contact4, contact5).subscribe(data => {
+          this.userService.saveCauseFormData(userid, this.fname, this.lname, this.email, charities, this.country, this.regionId, this.city, this.fewAboutYourself, this.moreAboutYourself, contact1, contact2, contact3, contact4, contact5).subscribe(data => {
             
             if(data.msg == 'success')
             {
-              this.setDataToStorage(userid, this.fname, this.lname, this.email, charities, this.country, this.city, this.fewAboutYourself, this.moreAboutYourself, contact1, contact2, contact3, contact4, contact5);
+              this.setDataToStorage(userid, this.fname, this.lname, this.email, charities, this.country, this.regionId, this.city, this.fewAboutYourself, this.moreAboutYourself, contact1, contact2, contact3, contact4, contact5);
               this.loader.dismiss();
+            }
+            if(data.msg == 'success' && data.status == 'processing')
+            {
+              this.createProcessAlert();
             }
             if(data.msg == 'err')
             {
@@ -231,6 +266,15 @@ export class CauseFormPage {
     else{
       this.createAlert();
     }
+  }
+
+  // createProcessAlert
+  createProcessAlert() {
+    const alert = this.alertCtrl.create({
+      message: 'We have already received your request and will return when it is processed. <p>Thank you.</p>',
+      buttons: ['ok']
+    });
+    alert.present();
   }
 
   // createLoader
@@ -254,7 +298,7 @@ export class CauseFormPage {
   }
 
   // setDataToStorage
-  setDataToStorage(userid: number, fname: string, lname: string, email: string, charities: any, country: string, city: string, fewAboutYourself: string, moreAboutYourself: string, contact1: string = '', contact2: string = '', contact3: string = '', contact4: string = '', contact5: string = '') {
+  setDataToStorage(userid: number, fname: string, lname: string, email: string, charities: any, country: any, region: any, city: string, fewAboutYourself: string, moreAboutYourself: string, contact1: string = '', contact2: string = '', contact3: string = '', contact4: string = '', contact5: string = '') {
     let data = {
         userid: userid,
         fname: fname,
@@ -262,6 +306,7 @@ export class CauseFormPage {
         email: email,
         causeCat: charities,
         country: country,
+        region: region,
         city: city,
         fewAboutYourself: fewAboutYourself,
         moreAboutYourself: moreAboutYourself,

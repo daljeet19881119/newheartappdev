@@ -39,7 +39,7 @@
           </ion-col>
       </ion-row>
     </div> 
-    <div class="textarea-div">
+    <div class="textarea-div" *ngIf="prefType == 'country'">
       <ion-row>
         <ion-label>Select the Country you are mainly active in*</ion-label>
       </ion-row>
@@ -53,7 +53,15 @@
           </ion-select>
         </ion-item>
       </ion-row>
-    </div>    
+    </div>  
+    <div class="textarea-div" *ngIf="prefType == 'region'">
+      <ion-row>
+        <p>Your selected region is:</p>
+      </ion-row>
+      <ion-row>
+        <ion-input class="contact-inputs" [readonly]="true" [value]="region"></ion-input>
+      </ion-row>
+    </div>  
     <ion-item no-padding class="item-feilds">
       <ion-label floating>Enter the City you are mainly active in*</ion-label>
       <ion-input type="text" [(ngModel)]="city"></ion-input>

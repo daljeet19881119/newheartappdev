@@ -27,6 +27,12 @@ export class UserProvider {
     return this._http.get('http://ionic.dsl.house/heartAppApi/all-regions.php').map(res => res.json());
   }
 
+  // getRegionNameById
+  getRegionNameById(regionId: any) {
+
+    return this._http.get('http://ionic.dsl.house/heartAppApi/get-region.php?id='+regionId).map(res => res.json());
+  }
+
   // getCountryCodeByCode
   getCountryCodeByCode(code: string) {
     return this._http.get('http://ionic.dsl.house/heartAppApi/all-countries.php?code='+code).map(res => res.json());
@@ -82,7 +88,7 @@ export class UserProvider {
   }
 
   // saveCauseFormData
-  saveCauseFormData(userid: number, fname: string, lname: string, email: string, cause_category: any, country: string, city: string, fewAboutYourself: string, moreAboutYourself: string, contact1: string, contact2: string, contact3: string, contact4: string, contact5: string) {
+  saveCauseFormData(userid: number, fname: string, lname: string, email: string, cause_category: any, country: any, region: any, city: string, fewAboutYourself: string, moreAboutYourself: string, contact1: string, contact2: string, contact3: string, contact4: string, contact5: string) {
 
     // set headers
     let headers = new Headers();
@@ -99,6 +105,7 @@ export class UserProvider {
         email: email,
         cause_category: cause_category,
         country: country,
+        region: region,
         city: city,
         fewAboutYourself: fewAboutYourself,
         moreAboutYourself: moreAboutYourself,
