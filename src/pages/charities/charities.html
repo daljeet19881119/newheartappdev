@@ -33,10 +33,6 @@
             <ion-toggle [(ngModel)]="environment_val" color="secondary" (ionChange)="getSelectedCharity(environment, environment_val)"></ion-toggle>
         </ion-item>
         <ion-item class="charities-list">
-            <ion-label (click)="toggleValue(geographic_preference, geographic_preference_val)">{{ geographic_preference }}</ion-label>
-            <ion-toggle [(ngModel)]="geographic_preference_val" color="secondary" (ionChange)="getSelectedCharity(geographic_preference, geographic_preference_val)"></ion-toggle>
-        </ion-item>
-        <ion-item class="charities-list">
             <ion-label (click)="toggleValue(human_right, human_right_val)">{{ human_right }}</ion-label>
             <ion-toggle [(ngModel)]="human_right_val" color="secondary" (ionChange)="getSelectedCharity(human_right, human_right_val)"></ion-toggle>
         </ion-item>

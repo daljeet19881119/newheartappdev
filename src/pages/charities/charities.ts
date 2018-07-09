@@ -25,7 +25,6 @@ export class CharitiesPage {
   human_right: string = 'Human Rights';
   poverty_hunger: string = 'Poverty and Hunger';
   education: string = 'Education';
-  geographic_preference: string = 'Geographic Preference(s)';
 
   animal_charity_val: boolean = false;
   economic_development_val: boolean = false;
@@ -33,7 +32,6 @@ export class CharitiesPage {
   human_right_val: boolean = false;
   poverty_hunger_val: boolean = false;
   education_val: boolean = false;
-  geographic_preference_val: boolean = false;
 
   // mobileno and ccode from userinfo page
   mobileNo: any;
@@ -88,10 +86,6 @@ export class CharitiesPage {
           {
             this.education_val = true;
           }
-          if(element == '"'+this.geographic_preference+'"')
-          {
-            this.geographic_preference_val = true;
-          }
       });
       
     }
@@ -141,16 +135,13 @@ export class CharitiesPage {
     if(this.education == name){
       this.education_val = !value;
     }
-    if(this.geographic_preference == name){
-      this.geographic_preference_val= !value;
-    }
   }
 
   // gotoUserinfoPage
   gotoUserinfoPage() {
 
     // check if none of charities selected then show alert
-    if(this.animal_charity_val === false && this.economic_development_val === false && this.environment_val === false && this.human_right_val === false && this.poverty_hunger_val === false && this.education_val === false && this.geographic_preference_val === false)
+    if(this.animal_charity_val === false && this.economic_development_val === false && this.environment_val === false && this.human_right_val === false && this.poverty_hunger_val === false && this.education_val === false)
     {
         // create alert
         const alert = this.alertCtrl.create({
@@ -170,8 +161,7 @@ export class CharitiesPage {
           {name: this.environment, value: this.environment_val},
           {name: this.human_right, value: this.human_right_val},
           {name: this.poverty_hunger, value: this.poverty_hunger_val},
-          {name: this.education, value: this.education_val},
-          {name: this.geographic_preference, value: this.geographic_preference_val}
+          {name: this.education, value: this.education_val}
         ];
         
         // check if request from userinfo page then gotouserinfo page

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, LoadingController, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, Platform } from 'ionic-angular';
 import { VerifycodePage } from '../verifycode/verifycode';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
@@ -30,7 +30,7 @@ export class VerifynumberPage {
   allCountries: any;
   loader: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, private modalCtrl: ModalController, public loadingCtrl: LoadingController, private uniqueDeviceID: UniqueDeviceID, public platform: Platform, public userService: UserProvider, private storage: Storage) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, public loadingCtrl: LoadingController, private uniqueDeviceID: UniqueDeviceID, public platform: Platform, public userService: UserProvider, private storage: Storage) {
 
     // call getuniqueDeviceID
     this.getuniqueDeviceID();
@@ -135,14 +135,20 @@ export class VerifynumberPage {
       {
 
         // push to verifycode page
-        const modal = this.modalCtrl.create(VerifycodePage,{
+        // const modal = this.modalCtrl.create(VerifycodePage,{
+        //   phone: this.mobileno,
+        //   country: this.country,
+        //   code: this.verficationCode,
+        //   userExists: userExists
+        // });
+        // modal.present();
+        
+        this.navCtrl.push(VerifycodePage, {
           phone: this.mobileno,
           country: this.country,
           code: this.verficationCode,
           userExists: userExists
         });
-        modal.present();
-        
         this.loader.dismiss();
       } 
     }, err => {
