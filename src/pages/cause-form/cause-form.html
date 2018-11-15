@@ -4,7 +4,6 @@
   </ion-navbar>
 </ion-header>
 
-
 <ion-content padding style="background-color: #ae0433;">
   <ion-list>
     <ion-item no-padding class="item-feilds">
@@ -14,31 +13,100 @@
     <ion-item no-padding class="item-feilds">
       <ion-label floating>Last Name*</ion-label>
       <ion-input type="text" [(ngModel)]="lname"></ion-input>
-    </ion-item>  
+    </ion-item>
     <ion-item no-padding class="item-feilds">
       <ion-label floating>Email*</ion-label>
       <ion-input type="text" [(ngModel)]="email" (ionBlur)="validateEmail(email)"></ion-input>
     </ion-item>
     <div class="textarea-div">
       <ion-row>
+        <ion-label>Select % to cause(0-97%) and to HC(3-100%)</ion-label>
+      </ion-row>
+      <ion-row>
+        <ion-label>Cause {{ '('+cause_percentage+'%)' }}</ion-label>
+        <ion-label text-right>HC ({{ 100-cause_percentage }}%)</ion-label>
+        <ion-item no-padding>
+          <ion-range min="0" max="100" [(ngModel)]="cause_percentage" color="appColor">
+            <ion-label range-left>0</ion-label>
+            <ion-label range-right>100</ion-label>
+          </ion-range>
+        </ion-item>
+      </ion-row>
+    </div>
+    <div class="textarea-div">
+      <ion-row>
+        <ion-label>How much do you want to donate each month?</ion-label>
+        <span class="range-val" style="margin-right: 5px;">{{ '$'+donation_amount }}</span>
+      </ion-row>
+      <ion-row>
+        <ion-item no-padding>
+          <ion-range min="10" max="1000" [(ngModel)]="donation_amount" color="appColor">
+            <ion-label range-left>$10</ion-label>
+            <ion-label range-right>$1000</ion-label>
+          </ion-range>
+        </ion-item>
+      </ion-row>
+    </div>
+    <div class="textarea-div">
+      <ion-row>
+        <ion-label>Add payment details</ion-label>
+      </ion-row>
+      <ion-item class="payment-item">
+        <ion-label>Card holder name</ion-label>
+        <ion-input [(ngModel)]="ch_name" type="text"></ion-input>
+      </ion-item>
+      <ion-item class="payment-item">
+        <ion-label>Card number</ion-label>
+        <ion-input [(ngModel)]="card_number" type="number"></ion-input>
+      </ion-item>
+      <ion-item class="payment-item">
+        <ion-label>CVV number</ion-label>
+        <ion-input [(ngModel)]="cvv_number" type="password"></ion-input>
+      </ion-item>
+      <ion-item class="payment-item">
+        <ion-label>Expiry date</ion-label>
+        <ion-datetime displayFormat="MMM/YYYY" [(ngModel)]="card_expiry"></ion-datetime>
+      </ion-item>
+    </div>
+    <div class="textarea-div" *ngIf="all_ngo">
+      <ion-row>
+        <ion-label>Select one ngo which you want to donate</ion-label>
+      </ion-row>
+      <ion-list radio-group [(ngModel)]="ngo_id">
+        <ng-container *ngFor="let ngo of all_ngo">
+          <ion-item class="payment-item">
+            <ion-avatar item-start style="background: #48414130;border-radius: 50%;border: 1px solid #48414130;">                
+              <img [src]="ngo.ngo_img_url" [alt]="ngo.ngo_name">
+            </ion-avatar>
+            <ion-label>{{ ngo.ngo_name }}</ion-label>
+            <ion-radio [value]="ngo.id"></ion-radio>
+          </ion-item>
+        </ng-container>
+      </ion-list>
+    </div>
+    <div class="textarea-div">
+      <ion-row>
         <ion-label>Select the Charity(ies) you are engaged in*</ion-label>
       </ion-row>
-      <ion-item no-padding (click)="gotoCharityPage()" *ngIf="!checkCharity || charities?.length == 0" class="item-feilds"> 
-        <ion-label style="color: #999999;">Tap here to select <ion-icon name="arrow-forward" class="next-arrow"></ion-icon></ion-label>
+      <ion-item no-padding (click)="gotoCharityPage()" *ngIf="!checkCharity || charities?.length == 0" class="item-feilds">
+        <ion-label style="color: #999999;">Tap here to select <ion-icon name="arrow-forward" class="next-arrow"></ion-icon>
+        </ion-label>
       </ion-item>
       <ion-row *ngIf="charities?.length > 0">
-          <ion-col col-10 no-padding>
-            <ion-item no-padding class="item-feild-textarea">
-                <ion-textarea [(ngModel)]="charities" readonly text-wrap class="text-area" (focus)="gotoCharityPage()"></ion-textarea>
-            </ion-item>
-          </ion-col>
-          <ion-col col-2 no-padding (click)="gotoCharityPage()">
-            <ion-item class="item-feild-arrow">
-              <ion-label style="color: #999999;margin:20px 8px 20px 0;"><ion-icon name="arrow-forward" class="next-arrow"></ion-icon></ion-label>
-            </ion-item>
-          </ion-col>
+        <ion-col col-10 no-padding>
+          <ion-item no-padding class="item-feild-textarea">
+            <ion-textarea [(ngModel)]="charities" readonly text-wrap class="text-area" (focus)="gotoCharityPage()"></ion-textarea>
+          </ion-item>
+        </ion-col>
+        <ion-col col-2 no-padding (click)="gotoCharityPage()">
+          <ion-item class="item-feild-arrow">
+            <ion-label style="color: #999999;margin:20px 8px 20px 0;">
+              <ion-icon name="arrow-forward" class="next-arrow"></ion-icon>
+            </ion-label>
+          </ion-item>
+        </ion-col>
       </ion-row>
-    </div> 
+    </div>
     <div class="textarea-div" *ngIf="prefType == 'country'">
       <ion-row>
         <ion-label>Select the Country you are mainly active in*</ion-label>
@@ -48,12 +116,12 @@
           <ion-label>Tap here to select</ion-label>
           <ion-select interface="popover" [(ngModel)]="country">
             <ng-container *ngFor="let country of countries">
-                <ion-option value="{{ country.code }}">{{ country.name }}</ion-option>
-            </ng-container>        
+              <ion-option value="{{ country.code }}">{{ country.name }}</ion-option>
+            </ng-container>
           </ion-select>
         </ion-item>
       </ion-row>
-    </div>  
+    </div>
     <div class="textarea-div" *ngIf="prefType == 'region'">
       <ion-row>
         <p>Your selected region is:</p>
@@ -61,7 +129,7 @@
       <ion-row>
         <ion-input class="contact-inputs" [readonly]="true" [value]="region"></ion-input>
       </ion-row>
-    </div>  
+    </div>
     <ion-item no-padding class="item-feilds">
       <ion-label floating>Enter the City you are mainly active in*</ion-label>
       <ion-input type="text" [(ngModel)]="city"></ion-input>
@@ -83,28 +151,28 @@
       </ion-row>
     </div>
     <div class="textarea-div">
-        <ion-row>
-          <p class="upload-para">Upload image of yourself or take a picture</p>
-          <ion-col col-7 class="profile-col">          
-            <button ion-button small color="white" class="upload-btn" (click)="choosePicture()">Choose file</button>
-            <button ion-button small color="white" class="upload-btn" (click)="tackPicture()">
-                <ion-icon name="camera"></ion-icon>
-            </button>
-          </ion-col>
-          <ion-col col-3>
-            <img [src]="profilePic" class="profile-pic" *ngIf="profilePic">
-          </ion-col>
+      <ion-row>
+        <p class="upload-para">Upload image of yourself or take a picture</p>
+        <ion-col col-7 class="profile-col">
+          <button ion-button small color="white" class="upload-btn" (click)="choosePicture()">Choose file</button>
+          <button ion-button small color="white" class="upload-btn" (click)="tackPicture()">
+            <ion-icon name="camera"></ion-icon>
+          </button>
+        </ion-col>
+        <ion-col col-3>
+          <img [src]="profilePic" class="profile-pic" *ngIf="profilePic">
+        </ion-col>
       </ion-row>
-    </div>    
+    </div>
     <div class="textarea-div">
       <ion-row>
-          <p class="upload-para">Upload up to 5 images or videos showing your cause(s)</p>
-          <ion-col col-5 class="profile-col">
-            <button ion-button small color="white" class="upload-btn" (click)="chooseMultiplePicture()">Choose files</button>
-          </ion-col>
-          <ion-col col-3>
-            <img [src]="multiplePics" class="profile-pic" *ngIf="multiplePics">
-          </ion-col>
+        <p class="upload-para">Upload up to 5 images or videos showing your cause(s)</p>
+        <ion-col col-5 class="profile-col">
+          <button ion-button small color="white" class="upload-btn" (click)="chooseMultiplePicture()">Choose files</button>
+        </ion-col>
+        <ion-col col-3>
+          <img [src]="multiplePics" class="profile-pic" *ngIf="multiplePics">
+        </ion-col>
       </ion-row>
     </div>
     <ion-row>
@@ -117,8 +185,8 @@
               <ion-input type="text" [(ngModel)]="contactName1" class="contact-inputs"></ion-input>
             </ion-item>
             <ion-item>
-                <ion-label>Contact email</ion-label>
-                <ion-input type="email" [(ngModel)]="contactEmail1" class="contact-inputs" (ionBlur)="validateEmail(contactEmail1)"></ion-input>
+              <ion-label>Contact email</ion-label>
+              <ion-input type="email" [(ngModel)]="contactEmail1" class="contact-inputs" (ionBlur)="validateEmail(contactEmail1)"></ion-input>
             </ion-item>
             <ion-row class="contact-row">
               <ion-label class="textarea-label">How have they been working with you</ion-label>
@@ -126,15 +194,15 @@
             <ion-row class="contact-row">
               <ion-textarea [(ngModel)]="contactDesc1" class="contact-inputs"></ion-textarea>
             </ion-row>
-          </div>  
+          </div>
           <div class="contact-div">
             <ion-item>
               <ion-label>Contact name</ion-label>
               <ion-input type="text" [(ngModel)]="contactName2" class="contact-inputs"></ion-input>
             </ion-item>
             <ion-item>
-                <ion-label>Contact email</ion-label>
-                <ion-input type="email" [(ngModel)]="contactEmail2" class="contact-inputs" (ionBlur)="validateEmail(contactEmail2)"></ion-input>
+              <ion-label>Contact email</ion-label>
+              <ion-input type="email" [(ngModel)]="contactEmail2" class="contact-inputs" (ionBlur)="validateEmail(contactEmail2)"></ion-input>
             </ion-item>
             <ion-row class="contact-row">
               <ion-label class="textarea-label">How have they been working with you</ion-label>
@@ -142,15 +210,15 @@
             <ion-row class="contact-row">
               <ion-textarea [(ngModel)]="contactDesc2" class="contact-inputs"></ion-textarea>
             </ion-row>
-          </div> 
+          </div>
           <div class="contact-div">
             <ion-item>
               <ion-label>Contact name</ion-label>
               <ion-input type="text" [(ngModel)]="contactName3" class="contact-inputs"></ion-input>
             </ion-item>
             <ion-item>
-                <ion-label>Contact email</ion-label>
-                <ion-input type="email" [(ngModel)]="contactEmail3" class="contact-inputs" (ionBlur)="validateEmail(contactEmail3)"></ion-input>
+              <ion-label>Contact email</ion-label>
+              <ion-input type="email" [(ngModel)]="contactEmail3" class="contact-inputs" (ionBlur)="validateEmail(contactEmail3)"></ion-input>
             </ion-item>
             <ion-row class="contact-row">
               <ion-label class="textarea-label">How have they been working with you</ion-label>
@@ -158,15 +226,15 @@
             <ion-row class="contact-row">
               <ion-textarea [(ngModel)]="contactDesc3" class="contact-inputs"></ion-textarea>
             </ion-row>
-          </div> 
+          </div>
           <div class="contact-div">
             <ion-item>
               <ion-label>Contact name</ion-label>
               <ion-input type="text" [(ngModel)]="contactName4" class="contact-inputs"></ion-input>
             </ion-item>
             <ion-item>
-                <ion-label>Contact email</ion-label>
-                <ion-input type="email" [(ngModel)]="contactEmail4" class="contact-inputs" (ionBlur)="validateEmail(contactEmail4)"></ion-input>
+              <ion-label>Contact email</ion-label>
+              <ion-input type="email" [(ngModel)]="contactEmail4" class="contact-inputs" (ionBlur)="validateEmail(contactEmail4)"></ion-input>
             </ion-item>
             <ion-row class="contact-row">
               <ion-label class="textarea-label">How have they been working with you</ion-label>
@@ -174,15 +242,15 @@
             <ion-row class="contact-row">
               <ion-textarea [(ngModel)]="contactDesc4" class="contact-inputs"></ion-textarea>
             </ion-row>
-          </div> 
+          </div>
           <div class="contact-div">
             <ion-item>
               <ion-label>Contact name</ion-label>
               <ion-input type="text" [(ngModel)]="contactName5" class="contact-inputs"></ion-input>
             </ion-item>
             <ion-item>
-                <ion-label>Contact email</ion-label>
-                <ion-input type="email" [(ngModel)]="contactEmail5" class="contact-inputs" (ionBlur)="validateEmail(contactEmail5)"></ion-input>
+              <ion-label>Contact email</ion-label>
+              <ion-input type="email" [(ngModel)]="contactEmail5" class="contact-inputs" (ionBlur)="validateEmail(contactEmail5)"></ion-input>
             </ion-item>
             <ion-row class="contact-row">
               <ion-label class="textarea-label">How have they been working with you</ion-label>
@@ -190,7 +258,7 @@
             <ion-row class="contact-row">
               <ion-textarea [(ngModel)]="contactDesc5" class="contact-inputs"></ion-textarea>
             </ion-row>
-          </div>           
+          </div>
         </ion-card-content>
       </ion-card>
     </ion-row>

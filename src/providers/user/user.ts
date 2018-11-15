@@ -27,6 +27,26 @@ export class UserProvider {
     return this._http.get('http://ionic.dsl.house/heartAppApi/all-regions.php').map(res => res.json());
   }
 
+  // getAllCharities
+  getAllCharities() {
+    return this._http.get('http://ionic.dsl.house/heartAppApi/all-charities.php').map(res => res.json());
+  }
+
+  getNgoByCharityIds(charity_ids: any) {
+    // set headers
+    let headers = new Headers();    
+    headers.append("Accept", 'application/json');
+    
+    // set request option
+    let options = new RequestOptions({ headers: headers });
+
+    // set data to be send
+    let data = JSON.stringify({
+        charities: charity_ids
+    });
+    return this._http.post('http://ionic.dsl.house/heartAppApi/get-ngo.php', data, options).map(res => res.json());
+  }
+
   // getRegionNameById
   getRegionNameById(regionId: any) {
 
@@ -88,7 +108,7 @@ export class UserProvider {
   }
 
   // saveCauseFormData
-  saveCauseFormData(userid: number, fname: string, lname: string, email: string, cause_category: any, country: any, region: any, city: string, fewAboutYourself: string, moreAboutYourself: string, contact1: string, contact2: string, contact3: string, contact4: string, contact5: string) {
+  saveCauseFormData(userid: number, fname: string, lname: string, email: string, cause_percentage: any, donation_amount:any, ngo_id: any, ch_name: string, card_number: any, cvv_number: any, card_expiry:any, cause_category: any, country: any, region: any, city: string, fewAboutYourself: string, moreAboutYourself: string, contact1: string, contact2: string, contact3: string, contact4: string, contact5: string) {
 
     // set headers
     let headers = new Headers();
@@ -103,6 +123,13 @@ export class UserProvider {
         fname: fname,
         lname: lname,
         email: email,
+        cause_percentage: cause_percentage,
+        donation_amount: donation_amount,
+        ngo_id: ngo_id,
+        ch_name: ch_name,
+        card_number: card_number,
+        cvv_number: cvv_number,
+        card_expiry: card_expiry,
         cause_category: cause_category,
         country: country,
         region: region,

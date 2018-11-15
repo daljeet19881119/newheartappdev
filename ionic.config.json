@@ -1,8 +1,8 @@
 {
   "name": "newheartappdev",
-  "app_id": "6b5995b5",
-  "type": "ionic-angular",
   "integrations": {
     "cordova": {}
-  }
+  },
+  "type": "ionic-angular",
+  "pro_id": "6b5995b5"
 }
