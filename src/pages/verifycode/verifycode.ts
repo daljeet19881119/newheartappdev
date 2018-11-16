@@ -1,18 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, AlertController, Platform, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, Platform, LoadingController } from 'ionic-angular';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { UserinfoPage } from '../userinfo/userinfo';
 import { HomePage } from '../home/home';
 import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 import { SplashScreen } from '@ionic-native/splash-screen';
-
-/**
- * Generated class for the VerifycodePage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
  
 @IonicPage()
@@ -31,7 +24,7 @@ export class VerifycodePage {
   btnDisable: boolean = true;
   loader: any;
 
-  constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, private http: Http, private modalCtrl: ModalController, private alertCtrl: AlertController, public platform: Platform, private uniqueDeviceID: UniqueDeviceID, public loadingCtrl: LoadingController) {
+  constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, private http: Http, private alertCtrl: AlertController, public platform: Platform, private uniqueDeviceID: UniqueDeviceID, public loadingCtrl: LoadingController) {
 
     // if user try goback then exit app
     this.platform.registerBackButtonAction(() => {
@@ -83,17 +76,16 @@ export class VerifycodePage {
         if(this.navParams.get('userExists') == 'true')
         {
           page = HomePage;
-          this.reload();
+          // this.reload();
         }else{
           page = UserinfoPage;
         }
 
         // gotoUserinfoPage
-        const modal = this.modalCtrl.create(page, {
-                  mobileno: this.mobileno,
-                  country: this.country                      
-              });
-        modal.present();
+        this.navCtrl.setRoot(page, {
+          mobileno: this.mobileno,
+          country: this.country 
+        });
 
         this.loader.dismiss();
       }
@@ -124,18 +116,13 @@ export class VerifycodePage {
 
   // resendVerifcationCode
   resendVerificationCode() {
-    // console.log('resend verification code');
-    
-    // call createLader
-    this.createLoader();
+    // call resendAlert
+    this.resendAlert();
 
      // request data from server
      this.http.get('http://ionic.dsl.house/heartAppApi/verify-users.php?country='+this.country+'&mobileno='+this.mobileno+'&uuid='+this.uuid).map(res => res.json()).subscribe(data => {
        
         this.verifyCode = data.data.verification_code;
-        console.log(data);
-
-        this.loader.dismiss();
     }, err => {
       console.log(err);
     });
@@ -162,5 +149,13 @@ export class VerifycodePage {
   reload(){
     this.splashScreen.show();
     window.location.reload();
+  }
+  // resendAlert
+  resendAlert() {
+    const alert = this.alertCtrl.create({
+      message: `We've sent an SMS with an activation code to your phone <b>+${this.country+' '+this.mobileno}</b>`,
+      buttons: ['ok']
+    });
+    alert.present();
   }
 }

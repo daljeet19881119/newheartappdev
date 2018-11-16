@@ -67,7 +67,7 @@ export class CauseFormPage {
   charities: any = [];
   checkCharity: boolean = false;
   cause_percentage: any = 0;
-  donation_amount: any = 10;
+  donation_amount: any = 200;
   ch_name: string;
   card_number: any;
   cvv_number: any;
@@ -76,7 +76,7 @@ export class CauseFormPage {
   ngo_id: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private userService: UserProvider, public loadingCtrl: LoadingController, public alertCtrl: AlertController, private uniqueDeviceID: UniqueDeviceID, private camera: Camera, private transfer: FileTransfer, public modalCtrl: ModalController, private platform: Platform) {
-    
+
     // store all countries
     this.storage.get('countries').then((val) => {
       this.countries = val;
@@ -147,20 +147,20 @@ export class CauseFormPage {
 
     // if user try goback then go to homepage
     this.platform.registerBackButtonAction(() => {
-      this.navCtrl.push(HomePage);
+      this.navCtrl.setRoot(HomePage);
     });
   }
 
   ionViewDidEnter() {
     console.log('ion view did enter');
-    if(this.charities.length > 0) {
+    if (this.charities.length > 0) {
       let selected_charity = [];
       this.charities.forEach(element => {
         selected_charity.push(element.trim());
       });
       this.getNgoByCharity(selected_charity);
     }
-    
+
   }
 
   ionViewDidLoad() {
@@ -311,7 +311,7 @@ export class CauseFormPage {
   }
 
   // setDataToStorage
-  setDataToStorage(userid: number, fname: string, lname: string, email: string, cause_percentage: any, donation_amount: any,ngo_id: any, ch_name: string, card_number: any, cvv_number: any, card_expiry: any, charities: any, country: any, region: any, city: string, fewAboutYourself: string, moreAboutYourself: string, contact1: string = '', contact2: string = '', contact3: string = '', contact4: string = '', contact5: string = '') {
+  setDataToStorage(userid: number, fname: string, lname: string, email: string, cause_percentage: any, donation_amount: any, ngo_id: any, ch_name: string, card_number: any, cvv_number: any, card_expiry: any, charities: any, country: any, region: any, city: string, fewAboutYourself: string, moreAboutYourself: string, contact1: string = '', contact2: string = '', contact3: string = '', contact4: string = '', contact5: string = '') {
     let data = {
       userid: userid,
       fname: fname,
@@ -462,15 +462,13 @@ export class CauseFormPage {
       charities.push(element.replace('  ', ''));
     });
 
-    // create modal
-    const modal = this.modalCtrl.create(CharitiesPage, {
+    this.navCtrl.push(CharitiesPage, {
       charities: charities,
       page: 'cause-form',
       fname: this.fname,
       lname: this.lname,
       email: this.email
     });
-    modal.present();
   }
 
   // get ngo by charity name
@@ -480,10 +478,10 @@ export class CauseFormPage {
       let charity_ids = [];
       data.forEach(element => {
         // check charity name in array then store that id
-        if(selected_charity.indexOf(element.name) != -1) {
+        if (selected_charity.indexOf(element.name) != -1) {
           charity_ids.push(element.id);
         }
-      });     
+      });
 
       // getNgoByCharityIds
       this.userService.getNgoByCharityIds(charity_ids).subscribe(res => {

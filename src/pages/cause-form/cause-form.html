@@ -20,7 +20,7 @@
     </ion-item>
     <div class="textarea-div">
       <ion-row>
-        <ion-label>Select % to cause(0-97%) and to HC(3-100%)</ion-label>
+        <p>How much you want to donate to causes(0-97%) and to Heart Global(3-100%)</p>
       </ion-row>
       <ion-row>
         <ion-label>Cause {{ '('+cause_percentage+'%)' }}</ion-label>
@@ -35,12 +35,11 @@
     </div>
     <div class="textarea-div">
       <ion-row>
-        <ion-label>How much do you want to donate each month?</ion-label>
-        <span class="range-val" style="margin-right: 5px;">{{ '$'+donation_amount }}</span>
+        <p>How much do you want to donate each month? <span class="range-val">{{ '$'+donation_amount }}</span></p>
       </ion-row>
       <ion-row>
         <ion-item no-padding>
-          <ion-range min="10" max="1000" [(ngModel)]="donation_amount" color="appColor">
+          <ion-range min="100" max="1000" [(ngModel)]="donation_amount" color="appColor" step="100" snaps="true">
             <ion-label range-left>$10</ion-label>
             <ion-label range-right>$1000</ion-label>
           </ion-range>

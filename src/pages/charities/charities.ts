@@ -18,7 +18,7 @@ import { VolunteerFormPage } from '../volunteer-form/volunteer-form';
 })
 export class CharitiesPage {
 
-  
+
   animal_charity: string = 'Animal Support';
   economic_development: string = 'Economic Development';
   environment: string = 'Environment';
@@ -50,44 +50,37 @@ export class CharitiesPage {
     this.lname = this.navParams.get('lname');
     this.email = this.navParams.get('email');
     this.charities = this.navParams.get('charities');
-    
-    if(this.charities !== null)
-    {
+
+    if (this.charities !== null) {
       // convert from object string into simple string
       let charities = JSON.stringify(this.charities);
 
       // replace brackets and then convert into an array
-      let charityArr = charities.replace('[','').replace(']','').split(',');
-      
+      let charityArr = charities.replace('[', '').replace(']', '').split(',');
+
       // start loop of array
       charityArr.forEach(element => {
-          // check if charity found then show acitve
-          if(element == '"'+this.animal_charity+'"')
-          {
-            this.animal_charity_val = true;
-          }
-          if(element == '"'+this.economic_development+'"')
-          {
-            this.economic_development_val = true;
-          }
-          if(element == '"'+this.environment+'"')
-          {
-            this.environment_val = true;
-          }
-          if(element == '"'+this.human_right+'"')
-          {
-            this.human_right_val = true;
-          }
-          if(element == '"'+this.poverty_hunger+'"')
-          {
-            this.poverty_hunger_val = true;
-          }
-          if(element == '"'+this.education+'"')
-          {
-            this.education_val = true;
-          }
+        // check if charity found then show acitve
+        if (element == '"' + this.animal_charity + '"') {
+          this.animal_charity_val = true;
+        }
+        if (element == '"' + this.economic_development + '"') {
+          this.economic_development_val = true;
+        }
+        if (element == '"' + this.environment + '"') {
+          this.environment_val = true;
+        }
+        if (element == '"' + this.human_right + '"') {
+          this.human_right_val = true;
+        }
+        if (element == '"' + this.poverty_hunger + '"') {
+          this.poverty_hunger_val = true;
+        }
+        if (element == '"' + this.education + '"') {
+          this.education_val = true;
+        }
       });
-      
+
     }
 
     // if user click on  goback btn then go back
@@ -104,35 +97,35 @@ export class CharitiesPage {
   getSelectedCharity(name: string, value: boolean) {
     let switchVal;
 
-    if(value == true){
+    if (value == true) {
       switchVal = 'on';
-    }else{
+    } else {
       switchVal = 'off';
     }
 
-    console.log(name+' is '+switchVal);
+    console.log(name + ' is ' + switchVal);
   }
 
   // toggleValue() 
   toggleValue(name: string, value: boolean) {
 
     // check if matched then toggle value
-    if(this.animal_charity == name){
+    if (this.animal_charity == name) {
       this.animal_charity_val = !value;
     }
-    if(this.economic_development == name){
+    if (this.economic_development == name) {
       this.economic_development_val = !value;
     }
-    if(this.environment == name){
+    if (this.environment == name) {
       this.environment_val = !value;
     }
-    if(this.human_right == name){
+    if (this.human_right == name) {
       this.human_right_val = !value;
     }
-    if(this.poverty_hunger == name){
+    if (this.poverty_hunger == name) {
       this.poverty_hunger_val = !value;
     }
-    if(this.education == name){
+    if (this.education == name) {
       this.education_val = !value;
     }
   }
@@ -141,69 +134,63 @@ export class CharitiesPage {
   gotoUserinfoPage() {
 
     // check if none of charities selected then show alert
-    if(this.animal_charity_val === false && this.economic_development_val === false && this.environment_val === false && this.human_right_val === false && this.poverty_hunger_val === false && this.education_val === false)
-    {
-        // create alert
-        const alert = this.alertCtrl.create({
-            title: 'HeartApp',
-            message: 'Please select at least one charity type.',
-            buttons: ['ok']
-        });
-        alert.present();
+    if (this.animal_charity_val === false && this.economic_development_val === false && this.environment_val === false && this.human_right_val === false && this.poverty_hunger_val === false && this.education_val === false) {
+      // create alert
+      const alert = this.alertCtrl.create({
+        title: 'HeartApp',
+        message: 'Please select at least one charity type.',
+        buttons: ['ok']
+      });
+      alert.present();
     }
-    else
-    {
+    else {
 
-        // send charities to userinfo page
-        let charities = [
-          {name: this.animal_charity, value: this.animal_charity_val},
-          {name: this.economic_development, value: this.economic_development_val},
-          {name: this.environment, value: this.environment_val},
-          {name: this.human_right, value: this.human_right_val},
-          {name: this.poverty_hunger, value: this.poverty_hunger_val},
-          {name: this.education, value: this.education_val}
-        ];
-        
-        // check if request from userinfo page then gotouserinfo page
-        if(this.navParams.get('page') == 'userinfo')
-        {
-            // create modal
-            const modal = this.modalCtrl.create(UserinfoPage, {
-                    charities: charities, 
-                    mobileno: this.mobileNo, 
-                    country: this.c_code, 
-                    fname: this.fname, 
-                    lname: this.lname, 
-                    email: this.email
-              });
-              modal.present();
-        }
+      // send charities to userinfo page
+      let charities = [
+        { name: this.animal_charity, value: this.animal_charity_val },
+        { name: this.economic_development, value: this.economic_development_val },
+        { name: this.environment, value: this.environment_val },
+        { name: this.human_right, value: this.human_right_val },
+        { name: this.poverty_hunger, value: this.poverty_hunger_val },
+        { name: this.education, value: this.education_val }
+      ];
 
-        // check if request from causeForm page then gotocauseform page
-        if(this.navParams.get('page') == 'cause-form')
-        {
-            // create modal
-            const modal = this.modalCtrl.create(CauseFormPage, {
-                  charities: charities,
-                  fname: this.navParams.get('fname'),
-                  lname: this.navParams.get('lname'),
-                  email: this.navParams.get('email')
-            });
-            modal.present();
-        }
+      // check if request from userinfo page then gotouserinfo page
+      if (this.navParams.get('page') == 'userinfo') {
+        this.navCtrl.setRoot(UserinfoPage, {
+          charities: charities,
+          mobileno: this.mobileNo,
+          country: this.c_code,
+          fname: this.fname,
+          lname: this.lname,
+          email: this.email
+        });
+      }
+
+      // check if request from causeForm page then gotocauseform page
+      if (this.navParams.get('page') == 'cause-form') {
         
-        // check if request from volunteerform page then gotovolunteerform page
-        if(this.navParams.get('page') == 'volunteer-form')
-        {
-            // create modal
-            const modal = this.modalCtrl.create(VolunteerFormPage, {
-                  charities: charities,
-                  fname: this.navParams.get('fname'),
-                  lname: this.navParams.get('lname'),
-                  email: this.navParams.get('email')
-            });
-            modal.present();
-        }
+        // create modal
+        const modal = this.modalCtrl.create(CauseFormPage, {
+          charities: charities,
+          fname: this.navParams.get('fname'),
+          lname: this.navParams.get('lname'),
+          email: this.navParams.get('email')
+        });
+        modal.present();
+      }
+
+      // check if request from volunteerform page then gotovolunteerform page
+      if (this.navParams.get('page') == 'volunteer-form') {
+        // create modal
+        const modal = this.modalCtrl.create(VolunteerFormPage, {
+          charities: charities,
+          fname: this.navParams.get('fname'),
+          lname: this.navParams.get('lname'),
+          email: this.navParams.get('email')
+        });
+        modal.present();
+      }
     }
   }
 }

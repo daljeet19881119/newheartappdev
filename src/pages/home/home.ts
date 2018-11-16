@@ -6,13 +6,16 @@ import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 import { StreamingMedia, StreamingVideoOptions } from '@ionic-native/streaming-media';
 import { HomePageProvider } from '../../providers/home-page/home-page';
 import { SocialSharing } from '@ionic-native/social-sharing';
-
+import { ViewChild } from '@angular/core';
+import { Slides } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
+  @ViewChild(Slides) slides: Slides;
 
   // icons
   latestTabs: string = 'payments';
@@ -35,11 +38,11 @@ export class HomePage {
 
   // user selected charities
   charities: any;
-  charityAutoplay: number = null;
-  charityLoop: boolean = false;
+  charityAutoplay: number = 3000;
+  charityLoop: boolean = true;
   loader: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private uniqueDeviceID: UniqueDeviceID, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, public loadingCtrl: LoadingController, private sharing: SocialSharing) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private uniqueDeviceID: UniqueDeviceID, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, public loadingCtrl: LoadingController, private sharing: SocialSharing, private storage: Storage) {
 
     // call function to get device id
     this.getDeviceID();
@@ -104,7 +107,7 @@ export class HomePage {
         platform.exitApp();
       });
       // call func getCharity
-      this.getCharity();
+      // this.getCharity();
 
   }
 
@@ -122,6 +125,10 @@ export class HomePage {
         console.log(error);
       });     
       
+      // get user causes from storage
+      this.storage.get('user_causes').then(data => {
+        this.charities = data;
+      });
   }
 
   ionViewWillEnter() {
@@ -253,7 +260,7 @@ export class HomePage {
 
     // store uuid
     let uuid;
-
+    uuid = this.uuid;
     if(this.uuid !== '')
     {      
       uuid =  this.navParams.get('uuid');
@@ -278,7 +285,7 @@ export class HomePage {
 
     // store uuid
     let uuid;
-
+    uuid = this.uuid;
     if(this.uuid !== '')
     {      
       uuid =  this.navParams.get('uuid');
@@ -296,14 +303,6 @@ export class HomePage {
       // convert charities string to array
       this.charities = charities.split(',');
 
-      // alert(this.charities);
-      
-      // check if charities length is 1
-      if(this.charities.length > 1)
-      {
-         this.charityAutoplay = 3000;
-         this.charityLoop = true;
-      }
     }, err => {
       console.log('Oops!'+err);
     });

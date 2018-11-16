@@ -29,7 +29,7 @@ export class MyApp {
     platform.ready().then(() => {
 
       // call func getDeviceID
-     this.getDeviceID();
+    //  this.getDeviceID();
 
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
