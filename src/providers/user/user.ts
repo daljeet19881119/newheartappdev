@@ -108,7 +108,7 @@ export class UserProvider {
   }
 
   // saveCauseFormData
-  saveCauseFormData(userid: number, fname: string, lname: string, email: string, cause_percentage: any, donation_amount:any, ngo_id: any, ch_name: string, card_number: any, cvv_number: any, card_expiry:any, cause_category: any, country: any, region: any, city: string, fewAboutYourself: string, moreAboutYourself: string, contact1: string, contact2: string, contact3: string, contact4: string, contact5: string) {
+  saveCauseFormData(userid: number, fname: string, lname: string, email: string, cause_percentage: any, donation_amount:any, ngo_id: any, ch_name: string, card_number: any, cvv_number: any, card_expiry:any, cause_category: any, country: any, region: any, city: string, fewAboutYourself: string, moreAboutYourself: string, profilePicName: string, multiplePics: any,  contact1: string, contact2: string, contact3: string, contact4: string, contact5: string) {
 
     // set headers
     let headers = new Headers();
@@ -136,6 +136,8 @@ export class UserProvider {
         city: city,
         fewAboutYourself: fewAboutYourself,
         moreAboutYourself: moreAboutYourself,
+        profilePic: profilePicName,
+        multiplePics: multiplePics,
         contact1: contact1,
         contact2: contact2,
         contact3: contact3,

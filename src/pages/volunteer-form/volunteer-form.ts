@@ -133,7 +133,7 @@ export class VolunteerFormPage {
 
     // if user try goback then go to homepage
     this.platform.registerBackButtonAction(() => {
-      this.navCtrl.push(HomePage);
+      this.navCtrl.setRoot(HomePage);
     });
   }
 
@@ -292,10 +292,12 @@ export class VolunteerFormPage {
     this.createLoader();
 
     const options: CameraOptions = {
-      quality: 100,
+      quality: 50,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE
+      mediaType: this.camera.MediaType.PICTURE,
+      targetHeight: 900,
+      targetWidth: 900
     }
     
     let date = new Date();
@@ -312,7 +314,7 @@ export class VolunteerFormPage {
      // imageData is either a base64 encoded string or a file URI
      // If it's base64:
      let base64Image = 'data:image/jpeg;base64,' + imageData;
-      this.profilePicName = 'user'+this.userid+'_volunteer.jpg';
+      this.profilePicName = timeStr+'_volunteer.jpg';
 
      // send file to server
      fileTransfer.upload(base64Image, 'http://ionic.dsl.house/heartAppApi/image-upload.php', uploadOptions).then((data) => {
@@ -320,7 +322,7 @@ export class VolunteerFormPage {
         this.profilePic = 'http://ionic.dsl.house/heartAppApi/imgs/volunteer-form/'+timeStr+'_volunteer.jpg';
         this.loader.dismiss();
      }).catch((err) => {
-        alert('err: '+err);
+        alert('Server is unable to upload your image please try again later.');
         this.loader.dismiss();
      });
      
@@ -340,10 +342,12 @@ export class VolunteerFormPage {
     this.createLoader();
 
     const options: CameraOptions = {
-      quality: 100,
+      quality: 50,
       destinationType: this.camera.DestinationType.DATA_URL,
       sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
-      saveToPhotoAlbum: false
+      saveToPhotoAlbum: false,
+      targetHeight: 900,
+      targetWidth: 900
     }
     
     let date = new Date();
@@ -360,7 +364,7 @@ export class VolunteerFormPage {
      // imageData is either a base64 encoded string or a file URI
      // If it's base64:
      let base64Image = 'data:image/jpeg;base64,' + imageData;
-     this.profilePicName = 'user'+this.userid+'_volunteer.jpg';
+     this.profilePicName = timeStr+'_volunteer.jpg';
 
      // send file to server
      fileTransfer.upload(base64Image, 'http://ionic.dsl.house/heartAppApi/image-upload.php', uploadOptions).then((data) => {
@@ -368,7 +372,7 @@ export class VolunteerFormPage {
         this.profilePic = 'http://ionic.dsl.house/heartAppApi/imgs/volunteer-form/'+timeStr+'_volunteer.jpg';
         this.loader.dismiss();
      }).catch((err) => {
-        alert('err: '+err);
+        alert('Server is unable to upload your image please try again later.');
         this.loader.dismiss();
      });
     }, (err) => {

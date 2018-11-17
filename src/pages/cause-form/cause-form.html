@@ -23,19 +23,23 @@
         <p>How much you want to donate to causes(0-97%) and to Heart Global(3-100%)</p>
       </ion-row>
       <ion-row>
-        <ion-label>Cause {{ '('+cause_percentage+'%)' }}</ion-label>
-        <ion-label text-right>HC ({{ 100-cause_percentage }}%)</ion-label>
+        <ion-label>Cause(s) {{ '('+cause_percentage+'%)' }}</ion-label>
+        <ion-label text-right>Heart Global ({{ 100-cause_percentage }}%)</ion-label>
         <ion-item no-padding>
-          <ion-range min="0" max="100" [(ngModel)]="cause_percentage" color="appColor">
-            <ion-label range-left>0</ion-label>
-            <ion-label range-right>100</ion-label>
+          <ion-range min="0" max="97" [(ngModel)]="cause_percentage" color="appColor">
+            <ion-label range-left></ion-label>
+            <ion-label range-right></ion-label>
           </ion-range>
         </ion-item>
       </ion-row>
     </div>
     <div class="textarea-div">
       <ion-row>
-        <p>How much do you want to donate each month? <span class="range-val">{{ '$'+donation_amount }}</span></p>
+        <p>How much do you want to donate each month?</p>        
+      </ion-row>
+      <ion-row>
+        <span class="range-val">{{ '$'+donation_amount }}</span>&nbsp;
+        <span class="hc-val">({{ donation_amount * 100 }} HC)</span>
       </ion-row>
       <ion-row>
         <ion-item no-padding>
@@ -169,9 +173,11 @@
         <ion-col col-5 class="profile-col">
           <button ion-button small color="white" class="upload-btn" (click)="chooseMultiplePicture()">Choose files</button>
         </ion-col>
-        <ion-col col-3>
-          <img [src]="multiplePics" class="profile-pic" *ngIf="multiplePics">
-        </ion-col>
+        <ng-container *ngIf="multiplePics">
+            <ion-col col-3 *ngFor="let pic of multiplePicsArr">
+              <img [src]="pic.src" class="profile-pic">
+            </ion-col>
+        </ng-container>   
       </ion-row>
     </div>
     <ion-row>
