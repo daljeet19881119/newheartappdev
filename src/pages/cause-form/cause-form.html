@@ -20,11 +20,11 @@
     </ion-item>
     <div class="textarea-div">
       <ion-row>
-        <p>How much you want to donate to causes(0-97%) and to Heart Global(3-100%)</p>
+        <p>How much you want to donate to causes (0-97%) and to HeartGlobal (3-100%)</p>
       </ion-row>
       <ion-row>
-        <ion-label>Cause(s) {{ '('+cause_percentage+'%)' }}</ion-label>
-        <ion-label text-right>Heart Global ({{ 100-cause_percentage }}%)</ion-label>
+        <ion-label><span class="range-val">Cause(s) {{ '('+cause_percentage+'%)' }}</span></ion-label>
+        <ion-label text-right><span class="range-val">HeartGlobal ({{ 100-cause_percentage }}%)</span></ion-label>
         <ion-item no-padding>
           <ion-range min="0" max="97" [(ngModel)]="cause_percentage" color="appColor">
             <ion-label range-left></ion-label>
@@ -38,14 +38,14 @@
         <p>How much do you want to donate each month?</p>        
       </ion-row>
       <ion-row>
-        <span class="range-val">{{ '$'+donation_amount }}</span>&nbsp;
-        <span class="hc-val">({{ donation_amount * 100 }} HC)</span>
+        <span class="range-val">{{ '$'+toLocaleString(donation_amount) }}</span>&nbsp;
+        <span class="hc-val">({{ toLocaleString(donation_amount * 100) }} HC)</span>
       </ion-row>
       <ion-row>
         <ion-item no-padding>
-          <ion-range min="100" max="1000" [(ngModel)]="donation_amount" color="appColor" step="100" snaps="true">
-            <ion-label range-left>$10</ion-label>
-            <ion-label range-right>$1000</ion-label>
+          <ion-range min="10" max="1000" [(ngModel)]="donation_amount" color="appColor" step="10">
+            <ion-label range-left></ion-label>
+            <ion-label range-right></ion-label>
           </ion-range>
         </ion-item>
       </ion-row>
@@ -173,9 +173,9 @@
         <ion-col col-5 class="profile-col">
           <button ion-button small color="white" class="upload-btn" (click)="chooseMultiplePicture()">Choose files</button>
         </ion-col>
-        <ng-container *ngIf="multiplePics">
+        <ng-container *ngIf="multiplePicsArr">
             <ion-col col-3 *ngFor="let pic of multiplePicsArr">
-              <img [src]="pic.src" class="profile-pic">
+              <img [src]="pic" class="profile-pic">
             </ion-col>
         </ng-container>   
       </ion-row>

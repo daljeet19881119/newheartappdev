@@ -1,19 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, AlertController, ModalController, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, AlertController, ModalController, Platform, ViewController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { UserProvider } from '../../providers/user/user';
 import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { CharitiesPage } from '../charities/charities';
-import { HomePage } from '../home/home';
-
-/**
- * Generated class for the CauseFormPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker';
 
 @IonicPage()
 @Component({
@@ -69,7 +62,7 @@ export class CauseFormPage {
   charities: any = [];
   checkCharity: boolean = false;
   cause_percentage: any = 90;
-  donation_amount: any = 200;
+  donation_amount: any = 20;
   ch_name: string;
   card_number: any;
   cvv_number: any;
@@ -77,7 +70,7 @@ export class CauseFormPage {
   all_ngo: any;
   ngo_id: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private userService: UserProvider, public loadingCtrl: LoadingController, public alertCtrl: AlertController, private uniqueDeviceID: UniqueDeviceID, private camera: Camera, private transfer: FileTransfer, public modalCtrl: ModalController, private platform: Platform) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private userService: UserProvider, public loadingCtrl: LoadingController, public alertCtrl: AlertController, private uniqueDeviceID: UniqueDeviceID, private camera: Camera, private transfer: FileTransfer, public modalCtrl: ModalController, private platform: Platform, private imagePicker: ImagePicker, public viewCtrl: ViewController) {
 
     // store all countries
     this.storage.get('countries').then((val) => {
@@ -151,7 +144,7 @@ export class CauseFormPage {
 
     // if user try goback then go to homepage
     this.platform.registerBackButtonAction(() => {
-      this.navCtrl.setRoot(HomePage);
+      this.viewCtrl.dismiss();
     });
   }
 
@@ -260,7 +253,7 @@ export class CauseFormPage {
         this.createLoader();
 
         // request user provider
-        this.userService.saveCauseFormData(userid, this.fname, this.lname, this.email, this.cause_percentage, this.donation_amount, this.ngo_id, this.ch_name, this.card_number, this.cvv_number, this.card_expiry, charities, this.country, this.regionId, this.city, this.fewAboutYourself, this.moreAboutYourself, this.profilePicName, this.multiplePics, contact1, contact2, contact3, contact4, contact5).subscribe(data => {
+        this.userService.saveCauseFormData(userid, this.fname, this.lname, this.email, this.cause_percentage, this.donation_amount, this.ngo_id, this.ch_name, this.card_number, this.cvv_number, this.card_expiry, charities, this.country, this.regionId, this.city, this.fewAboutYourself, this.moreAboutYourself, this.profilePicName, this.multiplePics.toLocaleString(), contact1, contact2, contact3, contact4, contact5).subscribe(data => {
 
           if (data.msg == 'success') {
             this.setDataToStorage(userid, this.fname, this.lname, this.email, this.cause_percentage, this.donation_amount, this.ngo_id, this.ch_name, this.card_number, this.cvv_number, this.card_expiry, charities, this.country, this.regionId, this.city, this.fewAboutYourself, this.moreAboutYourself, this.profilePic, this.multiplePicsArr, contact1, contact2, contact3, contact4, contact5);
@@ -446,54 +439,46 @@ export class CauseFormPage {
 
   // chooseMultiplePicture
   chooseMultiplePicture() {
-
-    // check if images < 5 otherwise show alert
+    // check if image length < 5
     if (this.multiplePicsArr.length < 5) {
-      this.createLoader();
-      const options: CameraOptions = {
+      const options: ImagePickerOptions = {
+        maximumImagesCount: 5,
+        width: 900,
+        height: 900,
         quality: 50,
-        destinationType: this.camera.DestinationType.DATA_URL,
-        sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
-        saveToPhotoAlbum: false,
-        targetHeight: 900,
-        targetWidth: 900
+        outputType: 1
       }
 
-      // let date = new Date();
-      // let timeStr = date.getTime();
+      this.imagePicker.getPictures(options).then((results) => {
+        for (var i = 0; i < results.length; i++) {
+          let src = 'data:image/jpeg;base64,' + results[i];
+          this.multiplePicsArr.push(src);
 
-      // const fileTransfer: FileTransferObject = this.transfer.create();
-      // let uploadOptions: FileUploadOptions = {
-      //   fileKey: 'file',
-      //   fileName: timeStr + '_cause.jpg',
-      //   headers: {}
-      // }
+          let date = new Date();
+          let timeStr = date.getTime();
 
-      this.camera.getPicture(options).then((imageData) => {
-        // imageData is either a base64 encoded string or a file URI
-        // If it's base64:
-        let base64Image = 'data:image/jpeg;base64,' + imageData;
-        // this.multiplePics.push(timeStr + '_cause.jpg');
-        this.multiplePicsArr.push({ src: base64Image });
-        this.loader.dismiss();
-        // send file to server
-        // fileTransfer.upload(base64Image, 'http://ionic.dsl.house/heartAppApi/cause-form-image-upload.php', uploadOptions).then((data) => {
-        //   // alert('data'+data.response);
-        //   let src = 'http://ionic.dsl.house/heartAppApi/imgs/cause-form/' + timeStr + '_cause.jpg';
-        //   this.multiplePicsArr.push({ src: src });
-        //   this.loader.dismiss();
-        // }).catch((err) => {
-        //   alert('Server is unable to upload your image please try again later.');
-        //   this.loader.dismiss();
-        // });
-      }, (err) => {
-        // Handle error
-        this.loader.dismiss();
-      });
+          const fileTransfer: FileTransferObject = this.transfer.create();
+          let uploadOptions: FileUploadOptions = {
+            fileKey: 'file',
+            fileName: timeStr + '_cause.jpg',
+            headers: {}
+          }
+
+          // send file to server
+          fileTransfer.upload(src, 'http://ionic.dsl.house/heartAppApi/cause-form-image-upload.php', uploadOptions).then((data) => {
+            // alert('data'+data.response);
+            this.multiplePics.push('http://ionic.dsl.house/heartAppApi/imgs/cause-form/' + timeStr + '_cause.jpg');
+          }).catch((err) => {
+            // alert('Server is unable to upload your image please try again later.');
+            this.loader.dismiss();
+          });
+        }
+      }, (err) => { });
     }
     else {
-      alert("You can upload only 5 images or videos.");
+      alert("you can upload only upto 5 images or videos.");
     }
+
   }
 
   // uploadPicture
@@ -576,5 +561,10 @@ export class CauseFormPage {
       console.log(err);
       // this.loader.dismiss();
     });
+  }
+
+  // toLocaleString
+  toLocaleString(number: any) {
+    return number.toLocaleString();
   }
 }

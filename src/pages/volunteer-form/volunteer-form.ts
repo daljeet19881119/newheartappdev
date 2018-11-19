@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, AlertController, ModalController, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, AlertController, ModalController, Platform, ViewController } from 'ionic-angular';
 import { UserProvider } from '../../providers/user/user';
 import { Storage } from '@ionic/storage';
 import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { CharitiesPage } from '../charities/charities';
-import { HomePage } from '../home/home';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 
 /**
@@ -61,7 +60,7 @@ export class VolunteerFormPage {
   charities: any = [];
   checkCharity: boolean = false;
 
-  constructor(private transfer: FileTransfer, public navCtrl: NavController, public navParams: NavParams, private userService: UserProvider, private storage: Storage, public loadingCtrl: LoadingController, public alertCtrl: AlertController, private uniqueDeviceID: UniqueDeviceID, private camera: Camera, public modalCtrl: ModalController, private platform: Platform) {
+  constructor(private transfer: FileTransfer, public navCtrl: NavController, public navParams: NavParams, private userService: UserProvider, private storage: Storage, public loadingCtrl: LoadingController, public alertCtrl: AlertController, private uniqueDeviceID: UniqueDeviceID, private camera: Camera, public modalCtrl: ModalController, private platform: Platform, public viewCtrl: ViewController) {
     
     // get countries from storage
     this.storage.get('countries').then((country) => {
@@ -133,7 +132,7 @@ export class VolunteerFormPage {
 
     // if user try goback then go to homepage
     this.platform.registerBackButtonAction(() => {
-      this.navCtrl.setRoot(HomePage);
+      this.viewCtrl.dismiss();
     });
   }
 

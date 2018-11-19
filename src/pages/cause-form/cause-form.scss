@@ -7,10 +7,16 @@ page-cause-form {
     }
     .range-val{
         color: #000;
+        font-weight: bold;
     }
     .hc-val{
         font-size: 13px;
         color: #000;
+        font-weight: bold;
+    }
+    .range-knob-min.range-knob-min .range-knob{
+        background: #ae0433!important;
+        border: 2px solid #ae0433!important;
     }
     .range{
         padding: 8px 0px;

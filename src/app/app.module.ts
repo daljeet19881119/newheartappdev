@@ -34,6 +34,7 @@ import { SocialSharing } from '@ionic-native/social-sharing';
 import { Camera } from '@ionic-native/camera';
 import { FileTransfer } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
+import { ImagePicker } from '@ionic-native/image-picker';
 
 
 @NgModule({
@@ -96,7 +97,8 @@ import { File } from '@ionic-native/file';
     SocialSharing,
     Camera,
     File,
-    FileTransfer      
+    FileTransfer,
+    ImagePicker      
   ]
 })
 export class AppModule {}

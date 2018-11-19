@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, ModalController, AlertController, 
 import { UserinfoPage } from '../userinfo/userinfo';
 import { CauseFormPage } from '../cause-form/cause-form';
 import { VolunteerFormPage } from '../volunteer-form/volunteer-form';
+import { HomePage } from '../home/home';
 
 /**
  * Generated class for the CharitiesPage page.
@@ -178,6 +179,10 @@ export class CharitiesPage {
           email: this.navParams.get('email')
         });
         modal.present();
+
+        modal.onDidDismiss(() => {
+          this.navCtrl.setRoot(HomePage);
+        });
       }
 
       // check if request from volunteerform page then gotovolunteerform page
@@ -190,6 +195,10 @@ export class CharitiesPage {
           email: this.navParams.get('email')
         });
         modal.present();
+
+        modal.onDidDismiss(() => {
+          this.navCtrl.setRoot(HomePage);
+        });
       }
     }
   }
