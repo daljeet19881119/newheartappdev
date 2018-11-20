@@ -21,6 +21,48 @@
         <ion-label floating>Email</ion-label>
         <ion-input type="email" [(ngModel)]="email"></ion-input>
       </ion-item>
+      <div class="textarea-div">
+      <ion-row>
+        <p>How much you want to donate to causes (0-97%) and to HeartGlobal (3-100%)</p>
+      </ion-row>
+      <ion-row>
+        <ion-label><span class="range-val">Cause(s) {{ '('+cause_percentage+'%)' }}</span></ion-label>
+        <ion-label text-right><span class="range-val">HeartGlobal ({{ 100-cause_percentage }}%)</span></ion-label>
+        <ion-item no-padding>
+          <ion-range min="0" max="97" [(ngModel)]="cause_percentage" color="appColor">
+            <ion-label range-left></ion-label>
+            <ion-label range-right></ion-label>
+          </ion-range>
+        </ion-item>
+      </ion-row>
+    </div>
+    <div class="textarea-div">
+      <ion-row>
+        <p>How much do you want to donate each month?</p>        
+      </ion-row>
+      <ion-row>
+        <span class="range-val">{{ '$'+toLocaleString(donation_amount) }}</span>&nbsp;
+        <span class="hc-val">({{ toLocaleString(donation_amount * 100) }} HC)</span>
+      </ion-row>
+      <ion-row>
+        <ion-item no-padding>
+          <ion-range min="10" max="1000" [(ngModel)]="donation_amount" color="appColor" step="10">
+            <ion-label range-left></ion-label>
+            <ion-label range-right></ion-label>
+          </ion-range>
+        </ion-item>
+      </ion-row>
+    </div>
+    <div class="textarea-div">
+        <ion-row>
+          <ion-col col-1 style="padding-top: 19px;">
+            <ion-checkbox [(ngModel)]="large_donation"></ion-checkbox>
+          </ion-col>
+          <ion-col col-11>
+            <ion-label>I have a larger one-time donation</ion-label>
+          </ion-col>        
+        </ion-row>
+      </div>
       <ion-item no-padding (click)="gotoCharityPage()" *ngIf="!checkCharity || charities?.length == 0" class="item-feilds"> 
         <ion-label style="color: #999999;">Select charity areas <ion-icon name="arrow-forward" class="next-arrow"></ion-icon></ion-label>        
       </ion-item>

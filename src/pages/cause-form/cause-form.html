@@ -20,38 +20,6 @@
     </ion-item>
     <div class="textarea-div">
       <ion-row>
-        <p>How much you want to donate to causes (0-97%) and to HeartGlobal (3-100%)</p>
-      </ion-row>
-      <ion-row>
-        <ion-label><span class="range-val">Cause(s) {{ '('+cause_percentage+'%)' }}</span></ion-label>
-        <ion-label text-right><span class="range-val">HeartGlobal ({{ 100-cause_percentage }}%)</span></ion-label>
-        <ion-item no-padding>
-          <ion-range min="0" max="97" [(ngModel)]="cause_percentage" color="appColor">
-            <ion-label range-left></ion-label>
-            <ion-label range-right></ion-label>
-          </ion-range>
-        </ion-item>
-      </ion-row>
-    </div>
-    <div class="textarea-div">
-      <ion-row>
-        <p>How much do you want to donate each month?</p>        
-      </ion-row>
-      <ion-row>
-        <span class="range-val">{{ '$'+toLocaleString(donation_amount) }}</span>&nbsp;
-        <span class="hc-val">({{ toLocaleString(donation_amount * 100) }} HC)</span>
-      </ion-row>
-      <ion-row>
-        <ion-item no-padding>
-          <ion-range min="10" max="1000" [(ngModel)]="donation_amount" color="appColor" step="10">
-            <ion-label range-left></ion-label>
-            <ion-label range-right></ion-label>
-          </ion-range>
-        </ion-item>
-      </ion-row>
-    </div>
-    <div class="textarea-div">
-      <ion-row>
         <ion-label>Add payment details</ion-label>
       </ion-row>
       <ion-item class="payment-item">
@@ -68,25 +36,9 @@
       </ion-item>
       <ion-item class="payment-item">
         <ion-label>Expiry date</ion-label>
-        <ion-datetime displayFormat="MMM/YYYY" [(ngModel)]="card_expiry"></ion-datetime>
+        <ion-datetime displayFormat="MMM/YYYY" [(ngModel)]="card_expiry" [min]="current_year" [max]="current_year + 50"></ion-datetime>
       </ion-item>
-    </div>
-    <div class="textarea-div" *ngIf="all_ngo">
-      <ion-row>
-        <ion-label>Select one ngo which you want to donate</ion-label>
-      </ion-row>
-      <ion-list radio-group [(ngModel)]="ngo_id">
-        <ng-container *ngFor="let ngo of all_ngo">
-          <ion-item class="payment-item">
-            <ion-avatar item-start style="background: #48414130;border-radius: 50%;border: 1px solid #48414130;">                
-              <img [src]="ngo.ngo_img_url" [alt]="ngo.ngo_name">
-            </ion-avatar>
-            <ion-label>{{ ngo.ngo_name }}</ion-label>
-            <ion-radio [value]="ngo.id"></ion-radio>
-          </ion-item>
-        </ng-container>
-      </ion-list>
-    </div>
+    </div>  
     <div class="textarea-div">
       <ion-row>
         <ion-label>Select the Charity(ies) you are engaged in*</ion-label>

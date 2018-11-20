@@ -41,7 +41,9 @@ export class UserinfoPage {
   // variable to store charities
   charities: any = [];
   checkCharity: boolean = false;
-
+  large_donation: boolean = false;
+  cause_percentage: any = 90;
+  donation_amount: any = 20;
   constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private http: Http, public platform: Platform, private uniqueDeviceID: UniqueDeviceID, private loadingCtrl: LoadingController, private userService: UserProvider, private storage: Storage) {
 
     // if user try goback then exit app
@@ -135,7 +137,7 @@ export class UserinfoPage {
       charities.push(element.replace('  ', ''));
     });
 
-    this.http.get('http://ionic.dsl.house/heartAppApi/verify-users.php?profile_status=verified&fname=' + this.firstName + '&lname=' + this.lastName + '&email=' + this.email + '&charity_type=' + charities + '&preference_type=' + this.preference + '&location=' + this.location + '&c_code=' + this.country + '&m_no=' + this.mobileno).map(res => res.json()).subscribe(data => {
+    this.http.get('http://ionic.dsl.house/heartAppApi/verify-users.php?profile_status=verified&fname=' + this.firstName + '&lname=' + this.lastName + '&email=' + this.email + '&cause_percentage='+ this.cause_percentage +'&donation_amount='+ this.donation_amount +'&large_donation='+ this.large_donation +'&charity_type=' + charities + '&preference_type=' + this.preference + '&location=' + this.location + '&c_code=' + this.country + '&m_no=' + this.mobileno).map(res => res.json()).subscribe(data => {
       this.profileStatus = data.data.profile_status;
       console.log(data);
 
@@ -255,5 +257,10 @@ export class UserinfoPage {
         this.loader.dismiss();
       });
     }
+  }
+
+  // toLocaleString
+  toLocaleString(number: any) {
+    return number.toLocaleString();
   }
 }

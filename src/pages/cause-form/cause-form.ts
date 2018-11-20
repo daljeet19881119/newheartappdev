@@ -15,6 +15,7 @@ import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker';
 })
 export class CauseFormPage {
 
+  current_year: any = new Date().getFullYear();
   countries: any;
   fname: string;
   lname: string;
@@ -61,17 +62,12 @@ export class CauseFormPage {
   // variable to store charities
   charities: any = [];
   checkCharity: boolean = false;
-  cause_percentage: any = 90;
-  donation_amount: any = 20;
   ch_name: string;
   card_number: any;
   cvv_number: any;
   card_expiry: any;
-  all_ngo: any;
-  ngo_id: any;
-
   constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private userService: UserProvider, public loadingCtrl: LoadingController, public alertCtrl: AlertController, private uniqueDeviceID: UniqueDeviceID, private camera: Camera, private transfer: FileTransfer, public modalCtrl: ModalController, private platform: Platform, private imagePicker: ImagePicker, public viewCtrl: ViewController) {
-
+    
     // store all countries
     this.storage.get('countries').then((val) => {
       this.countries = val;
@@ -83,9 +79,6 @@ export class CauseFormPage {
       this.fname = val.fname;
       this.lname = val.lname;
       this.email = val.email;
-      this.cause_percentage = val.cause_percentage;
-      this.donation_amount = val.donation_amount;
-      this.ngo_id = val.ngo_id;
       this.ch_name = val.ch_name;
       this.card_number = val.card_number;
       this.cvv_number = val.cvv_number;
@@ -146,18 +139,6 @@ export class CauseFormPage {
     this.platform.registerBackButtonAction(() => {
       this.viewCtrl.dismiss();
     });
-  }
-
-  ionViewDidEnter() {
-    console.log('ion view did enter');
-    if (this.charities.length > 0) {
-      let selected_charity = [];
-      this.charities.forEach(element => {
-        selected_charity.push(element.trim());
-      });
-      this.getNgoByCharity(selected_charity);
-    }
-
   }
 
   ionViewDidLoad() {
@@ -253,10 +234,10 @@ export class CauseFormPage {
         this.createLoader();
 
         // request user provider
-        this.userService.saveCauseFormData(userid, this.fname, this.lname, this.email, this.cause_percentage, this.donation_amount, this.ngo_id, this.ch_name, this.card_number, this.cvv_number, this.card_expiry, charities, this.country, this.regionId, this.city, this.fewAboutYourself, this.moreAboutYourself, this.profilePicName, this.multiplePics.toLocaleString(), contact1, contact2, contact3, contact4, contact5).subscribe(data => {
+        this.userService.saveCauseFormData(userid, this.fname, this.lname, this.email, this.ch_name, this.card_number, this.cvv_number, this.card_expiry, charities, this.country, this.regionId, this.city, this.fewAboutYourself, this.moreAboutYourself, this.profilePicName, this.multiplePics, contact1, contact2, contact3, contact4, contact5).subscribe(data => {
 
           if (data.msg == 'success') {
-            this.setDataToStorage(userid, this.fname, this.lname, this.email, this.cause_percentage, this.donation_amount, this.ngo_id, this.ch_name, this.card_number, this.cvv_number, this.card_expiry, charities, this.country, this.regionId, this.city, this.fewAboutYourself, this.moreAboutYourself, this.profilePic, this.multiplePicsArr, contact1, contact2, contact3, contact4, contact5);
+            this.setDataToStorage(userid, this.fname, this.lname, this.email, this.ch_name, this.card_number, this.cvv_number, this.card_expiry, charities, this.country, this.regionId, this.city, this.fewAboutYourself, this.moreAboutYourself, this.profilePic, this.multiplePicsArr, contact1, contact2, contact3, contact4, contact5);
             this.loader.dismiss();
           }
           if (data.msg == 'success' && data.status == 'processing') {
@@ -308,15 +289,12 @@ export class CauseFormPage {
   }
 
   // setDataToStorage
-  setDataToStorage(userid: number, fname: string, lname: string, email: string, cause_percentage: any, donation_amount: any, ngo_id: any, ch_name: string, card_number: any, cvv_number: any, card_expiry: any, charities: any, country: any, region: any, city: string, fewAboutYourself: string, moreAboutYourself: string, profilePic: string, multiplePics: any, contact1: string = '', contact2: string = '', contact3: string = '', contact4: string = '', contact5: string = '') {
+  setDataToStorage(userid: number, fname: string, lname: string, email: string, ch_name: string, card_number: any, cvv_number: any, card_expiry: any, charities: any, country: any, region: any, city: string, fewAboutYourself: string, moreAboutYourself: string, profilePic: string, multiplePics: any, contact1: string = '', contact2: string = '', contact3: string = '', contact4: string = '', contact5: string = '') {
     let data = {
       userid: userid,
       fname: fname,
       lname: lname,
       email: email,
-      cause_percentage: cause_percentage,
-      donation_amount: donation_amount,
-      ngo_id: ngo_id,
       ch_name: ch_name,
       card_number: card_number,
       cvv_number: cvv_number,
@@ -535,36 +513,5 @@ export class CauseFormPage {
       lname: this.lname,
       email: this.email
     });
-  }
-
-  // get ngo by charity name
-  getNgoByCharity(selected_charity: any) {
-    // this.createLoader();
-    this.userService.getAllCharities().subscribe(data => {
-      let charity_ids = [];
-      data.forEach(element => {
-        // check charity name in array then store that id
-        if (selected_charity.indexOf(element.name) != -1) {
-          charity_ids.push(element.id);
-        }
-      });
-
-      // getNgoByCharityIds
-      this.userService.getNgoByCharityIds(charity_ids).subscribe(res => {
-        this.all_ngo = res;
-        // this.loader.dismiss();
-      }, err => {
-        console.log(err);
-        // this.loader.dismiss();
-      });
-    }, err => {
-      console.log(err);
-      // this.loader.dismiss();
-    });
-  }
-
-  // toLocaleString
-  toLocaleString(number: any) {
-    return number.toLocaleString();
   }
 }
