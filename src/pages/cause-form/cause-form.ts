@@ -15,7 +15,6 @@ import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker';
 })
 export class CauseFormPage {
 
-  current_year: any = new Date().getFullYear();
   countries: any;
   fname: string;
   lname: string;
@@ -62,10 +61,10 @@ export class CauseFormPage {
   // variable to store charities
   charities: any = [];
   checkCharity: boolean = false;
-  ch_name: string;
-  card_number: any;
-  cvv_number: any;
-  card_expiry: any;
+  bank_name: string;
+  account_no: any;
+  ifsc_code: any;
+  paypal_email: any;
   constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private userService: UserProvider, public loadingCtrl: LoadingController, public alertCtrl: AlertController, private uniqueDeviceID: UniqueDeviceID, private camera: Camera, private transfer: FileTransfer, public modalCtrl: ModalController, private platform: Platform, private imagePicker: ImagePicker, public viewCtrl: ViewController) {
     
     // store all countries
@@ -79,10 +78,10 @@ export class CauseFormPage {
       this.fname = val.fname;
       this.lname = val.lname;
       this.email = val.email;
-      this.ch_name = val.ch_name;
-      this.card_number = val.card_number;
-      this.cvv_number = val.cvv_number;
-      this.card_expiry = val.card_expiry;
+      this.bank_name = val.bank_name;
+      this.account_no = val.account_no;
+      this.ifsc_code = val.ifsc_code;
+      this.paypal_email = val.paypal_email;
       this.charities = val.causeCat;
       this.checkCharity = true;
       this.country = val.country;
@@ -234,10 +233,10 @@ export class CauseFormPage {
         this.createLoader();
 
         // request user provider
-        this.userService.saveCauseFormData(userid, this.fname, this.lname, this.email, this.ch_name, this.card_number, this.cvv_number, this.card_expiry, charities, this.country, this.regionId, this.city, this.fewAboutYourself, this.moreAboutYourself, this.profilePicName, this.multiplePics, contact1, contact2, contact3, contact4, contact5).subscribe(data => {
+        this.userService.saveCauseFormData(userid, this.fname, this.lname, this.email, this.bank_name, this.account_no, this.ifsc_code, this.paypal_email, charities, this.country, this.regionId, this.city, this.fewAboutYourself, this.moreAboutYourself, this.profilePicName, this.multiplePics, contact1, contact2, contact3, contact4, contact5).subscribe(data => {
 
           if (data.msg == 'success') {
-            this.setDataToStorage(userid, this.fname, this.lname, this.email, this.ch_name, this.card_number, this.cvv_number, this.card_expiry, charities, this.country, this.regionId, this.city, this.fewAboutYourself, this.moreAboutYourself, this.profilePic, this.multiplePicsArr, contact1, contact2, contact3, contact4, contact5);
+            this.setDataToStorage(userid, this.fname, this.lname, this.email, this.bank_name, this.account_no, this.ifsc_code, this.paypal_email, charities, this.country, this.regionId, this.city, this.fewAboutYourself, this.moreAboutYourself, this.profilePic, this.multiplePicsArr, contact1, contact2, contact3, contact4, contact5);
             this.loader.dismiss();
           }
           if (data.msg == 'success' && data.status == 'processing') {
@@ -289,16 +288,16 @@ export class CauseFormPage {
   }
 
   // setDataToStorage
-  setDataToStorage(userid: number, fname: string, lname: string, email: string, ch_name: string, card_number: any, cvv_number: any, card_expiry: any, charities: any, country: any, region: any, city: string, fewAboutYourself: string, moreAboutYourself: string, profilePic: string, multiplePics: any, contact1: string = '', contact2: string = '', contact3: string = '', contact4: string = '', contact5: string = '') {
+  setDataToStorage(userid: number, fname: string, lname: string, email: string, bank_name: string, account_no: any, ifsc_code: any, paypal_email: any, charities: any, country: any, region: any, city: string, fewAboutYourself: string, moreAboutYourself: string, profilePic: string, multiplePics: any, contact1: string = '', contact2: string = '', contact3: string = '', contact4: string = '', contact5: string = '') {
     let data = {
       userid: userid,
       fname: fname,
       lname: lname,
       email: email,
-      ch_name: ch_name,
-      card_number: card_number,
-      cvv_number: cvv_number,
-      card_expiry: card_expiry,
+      bank_name: bank_name,
+      account_no: account_no,
+      ifsc_code: ifsc_code,
+      paypal_email: paypal_email,
       causeCat: charities,
       country: country,
       region: region,

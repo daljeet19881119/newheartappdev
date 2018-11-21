@@ -54,6 +54,27 @@
       </ion-row>
     </div>
     <div class="textarea-div">
+      <ion-row>
+        <ion-label>Add payment details</ion-label>
+      </ion-row>
+      <ion-item class="payment-item">
+        <ion-label>Card holder name</ion-label>
+        <ion-input [(ngModel)]="ch_name" type="text"></ion-input>
+      </ion-item>
+      <ion-item class="payment-item">
+        <ion-label>Card number</ion-label>
+        <ion-input [(ngModel)]="card_number" type="number"></ion-input>
+      </ion-item>
+      <ion-item class="payment-item">
+        <ion-label>CVV number</ion-label>
+        <ion-input [(ngModel)]="cvv_number" type="password"></ion-input>
+      </ion-item>
+      <ion-item class="payment-item">
+        <ion-label>Expiry date</ion-label>
+        <ion-datetime displayFormat="MMM/YYYY" [(ngModel)]="card_expiry" [min]="current_year" [max]="current_year + 50"></ion-datetime>
+      </ion-item>
+    </div>
+    <div class="textarea-div">
         <ion-row>
           <ion-col col-1 style="padding-top: 19px;">
             <ion-checkbox [(ngModel)]="large_donation"></ion-checkbox>

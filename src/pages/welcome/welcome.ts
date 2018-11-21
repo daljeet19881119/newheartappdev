@@ -8,6 +8,7 @@ import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 import { UserinfoPage } from '../userinfo/userinfo';
 import { HomePage } from '../home/home';
 import { Storage } from '@ionic/storage';
+import { BhHomePage } from '../bh-home/bh-home';
 
 @IonicPage()
 @Component({
@@ -74,7 +75,13 @@ export class WelcomePage {
           // save all user charity or causes in storage
           this.storage.set('user_causes', charities);
 
-          this.navCtrl.setRoot(HomePage); 
+          // check if user is bigheart or not
+          if(data.data.is_bh_user == 'yes') {
+            this.navCtrl.setRoot(BhHomePage);
+          }
+          else{
+            this.navCtrl.setRoot(HomePage);
+          } 
         } 
       }           
       if(data.msg == 'error') {

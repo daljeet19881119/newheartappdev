@@ -125,7 +125,12 @@ export class VerifynumberPage {
       // check if number already exists
       if(data.msg === 'update')
       {
-        userExists = 'true';
+        if(data.data.verification == 'notVerified') {
+          userExists = 'false';
+        }
+        else{
+          userExists = 'true';
+        }        
       }else{
         userExists = 'false';
       }

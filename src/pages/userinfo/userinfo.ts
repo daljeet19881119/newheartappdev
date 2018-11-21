@@ -44,6 +44,12 @@ export class UserinfoPage {
   large_donation: boolean = false;
   cause_percentage: any = 90;
   donation_amount: any = 20;
+
+  ch_name: string;
+  card_number: any;
+  cvv_number: any;
+  card_expiry: any;
+  current_year: any = new Date().getFullYear();
   constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private http: Http, public platform: Platform, private uniqueDeviceID: UniqueDeviceID, private loadingCtrl: LoadingController, private userService: UserProvider, private storage: Storage) {
 
     // if user try goback then exit app
@@ -136,8 +142,8 @@ export class UserinfoPage {
       // remove starting space from each element and push into charity array
       charities.push(element.replace('  ', ''));
     });
-
-    this.http.get('http://ionic.dsl.house/heartAppApi/verify-users.php?profile_status=verified&fname=' + this.firstName + '&lname=' + this.lastName + '&email=' + this.email + '&cause_percentage='+ this.cause_percentage +'&donation_amount='+ this.donation_amount +'&large_donation='+ this.large_donation +'&charity_type=' + charities + '&preference_type=' + this.preference + '&location=' + this.location + '&c_code=' + this.country + '&m_no=' + this.mobileno).map(res => res.json()).subscribe(data => {
+    
+    this.http.get('http://ionic.dsl.house/heartAppApi/verify-users.php?profile_status=verified&fname=' + this.firstName + '&lname=' + this.lastName + '&email=' + this.email + '&cause_percentage='+ this.cause_percentage +'&donation_amount='+ this.donation_amount +'&ch_name='+ this.ch_name +'&card_number='+ this.card_number +'&cvv_number='+ this.cvv_number +'&card_expiry='+ this.card_expiry +'&large_donation='+ this.large_donation +'&charity_type=' + charities + '&preference_type=' + this.preference + '&location=' + this.location + '&c_code=' + this.country + '&m_no=' + this.mobileno).map(res => res.json()).subscribe(data => {
       this.profileStatus = data.data.profile_status;
       console.log(data);
 

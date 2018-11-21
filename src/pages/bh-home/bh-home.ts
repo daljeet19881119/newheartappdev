@@ -1,25 +1,25 @@
-import { Component } from '@angular/core';
-import { NavController, MenuController, NavParams, Platform, LoadingController } from 'ionic-angular';
-import { ProfilePage } from '../profile/profile';
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams, Slides, MenuController, Platform, LoadingController } from 'ionic-angular';
 import { UserProvider } from '../../providers/user/user';
 import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 import { StreamingMedia, StreamingVideoOptions } from '@ionic-native/streaming-media';
 import { HomePageProvider } from '../../providers/home-page/home-page';
 import { SocialSharing } from '@ionic-native/social-sharing';
-import { ViewChild } from '@angular/core';
-import { Slides } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
+import { ProfilePage } from '../profile/profile';
+import { MediaCapture, CaptureVideoOptions, MediaFile, CaptureError } from '@ionic-native/media-capture';
 
+@IonicPage()
 @Component({
-  selector: 'page-home',
-  templateUrl: 'home.html'
+  selector: 'page-bh-home',
+  templateUrl: 'bh-home.html',
 })
-export class HomePage {
+export class BhHomePage {
   @ViewChild(Slides) slides: Slides;
 
   // icons
   latestTabs: string = 'payments';
-  tabClass: string = 'tab-'+this.latestTabs;
+  tabClass: string = 'tab-' + this.latestTabs;
 
   // latestDonations
   latestDonations: any;
@@ -42,14 +42,14 @@ export class HomePage {
   charityLoop: boolean = true;
   loader: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private uniqueDeviceID: UniqueDeviceID, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, public loadingCtrl: LoadingController, private sharing: SocialSharing, private storage: Storage) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private uniqueDeviceID: UniqueDeviceID, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, public loadingCtrl: LoadingController, private sharing: SocialSharing, private storage: Storage, private mediaCapture: MediaCapture) {
 
     // call function to get device id
     this.getDeviceID();
 
     // request data from server
     this.homeService.getLatestDonations().subscribe(data => {
-      
+
       // store requested data in the latestDonations
       this.latestDonations = data.res;
 
@@ -57,8 +57,7 @@ export class HomePage {
       let paging = Math.ceil(count / this.limit);
 
       // hide button if count is <= 5
-      if(paging <= 1)
-      {
+      if (paging <= 1) {
         this.showDonationBtn = false;
       }
 
@@ -69,77 +68,76 @@ export class HomePage {
 
     // request data from server
     this.homeService.getLatestPayments().subscribe(data => {
-      
-        // store requested data in the latestPayments
-        this.latestPayments = data.res;
 
-        let count = parseInt(data.count);
-        let paging = Math.ceil(count / this.limit);
+      // store requested data in the latestPayments
+      this.latestPayments = data.res;
 
-        // hide button if count is <= 5
-        if(paging <= 1)
-        {
-          this.showPaymentBtn = false;
-        }
+      let count = parseInt(data.count);
+      let paging = Math.ceil(count / this.limit);
+
+      // hide button if count is <= 5
+      if (paging <= 1) {
+        this.showPaymentBtn = false;
+      }
       // console.log(this.latestPayments);
-      },
+    },
       err => {
-      console.log('Oops!');
+        console.log('Oops!');
       });
 
-      // date object to store heloWish
-      let d = new Date();
-      if(d.getHours() < 12){
-       this.heloWish = 'Good morning,';
-      }
-      if(d.getHours() >= 12 && d.getHours() < 17){
-        this.heloWish = 'Good afternoon,';
-      }
-      if(d.getHours() >= 17 && d.getHours() < 20){
-        this.heloWish = 'Good evening,';
-      }
-      if(d.getHours() >= 20 && d.getHours() < 6){
-        this.heloWish = 'Good night,';
-      }
+    // date object to store heloWish
+    let d = new Date();
+    if (d.getHours() < 12) {
+      this.heloWish = 'Good morning,';
+    }
+    if (d.getHours() >= 12 && d.getHours() < 17) {
+      this.heloWish = 'Good afternoon,';
+    }
+    if (d.getHours() >= 17 && d.getHours() < 20) {
+      this.heloWish = 'Good evening,';
+    }
+    if (d.getHours() >= 20 && d.getHours() < 6) {
+      this.heloWish = 'Good night,';
+    }
 
-      // if user try to go back then exitapp
-      this.platform.registerBackButtonAction(() => {
-        platform.exitApp();
-      });
-      // call func getCharity
-      // this.getCharity();
-
+    // if user try to go back then exitapp
+    this.platform.registerBackButtonAction(() => {
+      platform.exitApp();
+    });
+    // call func getCharity
+    // this.getCharity();
   }
 
   ionViewDidLoad() {
-      // call func getDeviceID
-      this.uniqueDeviceID.get()
+    
+    // call func getDeviceID
+    this.uniqueDeviceID.get()
       .then((uuid: any) => {
 
         // get login user data
         this.userService.getUserByDeviceId(uuid).subscribe((data) => {
-          this.name = data.data.fname;        
+          this.name = data.data.fname;
         });
       })
       .catch((error: any) => {
         console.log(error);
-      });     
-      
-      // get user causes from storage
-      this.storage.get('user_causes').then(data => {
-        this.charities = data;
       });
+
+    // get user causes from storage
+    this.storage.get('user_causes').then(data => {
+      this.charities = data;
+    });
   }
 
-  ionViewWillEnter() {  
-      console.log('home page loaded');    
-      // call function getRecommendedBigHearts
-      this.getRecommendedBigHearts();
+  ionViewWillEnter() {
+    console.log('bigh heart home page loaded');
+    // call function getRecommendedBigHearts
+    this.getRecommendedBigHearts();
   }
 
   // showTabs
   showTabs() {
-    console.log('you selected: '+this.latestTabs);
+    console.log('you selected: ' + this.latestTabs);
   }
 
   // gotoProfilePage
@@ -154,7 +152,7 @@ export class HomePage {
 
   // viewAll
   viewAll() {
-    
+
     this.createLoader();
 
     // increment paging
@@ -172,7 +170,7 @@ export class HomePage {
 
       // loop of data
       data.res.forEach(element => {
-        
+
         // push data into latestDonations
         this.latestDonations.push(element);
       });
@@ -181,8 +179,7 @@ export class HomePage {
       let paging = Math.ceil(count / this.limit);
 
       // hide button if count is <= 5
-      if(this.paging >= paging)
-      {
+      if (this.paging >= paging) {
         this.showDonationBtn = false;
       }
 
@@ -194,7 +191,7 @@ export class HomePage {
 
   // viewAllPayments
   viewAllPayments() {
-    
+
     this.createLoader();
 
     // increment paging
@@ -211,7 +208,7 @@ export class HomePage {
 
       // loop of data
       data.res.forEach(element => {
-        
+
         // push data into latestDonations
         this.latestPayments.push(element);
       });
@@ -220,8 +217,7 @@ export class HomePage {
       let paging = Math.ceil(count / this.limit);
 
       // hide button if count is <= 5
-      if(this.paymentPaging >= paging)
-      {
+      if (this.paymentPaging >= paging) {
         this.showPaymentBtn = false;
       }
 
@@ -238,16 +234,29 @@ export class HomePage {
       errorCallback: (e) => { console.log('Error streaming') },
       orientation: 'portrait'
     };
-    
+
     this.streamingMedia.playVideo('http://ionic.dsl.house/heartAppApi/videos/small.mp4', options);
   }
 
-  
+  // recordThankyouMessage
+  recordThankyouMessage() {
+      let options: CaptureVideoOptions = {
+        limit: 1,
+        duration: 10,
+        quality: 50
+      };
+
+      this.mediaCapture.captureVideo(options).then(
+        (data: MediaFile[]) => console.log(data),
+        (err: CaptureError) => console.log(err)
+      );
+  }
+
   // getDeviceID
   getDeviceID() {
     this.uniqueDeviceID.get()
       .then((uuid: any) => {
-        this.uuid = uuid;  
+        this.uuid = uuid;
       })
       .catch((error: any) => {
         this.uuid = 'undefined';
@@ -260,11 +269,10 @@ export class HomePage {
     // store uuid
     let uuid;
     uuid = this.uuid;
-    if(this.uuid !== '')
-    {      
-      uuid =  this.navParams.get('uuid');
+    if (this.uuid !== '') {
+      uuid = this.navParams.get('uuid');
     }
-    else{
+    else {
       uuid = 'undefined';
     }
 
@@ -285,17 +293,16 @@ export class HomePage {
     // store uuid
     let uuid;
     uuid = this.uuid;
-    if(this.uuid !== '')
-    {      
-      uuid =  this.navParams.get('uuid');
+    if (this.uuid !== '') {
+      uuid = this.navParams.get('uuid');
     }
-    else{
+    else {
       uuid = 'undefined';
     }
 
     // call func to get user charities
     this.userService.getUserByDeviceId(uuid).subscribe(data => {
-        
+
       // store all user charities
       let charities = data.data.charity_type;
 
@@ -303,7 +310,7 @@ export class HomePage {
       this.charities = charities.split(',');
 
     }, err => {
-      console.log('Oops!'+err);
+      console.log('Oops!' + err);
     });
   }
 
@@ -321,16 +328,15 @@ export class HomePage {
   shareInfo(ngoName: string, ngoFounderImg: string, ngoFounderName: string, ngoFounderDesc: string, videoUrl: string = null) {
 
     let message = ngoFounderDesc;
-    let subject = ngoFounderName+' founder of '+ngoName;
+    let subject = ngoFounderName + ' founder of ' + ngoName;
     let file = ngoFounderImg;
     let url;
 
     // check if videoUlr not empty
-    if(videoUrl != null)
-    {
-      url = 'https://www.youtube.com/embed/'+videoUrl;
+    if (videoUrl != null) {
+      url = 'https://www.youtube.com/embed/' + videoUrl;
     }
-    else{
+    else {
       url = videoUrl;
     }
 

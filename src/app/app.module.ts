@@ -35,7 +35,8 @@ import { Camera } from '@ionic-native/camera';
 import { FileTransfer } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
 import { ImagePicker } from '@ionic-native/image-picker';
-
+import { BhHomePage } from '../pages/bh-home/bh-home';
+import { MediaCapture } from '@ionic-native/media-capture';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { ImagePicker } from '@ionic-native/image-picker';
     CauseFormPage,
     MerchantFormPage,
     VolunteerFormPage,
-    UserProfilePage
+    UserProfilePage,
+    BhHomePage
   ],
   imports: [
     BrowserModule,
@@ -82,7 +84,8 @@ import { ImagePicker } from '@ionic-native/image-picker';
     CauseFormPage,
     MerchantFormPage,
     VolunteerFormPage,
-    UserProfilePage
+    UserProfilePage,
+    BhHomePage
   ],
   providers: [
     StatusBar,
@@ -98,7 +101,8 @@ import { ImagePicker } from '@ionic-native/image-picker';
     Camera,
     File,
     FileTransfer,
-    ImagePicker      
+    ImagePicker,
+    MediaCapture    
   ]
 })
 export class AppModule {}

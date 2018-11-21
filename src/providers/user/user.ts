@@ -108,7 +108,7 @@ export class UserProvider {
   }
 
   // saveCauseFormData
-  saveCauseFormData(userid: number, fname: string, lname: string, email: string, ch_name: string, card_number: any, cvv_number: any, card_expiry:any, cause_category: any, country: any, region: any, city: string, fewAboutYourself: string, moreAboutYourself: string, profilePicName: string, multiplePics: any,  contact1: string, contact2: string, contact3: string, contact4: string, contact5: string) {
+  saveCauseFormData(userid: number, fname: string, lname: string, email: string, bank_name: string, account_no: any, ifsc_code: any, paypal_email:any, cause_category: any, country: any, region: any, city: string, fewAboutYourself: string, moreAboutYourself: string, profilePicName: string, multiplePics: any,  contact1: string, contact2: string, contact3: string, contact4: string, contact5: string) {
 
     // set headers
     let headers = new Headers();
@@ -123,10 +123,10 @@ export class UserProvider {
         fname: fname,
         lname: lname,
         email: email,
-        ch_name: ch_name,
-        card_number: card_number,
-        cvv_number: cvv_number,
-        card_expiry: card_expiry,
+        bank_name: bank_name,
+        account_no: account_no,
+        ifsc_code: ifsc_code,
+        paypal_email: paypal_email,
         cause_category: cause_category,
         country: country,
         region: region,

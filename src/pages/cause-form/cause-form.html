@@ -20,23 +20,28 @@
     </ion-item>
     <div class="textarea-div">
       <ion-row>
-        <ion-label>Add payment details</ion-label>
+        <ion-label>Add Bank details</ion-label>
       </ion-row>
       <ion-item class="payment-item">
-        <ion-label>Card holder name</ion-label>
-        <ion-input [(ngModel)]="ch_name" type="text"></ion-input>
+        <ion-label>Bank Name</ion-label>
+        <ion-input [(ngModel)]="bank_name" type="text"></ion-input>
       </ion-item>
       <ion-item class="payment-item">
-        <ion-label>Card number</ion-label>
-        <ion-input [(ngModel)]="card_number" type="number"></ion-input>
+        <ion-label>Account Number</ion-label>
+        <ion-input [(ngModel)]="account_no" type="number"></ion-input>
       </ion-item>
       <ion-item class="payment-item">
-        <ion-label>CVV number</ion-label>
-        <ion-input [(ngModel)]="cvv_number" type="password"></ion-input>
+        <ion-label>IFSC Code</ion-label>
+        <ion-input [(ngModel)]="ifsc_code" type="text"></ion-input>
       </ion-item>
+    </div> 
+    <div class="textarea-div">
+      <ion-row>
+        <ion-label>Add Paypal Email</ion-label>
+      </ion-row>
       <ion-item class="payment-item">
-        <ion-label>Expiry date</ion-label>
-        <ion-datetime displayFormat="MMM/YYYY" [(ngModel)]="card_expiry" [min]="current_year" [max]="current_year + 50"></ion-datetime>
+        <ion-label>Email</ion-label>
+        <ion-input [(ngModel)]="paypal_email" type="text"></ion-input>
       </ion-item>
     </div>  
     <div class="textarea-div">
