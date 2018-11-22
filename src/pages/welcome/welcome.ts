@@ -44,8 +44,8 @@ export class WelcomePage {
         this.requestData(this.uuid);
       })
       .catch((error: any) => {
-        // this.requestData('undefined');
-        this.gotoVerifyPage();
+        this.requestData('undefined');
+        // this.gotoVerifyPage();
       });
   }
 

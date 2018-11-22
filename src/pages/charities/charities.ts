@@ -164,13 +164,20 @@ export class CharitiesPage {
           country: this.c_code,
           fname: this.fname,
           lname: this.lname,
-          email: this.email
+          email: this.email,
+          cause_percentage: this.navParams.get('cause_percentage'),
+          donation_amount: this.navParams.get('donation_amount'),
+          large_donation: this.navParams.get('large_donation'),
+          ch_name: this.navParams.get('ch_name'),
+          card_number: this.navParams.get('card_number'),
+          cvv_number: this.navParams.get('cvv_number'),
+          current_year: this.navParams.get('current_year')
         });
       }
 
       // check if request from causeForm page then gotocauseform page
       if (this.navParams.get('page') == 'cause-form') {
-        
+
         // create modal
         const modal = this.modalCtrl.create(CauseFormPage, {
           charities: charities,

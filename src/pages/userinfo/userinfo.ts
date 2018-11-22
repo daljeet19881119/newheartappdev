@@ -50,6 +50,8 @@ export class UserinfoPage {
   cvv_number: any;
   card_expiry: any;
   current_year: any = new Date().getFullYear();
+  all_ngo: any;
+  ngo_id: any;
   constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private http: Http, public platform: Platform, private uniqueDeviceID: UniqueDeviceID, private loadingCtrl: LoadingController, private userService: UserProvider, private storage: Storage) {
 
     // if user try goback then exit app
@@ -66,6 +68,24 @@ export class UserinfoPage {
     this.firstName = this.navParams.get('fname');
     this.lastName = this.navParams.get('lname');
     this.email = this.navParams.get('email');
+    this.large_donation = this.navParams.get('large_donation');
+    this.ch_name = this.navParams.get('ch_name');
+    this.card_number = this.navParams.get('card_number');
+    this.cvv_number = this.navParams.get('cvv_number');
+
+    if(this.navParams.get('cause_percentage')){
+      this.cause_percentage = this.navParams.get('cause_percentage');
+      this.donation_amount = this.navParams.get('donation_amount');
+    }
+    if(this.navParams.get('donation_amount')){
+      this.donation_amount = this.navParams.get('donation_amount');
+    }
+    if(this.navParams.get('current_year')){
+      this.current_year = this.navParams.get('current_year');
+    }
+    
+    
+   
 
   }
 
@@ -86,6 +106,17 @@ export class UserinfoPage {
         }
       });
       this.checkCharity = true;
+    }
+  }
+
+  ionViewDidEnter() {
+    console.log('ion view did enter');
+    if (this.charities.length > 0) {
+      let selected_charity = [];
+      this.charities.forEach(element => {
+        selected_charity.push(element.trim());
+      });
+      this.getNgoByCharity(selected_charity);
     }
   }
 
@@ -143,7 +174,7 @@ export class UserinfoPage {
       charities.push(element.replace('  ', ''));
     });
     
-    this.http.get('http://ionic.dsl.house/heartAppApi/verify-users.php?profile_status=verified&fname=' + this.firstName + '&lname=' + this.lastName + '&email=' + this.email + '&cause_percentage='+ this.cause_percentage +'&donation_amount='+ this.donation_amount +'&ch_name='+ this.ch_name +'&card_number='+ this.card_number +'&cvv_number='+ this.cvv_number +'&card_expiry='+ this.card_expiry +'&large_donation='+ this.large_donation +'&charity_type=' + charities + '&preference_type=' + this.preference + '&location=' + this.location + '&c_code=' + this.country + '&m_no=' + this.mobileno).map(res => res.json()).subscribe(data => {
+    this.http.get('http://ionic.dsl.house/heartAppApi/verify-users.php?profile_status=verified&fname=' + this.firstName + '&lname=' + this.lastName + '&email=' + this.email + '&cause_percentage='+ this.cause_percentage +'&donation_amount='+ this.donation_amount +'&ngo_id='+ this.ngo_id +'&ch_name='+ this.ch_name +'&card_number='+ this.card_number +'&cvv_number='+ this.cvv_number +'&card_expiry='+ this.card_expiry +'&large_donation='+ this.large_donation +'&charity_type=' + charities + '&preference_type=' + this.preference + '&location=' + this.location + '&c_code=' + this.country + '&m_no=' + this.mobileno).map(res => res.json()).subscribe(data => {
       this.profileStatus = data.data.profile_status;
       console.log(data);
 
@@ -202,7 +233,14 @@ export class UserinfoPage {
       c_code: this.country,
       fname: this.firstName,
       lname: this.lastName,
-      email: this.email
+      email: this.email,
+      cause_percentage: this.cause_percentage,
+      donation_amount: this.donation_amount,
+      large_donation: this.large_donation,
+      ch_name: this.ch_name,
+      card_number: this.card_number,
+      cvv_number: this.cvv_number,
+      current_year: this.current_year
     });
   }
 
@@ -263,6 +301,32 @@ export class UserinfoPage {
         this.loader.dismiss();
       });
     }
+  }
+
+  // get ngo by charity name
+  getNgoByCharity(selected_charity: any) {
+    // this.createLoader();
+    this.userService.getAllCharities().subscribe(data => {
+      let charity_ids = [];
+      data.forEach(element => {
+        // check charity name in array then store that id
+        if (selected_charity.indexOf(element.name) != -1) {
+          charity_ids.push(element.id);
+        }
+      });
+
+      // getNgoByCharityIds
+      this.userService.getNgoByCharityIds(charity_ids).subscribe(res => {
+        this.all_ngo = res;
+        // this.loader.dismiss();
+      }, err => {
+        console.log(err);
+        // this.loader.dismiss();
+      });
+    }, err => {
+      console.log(err);
+      // this.loader.dismiss();
+    });
   }
 
   // toLocaleString

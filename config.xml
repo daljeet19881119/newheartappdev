@@ -101,5 +101,6 @@
         <variable name="PHOTO_LIBRARY_USAGE_DESCRIPTION" value="please select image" />
     </plugin>
     <plugin name="cordova-plugin-media-capture" spec="3.0.2" />
+    <plugin name="cordova-plugin-android-permissions" spec="1.0.0" />
     <engine name="android" spec="7.0.0" />
 </widget>

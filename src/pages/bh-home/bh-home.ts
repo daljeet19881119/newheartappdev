@@ -8,6 +8,8 @@ import { SocialSharing } from '@ionic-native/social-sharing';
 import { Storage } from '@ionic/storage';
 import { ProfilePage } from '../profile/profile';
 import { MediaCapture, CaptureVideoOptions, MediaFile, CaptureError } from '@ionic-native/media-capture';
+import { FileTransfer, FileTransferObject, FileUploadOptions } from '@ionic-native/file-transfer';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
 
 @IonicPage()
 @Component({
@@ -18,7 +20,7 @@ export class BhHomePage {
   @ViewChild(Slides) slides: Slides;
 
   // icons
-  latestTabs: string = 'payments';
+  latestTabs: string = 'donations';
   tabClass: string = 'tab-' + this.latestTabs;
 
   // latestDonations
@@ -41,8 +43,8 @@ export class BhHomePage {
   charityAutoplay: number = 3000;
   charityLoop: boolean = true;
   loader: any;
-
-  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private uniqueDeviceID: UniqueDeviceID, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, public loadingCtrl: LoadingController, private sharing: SocialSharing, private storage: Storage, private mediaCapture: MediaCapture) {
+  videoId: any;
+  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private uniqueDeviceID: UniqueDeviceID, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, public loadingCtrl: LoadingController, private sharing: SocialSharing, private storage: Storage, private mediaCapture: MediaCapture, private transfer: FileTransfer, private androidPermissions: AndroidPermissions) {
 
     // call function to get device id
     this.getDeviceID();
@@ -105,7 +107,22 @@ export class BhHomePage {
       platform.exitApp();
     });
     // call func getCharity
-    // this.getCharity();
+    this.getCharity();
+
+    this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE).then(
+      result => {
+        if (result.hasPermission) {
+          // code
+        } else {
+          this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE).then(result => {
+            if (result.hasPermission) {
+              // code
+            }
+          });
+        }
+      },
+      err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE)
+    );
   }
 
   ionViewDidLoad() {
@@ -132,7 +149,7 @@ export class BhHomePage {
   ionViewWillEnter() {
     console.log('bigh heart home page loaded');
     // call function getRecommendedBigHearts
-    this.getRecommendedBigHearts();
+    // this.getRecommendedBigHearts();
   }
 
   // showTabs
@@ -243,13 +260,41 @@ export class BhHomePage {
       let options: CaptureVideoOptions = {
         limit: 1,
         duration: 10,
-        quality: 50
+        quality: 0
       };
 
-      this.mediaCapture.captureVideo(options).then(
-        (data: MediaFile[]) => console.log(data),
-        (err: CaptureError) => console.log(err)
+      this.mediaCapture.captureVideo(options).then((data: MediaFile[]) => {
+          this.videoId = data[0].fullPath;
+          console.log(data)
+        },
+        (err: CaptureError) => {
+          console.log(err)
+        }
       );
+  }
+
+  // uploadThankyouMessage
+  uploadThankyouMessage() {
+    this.createLoader('uploading video');
+    const fileTransfer: FileTransferObject = this.transfer.create();
+
+    let options: FileUploadOptions = {
+      fileKey: 'video_file',
+      fileName: this.videoId,
+      chunkedMode: false,
+      httpMethod: 'post',
+      mimeType: "multipart/form-data",
+      headers: {}
+    }
+
+    fileTransfer.upload(this.videoId, 'http://ionic.dsl.house/heartAppApi/video-upload.php', options)
+      .then((data) => {
+        // success
+        this.loader.dismiss();
+      }, (err) => {
+        // error
+        this.loader.dismiss();
+      });
   }
 
   // getDeviceID
@@ -315,10 +360,10 @@ export class BhHomePage {
   }
 
   // createLoader
-  createLoader() {
+  createLoader(msg: string = 'Please wait') {
     this.loader = this.loadingCtrl.create({
       spinner: 'dots',
-      content: 'Please wait...'
+      content: msg+'...'
     });
 
     this.loader.present();

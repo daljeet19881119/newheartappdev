@@ -37,6 +37,7 @@ import { File } from '@ionic-native/file';
 import { ImagePicker } from '@ionic-native/image-picker';
 import { BhHomePage } from '../pages/bh-home/bh-home';
 import { MediaCapture } from '@ionic-native/media-capture';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
 
 @NgModule({
   declarations: [
@@ -102,7 +103,8 @@ import { MediaCapture } from '@ionic-native/media-capture';
     File,
     FileTransfer,
     ImagePicker,
-    MediaCapture    
+    MediaCapture,
+    AndroidPermissions    
   ]
 })
 export class AppModule {}
