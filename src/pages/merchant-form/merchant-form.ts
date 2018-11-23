@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, LoadingController, Platform } from 'ionic-angular';
 import { UserProvider } from '../../providers/user/user';
-import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 import { Storage } from '@ionic/storage';
 import { HomePage } from '../home/home';
+import { GlobalProvider } from '../../providers/global/global';
 
 /**
  * Generated class for the MerchantFormPage page.
@@ -28,14 +28,14 @@ export class MerchantFormPage {
   userid: any;
   uuid: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private userService: UserProvider, public alertCtrl: AlertController, public loadingCtrl: LoadingController, private uniqueDeviceID: UniqueDeviceID, private storage: Storage, private platform: Platform) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private userService: UserProvider, public alertCtrl: AlertController, public loadingCtrl: LoadingController, private global: GlobalProvider, private storage: Storage, private platform: Platform) {
 
     // get data from storage
     this.storage.get('merchantForm').then((val) => {
-        this.fname = val.fname;
-        this.lname = val.lname;
-        this.shortDesc = val.shortDesc;
-        this.aboutTeam = val.aboutTeam;
+      this.fname = val.fname;
+      this.lname = val.lname;
+      this.shortDesc = val.shortDesc;
+      this.aboutTeam = val.aboutTeam;
     }).catch((err) => {
       console.log(err);
     });
@@ -52,24 +52,24 @@ export class MerchantFormPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad MerchantFormPage');
 
-   
+
   }
 
   // getDeviceID
   getDeviceID() {
-    this.uniqueDeviceID.get()
-      .then((uuid: any) => {
-        this.uuid = uuid; 
-         // request to userProvide
-          this.userService.getUserByDeviceId(this.uuid).subscribe(data => {
-            this.userid = data.data.id;
-        }, err => {
-          console.log(err);
-        }); 
-      })
-      .catch((error: any) => {
-        this.uuid = 'undefined';
+    if (this.global.uuid()) {
+      this.uuid = this.global.uuid();
+
+      // request to userProvide
+      this.userService.getUserByDeviceId(this.uuid).subscribe(data => {
+        this.userid = data.data.id;
+      }, err => {
+        console.log(err);
       });
+    }
+    else{
+      this.uuid = 'undefined';
+    }
   }
 
   // saveData
@@ -77,30 +77,29 @@ export class MerchantFormPage {
 
     let userid = this.userid;
 
-    if(this.fname != null && this.lname != null && this.shortDesc != null && this.aboutTeam != null)
-    {
-        this.createLoader();
+    if (this.fname != null && this.lname != null && this.shortDesc != null && this.aboutTeam != null) {
+      this.createLoader();
 
-        // request to server
-        this.userService.saveMerchantFormData(userid, this.fname, this.lname, this.shortDesc, this.aboutTeam).subscribe(data => {
-          // alert(data.msg);
-          this.setDataToStorage(userid, this.fname, this.lname, this.shortDesc, this.aboutTeam);
-          this.loader.dismiss();
+      // request to server
+      this.userService.saveMerchantFormData(userid, this.fname, this.lname, this.shortDesc, this.aboutTeam).subscribe(data => {
+        // alert(data.msg);
+        this.setDataToStorage(userid, this.fname, this.lname, this.shortDesc, this.aboutTeam);
+        this.loader.dismiss();
       }, err => {
-        console.log('error: '+err);
+        console.log('error: ' + err);
       });
     }
-    else{
+    else {
       this.createAlert();
     }
-    
+
   }
 
   // createAlert
   createAlert() {
     const alert = this.alertCtrl.create({
-          message: 'Please fill out the required fields.',
-          buttons: ['ok']
+      message: 'Please fill out the required fields.',
+      buttons: ['ok']
     });
 
     alert.present();
@@ -108,22 +107,22 @@ export class MerchantFormPage {
 
   // createLoader
   createLoader() {
-     this.loader = this.loadingCtrl.create({
-          spinner: 'dots',
-          content: 'Please wait...'
-     });
-     this.loader.present();
+    this.loader = this.loadingCtrl.create({
+      spinner: 'dots',
+      content: 'Please wait...'
+    });
+    this.loader.present();
   }
 
   // setDataToStorage
   setDataToStorage(userid: number, fname: string, lname: string, shortDesc: string, aboutTeam: string) {
-    
+
     let data = {
-        userid: userid,
-        fname: fname,
-        lname: lname,
-        shortDesc: shortDesc,
-        aboutTeam: aboutTeam
+      userid: userid,
+      fname: fname,
+      lname: lname,
+      shortDesc: shortDesc,
+      aboutTeam: aboutTeam
     };
 
     this.storage.set('merchantForm', data);

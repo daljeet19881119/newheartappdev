@@ -3,11 +3,11 @@ import { IonicPage, NavController, NavParams, AlertController, Platform, Loading
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { HomePage } from '../home/home';
-import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 import { CharitiesPage } from '../charities/charities';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { UserProvider } from '../../providers/user/user';
 import { Storage } from '@ionic/storage';
+import { GlobalProvider } from '../../providers/global/global';
 
 /**
  * Generated class for the UserinfoPage page.
@@ -45,14 +45,15 @@ export class UserinfoPage {
   cause_percentage: any = 90;
   donation_amount: any = 20;
 
-  ch_name: string;
-  card_number: any;
-  cvv_number: any;
-  card_expiry: any;
+  ch_name: string = null;
+  card_number: any = null;
+  cvv_number: any = null;
+  card_expiry: any = null;
   current_year: any = new Date().getFullYear();
   all_ngo: any;
-  ngo_id: any;
-  constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private http: Http, public platform: Platform, private uniqueDeviceID: UniqueDeviceID, private loadingCtrl: LoadingController, private userService: UserProvider, private storage: Storage) {
+  ngo_id: string;
+  ngo_id_arr: any = [];
+  constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private http: Http, public platform: Platform, private global: GlobalProvider, private loadingCtrl: LoadingController, private userService: UserProvider, private storage: Storage) {
 
     // if user try goback then exit app
     this.platform.registerBackButtonAction(() => {
@@ -80,12 +81,10 @@ export class UserinfoPage {
     if(this.navParams.get('donation_amount')){
       this.donation_amount = this.navParams.get('donation_amount');
     }
-    if(this.navParams.get('current_year')){
-      this.current_year = this.navParams.get('current_year');
+    if(this.navParams.get('card_expiry')){
+      this.card_expiry = this.navParams.get('card_expiry');
     }
     
-    
-   
 
   }
 
@@ -120,13 +119,21 @@ export class UserinfoPage {
     }
   }
 
+  getSelectedNgo(checked: any, id: any) {
+    if(checked == true) {
+      this.ngo_id_arr.push(id);
+    }
+    else{
+      this.ngo_id_arr.pop(id);
+    }
+  }
   // registerUser
   registerUser() {
 
     // check if all fields are not empty then register user
-    if (this.firstName == null || this.lastName == null || this.email == null || this.charities.length == 0) {
+    if (this.firstName == null || this.lastName == null || this.email == null || this.ch_name == null || this.card_number == null || this.cvv_number == null || this.card_expiry == null || this.charities.length == 0) {
       const alert = this.alertCtrl.create({
-        message: 'We need a little more information about you. Please fill out all fields before continuing. <p>Thanks.</p>',
+        message: 'We need a little more information about you. Please fill out all fields marked with (*) before continuing. <p>Thanks.</p>',
         buttons: ['ok']
       });
       alert.present();
@@ -149,16 +156,12 @@ export class UserinfoPage {
 
   // getDeviceID
   getDeviceID() {
-    this.uniqueDeviceID.get()
-      .then((uuid: any) => {
-        this.uuid = uuid;
+    if(this.global.uuid()) {
+      this.uuid = this.global.uuid();
 
-        // call requestData
-        this.requestData();
-      })
-      .catch((error: any) => {
-        console.log(error);
-      });
+      // call requestData
+      this.requestData();
+    }
   }
 
   // makeServerRequest
@@ -174,7 +177,16 @@ export class UserinfoPage {
       charities.push(element.replace('  ', ''));
     });
     
-    this.http.get('http://ionic.dsl.house/heartAppApi/verify-users.php?profile_status=verified&fname=' + this.firstName + '&lname=' + this.lastName + '&email=' + this.email + '&cause_percentage='+ this.cause_percentage +'&donation_amount='+ this.donation_amount +'&ngo_id='+ this.ngo_id +'&ch_name='+ this.ch_name +'&card_number='+ this.card_number +'&cvv_number='+ this.cvv_number +'&card_expiry='+ this.card_expiry +'&large_donation='+ this.large_donation +'&charity_type=' + charities + '&preference_type=' + this.preference + '&location=' + this.location + '&c_code=' + this.country + '&m_no=' + this.mobileno).map(res => res.json()).subscribe(data => {
+    // conver array to stirng
+    this.ngo_id = this.ngo_id_arr.toString();
+
+    // calculate hc amount
+    let hc_amount = this.donation_amount * 100;
+    let ngo_count = parseInt(this.ngo_id_arr.length);
+    let us_amount_per_ngo = this.donation_amount / ngo_count;
+    let hc_amount_per_ngo = hc_amount / ngo_count;
+
+    this.http.get('http://ionic.dsl.house/heartAppApi/verify-users.php?profile_status=verified&fname=' + this.firstName + '&lname=' + this.lastName + '&email=' + this.email + '&cause_percentage='+ this.cause_percentage +'&donation_amount='+ this.donation_amount +'&hc_amount='+ hc_amount +'&us_amount_per_ngo='+ us_amount_per_ngo +'&hc_amount_per_ngo='+ hc_amount_per_ngo +'&ngo_id='+ this.ngo_id +'&ch_name='+ this.ch_name +'&card_number='+ this.card_number +'&cvv_number='+ this.cvv_number +'&card_expiry='+ this.card_expiry +'&large_donation='+ this.large_donation +'&charity_type=' + charities + '&preference_type=' + this.preference + '&location=' + this.location + '&c_code=' + this.country + '&m_no=' + this.mobileno).map(res => res.json()).subscribe(data => {
       this.profileStatus = data.data.profile_status;
       console.log(data);
 
@@ -240,7 +252,7 @@ export class UserinfoPage {
       ch_name: this.ch_name,
       card_number: this.card_number,
       cvv_number: this.cvv_number,
-      current_year: this.current_year
+      card_expiry: this.card_expiry
     });
   }
 
@@ -305,7 +317,7 @@ export class UserinfoPage {
 
   // get ngo by charity name
   getNgoByCharity(selected_charity: any) {
-    // this.createLoader();
+    this.createLoader();
     this.userService.getAllCharities().subscribe(data => {
       let charity_ids = [];
       data.forEach(element => {
@@ -318,14 +330,14 @@ export class UserinfoPage {
       // getNgoByCharityIds
       this.userService.getNgoByCharityIds(charity_ids).subscribe(res => {
         this.all_ngo = res;
-        // this.loader.dismiss();
+        this.loader.dismiss();
       }, err => {
         console.log(err);
-        // this.loader.dismiss();
+        this.loader.dismiss();
       });
     }, err => {
       console.log(err);
-      // this.loader.dismiss();
+      this.loader.dismiss();
     });
   }
 

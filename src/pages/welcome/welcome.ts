@@ -4,11 +4,11 @@ import { VerifynumberPage } from '../verifynumber/verifynumber';
 import { UserProvider } from '../../providers/user/user';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 import { UserinfoPage } from '../userinfo/userinfo';
 import { HomePage } from '../home/home';
 import { Storage } from '@ionic/storage';
 import { BhHomePage } from '../bh-home/bh-home';
+import { GlobalProvider } from '../../providers/global/global';
 
 @IonicPage()
 @Component({
@@ -18,7 +18,7 @@ import { BhHomePage } from '../bh-home/bh-home';
 export class WelcomePage {
 
   uuid: any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, private userService: UserProvider, private http: Http, private uniqueDeviceID: UniqueDeviceID, private storage: Storage) {   
+  constructor(public navCtrl: NavController, public navParams: NavParams, private userService: UserProvider, private http: Http, private global: GlobalProvider, private storage: Storage) {   
     this.getDeviceID();
   }
 
@@ -36,17 +36,16 @@ export class WelcomePage {
 
    // getDeviceID
    getDeviceID() {
-    this.uniqueDeviceID.get()
-      .then((uuid: any) => {
-        this.uuid = uuid;  
-        
+      if(this.global.uuid()) {
+        this.uuid = this.global.uuid();
+
         // call requestData
         this.requestData(this.uuid);
-      })
-      .catch((error: any) => {
+      }
+      else{
         // this.requestData('undefined');
         this.gotoVerifyPage();
-      });
+      }
   }
 
   // requestData

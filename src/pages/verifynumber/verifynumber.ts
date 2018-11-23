@@ -3,9 +3,9 @@ import { IonicPage, NavController, NavParams, LoadingController, Platform } from
 import { VerifycodePage } from '../verifycode/verifycode';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 import { UserProvider } from '../../providers/user/user';
 import { Storage } from '@ionic/storage';
+import { GlobalProvider } from '../../providers/global/global';
 
 /**
  * Generated class for the VerifynumberPage page.
@@ -30,7 +30,7 @@ export class VerifynumberPage {
   allCountries: any;
   loader: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, public loadingCtrl: LoadingController, private uniqueDeviceID: UniqueDeviceID, public platform: Platform, public userService: UserProvider, private storage: Storage) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, public loadingCtrl: LoadingController, private global: GlobalProvider, public platform: Platform, public userService: UserProvider, private storage: Storage) {
 
     // call getuniqueDeviceID
     this.getuniqueDeviceID();
@@ -105,9 +105,9 @@ export class VerifynumberPage {
 
   // getuniqueDeviceID
   getuniqueDeviceID() {
-    this.uniqueDeviceID.get()
-      .then((uuid: any) => {this.uuid = uuid;})
-      .catch((error: any) => console.log(error));
+    if(this.global.uuid()) {
+      this.uuid = this.global.uuid();
+    }
   }
   
   // sendSMS

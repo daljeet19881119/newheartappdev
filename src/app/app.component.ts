@@ -4,7 +4,6 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 import { WelcomePage } from '../pages/welcome/welcome';
 import { HomePage } from '../pages/home/home';
 import { UserinfoPage } from '../pages/userinfo/userinfo';
@@ -12,6 +11,7 @@ import { CauseFormPage } from '../pages/cause-form/cause-form';
 import { MerchantFormPage } from '../pages/merchant-form/merchant-form';
 import { VolunteerFormPage } from '../pages/volunteer-form/volunteer-form';
 import { UserProfilePage } from '../pages/user-profile/user-profile';
+import { GlobalProvider } from '../providers/global/global';
 
 
 @Component({
@@ -25,7 +25,7 @@ export class MyApp {
 
   uuid: any = null;
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private http: Http, private uniqueDeviceID: UniqueDeviceID) {
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private http: Http, private global: GlobalProvider) {
     platform.ready().then(() => {
 
       // call func getDeviceID
@@ -40,16 +40,10 @@ export class MyApp {
 
   // getDeviceID
   getDeviceID() {
-    this.uniqueDeviceID.get()
-      .then((uuid: any) => {
-        this.uuid = uuid;  
-        
-        // call requestData
-        this.requestData();
-      })
-      .catch((error: any) => {
-        console.log(error);
-      });
+    this.uuid = this.global.uuid();
+
+    // call requestData
+    this.requestData();
   }
 
   // requestData

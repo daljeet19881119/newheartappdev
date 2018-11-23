@@ -12,7 +12,6 @@ import { VerifynumberPage } from '../pages/verifynumber/verifynumber';
 import { WelcomePage } from '../pages/welcome/welcome';
 import { VerifycodePage } from '../pages/verifycode/verifycode';
 import { UserinfoPage } from '../pages/userinfo/userinfo';
-import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 import { YtvideoPage } from '../pages/ytvideo/ytvideo';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { UserProvider } from '../providers/user/user';
@@ -38,6 +37,8 @@ import { ImagePicker } from '@ionic-native/image-picker';
 import { BhHomePage } from '../pages/bh-home/bh-home';
 import { MediaCapture } from '@ionic-native/media-capture';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
+import { Device } from '@ionic-native/device'
+import { GlobalProvider } from '../providers/global/global';
 
 @NgModule({
   declarations: [
@@ -91,7 +92,6 @@ import { AndroidPermissions } from '@ionic-native/android-permissions';
   providers: [
     StatusBar,
     SplashScreen, 
-    UniqueDeviceID,
     ScreenOrientation,   
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     UserProvider,
@@ -104,7 +104,9 @@ import { AndroidPermissions } from '@ionic-native/android-permissions';
     FileTransfer,
     ImagePicker,
     MediaCapture,
-    AndroidPermissions    
+    AndroidPermissions,
+    Device,
+    GlobalProvider    
   ]
 })
 export class AppModule {}

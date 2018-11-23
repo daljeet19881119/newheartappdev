@@ -8,10 +8,10 @@ import { PhotoViewer } from '@ionic-native/photo-viewer';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CampaignsPage } from '../campaigns/campaigns';
 import { UserProvider } from '../../providers/user/user';
-import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 import { CommunityPage } from '../community/community';
 import { TeamPage } from '../team/team';
 import { ContributorsPage } from '../contributors/contributors';
+import { GlobalProvider } from '../../providers/global/global';
 
 @IonicPage()
 @Component({
@@ -45,7 +45,7 @@ export class ProfilePage {
   // loader
   loader: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, private modalCtrl: ModalController, private screenOrientation: ScreenOrientation, private photoViewer: PhotoViewer, private dom: DomSanitizer, private userProvider: UserProvider, private uniqueDeviceID: UniqueDeviceID, public loadingCtrl: LoadingController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, private modalCtrl: ModalController, private screenOrientation: ScreenOrientation, private photoViewer: PhotoViewer, private dom: DomSanitizer, private userProvider: UserProvider, private global: GlobalProvider, public loadingCtrl: LoadingController) {
 
     // call function to get device id
     this.getDeviceID();
@@ -397,13 +397,12 @@ export class ProfilePage {
 
   // getDeviceID
   getDeviceID() {
-    this.uniqueDeviceID.get()
-      .then((uuid: any) => {
-        this.uuid = uuid;  
-      })
-      .catch((error: any) => {
-        this.uuid = 'undefined';
-      });
+    if(this.global.uuid()) {
+      this.uuid = this.global.uuid();
+    }
+    else{
+      this.uuid = 'undefined';
+    }
   }
 
   // createLoader

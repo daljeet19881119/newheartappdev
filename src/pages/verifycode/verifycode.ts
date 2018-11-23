@@ -4,8 +4,8 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { UserinfoPage } from '../userinfo/userinfo';
 import { HomePage } from '../home/home';
-import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { GlobalProvider } from '../../providers/global/global';
 
  
 @IonicPage()
@@ -24,7 +24,7 @@ export class VerifycodePage {
   btnDisable: boolean = true;
   loader: any;
 
-  constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, private http: Http, private alertCtrl: AlertController, public platform: Platform, private uniqueDeviceID: UniqueDeviceID, public loadingCtrl: LoadingController) {
+  constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, private http: Http, private alertCtrl: AlertController, public platform: Platform, private global: GlobalProvider, public loadingCtrl: LoadingController) {
 
     // if user try goback then exit app
     this.platform.registerBackButtonAction(() => {
@@ -130,9 +130,9 @@ export class VerifycodePage {
 
   // getuniqueDeviceID
   getuniqueDeviceID() {
-    this.uniqueDeviceID.get()
-      .then((uuid: any) => {this.uuid = uuid;})
-      .catch((error: any) => console.log(error));
+    if(this.global.uuid()) {
+      this.uuid = this.global.uuid();
+    }
   }
 
   // createLoader

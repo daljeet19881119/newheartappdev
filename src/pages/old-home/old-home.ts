@@ -2,13 +2,13 @@ import { Component } from '@angular/core';
 import { NavController, MenuController, NavParams, Platform, LoadingController, IonicPage } from 'ionic-angular';
 import { ProfilePage } from '../profile/profile';
 import { UserProvider } from '../../providers/user/user';
-import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 import { StreamingMedia, StreamingVideoOptions } from '@ionic-native/streaming-media';
 import { HomePageProvider } from '../../providers/home-page/home-page';
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { ViewChild } from '@angular/core';
 import { Slides } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
+import { GlobalProvider } from '../../providers/global/global';
 
 
 @IonicPage()
@@ -43,7 +43,7 @@ export class OldHomePage {
   charityAutoplay: number = 3000;
   charityLoop: boolean = true;
   loader: any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private uniqueDeviceID: UniqueDeviceID, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, public loadingCtrl: LoadingController, private sharing: SocialSharing, private storage: Storage) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private global: GlobalProvider, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, public loadingCtrl: LoadingController, private sharing: SocialSharing, private storage: Storage) {
 
     // call function to get device id
     this.getDeviceID();
@@ -112,20 +112,14 @@ export class OldHomePage {
 
   ionViewDidLoad() {
     // call func getDeviceID
-    this.uniqueDeviceID.get()
-      .then((uuid: any) => {
+    if(this.global.uuid()) {
+      this.uuid = this.global.uuid();
 
-        // get login user data
-        this.userService.getUserByDeviceId(uuid).subscribe((data) => {
-          this.name = data.data.fname;
-        });
-      })
-      .catch((error: any) => {
-        // get login user data
-        this.userService.getUserByDeviceId('undefined').subscribe((data) => {
-          this.name = data.data.fname;
-        });
+      // get login user data
+      this.userService.getUserByDeviceId(this.uuid).subscribe((data) => {
+        this.name = data.data.fname;
       });
+    }
 
     // get user causes from storage
     this.storage.get('user_causes').then(data => {
@@ -245,13 +239,12 @@ export class OldHomePage {
 
   // getDeviceID
   getDeviceID() {
-    this.uniqueDeviceID.get()
-      .then((uuid: any) => {
-        this.uuid = uuid;
-      })
-      .catch((error: any) => {
-        this.uuid = 'undefined';
-      });
+    if(this.global.uuid()) {
+      this.uuid = this.global.uuid();
+    }
+    else{
+      this.uuid = 'undefined';
+    }
   }
 
   // getRecommendedBigHearts

@@ -1,7 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, Slides, MenuController, Platform, LoadingController } from 'ionic-angular';
 import { UserProvider } from '../../providers/user/user';
-import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 import { StreamingMedia, StreamingVideoOptions } from '@ionic-native/streaming-media';
 import { HomePageProvider } from '../../providers/home-page/home-page';
 import { SocialSharing } from '@ionic-native/social-sharing';
@@ -10,6 +9,7 @@ import { ProfilePage } from '../profile/profile';
 import { MediaCapture, CaptureVideoOptions, MediaFile, CaptureError } from '@ionic-native/media-capture';
 import { FileTransfer, FileTransferObject, FileUploadOptions } from '@ionic-native/file-transfer';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
+import { GlobalProvider } from '../../providers/global/global';
 
 @IonicPage()
 @Component({
@@ -44,7 +44,7 @@ export class BhHomePage {
   charityLoop: boolean = true;
   loader: any;
   videoId: any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private uniqueDeviceID: UniqueDeviceID, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, public loadingCtrl: LoadingController, private sharing: SocialSharing, private storage: Storage, private mediaCapture: MediaCapture, private transfer: FileTransfer, private androidPermissions: AndroidPermissions) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private global: GlobalProvider, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, public loadingCtrl: LoadingController, private sharing: SocialSharing, private storage: Storage, private mediaCapture: MediaCapture, private transfer: FileTransfer, private androidPermissions: AndroidPermissions) {
 
     // call function to get device id
     this.getDeviceID();
@@ -126,19 +126,15 @@ export class BhHomePage {
   }
 
   ionViewDidLoad() {
-    
     // call func getDeviceID
-    this.uniqueDeviceID.get()
-      .then((uuid: any) => {
+    if(this.global.uuid()) {
+        this.uuid = this.global.uuid();
 
         // get login user data
-        this.userService.getUserByDeviceId(uuid).subscribe((data) => {
+        this.userService.getUserByDeviceId(this.uuid).subscribe((data) => {
           this.name = data.data.fname;
         });
-      })
-      .catch((error: any) => {
-        console.log(error);
-      });
+    }  
 
     // get user causes from storage
     this.storage.get('user_causes').then(data => {
@@ -298,14 +294,13 @@ export class BhHomePage {
   }
 
   // getDeviceID
-  getDeviceID() {
-    this.uniqueDeviceID.get()
-      .then((uuid: any) => {
-        this.uuid = uuid;
-      })
-      .catch((error: any) => {
-        this.uuid = 'undefined';
-      });
+  getDeviceID() {    
+    if(this.global.uuid()) {
+      this.uuid = this.global.uuid();
+    }
+    else{
+      this.uuid = 'undefined';
+    }
   }
 
   // getRecommendedBigHearts

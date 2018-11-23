@@ -171,7 +171,7 @@ export class CharitiesPage {
           ch_name: this.navParams.get('ch_name'),
           card_number: this.navParams.get('card_number'),
           cvv_number: this.navParams.get('cvv_number'),
-          current_year: this.navParams.get('current_year')
+          card_expiry: this.navParams.get('card_expiry')
         });
       }
 
@@ -183,7 +183,11 @@ export class CharitiesPage {
           charities: charities,
           fname: this.navParams.get('fname'),
           lname: this.navParams.get('lname'),
-          email: this.navParams.get('email')
+          email: this.navParams.get('email'),
+          bank_name: this.navParams.get('bank_name'),
+          account_no: this.navParams.get('account_no'),
+          ifsc_code: this.navParams.get('ifsc_code'),
+          paypal_email: this.navParams.get('paypal_email')
         });
         modal.present();
 

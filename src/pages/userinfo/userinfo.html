@@ -10,15 +10,15 @@
 <ion-content padding class="body-color" style="background-color: #ae0433;">
     <ion-list>
       <ion-item no-padding class="item-feilds">
-        <ion-label floating>First Name</ion-label>
+        <ion-label floating>First Name*</ion-label>
         <ion-input type="text" [(ngModel)]="firstName"></ion-input>
       </ion-item>
       <ion-item no-padding class="item-feilds">
-          <ion-label floating>Last Name</ion-label>
+          <ion-label floating>Last Name*</ion-label>
           <ion-input type="text" [(ngModel)]="lastName"></ion-input>
         </ion-item>
       <ion-item no-padding class="item-feilds">
-        <ion-label floating>Email</ion-label>
+        <ion-label floating>Email*</ion-label>
         <ion-input type="email" [(ngModel)]="email"></ion-input>
       </ion-item>
       <div class="textarea-div">
@@ -68,24 +68,24 @@
         <ion-label>Add payment details</ion-label>
       </ion-row>
       <ion-item class="payment-item">
-        <ion-label>Card holder name</ion-label>
+        <ion-label floating>Card holder name*</ion-label>
         <ion-input [(ngModel)]="ch_name" type="text"></ion-input>
       </ion-item>
       <ion-item class="payment-item">
-        <ion-label>Card number</ion-label>
+        <ion-label floating>Card number*</ion-label>
         <ion-input [(ngModel)]="card_number" type="number"></ion-input>
       </ion-item>
       <ion-item class="payment-item">
-        <ion-label>CVV number</ion-label>
+        <ion-label floating>CVV number*</ion-label>
         <ion-input [(ngModel)]="cvv_number" type="password"></ion-input>
       </ion-item>
       <ion-item class="payment-item">
-        <ion-label>Expiry date</ion-label>
+        <ion-label floating>Expiry date*</ion-label>
         <ion-datetime displayFormat="MMM/YYYY" [(ngModel)]="card_expiry" [min]="current_year" [max]="current_year + 50"></ion-datetime>
       </ion-item>
     </div>    
       <ion-item no-padding (click)="gotoCharityPage()" *ngIf="!checkCharity || charities?.length == 0" class="item-feilds"> 
-        <ion-label style="color: #999999;">Select charity areas <ion-icon name="arrow-forward" class="next-arrow"></ion-icon></ion-label>        
+        <ion-label style="color: #999999;">Select charity areas* <ion-icon name="arrow-forward" class="next-arrow"></ion-icon></ion-label>        
       </ion-item>
       <ion-row *ngIf="charities?.length > 0">
           <ion-col col-10 no-padding>
@@ -101,16 +101,16 @@
       </ion-row>
       <div class="textarea-div" *ngIf="all_ngo">
         <ion-row>
-          <ion-label>Select one ngo which you want to donate</ion-label>
+          <p>Select any particular BigHeart to which you want to donate</p>
         </ion-row>
-        <ion-list radio-group [(ngModel)]="ngo_id">
+        <ion-list>
           <ng-container *ngFor="let ngo of all_ngo">
             <ion-item class="payment-item">
               <ion-avatar item-start style="background: #48414130;border-radius: 50%;border: 1px solid #48414130;">                
                 <img [src]="ngo.ngo_img_url" [alt]="ngo.ngo_name">
               </ion-avatar>
               <ion-label>{{ ngo.ngo_name }}</ion-label>
-              <ion-radio [value]="ngo.id"></ion-radio>
+              <ion-checkbox [(ngModel)]="ngo.checked" (click)="getSelectedNgo(ngo.checked, ngo.id);" item-end></ion-checkbox>
             </ion-item>
           </ng-container>
         </ion-list>

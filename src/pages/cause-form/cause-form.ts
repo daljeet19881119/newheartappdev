@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, AlertController, ModalController, Platform, ViewController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { UserProvider } from '../../providers/user/user';
-import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { CharitiesPage } from '../charities/charities';
 import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker';
+import { GlobalProvider } from '../../providers/global/global';
 
 @IonicPage()
 @Component({
@@ -65,8 +65,8 @@ export class CauseFormPage {
   account_no: any;
   ifsc_code: any;
   paypal_email: any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private userService: UserProvider, public loadingCtrl: LoadingController, public alertCtrl: AlertController, private uniqueDeviceID: UniqueDeviceID, private camera: Camera, private transfer: FileTransfer, public modalCtrl: ModalController, private platform: Platform, private imagePicker: ImagePicker, public viewCtrl: ViewController) {
-    
+  constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private userService: UserProvider, public loadingCtrl: LoadingController, public alertCtrl: AlertController, private global: GlobalProvider, private camera: Camera, private transfer: FileTransfer, public modalCtrl: ModalController, private platform: Platform, private imagePicker: ImagePicker, public viewCtrl: ViewController) {
+
     // store all countries
     this.storage.get('countries').then((val) => {
       this.countries = val;
@@ -162,45 +162,48 @@ export class CauseFormPage {
     this.fname = this.navParams.get('fname');
     this.lname = this.navParams.get('lname');
     this.email = this.navParams.get('email');
+    this.bank_name = this.navParams.get('bank_name');
+    this.account_no = this.navParams.get('account_no');
+    this.ifsc_code = this.navParams.get('ifsc_code');
+    this.paypal_email = this.navParams.get('paypal_email');
   }
 
   // getDeviceID
   getDeviceID() {
-    this.uniqueDeviceID.get()
-      .then((uuid: any) => {
-        this.uuid = uuid;
+    if (this.global.uuid()) {
+      this.uuid = this.global.uuid();
 
-        // request to userProvide
-        this.userService.getUserByDeviceId(this.uuid).subscribe(data => {
-          this.userid = data.data.id;
-          this.prefType = data.data.preference_type;
+      // request to userProvide
+      this.userService.getUserByDeviceId(this.uuid).subscribe(data => {
+        this.userid = data.data.id;
+        this.prefType = data.data.preference_type;
 
-          // put value if it is country
-          if (this.prefType == 'country') {
-            this.country = data.data.preference_location;
-          }
+        // put value if it is country
+        if (this.prefType == 'country') {
+          this.country = data.data.preference_location;
+        }
 
-          // put value if it is region
-          if (this.prefType == 'region') {
-            this.regionId = data.data.preference_location;
-            this.createLoader();
+        // put value if it is region
+        if (this.prefType == 'region') {
+          this.regionId = data.data.preference_location;
+          this.createLoader();
 
-            // get region name
-            this.userService.getRegionNameById(this.regionId).subscribe(data => {
-              this.region = data;
-              this.loader.dismiss();
-            }, err => {
-              console.log('err');
-              this.loader.dismiss();
-            });
-          }
-        }, err => {
-          console.log(err);
-        });
-      })
-      .catch((error: any) => {
-        this.uuid = 'undefined';
+          // get region name
+          this.userService.getRegionNameById(this.regionId).subscribe(data => {
+            this.region = data;
+            this.loader.dismiss();
+          }, err => {
+            console.log('err');
+            this.loader.dismiss();
+          });
+        }
+      }, err => {
+        console.log(err);
       });
+    }
+    else {
+      this.uuid = 'undefined';
+    }
   }
 
   // saveData
@@ -510,7 +513,11 @@ export class CauseFormPage {
       page: 'cause-form',
       fname: this.fname,
       lname: this.lname,
-      email: this.email
+      email: this.email,
+      bank_name: this.bank_name,
+      account_no: this.account_no,
+      ifsc_code: this.ifsc_code,
+      paypal_email: this.paypal_email
     });
   }
 }
