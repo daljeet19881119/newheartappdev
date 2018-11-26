@@ -61,7 +61,7 @@ export class ProfilePage {
     let id = this.navParams.get('id');
 
     // request data from server
-    this.http.get('http://ionic.dsl.house/heartAppApi/new-ngo-profile.php?id='+id).map(res => res.json()).subscribe(data => {
+    this.http.get(this.global.SITE_URL + '/new-ngo-profile.php?id='+id).map(res => res.json()).subscribe(data => {
       
       // store data in the ngoData
       this.ngoFounderImg = data.ngo_founder_img;

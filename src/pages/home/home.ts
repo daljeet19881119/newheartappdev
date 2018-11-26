@@ -31,7 +31,7 @@ export class HomePage {
   uuid: any;
   showDonationBtn: boolean = true;
   showPaymentBtn: boolean = true;
-  limit: number = 6;
+  limit: number = 5;
   paging: number = 1;
   paymentPaging: number = 1;
   recommendedBigHearts: any;
@@ -41,7 +41,7 @@ export class HomePage {
   charityAutoplay: number = 3000;
   charityLoop: boolean = true;
   loader: any;
-
+  user_id: any;
   constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private global: GlobalProvider, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, public loadingCtrl: LoadingController, private sharing: SocialSharing, private storage: Storage) {
 
     // call function to get device id
@@ -51,16 +51,16 @@ export class HomePage {
     this.homeService.getLatestDonations().subscribe(data => {
       
       // store requested data in the latestDonations
-      this.latestDonations = data.res;
+      // this.latestDonations = data.res;
 
-      let count = parseInt(data.count);
-      let paging = Math.ceil(count / this.limit);
+      // let count = parseInt(data.count);
+      // let paging = Math.ceil(count / this.limit);
 
-      // hide button if count is <= 5
-      if(paging <= 1)
-      {
-        this.showDonationBtn = false;
-      }
+      // // hide button if count is <= 5
+      // if(paging <= 1)
+      // {
+      //   this.showDonationBtn = false;
+      // }
 
       // console.log(data);
     }, err => {
@@ -118,14 +118,41 @@ export class HomePage {
 
         // get login user data
         this.userService.getUserByDeviceId(this.uuid).subscribe((data) => {
-          this.name = data.data.fname;        
+          this.name = data.data.fname;    
         });
       }
 
+      // get user data from storage
+      this.storage.get('user_data').then(data => {
+          this.user_id = data.id;
+
+          // get user bighearts
+          this.homeService.getUserBighearts(this.user_id).subscribe(res => {
+            
+            if(res.msg == 'success') 
+            {
+                // store requested data in the latestDonations
+                this.latestDonations = res.data;
+
+                let count = parseInt(res.count);
+                let paging = Math.ceil(count / this.limit);
+
+                // hide button if count is <= 5
+                if(paging <= 1)
+                {
+                  this.showDonationBtn = false;
+                }
+            }            
+          }, err => {
+            console.log(err);
+          });
+      });
+      
       // get user causes from storage
       this.storage.get('user_causes').then(data => {
         this.charities = data;
       });
+      
   }
 
   ionViewWillEnter() {  
@@ -163,29 +190,56 @@ export class HomePage {
     let offset = donationList.length;
 
     // request data from server
-    this.homeService.getLatestDonations(offset).subscribe(data => {
+    // this.homeService.getLatestDonations(offset).subscribe(data => {
 
+    //   this.loader.dismiss();
+
+    //   // loop of data
+    //   data.res.forEach(element => {
+        
+    //     // push data into latestDonations
+    //     this.latestDonations.push(element);
+    //   });
+
+    //   let count = parseInt(data.count);
+    //   let paging = Math.ceil(count / this.limit);
+
+    //   // hide button if count is <= 5
+    //   if(this.paging >= paging)
+    //   {
+    //     this.showDonationBtn = false;
+    //   }
+
+    //   console.log(data);
+    // }, err => {
+    //   console.log('Oops!');
+    // });
+
+    // get user bighearts
+    this.homeService.getUserBighearts(this.user_id, offset).subscribe(res => {
       this.loader.dismiss();
 
-      // loop of data
-      data.res.forEach(element => {
-        
-        // push data into latestDonations
-        this.latestDonations.push(element);
-      });
-
-      let count = parseInt(data.count);
-      let paging = Math.ceil(count / this.limit);
-
-      // hide button if count is <= 5
-      if(this.paging >= paging)
+      if(res.msg == 'success') 
       {
-        this.showDonationBtn = false;
-      }
+          // loop of data
+          res.data.forEach(element => {
+            
+            // push data into latestDonations
+            this.latestDonations.push(element);
+          });
 
-      console.log(data);
+          let count = parseInt(res.count);
+          let paging = Math.ceil(count / this.limit);
+
+          // hide button if count is <= 5
+          if(this.paging >= paging)
+          {
+            this.showDonationBtn = false;
+          }
+      }            
     }, err => {
-      console.log('Oops!');
+      this.loader.dismiss();
+      console.log(err);
     });
   }
 
@@ -236,7 +290,7 @@ export class HomePage {
       orientation: 'portrait'
     };
     
-    this.streamingMedia.playVideo('http://ionic.dsl.house/heartAppApi/videos/small.mp4', options);
+    this.streamingMedia.playVideo(this.global.SITE_URL + '/videos/small.mp4', options);
   }
 
   

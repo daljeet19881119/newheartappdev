@@ -117,7 +117,7 @@ export class VerifynumberPage {
     this.createLoader();
 
     // request data from server
-    this.http.get('http://ionic.dsl.house/heartAppApi/verify-users.php?country='+this.country+'&mobileno='+this.mobileno+'&uuid='+this.uuid).map(res => res.json()).subscribe(data => {
+    this.http.get(this.global.SITE_URL + '/verify-users.php?country='+this.country+'&mobileno='+this.mobileno+'&uuid='+this.uuid).map(res => res.json()).subscribe(data => {
       this.verficationCode = data.data.verification_code;
       console.log(data);
 

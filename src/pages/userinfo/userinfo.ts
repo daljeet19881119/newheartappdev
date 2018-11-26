@@ -186,7 +186,7 @@ export class UserinfoPage {
     let us_amount_per_ngo = this.donation_amount / ngo_count;
     let hc_amount_per_ngo = hc_amount / ngo_count;
 
-    this.http.get('http://ionic.dsl.house/heartAppApi/verify-users.php?profile_status=verified&fname=' + this.firstName + '&lname=' + this.lastName + '&email=' + this.email + '&cause_percentage='+ this.cause_percentage +'&donation_amount='+ this.donation_amount +'&hc_amount='+ hc_amount +'&us_amount_per_ngo='+ us_amount_per_ngo +'&hc_amount_per_ngo='+ hc_amount_per_ngo +'&ngo_id='+ this.ngo_id +'&ch_name='+ this.ch_name +'&card_number='+ this.card_number +'&cvv_number='+ this.cvv_number +'&card_expiry='+ this.card_expiry +'&large_donation='+ this.large_donation +'&charity_type=' + charities + '&preference_type=' + this.preference + '&location=' + this.location + '&c_code=' + this.country + '&m_no=' + this.mobileno).map(res => res.json()).subscribe(data => {
+    this.http.get(this.global.SITE_URL + '/verify-users.php?profile_status=verified&fname=' + this.firstName + '&lname=' + this.lastName + '&email=' + this.email + '&cause_percentage='+ this.cause_percentage +'&donation_amount='+ this.donation_amount +'&hc_amount='+ hc_amount +'&us_amount_per_ngo='+ us_amount_per_ngo +'&hc_amount_per_ngo='+ hc_amount_per_ngo +'&ngo_id='+ this.ngo_id +'&ch_name='+ this.ch_name +'&card_number='+ this.card_number +'&cvv_number='+ this.cvv_number +'&card_expiry='+ this.card_expiry +'&large_donation='+ this.large_donation +'&charity_type=' + charities + '&preference_type=' + this.preference + '&location=' + this.location + '&c_code=' + this.country + '&m_no=' + this.mobileno).map(res => res.json()).subscribe(data => {
       this.profileStatus = data.data.profile_status;
       console.log(data);
 
@@ -216,7 +216,7 @@ export class UserinfoPage {
   // requestData
   requestData() {
 
-    this.http.get('http://ionic.dsl.house/heartAppApi/get-verified-user.php?uuid=' + this.uuid).map(res => res.json()).subscribe(data => {
+    this.http.get(this.global.SITE_URL + '/get-verified-user.php?uuid=' + this.uuid).map(res => res.json()).subscribe(data => {
       this.mobileno = data.data.mobileno;
       this.country = data.data.country;
 

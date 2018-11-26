@@ -107,7 +107,7 @@ export class VerifycodePage {
   // verifyUser
   verifyUser(verifyCode: any) {
       // server request
-      this.http.get('http://ionic.dsl.house/heartAppApi/verify-users.php?verify=verified&phoneno='+this.mobileno+'&country_code='+this.country+'&verify_code='+verifyCode).map(res => res.json()).subscribe(data => {
+      this.http.get(this.global.SITE_URL + '/verify-users.php?verify=verified&phoneno='+this.mobileno+'&country_code='+this.country+'&verify_code='+verifyCode).map(res => res.json()).subscribe(data => {
         console.log(data);
       }, err => {
         console.log('Oops!'+err);
@@ -120,7 +120,7 @@ export class VerifycodePage {
     this.resendAlert();
 
      // request data from server
-     this.http.get('http://ionic.dsl.house/heartAppApi/verify-users.php?country='+this.country+'&mobileno='+this.mobileno+'&uuid='+this.uuid).map(res => res.json()).subscribe(data => {
+     this.http.get(this.global.SITE_URL + '/verify-users.php?country='+this.country+'&mobileno='+this.mobileno+'&uuid='+this.uuid).map(res => res.json()).subscribe(data => {
        
         this.verifyCode = data.data.verification_code;
     }, err => {

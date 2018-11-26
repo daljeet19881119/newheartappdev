@@ -248,7 +248,7 @@ export class BhHomePage {
       orientation: 'portrait'
     };
 
-    this.streamingMedia.playVideo('http://ionic.dsl.house/heartAppApi/videos/small.mp4', options);
+    this.streamingMedia.playVideo(this.global.SITE_URL + '/videos/small.mp4', options);
   }
 
   // recordThankyouMessage
@@ -283,7 +283,7 @@ export class BhHomePage {
       headers: {}
     }
 
-    fileTransfer.upload(this.videoId, 'http://ionic.dsl.house/heartAppApi/video-upload.php', options)
+    fileTransfer.upload(this.videoId, this.global.SITE_URL + '/video-upload.php', options)
       .then((data) => {
         // success
         this.loader.dismiss();

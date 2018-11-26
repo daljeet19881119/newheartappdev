@@ -353,9 +353,9 @@ export class CauseFormPage {
       this.profilePicName = timeStr + '_cause.jpg';
 
       // send file to server
-      fileTransfer.upload(base64Image, 'http://ionic.dsl.house/heartAppApi/cause-form-image-upload.php', uploadOptions).then((data) => {
+      fileTransfer.upload(base64Image, this.global.SITE_URL + '/cause-form-image-upload.php', uploadOptions).then((data) => {
         // alert('data'+data.response);
-        this.profilePic = 'http://ionic.dsl.house/heartAppApi/imgs/cause-form/' + timeStr + '_cause.jpg';
+        this.profilePic = this.global.SITE_URL + '/imgs/cause-form/' + timeStr + '_cause.jpg';
         this.loader.dismiss();
       }).catch((err) => {
         alert('Server is unable to upload your image please try again later.');
@@ -401,9 +401,9 @@ export class CauseFormPage {
       this.profilePicName = timeStr + '_cause.jpg';
 
       // send file to server
-      fileTransfer.upload(base64Image, 'http://ionic.dsl.house/heartAppApi/cause-form-image-upload.php', uploadOptions).then((data) => {
+      fileTransfer.upload(base64Image, this.global.SITE_URL + '/cause-form-image-upload.php', uploadOptions).then((data) => {
         // alert('data'+data.response);
-        this.profilePic = 'http://ionic.dsl.house/heartAppApi/imgs/cause-form/' + timeStr + '_cause.jpg';
+        this.profilePic = this.global.SITE_URL + '/imgs/cause-form/' + timeStr + '_cause.jpg';
         this.loader.dismiss();
       }).catch((err) => {
         alert('Server is unable to upload your image please try again later.');
@@ -445,9 +445,9 @@ export class CauseFormPage {
           }
 
           // send file to server
-          fileTransfer.upload(src, 'http://ionic.dsl.house/heartAppApi/cause-form-image-upload.php', uploadOptions).then((data) => {
+          fileTransfer.upload(src, this.global.SITE_URL + '/cause-form-image-upload.php', uploadOptions).then((data) => {
             // alert('data'+data.response);
-            this.multiplePics.push('http://ionic.dsl.house/heartAppApi/imgs/cause-form/' + timeStr + '_cause.jpg');
+            this.multiplePics.push(this.global.SITE_URL + '/imgs/cause-form/' + timeStr + '_cause.jpg');
           }).catch((err) => {
             // alert('Server is unable to upload your image please try again later.');
             this.loader.dismiss();
@@ -475,7 +475,7 @@ export class CauseFormPage {
       headers: {}
     }
 
-    fileTransfer.upload(this.profilePic, 'http://ionic.dsl.house/heartAppApi/image-upload.php', options)
+    fileTransfer.upload(this.profilePic, this.global.SITE_URL + '/image-upload.php', options)
       .then((data) => {
         // success
         this.loader.dismiss();

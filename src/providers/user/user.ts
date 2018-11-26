@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Storage } from '@ionic/storage';
+import { GlobalProvider } from '../global/global';
 
 /*
   Generated class for the UserProvider provider.
@@ -13,23 +14,23 @@ import { Storage } from '@ionic/storage';
 @Injectable()
 export class UserProvider {
 
-  constructor(public httpClient: HttpClient, private _http: Http, private storage: Storage) {
+  constructor(public httpClient: HttpClient, private _http: Http, private storage: Storage, private global: GlobalProvider) {
   }
 
   
   // getAllCountries
   getAllCountries() {
-    return this._http.get('http://ionic.dsl.house/heartAppApi/all-countries.php').map(res => res.json());
+    return this._http.get(this.global.SITE_URL + '/all-countries.php').map(res => res.json());
   }
 
   // getAllRegions
   getAllRegions() {
-    return this._http.get('http://ionic.dsl.house/heartAppApi/all-regions.php').map(res => res.json());
+    return this._http.get(this.global.SITE_URL + '/all-regions.php').map(res => res.json());
   }
 
   // getAllCharities
   getAllCharities() {
-    return this._http.get('http://ionic.dsl.house/heartAppApi/all-charities.php').map(res => res.json());
+    return this._http.get(this.global.SITE_URL + '/all-charities.php').map(res => res.json());
   }
 
   getNgoByCharityIds(charity_ids: any) {
@@ -44,23 +45,23 @@ export class UserProvider {
     let data = JSON.stringify({
         charities: charity_ids
     });
-    return this._http.post('http://ionic.dsl.house/heartAppApi/get-ngo.php', data, options).map(res => res.json());
+    return this._http.post(this.global.SITE_URL + '/get-ngo.php', data, options).map(res => res.json());
   }
 
   // getRegionNameById
   getRegionNameById(regionId: any) {
 
-    return this._http.get('http://ionic.dsl.house/heartAppApi/get-region.php?id='+regionId).map(res => res.json());
+    return this._http.get(this.global.SITE_URL + '/get-region.php?id='+regionId).map(res => res.json());
   }
 
   // getCountryCodeByCode
   getCountryCodeByCode(code: string) {
-    return this._http.get('http://ionic.dsl.house/heartAppApi/all-countries.php?code='+code).map(res => res.json());
+    return this._http.get(this.global.SITE_URL + '/all-countries.php?code='+code).map(res => res.json());
   }
 
   // getUserByDeviceId
   getUserByDeviceId(uuid: any) {
-    return this._http.get('http://ionic.dsl.house/heartAppApi/get-verified-user.php?uuid='+uuid).map(res => res.json());
+    return this._http.get(this.global.SITE_URL + '/get-verified-user.php?uuid='+uuid).map(res => res.json());
   }
 
   // addToMyBigHearts
@@ -79,13 +80,13 @@ export class UserProvider {
         ngo_id: ngo_id
     });
 
-    return this._http.post('http://ionic.dsl.house/heartAppApi/users-bighearts.php', data, options).map(res => res.json());
+    return this._http.post(this.global.SITE_URL + '/users-bighearts.php', data, options).map(res => res.json());
     // return this._http.get('http://ionic.dsl.house/heartAppApi/users-bighearts.php?uuid='+uuid+'&ngo_id='+ngo_id).map(res => res.json());
   }
 
   // checkInMyBigHearts
   checkInMyBigHearts(uuid: any, ngo_id: any) {
-    return this._http.get('http://ionic.dsl.house/heartAppApi/get-users-bighearts.php?uuid='+uuid+'&ngo_id='+ngo_id).map(res => res.json());
+    return this._http.get(this.global.SITE_URL + '/get-users-bighearts.php?uuid='+uuid+'&ngo_id='+ngo_id).map(res => res.json());
   }
 
   // removeFromMyBigHearts
@@ -104,7 +105,7 @@ export class UserProvider {
         ngo_id: ngo_id
     });
 
-    return this._http.post("http://ionic.dsl.house/heartAppApi/delete-users-bighearts.php", data, options).map(res => res.json());
+    return this._http.post(this.global.SITE_URL + "/delete-users-bighearts.php", data, options).map(res => res.json());
   }
 
   // saveCauseFormData
@@ -142,7 +143,7 @@ export class UserProvider {
         contact5: contact5
     });
 
-    return this._http.post("http://ionic.dsl.house/heartAppApi/cause-form.php", data, options).map(res => res.json());
+    return this._http.post(this.global.SITE_URL + "/cause-form.php", data, options).map(res => res.json());
   }
 
   // saveMerchantFormData
@@ -164,7 +165,7 @@ export class UserProvider {
           about_team: aboutTeam
       });
 
-      return this._http.post("http://ionic.dsl.house/heartAppApi/merchant-form.php", data, options).map(res => res.json());
+      return this._http.post(this.global.SITE_URL + "/merchant-form.php", data, options).map(res => res.json());
   }
 
   // saveVolunteerFormData
@@ -195,7 +196,7 @@ export class UserProvider {
         contact5: contact5
       });
 
-      return this._http.post("http://ionic.dsl.house/heartAppApi/volunteer-form.php", data, options).map(res => res.json());
+      return this._http.post(this.global.SITE_URL + "/volunteer-form.php", data, options).map(res => res.json());
   }
 
   // clean storage

@@ -233,7 +233,7 @@ export class OldHomePage {
       orientation: 'portrait'
     };
 
-    this.streamingMedia.playVideo('http://ionic.dsl.house/heartAppApi/videos/small.mp4', options);
+    this.streamingMedia.playVideo(this.global.SITE_URL + '/videos/small.mp4', options);
   }
 
 

@@ -43,14 +43,14 @@ export class WelcomePage {
         this.requestData(this.uuid);
       }
       else{
-        // this.requestData('undefined');
-        this.gotoVerifyPage();
+        this.requestData('undefined');
+        // this.gotoVerifyPage();
       }
   }
 
   // requestData
   requestData(uuid: any) {
-    this.http.get('http://ionic.dsl.house/heartAppApi/get-verified-user.php?uuid='+uuid).map(res => res.json()).subscribe(data => {
+    this.http.get(this.global.SITE_URL + '/get-verified-user.php?uuid='+uuid).map(res => res.json()).subscribe(data => {
       
       if(data.msg == 'success') 
       {
@@ -73,6 +73,9 @@ export class WelcomePage {
 
           // save all user charity or causes in storage
           this.storage.set('user_causes', charities);
+
+          // save user data in storage
+          this.storage.set('user_data', data.data);
 
           // check if user is bigheart or not
           if(data.data.is_bh_user == 'yes') {
