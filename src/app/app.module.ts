@@ -39,6 +39,7 @@ import { MediaCapture } from '@ionic-native/media-capture';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { Device } from '@ionic-native/device'
 import { GlobalProvider } from '../providers/global/global';
+import { BhHomePageProvider } from '../providers/bh-home-page/bh-home-page';
 
 @NgModule({
   declarations: [
@@ -106,7 +107,8 @@ import { GlobalProvider } from '../providers/global/global';
     MediaCapture,
     AndroidPermissions,
     Device,
-    GlobalProvider    
+    GlobalProvider,
+    BhHomePageProvider    
   ]
 })
 export class AppModule {}

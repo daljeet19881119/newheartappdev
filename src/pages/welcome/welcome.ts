@@ -43,8 +43,8 @@ export class WelcomePage {
         this.requestData(this.uuid);
       }
       else{
-        this.requestData('undefined');
-        // this.gotoVerifyPage();
+        // this.requestData('undefined');
+        this.gotoVerifyPage();
       }
   }
 

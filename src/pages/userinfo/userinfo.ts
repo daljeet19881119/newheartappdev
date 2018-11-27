@@ -204,6 +204,9 @@ export class UserinfoPage {
         // save all user charity or causes in storage
         this.storage.set('user_causes', charities);
 
+        // save user data in storage
+        this.storage.set('user_data', data.data);
+
         // gotodashboard
         this.navCtrl.setRoot(HomePage);
       }

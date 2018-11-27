@@ -48,26 +48,6 @@ export class HomePage {
     this.getDeviceID();
 
     // request data from server
-    this.homeService.getLatestDonations().subscribe(data => {
-      
-      // store requested data in the latestDonations
-      // this.latestDonations = data.res;
-
-      // let count = parseInt(data.count);
-      // let paging = Math.ceil(count / this.limit);
-
-      // // hide button if count is <= 5
-      // if(paging <= 1)
-      // {
-      //   this.showDonationBtn = false;
-      // }
-
-      // console.log(data);
-    }, err => {
-      console.log('Oops!');
-    });
-
-    // request data from server
     this.homeService.getLatestPayments().subscribe(data => {
       
         // store requested data in the latestPayments
@@ -188,32 +168,6 @@ export class HomePage {
     // let donationList = document.getElementById('donation-list');
     let donationList = document.getElementsByClassName('donations-lists');
     let offset = donationList.length;
-
-    // request data from server
-    // this.homeService.getLatestDonations(offset).subscribe(data => {
-
-    //   this.loader.dismiss();
-
-    //   // loop of data
-    //   data.res.forEach(element => {
-        
-    //     // push data into latestDonations
-    //     this.latestDonations.push(element);
-    //   });
-
-    //   let count = parseInt(data.count);
-    //   let paging = Math.ceil(count / this.limit);
-
-    //   // hide button if count is <= 5
-    //   if(this.paging >= paging)
-    //   {
-    //     this.showDonationBtn = false;
-    //   }
-
-    //   console.log(data);
-    // }, err => {
-    //   console.log('Oops!');
-    // });
 
     // get user bighearts
     this.homeService.getUserBighearts(this.user_id, offset).subscribe(res => {

@@ -172,38 +172,38 @@ export class CauseFormPage {
   getDeviceID() {
     if (this.global.uuid()) {
       this.uuid = this.global.uuid();
-
-      // request to userProvide
-      this.userService.getUserByDeviceId(this.uuid).subscribe(data => {
-        this.userid = data.data.id;
-        this.prefType = data.data.preference_type;
-
-        // put value if it is country
-        if (this.prefType == 'country') {
-          this.country = data.data.preference_location;
-        }
-
-        // put value if it is region
-        if (this.prefType == 'region') {
-          this.regionId = data.data.preference_location;
-          this.createLoader();
-
-          // get region name
-          this.userService.getRegionNameById(this.regionId).subscribe(data => {
-            this.region = data;
-            this.loader.dismiss();
-          }, err => {
-            console.log('err');
-            this.loader.dismiss();
-          });
-        }
-      }, err => {
-        console.log(err);
-      });
     }
     else {
       this.uuid = 'undefined';
     }
+
+    // request to userProvide
+    this.userService.getUserByDeviceId(this.uuid).subscribe(data => {
+      this.userid = data.data.id;
+      this.prefType = data.data.preference_type;
+
+      // put value if it is country
+      if (this.prefType == 'country') {
+        this.country = data.data.preference_location;
+      }
+
+      // put value if it is region
+      if (this.prefType == 'region') {
+        this.regionId = data.data.preference_location;
+        this.createLoader();
+
+        // get region name
+        this.userService.getRegionNameById(this.regionId).subscribe(data => {
+          this.region = data;
+          this.loader.dismiss();
+        }, err => {
+          console.log('err');
+          this.loader.dismiss();
+        });
+      }
+    }, err => {
+      console.log(err);
+    });
   }
 
   // saveData

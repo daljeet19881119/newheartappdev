@@ -10,6 +10,7 @@ import { MediaCapture, CaptureVideoOptions, MediaFile, CaptureError } from '@ion
 import { FileTransfer, FileTransferObject, FileUploadOptions } from '@ionic-native/file-transfer';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { GlobalProvider } from '../../providers/global/global';
+import { BhHomePageProvider } from '../../providers/bh-home-page/bh-home-page';
 
 @IonicPage()
 @Component({
@@ -44,29 +45,11 @@ export class BhHomePage {
   charityLoop: boolean = true;
   loader: any;
   videoId: any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private global: GlobalProvider, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, public loadingCtrl: LoadingController, private sharing: SocialSharing, private storage: Storage, private mediaCapture: MediaCapture, private transfer: FileTransfer, private androidPermissions: AndroidPermissions) {
+  user_id: any;
+  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private global: GlobalProvider, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, private bhHomeService: BhHomePageProvider, public loadingCtrl: LoadingController, private sharing: SocialSharing, private storage: Storage, private mediaCapture: MediaCapture, private transfer: FileTransfer, private androidPermissions: AndroidPermissions) {
 
     // call function to get device id
     this.getDeviceID();
-
-    // request data from server
-    this.homeService.getLatestDonations().subscribe(data => {
-
-      // store requested data in the latestDonations
-      this.latestDonations = data.res;
-
-      let count = parseInt(data.count);
-      let paging = Math.ceil(count / this.limit);
-
-      // hide button if count is <= 5
-      if (paging <= 1) {
-        this.showDonationBtn = false;
-      }
-
-      // console.log(data);
-    }, err => {
-      console.log('Oops!');
-    });
 
     // request data from server
     this.homeService.getLatestPayments().subscribe(data => {
@@ -127,15 +110,38 @@ export class BhHomePage {
 
   ionViewDidLoad() {
     // call func getDeviceID
-    if(this.global.uuid()) {
-        this.uuid = this.global.uuid();
+    if (this.global.uuid()) {
+      this.uuid = this.global.uuid();
 
-        // get login user data
-        this.userService.getUserByDeviceId(this.uuid).subscribe((data) => {
-          this.name = data.data.fname;
-        });
-    }  
+      // get login user data
+      this.userService.getUserByDeviceId(this.uuid).subscribe((data) => {
+        this.name = data.data.fname;
+      });
+    }
 
+    // get user data from storage
+    this.storage.get('user_data').then(data => {
+      this.user_id = data.id;
+
+      // get user bighearts
+      this.bhHomeService.getBigheartUsers(this.user_id).subscribe(res => {
+
+        if (res.msg == 'success') {
+          // store requested data in the latestDonations
+          this.latestDonations = res.data;
+
+          let count = parseInt(res.count);
+          let paging = Math.ceil(count / this.limit);
+
+          // hide button if count is <= 5
+          if (paging <= 1) {
+            this.showDonationBtn = false;
+          }
+        }
+      }, err => {
+        console.log(err);
+      });
+    });
     // get user causes from storage
     this.storage.get('user_causes').then(data => {
       this.charities = data;
@@ -176,29 +182,31 @@ export class BhHomePage {
     let donationList = document.getElementsByClassName('donations-lists');
     let offset = donationList.length;
 
-    // request data from server
-    this.homeService.getLatestDonations(offset).subscribe(data => {
-
+    // get user bighearts
+    this.bhHomeService.getBigheartUsers(this.user_id, offset).subscribe(res => {
       this.loader.dismiss();
 
-      // loop of data
-      data.res.forEach(element => {
+      if(res.msg == 'success') 
+      {
+          // loop of data
+          res.data.forEach(element => {
+            
+            // push data into latestDonations
+            this.latestDonations.push(element);
+          });
 
-        // push data into latestDonations
-        this.latestDonations.push(element);
-      });
+          let count = parseInt(res.count);
+          let paging = Math.ceil(count / this.limit);
 
-      let count = parseInt(data.count);
-      let paging = Math.ceil(count / this.limit);
-
-      // hide button if count is <= 5
-      if (this.paging >= paging) {
-        this.showDonationBtn = false;
-      }
-
-      console.log(data);
+          // hide button if count is <= 5
+          if(this.paging >= paging)
+          {
+            this.showDonationBtn = false;
+          }
+      }            
     }, err => {
-      console.log('Oops!');
+      this.loader.dismiss();
+      console.log(err);
     });
   }
 
@@ -253,20 +261,20 @@ export class BhHomePage {
 
   // recordThankyouMessage
   recordThankyouMessage() {
-      let options: CaptureVideoOptions = {
-        limit: 1,
-        duration: 10,
-        quality: 0
-      };
+    let options: CaptureVideoOptions = {
+      limit: 1,
+      duration: 10,
+      quality: 0
+    };
 
-      this.mediaCapture.captureVideo(options).then((data: MediaFile[]) => {
-          this.videoId = data[0].fullPath;
-          console.log(data)
-        },
-        (err: CaptureError) => {
-          console.log(err)
-        }
-      );
+    this.mediaCapture.captureVideo(options).then((data: MediaFile[]) => {
+      this.videoId = data[0].fullPath;
+      console.log(data)
+    },
+      (err: CaptureError) => {
+        console.log(err)
+      }
+    );
   }
 
   // uploadThankyouMessage
@@ -294,11 +302,11 @@ export class BhHomePage {
   }
 
   // getDeviceID
-  getDeviceID() {    
-    if(this.global.uuid()) {
+  getDeviceID() {
+    if (this.global.uuid()) {
       this.uuid = this.global.uuid();
     }
-    else{
+    else {
       this.uuid = 'undefined';
     }
   }
@@ -358,7 +366,7 @@ export class BhHomePage {
   createLoader(msg: string = 'Please wait') {
     this.loader = this.loadingCtrl.create({
       spinner: 'dots',
-      content: msg+'...'
+      content: msg + '...'
     });
 
     this.loader.present();
