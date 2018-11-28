@@ -12,6 +12,7 @@ import { CommunityPage } from '../community/community';
 import { TeamPage } from '../team/team';
 import { ContributorsPage } from '../contributors/contributors';
 import { GlobalProvider } from '../../providers/global/global';
+import { UserBigheartsPage } from '../user-bighearts/user-bighearts';
 
 @IonicPage()
 @Component({
@@ -413,5 +414,10 @@ export class ProfilePage {
     });
 
     this.loader.present();
+  }
+
+  // gotoUserBigheartsPage
+  gotoUserBigheartsPage() {
+    this.navCtrl.push(UserBigheartsPage);
   }
 }

@@ -269,7 +269,9 @@ export class BhHomePage {
 
     this.mediaCapture.captureVideo(options).then((data: MediaFile[]) => {
       this.videoId = data[0].fullPath;
-      console.log(data)
+      
+      // upload video to server
+      this.uploadThankyouMessage();
     },
       (err: CaptureError) => {
         console.log(err)

@@ -205,4 +205,22 @@ export class UserProvider {
       console.log('all keys cleared');
     });
   }
+
+  // saveUserBighearts
+  saveUserBighearts(ngo_ids: any, uuid: any) {
+    // set headers
+    let headers = new Headers();
+    headers.append("Accept", "application/json");
+
+    // set request option
+    let options = new RequestOptions({headers: headers});
+
+    // set data to be send
+    let data = JSON.stringify({
+        ngo_ids: ngo_ids,
+        uuid: uuid
+    });
+
+    return this._http.post(this.global.SITE_URL + "/save-user-bighearts.php", data, options).map(res => res.json());
+  }
 }

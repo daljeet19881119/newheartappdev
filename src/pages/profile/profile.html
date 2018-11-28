@@ -28,6 +28,7 @@
             <ion-icon name="checkmark" class="add-checkmark"></ion-icon>&nbsp;
             {{ addBigHeartText }}
         </button>
+        <button ion-button small color="appColor" class="add-to-bighearts" (click)="gotoUserBigheartsPage()">My Bighearts</button>
         <p class="ngo-desc" id="ngo-desc" (click)="showWords()">{{ getWords()+'.....' }}</p>
         <span class="read-more" (click)="showAllWords()" *ngIf="showMore">
             <ion-icon name="arrow-dropdown"></ion-icon>

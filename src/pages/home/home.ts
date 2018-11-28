@@ -42,11 +42,13 @@ export class HomePage {
   charityLoop: boolean = true;
   loader: any;
   user_id: any;
+  hc_balance: any;
+  us_balance: any;
   constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private global: GlobalProvider, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, public loadingCtrl: LoadingController, private sharing: SocialSharing, private storage: Storage) {
 
     // call function to get device id
     this.getDeviceID();
-
+ 
     // request data from server
     this.homeService.getLatestPayments().subscribe(data => {
       
@@ -95,12 +97,17 @@ export class HomePage {
       // call func getDeviceID   
       if(this.global.uuid()) {
         this.uuid = this.global.uuid();
-
-        // get login user data
-        this.userService.getUserByDeviceId(this.uuid).subscribe((data) => {
-          this.name = data.data.fname;    
-        });
       }
+      else{
+        this.uuid = 'undefined';
+      }
+
+      // get login user data
+      this.userService.getUserByDeviceId(this.uuid).subscribe((data) => {
+        this.name = data.data.fname; 
+        this.us_balance = this.toLocaleString(parseFloat(data.data.us_balance));
+        this.hc_balance = this.toLocaleString(parseFloat(data.data.hc_balance));
+      });
 
       // get user data from storage
       this.storage.get('user_data').then(data => {
@@ -343,5 +350,10 @@ export class HomePage {
     }).catch((err) => {
       console.log(err);
     });
+  }
+
+  // toLocaleString
+  toLocaleString(number: any) {
+    return number.toLocaleString();
   }
 }

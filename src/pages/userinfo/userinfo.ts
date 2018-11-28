@@ -9,12 +9,6 @@ import { UserProvider } from '../../providers/user/user';
 import { Storage } from '@ionic/storage';
 import { GlobalProvider } from '../../providers/global/global';
 
-/**
- * Generated class for the UserinfoPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -183,10 +177,14 @@ export class UserinfoPage {
     // calculate hc amount
     let hc_amount = this.donation_amount * 100;
     let ngo_count = parseInt(this.ngo_id_arr.length);
-    let us_amount_per_ngo = this.donation_amount / ngo_count;
-    let hc_amount_per_ngo = hc_amount / ngo_count;
+    let cause_percentage = parseInt(this.cause_percentage);
+    let calculated_amount = hc_amount / 100 * cause_percentage;  
+    let hc_balance = hc_amount - calculated_amount; 
+    let us_balance = calculated_amount / 100; 
+    let us_amount_per_ngo = us_balance / ngo_count;
+    let hc_amount_per_ngo = calculated_amount / ngo_count;
 
-    this.http.get(this.global.SITE_URL + '/verify-users.php?profile_status=verified&fname=' + this.firstName + '&lname=' + this.lastName + '&email=' + this.email + '&cause_percentage='+ this.cause_percentage +'&donation_amount='+ this.donation_amount +'&hc_amount='+ hc_amount +'&us_amount_per_ngo='+ us_amount_per_ngo +'&hc_amount_per_ngo='+ hc_amount_per_ngo +'&ngo_id='+ this.ngo_id +'&ch_name='+ this.ch_name +'&card_number='+ this.card_number +'&cvv_number='+ this.cvv_number +'&card_expiry='+ this.card_expiry +'&large_donation='+ this.large_donation +'&charity_type=' + charities + '&preference_type=' + this.preference + '&location=' + this.location + '&c_code=' + this.country + '&m_no=' + this.mobileno).map(res => res.json()).subscribe(data => {
+    this.http.get(this.global.SITE_URL + '/verify-users.php?profile_status=verified&fname=' + this.firstName + '&lname=' + this.lastName + '&email=' + this.email + '&cause_percentage='+ this.cause_percentage +'&donation_amount='+ this.donation_amount +'&hc_amount='+ hc_amount +'&hc_balance='+hc_balance+'&us_balance='+us_balance+'&us_amount_per_ngo='+ us_amount_per_ngo +'&hc_amount_per_ngo='+ hc_amount_per_ngo +'&ngo_id='+ this.ngo_id +'&ch_name='+ this.ch_name +'&card_number='+ this.card_number +'&cvv_number='+ this.cvv_number +'&card_expiry='+ this.card_expiry +'&large_donation='+ this.large_donation +'&charity_type=' + charities + '&preference_type=' + this.preference + '&location=' + this.location + '&c_code=' + this.country + '&m_no=' + this.mobileno).map(res => res.json()).subscribe(data => {
       this.profileStatus = data.data.profile_status;
       console.log(data);
 

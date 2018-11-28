@@ -1,0 +1,27 @@
+
+<ion-header>
+  <ion-navbar color="appColor" class="profile-nav">
+      <ion-row>
+          <ion-col col-3 offset-4  class="heart-col" no-padding>
+              <!-- <ion-icon name="heart-outline" class="heart-icon"></ion-icon> -->
+              <div class="logo-div" style="background: url('assets/imgs/logo.png');"></div>
+          </ion-col>
+      </ion-row>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content no-padding style="background-color:#ae0433;">
+  <div class="charity-div">
+      <p>My all BigHearts</p>
+  </div>
+  <ion-list>
+      <ion-item class="charities-list" *ngFor="let ngo of all_ngo">
+          <ion-label>{{ ngo.ngo_user+' ('+ngo.ngo_name+')' }}</ion-label>
+          <ion-toggle color="secondary" [(ngModel)]="ngo.checked" [checked]="ngo.checked" (ionChange)="getCurrentSelectedNgoId(ngo.id, ngo.checked)"></ion-toggle>
+      </ion-item>
+  </ion-list>
+  <div class="save-btn">
+      <button ion-button color="light" block (click)="saveUserBigheart()">Save</button>
+  </div>
+</ion-content>

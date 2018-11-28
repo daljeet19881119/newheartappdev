@@ -40,6 +40,7 @@ import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { Device } from '@ionic-native/device'
 import { GlobalProvider } from '../providers/global/global';
 import { BhHomePageProvider } from '../providers/bh-home-page/bh-home-page';
+import { UserBigheartsPage } from '../pages/user-bighearts/user-bighearts';
 
 @NgModule({
   declarations: [
@@ -60,7 +61,8 @@ import { BhHomePageProvider } from '../providers/bh-home-page/bh-home-page';
     MerchantFormPage,
     VolunteerFormPage,
     UserProfilePage,
-    BhHomePage
+    BhHomePage,
+    UserBigheartsPage
   ],
   imports: [
     BrowserModule,
@@ -88,7 +90,8 @@ import { BhHomePageProvider } from '../providers/bh-home-page/bh-home-page';
     MerchantFormPage,
     VolunteerFormPage,
     UserProfilePage,
-    BhHomePage
+    BhHomePage,
+    UserBigheartsPage
   ],
   providers: [
     StatusBar,
@@ -108,7 +111,7 @@ import { BhHomePageProvider } from '../providers/bh-home-page/bh-home-page';
     AndroidPermissions,
     Device,
     GlobalProvider,
-    BhHomePageProvider    
+    BhHomePageProvider 
   ]
 })
 export class AppModule {}
