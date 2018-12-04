@@ -1,13 +1,12 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, Platform, LoadingController } from 'ionic-angular';
-import { Http } from '@angular/http';
-import 'rxjs/add/operator/map';
 import { UserinfoPage } from '../userinfo/userinfo';
 import { HomePage } from '../home/home';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { GlobalProvider } from '../../providers/global/global';
+import { UserProvider } from '../../providers/user/user';
 
- 
+
 @IonicPage()
 @Component({
   selector: 'page-verifycode',
@@ -24,7 +23,7 @@ export class VerifycodePage {
   btnDisable: boolean = true;
   loader: any;
 
-  constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, private http: Http, private alertCtrl: AlertController, public platform: Platform, private global: GlobalProvider, public loadingCtrl: LoadingController) {
+  constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, private alertCtrl: AlertController, public platform: Platform, private global: GlobalProvider, public loadingCtrl: LoadingController, private userService: UserProvider) {
 
     // if user try goback then exit app
     this.platform.registerBackButtonAction(() => {
@@ -39,18 +38,24 @@ export class VerifycodePage {
     this.mobileno = this.navParams.get('phone');
     this.country = this.navParams.get('country');
     this.verifyCode = this.navParams.get('code');
+
+    if (this.global.uuid()) {
+      this.uuid = this.global.uuid();
+    }
+    else{
+      this.uuid = 'undefined';
+    }
   }
 
   // checkCode
   checkCode(code: number) {
     // console.log('verify code is: '+code);
-    
+
     // check if code matched to verification code then enable next button
-    if(code.toString().length >= 4)
-    {
+    if (code.toString().length >= 4) {
       this.btnDisable = false;
     }
-    else{
+    else {
       this.btnDisable = true;
     }
   }
@@ -58,60 +63,61 @@ export class VerifycodePage {
   // checkVerifyCode
   checkVerifyCode(code: number) {
 
-      // call createLoader
-      this.createLoader();
+    // call createLoader
+    this.createLoader();
 
-      // check if code matched to verifyCode
-      if(code == this.verifyCode || code == 1357 || code == 1234)
-      {
-        if(code == 1357 || code == 1234)
-        {
-          code = this.verifyCode;
-        }
-        // verify user
-        this.verifyUser(code);
-
-        let page: any;
-        // check if userExists
-        if(this.navParams.get('userExists') == 'true')
-        {
-          page = HomePage;
-          // this.reload();
-        }else{
-          page = UserinfoPage;
-        }
-
-        // gotoUserinfoPage
-        this.navCtrl.setRoot(page, {
-          mobileno: this.mobileno,
-          country: this.country 
-        });
-
-        this.loader.dismiss();
+    // check if code matched to verifyCode
+    if (code == this.verifyCode || code == 1357 || code == 1234) {
+      if (code == 1357 || code == 1234) {
+        code = this.verifyCode;
       }
-      else
-      {
-        // show alert
-        const alert = this.alertCtrl.create({
-          title: 'Heart App',
-          message: 'Your verification code does not match.',
-          buttons: ['ok']
-        });
-        alert.present();
+      // verify user
+      this.verifyUser(code);
 
-        this.loader.dismiss();
-        console.log('Oops code not matched!');
+      let page: any;
+      // check if userExists
+      if (this.navParams.get('userExists') == 'true') {
+        page = HomePage;
+        // this.reload();
+      } else {
+        page = UserinfoPage;
       }
+
+      // gotoUserinfoPage
+      this.navCtrl.setRoot(page, {
+        mobileno: this.mobileno,
+        country: this.country
+      });
+
+      this.loader.dismiss();
+    }
+    else {
+      // show alert
+      const alert = this.alertCtrl.create({
+        title: 'Heart App',
+        message: 'Your verification code does not match.',
+        buttons: ['ok']
+      });
+      alert.present();
+
+      this.loader.dismiss();
+      console.log('Oops code not matched!');
+    }
   }
 
   // verifyUser
   verifyUser(verifyCode: any) {
-      // server request
-      this.http.get(this.global.SITE_URL + '/verify-users.php?verify=verified&phoneno='+this.mobileno+'&country_code='+this.country+'&verify_code='+verifyCode).map(res => res.json()).subscribe(data => {
-        console.log(data);
-      }, err => {
-        console.log('Oops!'+err);
-      });
+    const data = {
+        verification: 'verified',
+        mobileno: this.mobileno,
+        country: this.country,
+        verification_code: verifyCode,
+    };
+    this.userService.verifyVerificationCode(data).subscribe(data => {
+      console.log(data);
+    }, err => {
+      console.log(err);
+    });
   }
 
   // resendVerifcationCode
@@ -119,20 +125,17 @@ export class VerifycodePage {
     // call resendAlert
     this.resendAlert();
 
-     // request data from server
-     this.http.get(this.global.SITE_URL + '/verify-users.php?country='+this.country+'&mobileno='+this.mobileno+'&uuid='+this.uuid).map(res => res.json()).subscribe(data => {
-       
-        this.verifyCode = data.data.verification_code;
+    const data = {
+      mobileno: this.mobileno,
+      country: this.country,
+      uuid: this.uuid
+    };
+
+    this.userService.verifyNumber(data).subscribe(data => {
+      this.verifyCode = data.data.verification_code;
     }, err => {
       console.log(err);
     });
-  }
-
-  // getuniqueDeviceID
-  getuniqueDeviceID() {
-    if(this.global.uuid()) {
-      this.uuid = this.global.uuid();
-    }
   }
 
   // createLoader
@@ -146,14 +149,14 @@ export class VerifycodePage {
   }
 
   // reload
-  reload(){
+  reload() {
     this.splashScreen.show();
     window.location.reload();
   }
   // resendAlert
   resendAlert() {
     const alert = this.alertCtrl.create({
-      message: `We've sent an SMS with an activation code to your phone <b>+${this.country+' '+this.mobileno}</b>`,
+      message: `We've sent an SMS with an activation code to your phone <b>+${this.country + ' ' + this.mobileno}</b>`,
       buttons: ['ok']
     });
     alert.present();

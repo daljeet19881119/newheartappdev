@@ -1,4 +1,12 @@
 page-userinfo {
+    .list-height{
+        overflow:scroll;
+        height: 120px;
+    }
+    .list-auto-height{
+        overflow:scroll;
+        height: auto;
+    }
     .next-arrow{
         float: right;
     }

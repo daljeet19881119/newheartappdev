@@ -41,6 +41,7 @@ import { Device } from '@ionic-native/device'
 import { GlobalProvider } from '../providers/global/global';
 import { BhHomePageProvider } from '../providers/bh-home-page/bh-home-page';
 import { UserBigheartsPage } from '../pages/user-bighearts/user-bighearts';
+import { ViewNgoPage } from '../pages/view-ngo/view-ngo';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { UserBigheartsPage } from '../pages/user-bighearts/user-bighearts';
     VolunteerFormPage,
     UserProfilePage,
     BhHomePage,
-    UserBigheartsPage
+    UserBigheartsPage,
+    ViewNgoPage
   ],
   imports: [
     BrowserModule,
@@ -91,7 +93,8 @@ import { UserBigheartsPage } from '../pages/user-bighearts/user-bighearts';
     VolunteerFormPage,
     UserProfilePage,
     BhHomePage,
-    UserBigheartsPage
+    UserBigheartsPage,
+    ViewNgoPage
   ],
   providers: [
     StatusBar,

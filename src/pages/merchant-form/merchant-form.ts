@@ -5,12 +5,6 @@ import { Storage } from '@ionic/storage';
 import { HomePage } from '../home/home';
 import { GlobalProvider } from '../../providers/global/global';
 
-/**
- * Generated class for the MerchantFormPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -40,9 +34,6 @@ export class MerchantFormPage {
       console.log(err);
     });
 
-    // get device id
-    this.getDeviceID();
-
     // if user try goback then go to homepage
     this.platform.registerBackButtonAction(() => {
       this.navCtrl.push(HomePage);
@@ -51,25 +42,19 @@ export class MerchantFormPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad MerchantFormPage');
-
-
-  }
-
-  // getDeviceID
-  getDeviceID() {
     if (this.global.uuid()) {
       this.uuid = this.global.uuid();
-
-      // request to userProvide
-      this.userService.getUserByDeviceId(this.uuid).subscribe(data => {
-        this.userid = data.data.id;
-      }, err => {
-        console.log(err);
-      });
     }
-    else{
+    else {
       this.uuid = 'undefined';
     }
+
+    // request to userProvide
+    this.userService.getUserByDeviceId(this.uuid).subscribe(data => {
+      this.userid = data.data.id;
+    }, err => {
+      console.log(err);
+    });
   }
 
   // saveData
@@ -80,13 +65,22 @@ export class MerchantFormPage {
     if (this.fname != null && this.lname != null && this.shortDesc != null && this.aboutTeam != null) {
       this.createLoader();
 
+      const data = {
+        user_id: userid,
+        fname: this.fname,
+        lname: this.lname,
+        short_desc: this.shortDesc,
+        about_team: this.aboutTeam
+      };
+
       // request to server
-      this.userService.saveMerchantFormData(userid, this.fname, this.lname, this.shortDesc, this.aboutTeam).subscribe(data => {
+      this.userService.saveMerchantFormData(data).subscribe(data => {
         // alert(data.msg);
         this.setDataToStorage(userid, this.fname, this.lname, this.shortDesc, this.aboutTeam);
         this.loader.dismiss();
       }, err => {
-        console.log('error: ' + err);
+        console.log(err);
+        this.loader.dismiss();
       });
     }
     else {

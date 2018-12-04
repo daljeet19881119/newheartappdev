@@ -193,8 +193,8 @@ export class CauseFormPage {
         this.createLoader();
 
         // get region name
-        this.userService.getRegionNameById(this.regionId).subscribe(data => {
-          this.region = data;
+        this.userService.getRegionById(this.regionId).subscribe(data => {
+          this.region = data.name;
           this.loader.dismiss();
         }, err => {
           console.log('err');
@@ -235,21 +235,44 @@ export class CauseFormPage {
         // call func createLoader
         this.createLoader();
 
+        const data = {
+          userid: userid,
+          fname: this.fname,
+          lname: this.lname,
+          email: this.email,
+          bank_name: this.bank_name,
+          account_no: this.account_no,
+          ifsc_code: this.ifsc_code,
+          paypal_email: this.paypal_email,
+          cause_category: charities,
+          country: this.country,
+          region: this.regionId,
+          city: this.city,
+          few_about_yourself: this.fewAboutYourself,
+          more_about_yourself: this.moreAboutYourself,
+          profile_pic: this.profilePicName,
+          pics_n_video: this.multiplePics,
+          contact1: contact1,
+          contact2: contact2,
+          contact3: contact3,
+          contact4: contact4,
+          contact5: contact5
+        };
+
         // request user provider
-        this.userService.saveCauseFormData(userid, this.fname, this.lname, this.email, this.bank_name, this.account_no, this.ifsc_code, this.paypal_email, charities, this.country, this.regionId, this.city, this.fewAboutYourself, this.moreAboutYourself, this.profilePicName, this.multiplePics, contact1, contact2, contact3, contact4, contact5).subscribe(data => {
+        this.userService.saveCauseFormData(data).subscribe(data => {
 
           if (data.msg == 'success') {
             this.setDataToStorage(userid, this.fname, this.lname, this.email, this.bank_name, this.account_no, this.ifsc_code, this.paypal_email, charities, this.country, this.regionId, this.city, this.fewAboutYourself, this.moreAboutYourself, this.profilePic, this.multiplePicsArr, contact1, contact2, contact3, contact4, contact5);
-            this.loader.dismiss();
           }
           if (data.msg == 'success' && data.status == 'processing') {
             this.createProcessAlert();
           }
-          if (data.msg == 'err') {
-            this.loader.dismiss();
-          }
+          
+          this.loader.dismiss();
         }, err => {
           console.log('error: ' + err);
+          this.loader.dismiss();
         });
       }
       else {

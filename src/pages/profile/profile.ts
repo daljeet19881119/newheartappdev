@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController, LoadingController } from 'ionic-angular';
-import { Http } from '@angular/http';
-import 'rxjs/add/operator/map';
 import { YtvideoPage } from '../ytvideo/ytvideo';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { PhotoViewer } from '@ionic-native/photo-viewer';
@@ -13,6 +11,7 @@ import { TeamPage } from '../team/team';
 import { ContributorsPage } from '../contributors/contributors';
 import { GlobalProvider } from '../../providers/global/global';
 import { UserBigheartsPage } from '../user-bighearts/user-bighearts';
+import { HomePageProvider } from '../../providers/home-page/home-page';
 
 @IonicPage()
 @Component({
@@ -46,24 +45,27 @@ export class ProfilePage {
   // loader
   loader: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, private modalCtrl: ModalController, private screenOrientation: ScreenOrientation, private photoViewer: PhotoViewer, private dom: DomSanitizer, private userProvider: UserProvider, private global: GlobalProvider, public loadingCtrl: LoadingController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private modalCtrl: ModalController, private screenOrientation: ScreenOrientation, private photoViewer: PhotoViewer, private dom: DomSanitizer, private userProvider: UserProvider, private global: GlobalProvider, public loadingCtrl: LoadingController, private homeService: HomePageProvider) {
 
-    // call function to get device id
-    this.getDeviceID();
-
-    // call function
-    this.checkInUserBigHearts();
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ProfilePage');
 
+    if (this.global.uuid()) {
+      this.uuid = this.global.uuid();
+    }
+    else {
+      this.uuid = 'undefined';
+    }
+
+    // call function
+    this.checkInUserBigHearts();
+
     // get the ngoId from previous page
     let id = this.navParams.get('id');
 
-    // request data from server
-    this.http.get(this.global.SITE_URL + '/new-ngo-profile.php?id='+id).map(res => res.json()).subscribe(data => {
-      
+    this.homeService.getNgoById(id).subscribe(data => {
       // store data in the ngoData
       this.ngoFounderImg = data.ngo_founder_img;
       this.ngoFounderName = data.ngo_founder;
@@ -78,20 +80,15 @@ export class ProfilePage {
       this.ngoFamilyFirstImg = data.ngo_family_img[0];
 
       // check if youtube id not empty
-      if(this.ngoYoutubeId !== '')
-      {
+      if (this.ngoYoutubeId !== '') {
         this.showIframediv = true;
 
         // hide youtube image div
         document.getElementById('iframe-div').style.display = 'none';
       }
-      // console.log(data);
     }, err => {
-      console.log('Oops!');
-    });  
-    
-    // call loader function
-    this.createLoader();
+      console.log(err);
+    });
   }
 
   // getYoutubeVideoImgUrl
@@ -100,11 +97,11 @@ export class ProfilePage {
     let url;
 
     // check youtube video url is not empty
-    if(this.ngoYoutubeId === ''){
+    if (this.ngoYoutubeId === '') {
       url = this.ngoFamilyFirstImg;
     }
-    else{
-      url = 'https://img.youtube.com/vi/'+ this.ngoYoutubeId +'/hqdefault.jpg';
+    else {
+      url = 'https://img.youtube.com/vi/' + this.ngoYoutubeId + '/hqdefault.jpg';
     }
 
     return url;
@@ -113,21 +110,20 @@ export class ProfilePage {
   // showFullVideo
   showFullVideo() {
 
-     // detect orientation changes
-     this.screenOrientation.onChange().subscribe(
+    // detect orientation changes
+    this.screenOrientation.onChange().subscribe(
       () => {
-          // alert("Orientation Changed to : "+this.screenOrientation.type);
+        // alert("Orientation Changed to : "+this.screenOrientation.type);
 
-          // check if screen is in landscape
-          if(this.screenOrientation.ORIENTATIONS.LANDSCAPE)
-          {
-             // store youtube video url
-            let videoUrl = this.youtubeUrl + this.ngoYoutubeId;
-            let viewModal = this.modalCtrl.create(YtvideoPage, {videoUrl: videoUrl});
-            viewModal.present();
-          }
+        // check if screen is in landscape
+        if (this.screenOrientation.ORIENTATIONS.LANDSCAPE) {
+          // store youtube video url
+          let videoUrl = this.youtubeUrl + this.ngoYoutubeId;
+          let viewModal = this.modalCtrl.create(YtvideoPage, { videoUrl: videoUrl });
+          viewModal.present();
+        }
       }
-    );   
+    );
   }
 
   // getWords
@@ -136,29 +132,29 @@ export class ProfilePage {
     // return this.ngoDesc.split(/\s+/).slice(0,16).join(" ");
 
     // return only 30 character
-    return this.ngoDesc.slice(0,80);
+    return this.ngoDesc.slice(0, 80);
   }
 
   // show all words
   showAllWords() {
-    document.getElementById('ngo-desc').innerHTML = this.ngoDesc;  
-    this.showMore = false;  
+    document.getElementById('ngo-desc').innerHTML = this.ngoDesc;
+    this.showMore = false;
   }
 
-    // showLessWords
+  // showLessWords
   showLessWords() {
-    document.getElementById('ngo-desc').innerHTML = this.ngoDesc.slice(0,80)+'.....';
-    this.showMore = true; 
-  } 
+    document.getElementById('ngo-desc').innerHTML = this.ngoDesc.slice(0, 80) + '.....';
+    this.showMore = true;
+  }
 
   // showWords
   showWords() {
     this.showMore = !this.showMore;
 
     // check if showmore is true
-    if(this.showMore === true) {
+    if (this.showMore === true) {
       this.showLessWords();
-    }else{
+    } else {
       this.showAllWords();
     }
   }
@@ -167,84 +163,80 @@ export class ProfilePage {
   showFullImg(event) {
     // get current image url and replace url(" ") from url("imageurl")
     let url = event.srcElement.style.backgroundImage.split('("')[1]
-    .split('")')[0];
+      .split('")')[0];
 
     // show image in viewer
-    this.photoViewer.show(url, '', {share: false});        
+    this.photoViewer.show(url, '', { share: false });
   }
 
   // getIframeUrl
   getIframeUrl() {
     let controlls = '?theme=dark&autohide=2&modestbranding=1&showinfo=0';
-    return this.dom.bypassSecurityTrustResourceUrl(this.youtubeUrl+this.ngoYoutubeId+controlls);
+    return this.dom.bypassSecurityTrustResourceUrl(this.youtubeUrl + this.ngoYoutubeId + controlls);
   }
 
   // interchangeImg
   interchangeImg(event) {
-     
+
     // select youtube div
-     let youtube = document.getElementById('iframe-div');
+    let youtube = document.getElementById('iframe-div');
 
-     // get current small img url
-     let imgurl = event.srcElement.style['background-image'];
+    // get current small img url
+    let imgurl = event.srcElement.style['background-image'];
 
-     // get image of youtube video block
-     let youtubeImgUrl = youtube.style.backgroundImage;
-     
-     // set small in video image block
-     youtube.style.backgroundImage = imgurl;
+    // get image of youtube video block
+    let youtubeImgUrl = youtube.style.backgroundImage;
 
-     // set youtube image into small block
-     event.srcElement.style.backgroundImage = youtubeImgUrl;
-      
-     // search only if this.ngoYoutubeId is not empty
-    if(this.ngoYoutubeId !== '')
-    {
-        // serach youtube id from url
-        let strSearch = imgurl.search(this.ngoYoutubeId);
-        
-        // check if youtube id not found
-        if(strSearch === -1)
-        {
-          // set iframe value to flase
-          this.showIframe = false;
+    // set small in video image block
+    youtube.style.backgroundImage = imgurl;
 
-          // hide youtube iframe div
-          this.showIframediv = false;
+    // set youtube image into small block
+    event.srcElement.style.backgroundImage = youtubeImgUrl;
 
-          // show youtube image div
-          youtube.style.display = 'block';  
+    // search only if this.ngoYoutubeId is not empty
+    if (this.ngoYoutubeId !== '') {
+      // serach youtube id from url
+      let strSearch = imgurl.search(this.ngoYoutubeId);
 
-        }
-        else
-        {
-          // show youtube iframe div
-          this.showIframediv = true;
+      // check if youtube id not found
+      if (strSearch === -1) {
+        // set iframe value to flase
+        this.showIframe = false;
 
-          // hide youtube image div
-          youtube.style.display = 'none'; 
-        } 
+        // hide youtube iframe div
+        this.showIframediv = false;
 
-        // search youtube id from big image url
-        let idSearch = youtubeImgUrl.search(this.ngoYoutubeId);
-        
-        // store id of current clicked img
-        let currentId = event.srcElement.getAttribute('id');
-        
-        // get the current clicked image previous element
-        let youtubeBtn = document.getElementById(currentId).previousElementSibling;
+        // show youtube image div
+        youtube.style.display = 'block';
 
-        // check if youtube id found
-        if(idSearch !== -1) 
-        {
-          // show the youtube btn on video image  
-           youtubeBtn.setAttribute('data-show-img','show');
-        }
-        else{
+      }
+      else {
+        // show youtube iframe div
+        this.showIframediv = true;
 
-          // hide youtubebtn for non youtube image
-          youtubeBtn.setAttribute('data-show-img','hide');
-        }
+        // hide youtube image div
+        youtube.style.display = 'none';
+      }
+
+      // search youtube id from big image url
+      let idSearch = youtubeImgUrl.search(this.ngoYoutubeId);
+
+      // store id of current clicked img
+      let currentId = event.srcElement.getAttribute('id');
+
+      // get the current clicked image previous element
+      let youtubeBtn = document.getElementById(currentId).previousElementSibling;
+
+      // check if youtube id found
+      if (idSearch !== -1) {
+        // show the youtube btn on video image  
+        youtubeBtn.setAttribute('data-show-img', 'show');
+      }
+      else {
+
+        // hide youtubebtn for non youtube image
+        youtubeBtn.setAttribute('data-show-img', 'hide');
+      }
 
     }
 
@@ -264,22 +256,22 @@ export class ProfilePage {
 
   // gotoCampignsPage
   gotoCampignPage() {
-    this.navCtrl.push(CampaignsPage, {founderName: this.ngoFounderName});
+    this.navCtrl.push(CampaignsPage, { founderName: this.ngoFounderName });
   }
 
   // gotoCommunityPage
   gotoCommunityPage() {
-    this.navCtrl.push(CommunityPage, {founderName: this.ngoFounderName});
+    this.navCtrl.push(CommunityPage, { founderName: this.ngoFounderName });
   }
 
   // gotoContributorPage
   gotoContributorPage() {
-    this.navCtrl.push(ContributorsPage, {founderName: this.ngoFounderName});
+    this.navCtrl.push(ContributorsPage, { founderName: this.ngoFounderName });
   }
 
   // gotoTeamPage
   gotoTeamPage() {
-    this.navCtrl.push(TeamPage, {founderName: this.ngoFounderName});
+    this.navCtrl.push(TeamPage, { founderName: this.ngoFounderName });
   }
   // add ngo's to user list
   addToUserBigHearts() {
@@ -287,42 +279,46 @@ export class ProfilePage {
     // call func createLoader
     this.createLoader();
 
-      // store ngoid
-      let ngo_id = this.navParams.get('id');
+    // store ngoid
+    let ngo_id = this.navParams.get('id');
 
-      // store uuid
-      let uuid;
+    // store uuid
+    let uuid;
 
-      if(this.uuid !== '')
-      {
-        uuid = this.navParams.get('uuid');
-      }else{
-        uuid = 'undefined';
+    if (this.uuid !== '') {
+      uuid = this.navParams.get('uuid');
+    } else {
+      uuid = 'undefined';
+    }
+
+    const data = {
+      uuid: uuid,
+      ngo_id: ngo_id
+    };
+
+    // save ngo_id to users list
+    this.userProvider.addToMyBigHearts(data).subscribe(data => {
+
+      // dismiss the loader
+      this.loader.dismiss();
+
+      // check if found true
+      if (data.found == 'true') {
+        // store added class to btn
+        this.addBigHeartsClass = 'added-bighearts';
+        this.addBigHeartText = 'Unselect from My BigHearts';
       }
+    }, err => {
+      // dismiss the loader
+      this.loader.dismiss();
+    });
 
-      // save ngo_id to users list
-      this.userProvider.addToMyBigHearts(uuid,ngo_id).subscribe(data => {
-        
-        // dismiss the loader
-        this.loader.dismiss();
-
-        // check if found true
-        if(data.found =='true')
-        {
-          // store added class to btn
-          this.addBigHeartsClass = 'added-bighearts';
-          this.addBigHeartText = 'Unselect from My BigHearts'; 
-          // this.loader.dismiss(); 
-        }  
-        console.log(data);     
-      }, err => {
-        console.log('Oops!');
-      });
-      
   }
 
   // check ngo's in the user list
   checkInUserBigHearts() {
+    // call loader function
+    this.createLoader();
 
     // store ngoid
     let ngo_id = this.navParams.get('id');
@@ -330,36 +326,31 @@ export class ProfilePage {
     // store uuid
     let uuid;
 
-    if(this.uuid !== '')
-    {      
-      uuid =  this.navParams.get('uuid');
-    }else{
+    if (this.uuid !== '') {
+      uuid = this.navParams.get('uuid');
+    } else {
       uuid = 'undefined';
     }
 
     // request data from server
-    this.userProvider.checkInMyBigHearts(uuid,ngo_id).subscribe(data => {
-      
-      // dismiss the loader
-      this.loader.dismiss();
+    this.userProvider.checkInMyBigHearts(uuid, ngo_id).subscribe(data => {
 
       // check if found true
-      if(data.found =='true')
-      {
+      if (data.found == 'true') {
         // store added class to btn
-        this.addBigHeartsClass = 'added-bighearts';  
-        this.addBigHeartText = 'Unselect from My BigHearts';  
+        this.addBigHeartsClass = 'added-bighearts';
+        this.addBigHeartText = 'Unselect from My BigHearts';
       }
-          
-      console.log(data);  
+      this.loader.dismiss();
     }, err => {
       console.log('Oops!');
+      this.loader.dismiss();
     });
   }
 
   // remove ngo from user list
   removeFromUserBigHearts() {
-    
+
     // call func createLoader
     this.createLoader();
 
@@ -369,41 +360,33 @@ export class ProfilePage {
     // store uuid
     let uuid;
 
-    if(this.uuid !== '')
-    {      
-      uuid =  this.navParams.get('uuid');
-    }else{
+    if (this.uuid !== '') {
+      uuid = this.navParams.get('uuid');
+    } else {
       uuid = 'undefined';
     }
 
+    const data = {
+      uuid: uuid,
+      ngo_id: ngo_id
+    };
+
     // request to server
-    this.userProvider.removeFromMyBigHearts(uuid,ngo_id).subscribe(data => {
+    this.userProvider.removeFromMyBigHearts(data).subscribe(data => {
 
       // dismiss the loader
       this.loader.dismiss();
 
       // check if found true
-      if(data.found =='true')
-      {
+      if (data.found == 'true') {
         // store added class to btn
-        this.addBigHeartsClass = 'add-to-bighearts';  
-        this.addBigHeartText = 'Add to my BigHearts';  
+        this.addBigHeartsClass = 'add-to-bighearts';
+        this.addBigHeartText = 'Add to my BigHearts';
       }
-
-      console.log(data);
     }, err => {
-      console.log('Oops!');
+      // dismiss the loader
+      this.loader.dismiss();
     });
-  }
-
-  // getDeviceID
-  getDeviceID() {
-    if(this.global.uuid()) {
-      this.uuid = this.global.uuid();
-    }
-    else{
-      this.uuid = 'undefined';
-    }
   }
 
   // createLoader

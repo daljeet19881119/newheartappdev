@@ -75,16 +75,16 @@ export class UserBigheartsPage {
 
   // getCurrentSelectedNgoId
   getCurrentSelectedNgoId(ngo_id: any, checked: any) {
-    if(this.ngo_ids.indexOf(ngo_id) == -1) {
-      if(checked == true) {
+    if (this.ngo_ids.indexOf(ngo_id) == -1) {
+      if (checked == true) {
         this.ngo_ids.push(ngo_id);
       }
     }
-    else{
-      if(checked == true) {
+    else {
+      if (checked == true) {
         this.ngo_ids.push(ngo_id);
       }
-      else{
+      else {
         this.ngo_ids.pop(ngo_id);
       }
     }
@@ -103,8 +103,17 @@ export class UserBigheartsPage {
   // saveUserBighearts
   saveUserBigheart() {
     this.createLoader();
-    this.userService.saveUserBighearts(this.ngo_ids, this.uuid).subscribe(data => {
-      this.storage.set('user_data', data);
+
+    const data = {
+      ngo_id: this.ngo_ids,
+      uuid: this.uuid
+    };
+
+    this.userService.saveUserBighearts(data).subscribe(data => {
+      if(data.msg == 'success')
+      {
+        this.storage.set('user_data', data);
+      }      
       this.loader.dismiss();
     }, err => {
       console.log(err);

@@ -1,13 +1,12 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, Platform, LoadingController } from 'ionic-angular';
-import { Http } from '@angular/http';
-import 'rxjs/add/operator/map';
 import { HomePage } from '../home/home';
 import { CharitiesPage } from '../charities/charities';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { UserProvider } from '../../providers/user/user';
 import { Storage } from '@ionic/storage';
 import { GlobalProvider } from '../../providers/global/global';
+import { ViewNgoPage } from '../view-ngo/view-ngo';
 
 
 @IonicPage()
@@ -47,15 +46,13 @@ export class UserinfoPage {
   all_ngo: any;
   ngo_id: string;
   ngo_id_arr: any = [];
-  constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private http: Http, public platform: Platform, private global: GlobalProvider, private loadingCtrl: LoadingController, private userService: UserProvider, private storage: Storage) {
+  listHeight: any = 'list-height';
+  constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, public platform: Platform, private global: GlobalProvider, private loadingCtrl: LoadingController, private userService: UserProvider, private storage: Storage) {
 
     // if user try goback then exit app
     this.platform.registerBackButtonAction(() => {
       platform.exitApp();
     });
-
-    // call getDeviceID
-    this.getDeviceID();
 
     // get params from previous opened page
     this.mobileno = this.navParams.get('mobileno');
@@ -68,22 +65,30 @@ export class UserinfoPage {
     this.card_number = this.navParams.get('card_number');
     this.cvv_number = this.navParams.get('cvv_number');
 
-    if(this.navParams.get('cause_percentage')){
+    if (this.navParams.get('cause_percentage')) {
       this.cause_percentage = this.navParams.get('cause_percentage');
       this.donation_amount = this.navParams.get('donation_amount');
     }
-    if(this.navParams.get('donation_amount')){
+    if (this.navParams.get('donation_amount')) {
       this.donation_amount = this.navParams.get('donation_amount');
     }
-    if(this.navParams.get('card_expiry')){
+    if (this.navParams.get('card_expiry')) {
       this.card_expiry = this.navParams.get('card_expiry');
     }
-    
+
 
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad UserinfoPage');
+
+    // check if have uuid
+    if (this.global.uuid()) {
+      this.uuid = this.global.uuid();
+    }
+    else{
+      this.uuid = 'undefined';
+    }
 
     // check if charities comes
     if (this.navParams.get('charities')) {
@@ -100,10 +105,8 @@ export class UserinfoPage {
       });
       this.checkCharity = true;
     }
-  }
 
-  ionViewDidEnter() {
-    console.log('ion view did enter');
+    // get ngo of charities
     if (this.charities.length > 0) {
       let selected_charity = [];
       this.charities.forEach(element => {
@@ -114,10 +117,10 @@ export class UserinfoPage {
   }
 
   getSelectedNgo(checked: any, id: any) {
-    if(checked == true) {
+    if (checked == true) {
       this.ngo_id_arr.push(id);
     }
-    else{
+    else {
       this.ngo_id_arr.pop(id);
     }
   }
@@ -132,7 +135,7 @@ export class UserinfoPage {
       });
       alert.present();
     }
-    else{
+    else {
 
       if (this.validateEmail(this.email) == true) {
 
@@ -142,19 +145,9 @@ export class UserinfoPage {
           this.makeServerRequest();
         }
       }
-      else{
+      else {
         alert("please enter valid email");
       }
-    }
-  }
-
-  // getDeviceID
-  getDeviceID() {
-    if(this.global.uuid()) {
-      this.uuid = this.global.uuid();
-
-      // call requestData
-      this.requestData();
     }
   }
 
@@ -168,9 +161,9 @@ export class UserinfoPage {
     this.charities.forEach(element => {
 
       // remove starting space from each element and push into charity array
-      charities.push(element.replace('  ', ''));
+      charities.push(element.trim());
     });
-    
+
     // conver array to stirng
     this.ngo_id = this.ngo_id_arr.toString();
 
@@ -178,15 +171,39 @@ export class UserinfoPage {
     let hc_amount = this.donation_amount * 100;
     let ngo_count = parseInt(this.ngo_id_arr.length);
     let cause_percentage = parseInt(this.cause_percentage);
-    let calculated_amount = hc_amount / 100 * cause_percentage;  
-    let hc_balance = hc_amount - calculated_amount; 
-    let us_balance = calculated_amount / 100; 
+    let calculated_amount = hc_amount / 100 * cause_percentage;
+    let hc_balance = hc_amount - calculated_amount;
+    let us_balance = calculated_amount / 100;
     let us_amount_per_ngo = us_balance / ngo_count;
     let hc_amount_per_ngo = calculated_amount / ngo_count;
 
-    this.http.get(this.global.SITE_URL + '/verify-users.php?profile_status=verified&fname=' + this.firstName + '&lname=' + this.lastName + '&email=' + this.email + '&cause_percentage='+ this.cause_percentage +'&donation_amount='+ this.donation_amount +'&hc_amount='+ hc_amount +'&hc_balance='+hc_balance+'&us_balance='+us_balance+'&us_amount_per_ngo='+ us_amount_per_ngo +'&hc_amount_per_ngo='+ hc_amount_per_ngo +'&ngo_id='+ this.ngo_id +'&ch_name='+ this.ch_name +'&card_number='+ this.card_number +'&cvv_number='+ this.cvv_number +'&card_expiry='+ this.card_expiry +'&large_donation='+ this.large_donation +'&charity_type=' + charities + '&preference_type=' + this.preference + '&location=' + this.location + '&c_code=' + this.country + '&m_no=' + this.mobileno).map(res => res.json()).subscribe(data => {
+    const data = {
+      profile_status: 'verified',
+      fname: this.firstName,
+      lname: this.lastName,
+      email: this.email,
+      cause_percentage: this.cause_percentage,
+      donation_amount: this.donation_amount,
+      hc_balance: hc_balance,
+      us_balance: us_balance,
+      hc_amount: hc_amount,
+      us_amount_per_ngo: us_amount_per_ngo,
+      hc_amount_per_ngo: hc_amount_per_ngo,
+      ngo_id: this.ngo_id,
+      ch_name: this.ch_name,
+      card_number: this.card_number,
+      cvv_number: this.cvv_number,
+      card_expiry: this.card_expiry,
+      large_donation: this.large_donation,
+      charity_type: charities.toString(),
+      preference_type: this.preference,
+      preference_location: this.location,
+      mobileno: this.mobileno,
+      country: this.country
+    };
+
+    this.userService.verifyUserProfile(data).subscribe(data => {
       this.profileStatus = data.data.profile_status;
-      console.log(data);
 
       // check if profileStatus is null
       if (this.profileStatus !== null && this.profileStatus == 'verified') {
@@ -195,7 +212,7 @@ export class UserinfoPage {
 
         // store user charities in storage
         let charities = data.data.charity_type;
-         
+
         // convert charities string to array
         charities = charities.split(',');
 
@@ -210,19 +227,7 @@ export class UserinfoPage {
       }
 
     }, err => {
-      console.log('Oops!');
-    });
-  }
-
-  // requestData
-  requestData() {
-
-    this.http.get(this.global.SITE_URL + '/get-verified-user.php?uuid=' + this.uuid).map(res => res.json()).subscribe(data => {
-      this.mobileno = data.data.mobileno;
-      this.country = data.data.country;
-
-    }, error => {
-      console.log(error);
+      console.log(err);
     });
   }
 
@@ -331,6 +336,13 @@ export class UserinfoPage {
       // getNgoByCharityIds
       this.userService.getNgoByCharityIds(charity_ids).subscribe(res => {
         this.all_ngo = res;
+
+        // check if length is < 3
+        if(res.length < 3)
+        {
+          this.listHeight = 'list-auto-height';
+        }
+
         this.loader.dismiss();
       }, err => {
         console.log(err);
@@ -345,5 +357,12 @@ export class UserinfoPage {
   // toLocaleString
   toLocaleString(number: any) {
     return number.toLocaleString();
+  }
+
+  // viewNgoProfile
+  viewNgoProfile(ngoid: any) {
+    this.navCtrl.push(ViewNgoPage, {
+      ngoid: ngoid
+    });
   }
 }

@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, Platform } from 'ionic-angular';
 import { VerifycodePage } from '../verifycode/verifycode';
-import { Http } from '@angular/http';
-import 'rxjs/add/operator/map';
 import { UserProvider } from '../../providers/user/user';
 import { Storage } from '@ionic/storage';
 import { GlobalProvider } from '../../providers/global/global';
@@ -30,7 +28,7 @@ export class VerifynumberPage {
   allCountries: any;
   loader: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, public loadingCtrl: LoadingController, private global: GlobalProvider, public platform: Platform, public userService: UserProvider, private storage: Storage) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, private global: GlobalProvider, public platform: Platform, public userService: UserProvider, private storage: Storage) {
 
     // call getuniqueDeviceID
     this.getuniqueDeviceID();
@@ -51,16 +49,24 @@ export class VerifynumberPage {
     this.userService.getAllCountries().subscribe((country) => {
       this.allCountries = country;
 
+      // GET COUNTRY DIAL CODE BY ITS CODE
+      country.forEach(element => {
+        if(element.code == this.code){
+          this.country = element.dial_code;
+        }
+      });
+
       // set a countries in storage
       this.storage.set('countries', this.allCountries);
-      
-      // console.log(country);
+
+      this.loader.dismiss();
     }, error => {
       console.log('Oops!');
+      this.loader.dismiss();
     });
     
     // call function getCountryCode
-    this.getCountryCode(this.code);
+    // this.getCountryCode(this.code);
 
   }
 
@@ -108,6 +114,9 @@ export class VerifynumberPage {
     if(this.global.uuid()) {
       this.uuid = this.global.uuid();
     }
+    else{
+      this.uuid = 'undefined';
+    }
   }
   
   // sendSMS
@@ -116,10 +125,15 @@ export class VerifynumberPage {
     // call createLoader
     this.createLoader();
 
-    // request data from server
-    this.http.get(this.global.SITE_URL + '/verify-users.php?country='+this.country+'&mobileno='+this.mobileno+'&uuid='+this.uuid).map(res => res.json()).subscribe(data => {
+    const data = {
+      mobileno: this.mobileno,
+      country: this.country,
+      uuid: this.uuid
+    };
+    
+    // verifyNumber
+    this.userService.verifyNumber(data).subscribe(data => {
       this.verficationCode = data.data.verification_code;
-      console.log(data);
 
       let userExists: any;
       // check if number already exists
@@ -137,17 +151,7 @@ export class VerifynumberPage {
 
       // check if verification code is null then show loader
       if(this.verficationCode !== null) 
-      {
-
-        // push to verifycode page
-        // const modal = this.modalCtrl.create(VerifycodePage,{
-        //   phone: this.mobileno,
-        //   country: this.country,
-        //   code: this.verficationCode,
-        //   userExists: userExists
-        // });
-        // modal.present();
-        
+      {        
         this.navCtrl.push(VerifycodePage, {
           phone: this.mobileno,
           country: this.country,
@@ -157,7 +161,8 @@ export class VerifynumberPage {
         this.loader.dismiss();
       } 
     }, err => {
-      console.log('Oops!');
+      console.log(err);
+      this.loader.dismiss();
     });
   }
 

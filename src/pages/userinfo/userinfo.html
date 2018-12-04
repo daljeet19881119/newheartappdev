@@ -103,10 +103,10 @@
         <ion-row>
           <p>Select any particular BigHeart to which you want to donate</p>
         </ion-row>
-        <ion-list>
+        <ion-list [class]="listHeight">
           <ng-container *ngFor="let ngo of all_ngo">
             <ion-item class="payment-item">
-              <ion-avatar item-start style="background: #48414130;border-radius: 50%;border: 1px solid #48414130;">                
+              <ion-avatar item-start style="background: #48414130;border-radius: 50%;border: 1px solid #48414130;z-index: 1;" (click)="viewNgoProfile(ngo.id)">                
                 <img [src]="ngo.ngo_founder_img_url" [alt]="ngo.ngo_name">
               </ion-avatar>
               <ion-label>{{ ngo.ngo_user+' ('+ngo.ngo_name+')' }}</ion-label>

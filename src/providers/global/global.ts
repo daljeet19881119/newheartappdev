@@ -5,6 +5,7 @@ import { Device } from '@ionic-native/device';
 export class GlobalProvider {
 
   SITE_URL: string = 'http://ionic.dsl.house/heartAppApi';
+  API_URL: string = 'http://ionic.dsl.house/api/heartapp';
 
   constructor(private device: Device) {
     console.log('Hello GlobalProvider Provider');
@@ -15,4 +16,7 @@ export class GlobalProvider {
     return this.device.uuid;
   }
 
+  apiUrl(url: string) {
+    return this.API_URL + url;
+  }
 }
