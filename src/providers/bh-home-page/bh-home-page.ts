@@ -12,6 +12,6 @@ export class BhHomePageProvider {
   }
 
   getBigheartUsers(user_id: any, offset: number = 0) {
-    return this.http.get(this.global.SITE_URL + '/bigheart-user-dashboard.php?user_id='+user_id+'&offset='+offset).map(res => res.json());
+    return this.http.get(this.global.apiUrl('/bigheart_user_dashboard/'+user_id+'/'+offset)).map(res => res.json());
   }
 }

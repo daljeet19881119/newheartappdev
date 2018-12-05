@@ -12,7 +12,7 @@ export class HomePageProvider {
 
   // getLatestDonations
   getLatestDonations(offset: number = 0) {
-      return this.http.get(this.global.SITE_URL + '/new-latest-donations.php?offset='+offset).map(res => res.json());
+      return this.http.get(this.global.apiUrl('/all_ngo/'+offset)).map(res => res.json());
   }
 
   // getLatestPayments
@@ -22,13 +22,12 @@ export class HomePageProvider {
 
   // getRecommendedBigHearts()
   getRecommendedBigHearts(uuid: any) {
-      return this.http.get(this.global.SITE_URL + "/get-recommended-bighearts.php?uuid="+uuid).map(res => res.json());
+      return this.http.get(this.global.apiUrl('/recommended_bighearts/'+uuid)).map(res => res.json());
   }
 
   // getUserBighearts
   getUserBighearts(user_id: any, offset: number = 0) {
-    return this.http.get(this.global.SITE_URL + '/simple-user-dashboard.php?user_id='+user_id+'&offset='+offset).map(res => res.json());
-    // return this.http.get(this.global.apiUrl('/simple_user_dashboard/'+user_id+'/'+offset)).map(res => res.json());
+    return this.http.get(this.global.apiUrl('/simple_user_dashboard/'+user_id+'/'+offset)).map(res => res.json());
   }
 
   // getNgoById

@@ -47,6 +47,7 @@ export class UserinfoPage {
   ngo_id: string;
   ngo_id_arr: any = [];
   listHeight: any = 'list-height';
+  referral_code: any;
   constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, public platform: Platform, private global: GlobalProvider, private loadingCtrl: LoadingController, private userService: UserProvider, private storage: Storage) {
 
     // if user try goback then exit app
@@ -173,9 +174,18 @@ export class UserinfoPage {
     let cause_percentage = parseInt(this.cause_percentage);
     let calculated_amount = hc_amount / 100 * cause_percentage;
     let hc_balance = hc_amount - calculated_amount;
-    let us_balance = calculated_amount / 100;
+    let us_balance = hc_balance / 100;
     let us_amount_per_ngo = us_balance / ngo_count;
     let hc_amount_per_ngo = calculated_amount / ngo_count;
+
+    let referral_code = '';
+    let referral_amount = '';
+
+    // check if user have referral code
+    if((this.referral_code)) {
+        referral_code = this.referral_code;
+        referral_amount = '5';
+    }
 
     const data = {
       profile_status: 'verified',
@@ -199,7 +209,9 @@ export class UserinfoPage {
       preference_type: this.preference,
       preference_location: this.location,
       mobileno: this.mobileno,
-      country: this.country
+      country: this.country,
+      referral_code: referral_code,
+      referral_amount: referral_amount,
     };
 
     this.userService.verifyUserProfile(data).subscribe(data => {

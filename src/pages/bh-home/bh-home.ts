@@ -46,29 +46,31 @@ export class BhHomePage {
   loader: any;
   videoId: any;
   user_id: any;
+  hc_balance: any;
+  us_balance: any;
   constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private global: GlobalProvider, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, private bhHomeService: BhHomePageProvider, public loadingCtrl: LoadingController, private sharing: SocialSharing, private storage: Storage, private mediaCapture: MediaCapture, private transfer: FileTransfer, private androidPermissions: AndroidPermissions) {
 
     // call function to get device id
     this.getDeviceID();
 
     // request data from server
-    this.homeService.getLatestPayments().subscribe(data => {
+    // this.homeService.getLatestPayments().subscribe(data => {
 
-      // store requested data in the latestPayments
-      this.latestPayments = data.res;
+    //   // store requested data in the latestPayments
+    //   this.latestPayments = data.res;
 
-      let count = parseInt(data.count);
-      let paging = Math.ceil(count / this.limit);
+    //   let count = parseInt(data.count);
+    //   let paging = Math.ceil(count / this.limit);
 
-      // hide button if count is <= 5
-      if (paging <= 1) {
-        this.showPaymentBtn = false;
-      }
-      // console.log(this.latestPayments);
-    },
-      err => {
-        console.log('Oops!');
-      });
+    //   // hide button if count is <= 5
+    //   if (paging <= 1) {
+    //     this.showPaymentBtn = false;
+    //   }
+    //   // console.log(this.latestPayments);
+    // },
+    //   err => {
+    //     console.log('Oops!');
+    //   });
 
     // date object to store heloWish
     let d = new Date();
@@ -112,12 +114,18 @@ export class BhHomePage {
     // call func getDeviceID
     if (this.global.uuid()) {
       this.uuid = this.global.uuid();
-
-      // get login user data
-      this.userService.getUserByDeviceId(this.uuid).subscribe((data) => {
-        this.name = data.data.fname;
-      });
     }
+    else{
+      this.uuid = 'undefined';
+    }
+
+    // get login user data
+    this.userService.getUserByDeviceId(this.uuid).subscribe((data) => {
+      this.name = data.data.fname;
+      this.user_id = data.data.id;
+      this.hc_balance = data.data.hc_balance;
+      this.us_balance = data.data.us_balance;
+    });
 
     // get user data from storage
     this.storage.get('user_data').then(data => {
@@ -146,12 +154,6 @@ export class BhHomePage {
     this.storage.get('user_causes').then(data => {
       this.charities = data;
     });
-  }
-
-  ionViewWillEnter() {
-    console.log('bigh heart home page loaded');
-    // call function getRecommendedBigHearts
-    // this.getRecommendedBigHearts();
   }
 
   // showTabs

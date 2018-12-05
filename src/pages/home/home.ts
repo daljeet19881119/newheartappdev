@@ -47,23 +47,23 @@ export class HomePage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private global: GlobalProvider, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, public loadingCtrl: LoadingController, private sharing: SocialSharing, private storage: Storage) {
 
     // request data from server
-    this.homeService.getLatestPayments().subscribe(data => {
+    // this.homeService.getLatestPayments().subscribe(data => {
 
-      // store requested data in the latestPayments
-      this.latestPayments = data.res;
+    //   // store requested data in the latestPayments
+    //   this.latestPayments = data.res;
 
-      let count = parseInt(data.count);
-      let paging = Math.ceil(count / this.limit);
+    //   let count = parseInt(data.count);
+    //   let paging = Math.ceil(count / this.limit);
 
-      // hide button if count is <= 5
-      if (paging <= 1) {
-        this.showPaymentBtn = false;
-      }
-      // console.log(this.latestPayments);
-    },
-      err => {
-        console.log('Oops!');
-      });
+    //   // hide button if count is <= 5
+    //   if (paging <= 1) {
+    //     this.showPaymentBtn = false;
+    //   }
+    //   // console.log(this.latestPayments);
+    // },
+    //   err => {
+    //     console.log('Oops!');
+    //   });
 
     // date object to store heloWish
     let d = new Date();

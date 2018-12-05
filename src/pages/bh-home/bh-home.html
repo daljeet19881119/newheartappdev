@@ -22,14 +22,9 @@
         <span class="upper-text">Your account balance is</span>
         <p class="balance-para">
             <ion-icon name="heart-outline" class="heart-balance"></ion-icon>
-            <ng-container *ngFor="let payment of latestPayments">
-                <span class="balance" *ngIf="payment.id == 1">{{ payment.balance }}</span>
-            </ng-container>
-
+            <span class="balance">{{ hc_balance }}</span>
         </p>
-        <ng-container *ngFor="let payment of latestPayments">
-            <span class="usd-balance" *ngIf="payment.id == 1">{{ '($'+ payment.us_balance +')' }}</span>
-        </ng-container>
+        <span class="usd-balance">{{ '($'+ us_balance +')' }}</span>
         <ion-toolbar color="appColor" class="payment-toolbar">
             <ion-segment [(ngModel)]="latestTabs" (click)="showTabs()">
                 <!-- <ion-segment-button value="payments" class="payment-segments">
