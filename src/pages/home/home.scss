@@ -195,7 +195,7 @@ page-home {
         margin: 3px 0 5px;
     }
     .scroll-content{
-        margin-bottom: 192px;
+        margin-top: 190px !important;
     }
     .list-part{
         height: 400px;
@@ -203,8 +203,8 @@ page-home {
     }
     .donation-list{
         height: 100%;
-        overflow: scroll;        
-        margin-top: 30px;
+        overflow: auto;        
+        margin-top: 100px;
         margin-bottom: 50px;
     }
     #payment-list{

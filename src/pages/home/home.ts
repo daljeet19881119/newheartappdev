@@ -29,7 +29,7 @@ export class HomePage {
   heloWish: string;
   name: string = 'Loading...';
   uuid: any;
-  showDonationBtn: boolean = true;
+  showDonationBtn: boolean;
   showPaymentBtn: boolean = true;
   limit: number = 5;
   paging: number = 1;
@@ -123,6 +123,9 @@ export class HomePage {
           if (paging <= 1) {
             this.showDonationBtn = false;
           }
+          else{
+            this.showDonationBtn = true;
+          }
         }
       }, err => {
         console.log(err);
@@ -188,6 +191,9 @@ export class HomePage {
         // hide button if count is <= 5
         if (this.paging >= paging) {
           this.showDonationBtn = false;
+        }
+        else{
+          this.showDonationBtn = true;
         }
       }
     }, err => {

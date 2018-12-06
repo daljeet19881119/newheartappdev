@@ -44,6 +44,7 @@ export class ProfilePage {
 
   // loader
   loader: any;
+  showItem: boolean = true;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private modalCtrl: ModalController, private screenOrientation: ScreenOrientation, private photoViewer: PhotoViewer, private dom: DomSanitizer, private userProvider: UserProvider, private global: GlobalProvider, public loadingCtrl: LoadingController, private homeService: HomePageProvider) {
 
@@ -61,6 +62,11 @@ export class ProfilePage {
 
     // call function
     this.checkInUserBigHearts();
+
+    // check if nav param page == register page
+    if(this.navParams.get('page') && this.navParams.get('page') == 'register'){
+      this.showItem = false;
+    }
 
     // get the ngoId from previous page
     let id = this.navParams.get('id');

@@ -16,19 +16,21 @@
     <div class="upper-empty-container"></div>
     <div class="founder-img-div">
         <img [src]="ngoFounderImg" class="founder-img">
-        <img src="assets/imgs/address-card.png" class="address-card">
+        <img src="assets/imgs/address-card.png" class="address-card" *ngIf="showItem">
     </div> 
     <div class="profile-info">
         <h2 class="founder-name">{{ ngoFounderName }}</h2>
         <p class="ngo-name">Co-Founder of {{ ngoName }}</p>
-        <button ion-button small [ngClass]="addBigHeartsClass" color="appColor" (click)="addToUserBigHearts()"  *ngIf="addBigHeartsClass === 'add-to-bighearts'">
+        <ng-container *ngIf="showItem">
+            <button ion-button small [ngClass]="addBigHeartsClass" color="appColor" (click)="addToUserBigHearts()"  *ngIf="addBigHeartsClass === 'add-to-bighearts'">
+                    {{ addBigHeartText }}
+            </button>
+            <button ion-button small [ngClass]="addBigHeartsClass" color="appColor" *ngIf="addBigHeartsClass === 'added-bighearts'" (click)="removeFromUserBigHearts()">
+                <ion-icon name="checkmark" class="add-checkmark"></ion-icon>&nbsp;
                 {{ addBigHeartText }}
-        </button>
-        <button ion-button small [ngClass]="addBigHeartsClass" color="appColor" *ngIf="addBigHeartsClass === 'added-bighearts'" (click)="removeFromUserBigHearts()">
-            <ion-icon name="checkmark" class="add-checkmark"></ion-icon>&nbsp;
-            {{ addBigHeartText }}
-        </button>
-        <button ion-button small color="appColor" class="add-to-bighearts" (click)="gotoUserBigheartsPage()">My Bighearts</button>
+            </button>
+            <button ion-button small color="appColor" class="add-to-bighearts" (click)="gotoUserBigheartsPage()">My Bighearts</button>
+        </ng-container>        
         <p class="ngo-desc" id="ngo-desc" (click)="showWords()">{{ getWords()+'.....' }}</p>
         <span class="read-more" (click)="showAllWords()" *ngIf="showMore">
             <ion-icon name="arrow-dropdown"></ion-icon>
@@ -37,7 +39,7 @@
             <ion-icon name="arrow-dropup"></ion-icon> 
         </span>  
     </div>    
-    <div class="lists-part">
+    <div class="lists-part" *ngIf="showItem">
         <ion-list class="ngo-list">
             <ion-item class="list-item campaigns" (click)="gotoCampignPage()">
                 <span class="list-text-color">Campaigns</span> 

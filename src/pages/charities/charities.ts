@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, AlertController, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, AlertController, Platform, ViewController } from 'ionic-angular';
 import { UserinfoPage } from '../userinfo/userinfo';
 import { CauseFormPage } from '../cause-form/cause-form';
 import { VolunteerFormPage } from '../volunteer-form/volunteer-form';
@@ -42,7 +42,7 @@ export class CharitiesPage {
   email: string;
   charities: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController, public platform: Platform) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController, public platform: Platform, private viewCtrl: ViewController) {
 
     // get data from nav params
     this.mobileNo = this.navParams.get('mobileno');
@@ -158,20 +158,8 @@ export class CharitiesPage {
 
       // check if request from userinfo page then gotouserinfo page
       if (this.navParams.get('page') == 'userinfo') {
-        this.navCtrl.setRoot(UserinfoPage, {
-          charities: charities,
-          mobileno: this.mobileNo,
-          country: this.c_code,
-          fname: this.fname,
-          lname: this.lname,
-          email: this.email,
-          cause_percentage: this.navParams.get('cause_percentage'),
-          donation_amount: this.navParams.get('donation_amount'),
-          large_donation: this.navParams.get('large_donation'),
-          ch_name: this.navParams.get('ch_name'),
-          card_number: this.navParams.get('card_number'),
-          cvv_number: this.navParams.get('cvv_number'),
-          card_expiry: this.navParams.get('card_expiry')
+        this.viewCtrl.dismiss({
+          charities: charities
         });
       }
 
