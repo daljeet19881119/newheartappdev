@@ -42,6 +42,7 @@ import { GlobalProvider } from '../providers/global/global';
 import { BhHomePageProvider } from '../providers/bh-home-page/bh-home-page';
 import { UserBigheartsPage } from '../pages/user-bighearts/user-bighearts';
 import { ViewNgoPage } from '../pages/view-ngo/view-ngo';
+import { CardIO } from '@ionic-native/card-io';
 
 @NgModule({
   declarations: [
@@ -114,7 +115,8 @@ import { ViewNgoPage } from '../pages/view-ngo/view-ngo';
     AndroidPermissions,
     Device,
     GlobalProvider,
-    BhHomePageProvider 
+    BhHomePageProvider,
+    CardIO 
   ]
 })
 export class AppModule {}

@@ -1,16 +1,5 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController, AlertController, Platform, ViewController } from 'ionic-angular';
-import { UserinfoPage } from '../userinfo/userinfo';
-import { CauseFormPage } from '../cause-form/cause-form';
-import { VolunteerFormPage } from '../volunteer-form/volunteer-form';
-import { HomePage } from '../home/home';
-
-/**
- * Generated class for the CharitiesPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -165,38 +154,15 @@ export class CharitiesPage {
 
       // check if request from causeForm page then gotocauseform page
       if (this.navParams.get('page') == 'cause-form') {
-
-        // create modal
-        const modal = this.modalCtrl.create(CauseFormPage, {
-          charities: charities,
-          fname: this.navParams.get('fname'),
-          lname: this.navParams.get('lname'),
-          email: this.navParams.get('email'),
-          bank_name: this.navParams.get('bank_name'),
-          account_no: this.navParams.get('account_no'),
-          ifsc_code: this.navParams.get('ifsc_code'),
-          paypal_email: this.navParams.get('paypal_email')
-        });
-        modal.present();
-
-        modal.onDidDismiss(() => {
-          this.navCtrl.setRoot(HomePage);
+        this.viewCtrl.dismiss({
+          charities: charities
         });
       }
 
       // check if request from volunteerform page then gotovolunteerform page
       if (this.navParams.get('page') == 'volunteer-form') {
-        // create modal
-        const modal = this.modalCtrl.create(VolunteerFormPage, {
+        this.viewCtrl.dismiss({
           charities: charities,
-          fname: this.navParams.get('fname'),
-          lname: this.navParams.get('lname'),
-          email: this.navParams.get('email')
-        });
-        modal.present();
-
-        modal.onDidDismiss(() => {
-          this.navCtrl.setRoot(HomePage);
         });
       }
     }

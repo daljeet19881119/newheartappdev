@@ -6,13 +6,8 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 import { CharitiesPage } from '../charities/charities';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { GlobalProvider } from '../../providers/global/global';
+import { HomePage } from '../home/home';
 
-/**
- * Generated class for the VolunteerFormPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -124,7 +119,7 @@ export class VolunteerFormPage {
 
     // if user try goback then go to homepage
     this.platform.registerBackButtonAction(() => {
-      this.viewCtrl.dismiss();
+      this.navCtrl.setRoot(HomePage);
     });
   }
 
@@ -145,26 +140,6 @@ export class VolunteerFormPage {
     }, err => {
       console.log(err);
     });
-
-    // check if charities comes
-    if (this.navParams.get('charities')) {
-      // store charities object that are send from the charities page
-      let charities = this.navParams.get('charities');
-
-      // loop all charities
-      charities.forEach(element => {
-
-        // sotore only selected charities in array
-        if (element.value == true) {
-          this.charities.push('  ' + element.name);
-        }
-      });
-      this.checkCharity = true;
-    }
-
-    this.fname = this.navParams.get('fname');
-    this.lname = this.navParams.get('lname');
-    this.email = this.navParams.get('email');
   }
 
   // validateEmail
@@ -187,7 +162,7 @@ export class VolunteerFormPage {
     this.charities.forEach(element => {
 
       // remove starting space from each element and push into charity array
-      charities.push(element.replace('  ', ''));
+      charities.push(element.trim());
     });
 
     let contact1 = this.contactName1 + ',' + this.contactEmail1 + ',' + this.contactDesc1;
@@ -389,17 +364,42 @@ export class VolunteerFormPage {
     this.charities.forEach(element => {
 
       // remove starting space from each element and push into charity array
-      charities.push(element.replace('  ', ''));
+      charities.push(element.trim());
     });
 
     // create modal
     const modal = this.modalCtrl.create(CharitiesPage, {
       charities: charities,
       page: 'volunteer-form',
-      fname: this.fname,
-      lname: this.lname,
-      email: this.email
     });
     modal.present();
+
+    modal.onDidDismiss((data) => {
+      console.log('view dismiss run successfuly');
+
+      // declare empty array for charity
+      let charities = [];
+
+      // loop of charity
+      data.charities.forEach(element => {
+        if (element.value == true) {
+          // push element to charity arr
+          charities.push(element.name.trim());
+        }
+      });
+
+      this.checkCharity = true;
+
+      // store selected charities in charities variable
+      this.charities = charities;
+
+      // get ngo of charities
+      if (this.charities.length > 0) {
+        let selected_charity = [];
+        this.charities.forEach(element => {
+          selected_charity.push(element.trim());
+        });
+      }
+    });
   }
 }

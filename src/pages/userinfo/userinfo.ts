@@ -7,6 +7,7 @@ import { UserProvider } from '../../providers/user/user';
 import { Storage } from '@ionic/storage';
 import { GlobalProvider } from '../../providers/global/global';
 import { ProfilePage } from '../profile/profile';
+import { CardIO, CardIOOptions, CardIOResponse } from '@ionic-native/card-io';
 
 
 @IonicPage()
@@ -30,6 +31,8 @@ export class UserinfoPage {
   allRegions: any;
   countries: any;
   location: any;
+  checkCountry: boolean = false;
+  checkRegion: boolean = false;
 
   // variable to store charities
   charities: any = [];
@@ -41,14 +44,16 @@ export class UserinfoPage {
   ch_name: string = null;
   card_number: any = null;
   cvv_number: any = null;
-  card_expiry: any = null;
   current_year: any = new Date().getFullYear();
+  dateObj: Date = new Date();
+  card_expiry: any = null;
   all_ngo: any;
   ngo_id: string;
   ngo_id_arr: any = [];
   referral_code: any;
-  constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, public platform: Platform, private global: GlobalProvider, private loadingCtrl: LoadingController, private userService: UserProvider, private storage: Storage, private modalCtrl: ModalController) {
-    
+
+  constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, public platform: Platform, private global: GlobalProvider, private loadingCtrl: LoadingController, private userService: UserProvider, private storage: Storage, private modalCtrl: ModalController, private cardIO: CardIO) {
+
     // if user try goback then exit app
     this.platform.registerBackButtonAction(() => {
       platform.exitApp();
@@ -89,8 +94,40 @@ export class UserinfoPage {
     else {
       this.uuid = 'undefined';
     }
+
+    // add date default date in expiry
+    let year = this.dateObj.getFullYear() + 1;
+    let month = this.dateObj.getMonth() + 1;
+    this.card_expiry = year + '-' + month;
+
+    // load countries and regions
+    this.loadCountries();
+    this.loadRegions();
+
   }
 
+  // checkPreference
+  checkPreference(preference: string) {
+    if(preference == 'country' && this.checkCountry == false) {
+      this.checkCountry = false;
+    }
+    else if(preference == 'country' && this.checkCountry == true) {
+      this.checkCountry = true;
+      this.checkRegion = false;
+      this.preference = preference;
+    }
+
+    if(preference == 'region' && this.checkRegion == false) {
+      this.checkRegion = false;
+    }
+    else if(preference == 'region' && this.checkRegion == true) {
+      this.checkRegion = true;
+      this.checkCountry = false;
+      this.preference = preference;
+    }
+  }
+
+  // getSelectedNgo
   getSelectedNgo(checked: any, id: any) {
     if (checked == true) {
       this.ngo_id_arr.push(id);
@@ -99,8 +136,48 @@ export class UserinfoPage {
       this.ngo_id_arr.pop(id);
     }
   }
+
+  // setCardHolderName
+  setCardHolderName() {
+    // check if first name and last name not null then insert fullname in ch_name
+    if (this.firstName != null && this.lastName != null) {
+      this.ch_name = this.firstName + ' ' + this.lastName;
+    }
+  }
+
+  // scanCard
+  scanCard() {
+    this.cardIO.canScan()
+      .then(
+        (res: boolean) => {
+          if (res) {
+            let options: CardIOOptions = {
+              requireCardholderName: true,
+              requireCVV: true,
+              scanExpiry: true,
+              requireExpiry: true,
+              scanInstructions: "Scan your card to continue."
+            };
+            this.cardIO.scan(options).then((cardResponse: CardIOResponse) => {
+              this.ch_name = cardResponse.cardholderName;
+              this.card_number = cardResponse.cardNumber,
+                this.cvv_number = cardResponse.cvv;
+
+              // check if month is less than 10 then add 0
+              if (cardResponse.expiryMonth < 10) {
+                this.card_expiry = cardResponse.expiryYear + '-0' + cardResponse.expiryMonth;
+              }
+              else {
+                this.card_expiry = cardResponse.expiryYear + '-' + cardResponse.expiryMonth;
+              }
+            });
+          }
+        }
+      );
+  }
+
   // registerUser
-  registerUser() {    
+  registerUser() {
 
     // check if all fields are not empty then register user
     if (this.firstName == null || this.lastName == null || this.email == null || this.ch_name == null || this.card_number == null || this.cvv_number == null || this.card_expiry == null || this.charities.length == 0) {
@@ -135,15 +212,15 @@ export class UserinfoPage {
     });
 
     // check if none selected ngo then assign automaticaly ngo to member
-    if(this.ngo_id_arr.length < 1) {
+    if (this.ngo_id_arr.length < 1) {
       let i = 1;
       this.all_ngo.forEach(element => {
-        if(i <= 5) {
+        if (i <= 5) {
           this.ngo_id_arr.push(element.id);
         }
         i++;
       });
-    } 
+    }
 
     // conver array to stirng
     this.ngo_id = this.ngo_id_arr.toString();
@@ -286,8 +363,8 @@ export class UserinfoPage {
   // createAlert
   createAlert(msg: string) {
     const alert = this.alertCtrl.create({
-        message: msg,
-        buttons: ['ok']
+      message: msg,
+      buttons: ['ok']
     });
     alert.present();
   }
@@ -308,36 +385,24 @@ export class UserinfoPage {
     }
   }
 
-  // getPreference
-  getPreference() {
+  // loadCountries
+  loadCountries() {
+    // get countries from storage
+    this.storage.get('countries').then((country) => {
+      this.countries = country;
+    }).catch((err) => {
+      console.log('error: ' + err);
+    });
+  }
 
-    // if user select region then get all region
-    if (this.preference == 'region') {
-      this.createLoader();
-
-      // request region from server
-      this.userService.getAllRegions().subscribe(data => {
-        this.allRegions = data;
-        this.loader.dismiss();
-      }, err => {
-        console.log('err: ' + err);
-        this.loader.dismiss();
-      });
-    }
-
-    // if user select country then get all countries
-    if (this.preference == 'country') {
-      this.createLoader();
-
-      // get countries from storage
-      this.storage.get('countries').then((country) => {
-        this.countries = country;
-        this.loader.dismiss();
-      }).catch((err) => {
-        console.log('error: ' + err);
-        this.loader.dismiss();
-      });
-    }
+  // loadRegions
+  loadRegions() {
+    // request region from server
+    this.userService.getAllRegions().subscribe(data => {
+      this.allRegions = data;
+    }, err => {
+      console.log('err: ' + err);
+    });
   }
 
   // get ngo by charity name

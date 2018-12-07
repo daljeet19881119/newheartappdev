@@ -270,7 +270,7 @@ export class HomePage {
 
       // store data
       this.recommendedBigHearts = data;
-      console.log(data);
+      // console.log(data);
     }, err => {
       console.log('Oops!');
     });

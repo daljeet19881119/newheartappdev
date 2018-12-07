@@ -11,11 +11,11 @@
     <ion-list>
       <ion-item no-padding class="item-feilds">
         <ion-label floating>First Name*</ion-label>
-        <ion-input type="text" [(ngModel)]="firstName"></ion-input>
+        <ion-input type="text" [(ngModel)]="firstName" (ionBlur)="setCardHolderName()"></ion-input>
       </ion-item>
       <ion-item no-padding class="item-feilds">
           <ion-label floating>Last Name*</ion-label>
-          <ion-input type="text" [(ngModel)]="lastName"></ion-input>
+          <ion-input type="text" [(ngModel)]="lastName" (ionBlur)="setCardHolderName()"></ion-input>
         </ion-item>
       <ion-item no-padding class="item-feilds">
         <ion-label floating>Email*</ion-label>
@@ -67,6 +67,7 @@
     <div class="textarea-div">
       <ion-row>
         <ion-label>Add payment details</ion-label>
+        <button ion-button small float-left (click)="scanCard()">Scan Card</button>
       </ion-row>
       <ion-item class="payment-item">
         <ion-label floating>Card holder name*</ion-label>
@@ -82,7 +83,7 @@
       </ion-item>
       <ion-item class="payment-item">
         <ion-label floating>Expiry date*</ion-label>
-        <ion-datetime displayFormat="MMM/YYYY" [(ngModel)]="card_expiry" [min]="current_year + 1" [max]="current_year + 50"></ion-datetime>
+        <ion-datetime displayFormat="MMM/YYYY" [(ngModel)]="card_expiry" [min]="current_year" [max]="current_year + 50"></ion-datetime>
       </ion-item>
     </div>    
       <ion-item no-padding (click)="gotoCharityPage()" *ngIf="!checkCharity || charities?.length == 0" class="item-feilds"> 
@@ -113,7 +114,7 @@
               <ion-avatar item-start style="background: #48414130;border-radius: 50%;border: 1px solid #48414130;z-index: 1;" (click)="viewNgoProfile(ngo.id)">                
                 <img [src]="ngo.ngo_founder_img_url" [alt]="ngo.ngo_name">
               </ion-avatar>
-              <ion-label>{{ ngo.ngo_user+' ('+ngo.ngo_name+')' }}</ion-label>
+              <ion-label (click)="viewNgoProfile(ngo.id)" style="z-index: 1;">{{ ngo.ngo_user+' ('+ngo.ngo_name+')' }}</ion-label>
               <ion-checkbox [(ngModel)]="ngo.checked" (click)="getSelectedNgo(ngo.checked, ngo.id);" item-end></ion-checkbox>
             </ion-item>
           </ng-container>
@@ -123,22 +124,22 @@
         <ion-row class="label-row">
           <p>Geographic Preference(s)</p>
         </ion-row>
-        <ion-row radio-group [(ngModel)]="preference" (ionChange)="getPreference()">
+        <ion-row>
           <ion-col>
             <ion-item class="item-radio">
               <ion-label>Select a specific country</ion-label>
-              <ion-radio value="country"></ion-radio>
+              <ion-checkbox [(ngModel)]="checkCountry" item-end (ionChange)="checkPreference('country')"></ion-checkbox>
             </ion-item>
           </ion-col>
           <ion-col>
             <ion-item class="item-radio">
               <ion-label>Select a region</ion-label>
-              <ion-radio value="region"></ion-radio>
+              <ion-checkbox [(ngModel)]="checkRegion" item-end (ionChange)="checkPreference('region')"></ion-checkbox>
             </ion-item>
           </ion-col>
         </ion-row>
       </div>
-      <ion-item *ngIf="preference == 'country'" no-padding class="item-feilds">
+      <ion-item *ngIf="checkCountry" no-padding class="item-feilds">
         <ion-label>
           Tap here to select country
         </ion-label>
@@ -148,7 +149,7 @@
           </ng-container>
         </ion-select>
       </ion-item>
-      <ion-item *ngIf="preference == 'region'" no-padding class="item-feilds">
+      <ion-item *ngIf="checkRegion" no-padding class="item-feilds">
         <ion-label>
           Tap here to select region
         </ion-label>
@@ -161,7 +162,7 @@
       <div class="textarea-div">
         <ion-item no-padding class="item-feilds">
           <ion-label floating>Referral code</ion-label>
-          <ion-input type="text" [(ngModel)]="referral_code"></ion-input>
+          <ion-input type="number" [(ngModel)]="referral_code"></ion-input>
         </ion-item>
       </div>
     </ion-list>

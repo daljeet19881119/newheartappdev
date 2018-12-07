@@ -4,8 +4,8 @@ import { Device } from '@ionic-native/device';
 @Injectable()
 export class GlobalProvider {
 
-  SITE_URL: string = 'http://ionic.dsl.house/heartAppApi';
-  API_URL: string = 'http://ionic.dsl.house/api/heartapp';
+  SITE_URL: string = 'https://ionic.dsl.house/heartAppApi';
+  API_URL: string = 'https://ionic.dsl.house/api/heartapp';
 
   constructor(private device: Device) {
     console.log('Hello GlobalProvider Provider');

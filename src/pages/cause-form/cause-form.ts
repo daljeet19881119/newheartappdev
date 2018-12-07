@@ -7,6 +7,7 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
 import { CharitiesPage } from '../charities/charities';
 import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker';
 import { GlobalProvider } from '../../providers/global/global';
+import { HomePage } from '../home/home';
 
 @IonicPage()
 @Component({
@@ -129,43 +130,18 @@ export class CauseFormPage {
 
     }).catch((err) => {
       console.log(err);
-    });
-
-    // get device id
-    this.getDeviceID();
+    });    
 
     // if user try goback then go to homepage
     this.platform.registerBackButtonAction(() => {
-      this.viewCtrl.dismiss();
+      this.navCtrl.setRoot(HomePage);
     });
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CauseFormPage');
-
-    // check if charities comes
-    if (this.navParams.get('charities')) {
-      // store charities object that are send from the charities page
-      let charities = this.navParams.get('charities');
-
-      // loop all charities
-      charities.forEach(element => {
-
-        // sotore only selected charities in array
-        if (element.value == true) {
-          this.charities.push('  ' + element.name);
-        }
-      });
-      this.checkCharity = true;
-    }
-
-    this.fname = this.navParams.get('fname');
-    this.lname = this.navParams.get('lname');
-    this.email = this.navParams.get('email');
-    this.bank_name = this.navParams.get('bank_name');
-    this.account_no = this.navParams.get('account_no');
-    this.ifsc_code = this.navParams.get('ifsc_code');
-    this.paypal_email = this.navParams.get('paypal_email');
+    // get device id
+    this.getDeviceID();
   }
 
   // getDeviceID
@@ -216,7 +192,7 @@ export class CauseFormPage {
     this.charities.forEach(element => {
 
       // remove starting space from each element and push into charity array
-      charities.push(element.replace('  ', ''));
+      charities.push(element.trim());
     });
 
     let contact1 = this.contactName1 + ',' + this.contactEmail1 + ',' + this.contactDesc1;
@@ -528,19 +504,42 @@ export class CauseFormPage {
     this.charities.forEach(element => {
 
       // remove starting space from each element and push into charity array
-      charities.push(element.replace('  ', ''));
+      charities.push(element.trim());
     });
 
-    this.navCtrl.push(CharitiesPage, {
+    // goto charity page
+    const modal = this.modalCtrl.create(CharitiesPage, {
       charities: charities,
-      page: 'cause-form',
-      fname: this.fname,
-      lname: this.lname,
-      email: this.email,
-      bank_name: this.bank_name,
-      account_no: this.account_no,
-      ifsc_code: this.ifsc_code,
-      paypal_email: this.paypal_email
+      page: 'cause-form'
+    });
+    modal.present();
+
+    modal.onDidDismiss((data) => {
+      console.log('view dismiss run successfuly');
+
+      // declare empty array for charity
+      let charities = [];
+
+      // loop of charity
+      data.charities.forEach(element => {
+        if (element.value == true) {
+          // push element to charity arr
+          charities.push(element.name.trim());
+        }
+      });
+
+      this.checkCharity = true;
+
+      // store selected charities in charities variable
+      this.charities = charities;
+
+      // get ngo of charities
+      if (this.charities.length > 0) {
+        let selected_charity = [];
+        this.charities.forEach(element => {
+          selected_charity.push(element.trim());
+        });
+      }
     });
   }
 }
