@@ -51,7 +51,9 @@ export class WelcomePage {
         if (data.data.verification == 'verified' && data.data.profile_status == 'notVerified') {
           this.navCtrl.setRoot(UserinfoPage, {
             mobileno: data.data.mobileno,
-            country: data.data.country
+            country: data.data.country,
+            email: data.data.email,
+            verification_type: data.data.verification_type
           });
         }
         if (data.data.verification == 'verified' && data.data.profile_status == 'verified') {

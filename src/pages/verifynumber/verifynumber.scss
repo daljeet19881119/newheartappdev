@@ -5,6 +5,7 @@ page-verifynumber {
         color: #ae0433;
         font-size: 18px;
         font-weight: 400;
+        margin-top: 20px;
     }
     .number-row{
         margin: 10px 0;
@@ -17,5 +18,13 @@ page-verifynumber {
     }
     .item-radious{
         border-radius: 5px;
+    }
+    .h-text{
+        color:#fff;
+        font-size: 2rem;
+    }
+    .divider{
+        background-color: transparent;
+        border-bottom-color: transparent;
     }
 }

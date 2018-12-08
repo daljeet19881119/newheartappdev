@@ -22,6 +22,7 @@ export class UserinfoPage {
   firstName: string = null;
   lastName: string = null;
   email: string = null;
+  showEmail: boolean;
   mobileno: number = null;
   country: number = null;
   profileStatus: string = null;
@@ -51,6 +52,7 @@ export class UserinfoPage {
   ngo_id: string;
   ngo_id_arr: any = [];
   referral_code: any;
+  verification_type: any;
 
   constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, public platform: Platform, private global: GlobalProvider, private loadingCtrl: LoadingController, private userService: UserProvider, private storage: Storage, private modalCtrl: ModalController, private cardIO: CardIO) {
 
@@ -64,7 +66,25 @@ export class UserinfoPage {
     this.country = this.navParams.get('country');
     this.firstName = this.navParams.get('fname');
     this.lastName = this.navParams.get('lname');
+    this.verification_type = this.navParams.get('verification_type');
     this.email = this.navParams.get('email');
+
+    // check verificaiton type
+    if (this.verification_type == 'email') {
+      this.showEmail = true;
+    }
+    else if (this.verification_type == 'both') {
+      if (this.navParams.get('email') != '') {
+        this.showEmail = true;
+      }
+      else {
+        this.showEmail = false;
+      }
+    }
+    else {
+      this.showEmail = false;
+    }
+
     this.large_donation = this.navParams.get('large_donation');
     this.ch_name = this.navParams.get('ch_name');
     this.card_number = this.navParams.get('card_number');
@@ -108,19 +128,19 @@ export class UserinfoPage {
 
   // checkPreference
   checkPreference(preference: string) {
-    if(preference == 'country' && this.checkCountry == false) {
+    if (preference == 'country' && this.checkCountry == false) {
       this.checkCountry = false;
     }
-    else if(preference == 'country' && this.checkCountry == true) {
+    else if (preference == 'country' && this.checkCountry == true) {
       this.checkCountry = true;
       this.checkRegion = false;
       this.preference = preference;
     }
 
-    if(preference == 'region' && this.checkRegion == false) {
+    if (preference == 'region' && this.checkRegion == false) {
       this.checkRegion = false;
     }
-    else if(preference == 'region' && this.checkRegion == true) {
+    else if (preference == 'region' && this.checkRegion == true) {
       this.checkRegion = true;
       this.checkCountry = false;
       this.preference = preference;
@@ -201,6 +221,8 @@ export class UserinfoPage {
 
   // makeServerRequest
   makeServerRequest() {
+    this.createLoader('submitting your request');
+
     // declare empty array for charity
     let charities = [];
 
@@ -269,6 +291,7 @@ export class UserinfoPage {
       country: this.country,
       referral_code: referral_code,
       referral_amount: referral_amount,
+      verification_type: this.verification_type      
     };
 
     this.userService.verifyUserProfile(data).subscribe(data => {
@@ -295,8 +318,15 @@ export class UserinfoPage {
         this.navCtrl.setRoot(HomePage);
       }
 
+      // check if msg failed
+      if(data.msg == 'failed') {
+        this.createAlert('Server is unable to submit your request. Please try again later.');
+      }
+
+      this.loader.dismiss();
     }, err => {
       console.log(err);
+      this.loader.dismiss();
     });
   }
 
@@ -351,10 +381,10 @@ export class UserinfoPage {
   }
 
   // createLoader
-  createLoader() {
+  createLoader(msg: string = 'Please wait...') {
     this.loader = this.loadingCtrl.create({
       spinner: 'dots',
-      content: 'Please wait...'
+      content: msg
     });
 
     this.loader.present();

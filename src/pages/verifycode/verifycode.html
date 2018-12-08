@@ -6,12 +6,18 @@
 
 
 <ion-content padding class="body-color">
-  <p class="para">We've sent an SMS with an activation code to your phone <b>+{{country+' '+mobileno}}</b>.</p>
-  <ion-item class="input-item">
-    <ion-input type="number" placeholder="Code" [(ngModel)]="code" (ionChange)="checkCode(code)"></ion-input>
-  </ion-item>
-  <!-- <p class="para">This is your verification code <b>{{this.verifyCode}}</b> please enter</p>
-  <p class="para">The verification will show for only testing and development purpose. But when app will live verification will recieved on entered mobile no.</p> -->
+  <ng-container *ngIf="sendSMS">
+      <p class="para">We've sent an SMS with an activation code to your phone <b>+{{country+' '+mobileno}}</b>.</p>
+      <ion-item class="input-item">
+        <ion-input type="number" placeholder="Code" [(ngModel)]="code" (ionChange)="checkCode(code)"></ion-input>
+      </ion-item>
+  </ng-container>  
+  <ng-container *ngIf="!sendSMS">
+      <p class="para">We've sent an email with an activation code to your email <b>{{ email }}</b>.</p>
+      <ion-item class="input-item">
+        <ion-input type="number" placeholder="Code" [(ngModel)]="code" (ionChange)="checkCode(code)"></ion-input>
+      </ion-item>
+  </ng-container>
   <ion-row class="btn-row">
     <ion-col class="btn-col" style="text-align: right;">
         <button ion-button color="light" block class="resend-btn" (click)="resendVerificationCode()">Resend</button>

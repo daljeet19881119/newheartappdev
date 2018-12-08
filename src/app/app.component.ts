@@ -90,5 +90,9 @@ export class MyApp {
     this.nav.push(UserProfilePage);
   }
 
+  // gotoSettingsPage
+  gotoSettingsPage() {
+    
+  }
 }
 

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, Platform, AlertController } from 'ionic-angular';
 import { VerifycodePage } from '../verifycode/verifycode';
 import { UserProvider } from '../../providers/user/user';
 import { Storage } from '@ionic/storage';
@@ -21,14 +21,15 @@ export class VerifynumberPage {
 
   // country
   code: string = 'US';
-  country: number = null;
-  mobileno: number = null;
+  country: number;
+  mobileno: any = '';
   verficationCode: any;
   uuid: any;
   allCountries: any;
   loader: any;
+  email: any = '';
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, private global: GlobalProvider, public platform: Platform, public userService: UserProvider, private storage: Storage) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, private global: GlobalProvider, public platform: Platform, public userService: UserProvider, private storage: Storage, private alertCtrl: AlertController) {
 
     // call getuniqueDeviceID
     this.getuniqueDeviceID();
@@ -51,7 +52,7 @@ export class VerifynumberPage {
 
       // GET COUNTRY DIAL CODE BY ITS CODE
       country.forEach(element => {
-        if(element.code == this.code){
+        if (element.code == this.code) {
           this.country = element.dial_code;
         }
       });
@@ -64,7 +65,7 @@ export class VerifynumberPage {
       console.log('Oops!');
       this.loader.dismiss();
     });
-    
+
     // call function getCountryCode
     // this.getCountryCode(this.code);
 
@@ -73,54 +74,64 @@ export class VerifynumberPage {
   // function to getCountryCode
   getCountryCode(code: string) {
 
-      // call user service provider to get country code
-      this.userService.getCountryCodeByCode(code).subscribe(data => {
-        this.country = data.dial_code;
+    // call user service provider to get country code
+    this.userService.getCountryCodeByCode(code).subscribe(data => {
+      this.country = data.dial_code;
 
-        // dismiss laoder
-        this.loader.dismiss();
+      // dismiss laoder
+      this.loader.dismiss();
     }, err => {
-      console.log('Oops!'+err);
+      console.log('Oops!' + err);
     });
   }
 
-  // validateNumber
-  validateNumber() {
-    
-    // check if country or number is empty give alert
-    if(this.mobileno === null)
-    {
-      // create alert
-      alert('please enter your number');
-    }
-    else
-    {
-      let mobileno = Number(this.mobileno);
-      // check if mobileno is not a string then sendSMS
-      if(!isNaN(mobileno))
-      {
-        // sendSMS
-        this.sendSMS();
+  // validateData
+  validateData() {
+    // check if not empty email or number
+    if (this.mobileno != '' && this.email != '') {      
+      if(!Number(parseInt(this.mobileno))) {
+        this.createAlert('Please enter valid number');
+      }
+      else if(this.validateEmail(this.email) == false) {
+        this.createAlert('Please enter valid email');
       }
       else{
-        alert('Please enter valid number');
+        this.sendSMS('both');
       }
-      
+    }
+    else if(this.mobileno != '' && this.email == '') {
+      if(!Number(parseInt(this.mobileno))) {
+        this.createAlert('Please enter valid number');
+      }
+      else{
+        this.sendSMS('mobileno');
+      }
+    }
+    else if(this.email != '' && this.mobileno == '') {
+      if(this.validateEmail(this.email) == false) {
+        this.createAlert('Please enter valid email');
+      }
+      else{
+        this.sendSMS('email');
+      }
+    }
+    else if (this.mobileno == '' && this.email == ''){
+      this.createAlert('Please enter your mobile number or email.');
     }
   }
 
   // getuniqueDeviceID
   getuniqueDeviceID() {
-    if(this.global.uuid()) {
+    if (this.global.uuid()) {
       this.uuid = this.global.uuid();
     }
-    else{
+    else {
       this.uuid = 'undefined';
     }
   }
-  
+
   // sendSMS
-  sendSMS() {
+  sendSMS(verification_type: string) {
 
     // call createLoader
     this.createLoader();
@@ -128,42 +139,56 @@ export class VerifynumberPage {
     const data = {
       mobileno: this.mobileno,
       country: this.country,
+      email: this.email,
+      verification_type: verification_type,
       uuid: this.uuid
     };
-    
+
     // verifyNumber
     this.userService.verifyNumber(data).subscribe(data => {
       this.verficationCode = data.data.verification_code;
 
       let userExists: any;
       // check if number already exists
-      if(data.msg === 'update')
-      {
-        if(data.data.verification == 'notVerified') {
+      if (data.msg === 'update') {
+        if (data.data.verification == 'notVerified') {
+          userExists = 'false';
+        }
+        else if(data.data.profile_status == 'notVerified') {
           userExists = 'false';
         }
         else{
           userExists = 'true';
-        }        
-      }else{
+        }
+      } else {
         userExists = 'false';
       }
 
       // check if verification code is null then show loader
-      if(this.verficationCode !== null) 
-      {        
+      if (this.verficationCode !== null) {
         this.navCtrl.push(VerifycodePage, {
           phone: this.mobileno,
           country: this.country,
           code: this.verficationCode,
+          email: this.email,
+          verification_type: verification_type,
           userExists: userExists
         });
         this.loader.dismiss();
-      } 
+      }
     }, err => {
       console.log(err);
       this.loader.dismiss();
     });
+  }
+
+  // createAlert
+  createAlert(msg: string) {
+    const alert = this.alertCtrl.create({
+      message: msg,
+      buttons: ['ok']
+    });
+    alert.present();
   }
 
   // createLoader
@@ -174,5 +199,15 @@ export class VerifynumberPage {
     });
 
     this.loader.present();
+  }
+
+  // validateEmail
+  validateEmail(mail: string) {
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 }

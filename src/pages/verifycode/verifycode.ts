@@ -22,6 +22,9 @@ export class VerifycodePage {
   uuid: any;
   btnDisable: boolean = true;
   loader: any;
+  email: any;
+  verification_type: any;
+  sendSMS: boolean;
 
   constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, private alertCtrl: AlertController, public platform: Platform, private global: GlobalProvider, public loadingCtrl: LoadingController, private userService: UserProvider) {
 
@@ -38,6 +41,19 @@ export class VerifycodePage {
     this.mobileno = this.navParams.get('phone');
     this.country = this.navParams.get('country');
     this.verifyCode = this.navParams.get('code');
+    this.email = this.navParams.get('email');
+    this.verification_type = this.navParams.get('verification_type');
+
+    // check if verification type
+    if(this.verification_type == 'email') {
+      this.sendSMS = false;
+    }
+    else if(this.verification_type == 'mobileno') {
+      this.sendSMS = true;
+    }
+    else{
+      this.sendSMS = true;
+    }
 
     if (this.global.uuid()) {
       this.uuid = this.global.uuid();
@@ -86,7 +102,9 @@ export class VerifycodePage {
       // gotoUserinfoPage
       this.navCtrl.setRoot(page, {
         mobileno: this.mobileno,
-        country: this.country
+        country: this.country,
+        email: this.email,
+        verification_type: this.verification_type
       });
 
       this.loader.dismiss();
@@ -112,6 +130,8 @@ export class VerifycodePage {
         mobileno: this.mobileno,
         country: this.country,
         verification_code: verifyCode,
+        verification_type: this.verification_type,
+        email: this.email
     };
     this.userService.verifyVerificationCode(data).subscribe(data => {
       console.log(data);
@@ -128,7 +148,9 @@ export class VerifycodePage {
     const data = {
       mobileno: this.mobileno,
       country: this.country,
-      uuid: this.uuid
+      uuid: this.uuid,
+      verification_type: this.verification_type,
+      email: this.email
     };
 
     this.userService.verifyNumber(data).subscribe(data => {
@@ -155,8 +177,14 @@ export class VerifycodePage {
   }
   // resendAlert
   resendAlert() {
+    let message = `We've sent an SMS with an activation code to your phone <b>+${this.country + ' ' + this.mobileno}</b>`;
+    // check send sms false
+    if(this.sendSMS == false) {
+      message = `We've sent an email with an activation code to your email <b>${this.email}</b>`;
+    }
+
     const alert = this.alertCtrl.create({
-      message: `We've sent an SMS with an activation code to your phone <b>+${this.country + ' ' + this.mobileno}</b>`,
+      message: message,
       buttons: ['ok']
     });
     alert.present();

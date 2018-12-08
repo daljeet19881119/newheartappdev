@@ -332,7 +332,8 @@ export class CauseFormPage {
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
       targetHeight: 900,
-      targetWidth: 900
+      targetWidth: 900,
+      correctOrientation: true
     }
 
     let date = new Date();
@@ -380,7 +381,8 @@ export class CauseFormPage {
       sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
       saveToPhotoAlbum: false,
       targetHeight: 900,
-      targetWidth: 900
+      targetWidth: 900,
+      correctOrientation: true
     }
 
     let date = new Date();

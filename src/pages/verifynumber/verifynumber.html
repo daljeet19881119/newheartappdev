@@ -27,5 +27,23 @@
         </ion-item>          
       </ion-col>
     </ion-row>
-    <button ion-button block class="next-btn" (click)="validateNumber()" color="white">Next</button>
+    <ion-item-divider class="divider"></ion-item-divider>
+    <ion-row>
+      <ion-col>
+          <h3 text-center class="h-text">OR</h3>
+      </ion-col>      
+    </ion-row>
+    <ion-item-divider class="divider"></ion-item-divider>
+    <ion-row>
+      <ion-col>
+          <h2 text-center class="h-text">Email Verification</h2>
+      </ion-col>      
+    </ion-row>
+    <ion-row>
+      <ion-item class="item-radious">
+        <ion-label floating>Enter Email</ion-label>
+        <ion-input type="email" [(ngModel)]="email"></ion-input>
+      </ion-item>
+    </ion-row>
+    <button ion-button block class="next-btn" (click)="validateData()" color="white">Next</button>
 </ion-content>

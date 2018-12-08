@@ -19,7 +19,7 @@
         </ion-item>
       <ion-item no-padding class="item-feilds">
         <ion-label floating>Email*</ion-label>
-        <ion-input type="email" [(ngModel)]="email"></ion-input>
+        <ion-input type="email" [(ngModel)]="email" [readonly]="showEmail"></ion-input>
       </ion-item>
       <div class="textarea-div">
       <ion-row>
@@ -106,7 +106,7 @@
       </ion-row>
       <div class="textarea-div" *ngIf="all_ngo">
         <ion-row>
-          <p>Select any particular BigHeart to which you want to donate</p>
+          <p>Select any particular BigHeart to which you want to donate to otherwise we will select a few we believe you like</p>
         </ion-row>
         <ion-list class="list-height">
           <ng-container *ngFor="let ngo of all_ngo">
