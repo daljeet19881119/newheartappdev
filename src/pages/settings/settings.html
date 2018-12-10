@@ -1,0 +1,98 @@
+<ion-header>
+  <ion-navbar color="appColor">
+    <ion-title style="text-align: center;">Settings</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding class="body-color" style="background-color: #ae0433;">
+  <ion-list>
+    <ion-item no-padding class="item-feilds">
+      <ion-label floating>First Name*</ion-label>
+      <ion-input type="text" [(ngModel)]="fname"></ion-input>
+    </ion-item>
+    <ion-item no-padding class="item-feilds">
+      <ion-label floating>Last Name*</ion-label>
+      <ion-input type="text" [(ngModel)]="lname"></ion-input>
+    </ion-item>
+    <ion-item no-padding class="item-feilds" *ngIf="verification_type == 'phone'">
+      <ion-label floating>Phone*</ion-label>
+      <ion-input type="number" [(ngModel)]="mobileno"></ion-input>
+    </ion-item>
+    <ion-item no-padding class="item-feilds" *ngIf="verification_type == 'email'">
+      <ion-label floating>Email*</ion-label>
+      <ion-input type="email" [(ngModel)]="email"></ion-input>
+    </ion-item>
+    <div class="textarea-div">
+      <ion-row>
+        <p>How much you want to donate to causes (0-97%) and to HeartGlobal (3-100%)</p>
+      </ion-row>
+      <ion-row>
+        <ion-label><span class="range-val">Cause(s) {{ '('+cause_percentage+'%)' }}</span></ion-label>
+        <ion-label text-right><span class="range-val">HeartGlobal ({{ 100-cause_percentage }}%)</span></ion-label>
+        <ion-item no-padding>
+          <ion-range min="0" max="97" [(ngModel)]="cause_percentage" color="appColor">
+            <ion-label range-left></ion-label>
+            <ion-label range-right></ion-label>
+          </ion-range>
+        </ion-item>
+      </ion-row>
+    </div>
+    <ion-item no-padding (click)="gotoCharityPage()" *ngIf="!checkCharity || charities?.length == 0" class="item-feilds">
+      <ion-label style="color: #999999;">Select charity areas <ion-icon name="arrow-forward" class="next-arrow"></ion-icon>
+      </ion-label>
+    </ion-item>
+    <ion-row *ngIf="charities?.length > 0">
+      <div class="selected-charity-div">
+        <span>Selected causes</span>
+      </div>
+      <ion-col col-10 no-padding>
+        <ion-item no-padding class="item-feild-textarea">
+          <ion-textarea [(ngModel)]="charities" readonly text-wrap class="text-area" (ionFocus)="gotoCharityPage()"></ion-textarea>
+        </ion-item>
+      </ion-col>
+      <ion-col col-2 no-padding (click)="gotoCharityPage()">
+        <ion-item class="item-feild-arrow">
+          <ion-label style="color: #999999;margin:20px 8px 20px 0;">
+            <ion-icon name="arrow-forward" class="next-arrow"></ion-icon>
+          </ion-label>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-item no-padding class="item-feilds"  *ngIf="preference_type == 'country'">
+      <ion-label>
+        Tap here to select country
+      </ion-label>
+      <ion-select interface="popover" [(ngModel)]="preference_location">
+        <ng-container *ngFor="let country of all_countries">
+          <ion-option [value]="country.code">{{ country.name }}</ion-option>
+        </ng-container>
+      </ion-select>
+    </ion-item>
+    <ion-item no-padding class="item-feilds" *ngIf="preference_type == 'region'">
+      <ion-label>
+        Tap here to select region
+      </ion-label>
+      <ion-select interface="popover" [(ngModel)]="preference_location">
+        <ng-container *ngFor="let region of all_regions">
+          <ion-option [value]="region.id">{{ region.name }}</ion-option>
+        </ng-container>
+      </ion-select>
+    </ion-item>
+    <div class="textarea-div">
+      <ion-row>
+        <p class="upload-para">Upload image of yourself or take a picture</p>
+        <ion-col col-7 class="profile-col">
+          <button ion-button small color="white" class="upload-btn" (click)="choosePicture()">Choose file</button>
+          <button ion-button small color="white" class="upload-btn" (click)="tackPicture()">
+            <ion-icon name="camera"></ion-icon>
+          </button>
+        </ion-col>
+        <ion-col col-3>
+          <img [src]="profile_pic_src" class="profile-pic" *ngIf="profile_pic_src">
+        </ion-col>
+      </ion-row>
+    </div>
+  </ion-list>
+  <button ion-button block color="white" class="register-btn" (click)="updateUserData()">Save</button>
+</ion-content>

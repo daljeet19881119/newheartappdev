@@ -101,7 +101,7 @@
     <plugin name="cordova-plugin-media-capture" spec="3.0.2" />
     <plugin name="cordova-plugin-android-permissions" spec="1.0.0" />
     <plugin name="cordova-plugin-device" spec="^2.0.2" />
-    <plugin name="com.hutchind.cordova.plugins.streamingmedia" spec="~0.1.4" />
     <plugin name="card.io.cordova.mobilesdk" spec="2.1.0" />
+    <plugin name="com.hutchind.cordova.plugins.streamingmedia" spec="~0.1.4" />
     <engine name="android" spec="7.0.0" />
 </widget>

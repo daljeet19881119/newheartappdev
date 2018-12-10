@@ -165,6 +165,13 @@ export class CharitiesPage {
           charities: charities,
         });
       }
+
+      // check if request from Settings page then goto setting apge
+      if(this.navParams.get('page') == 'settings') {
+        this.viewCtrl.dismiss({
+          charities: charities
+        });
+      }
     }
   }
 }

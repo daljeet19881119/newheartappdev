@@ -43,6 +43,7 @@ import { BhHomePageProvider } from '../providers/bh-home-page/bh-home-page';
 import { UserBigheartsPage } from '../pages/user-bighearts/user-bighearts';
 import { ViewNgoPage } from '../pages/view-ngo/view-ngo';
 import { CardIO } from '@ionic-native/card-io';
+import { SettingsPage } from '../pages/settings/settings';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ import { CardIO } from '@ionic-native/card-io';
     UserProfilePage,
     BhHomePage,
     UserBigheartsPage,
-    ViewNgoPage
+    ViewNgoPage,
+    SettingsPage
   ],
   imports: [
     BrowserModule,
@@ -95,7 +97,8 @@ import { CardIO } from '@ionic-native/card-io';
     UserProfilePage,
     BhHomePage,
     UserBigheartsPage,
-    ViewNgoPage
+    ViewNgoPage,
+    SettingsPage
   ],
   providers: [
     StatusBar,

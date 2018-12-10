@@ -231,4 +231,21 @@ export class UserProvider {
 
     return this._http.post(this.global.apiUrl('/save_user_bighearts'), postdata, options).map(res => res.json());
   }
+
+  // updateUserInfo
+  updateUserInfo(data: any) {
+    // set headers
+    let headers = new Headers();
+    headers.append("Accept","application/json");
+
+    // set request option
+    let options = new RequestOptions({headers: headers});
+
+    // set data to be send
+    let postdata = JSON.stringify({
+        data: data
+    });
+
+    return this._http.post(this.global.apiUrl('/update_user_info'), postdata, options).map(res => res.json());
+  }
 }
