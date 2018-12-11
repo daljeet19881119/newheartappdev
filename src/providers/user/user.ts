@@ -248,4 +248,38 @@ export class UserProvider {
 
     return this._http.post(this.global.apiUrl('/update_user_info'), postdata, options).map(res => res.json());
   }
+
+  // sendVerificationCode
+  sendVerificationCode(data: any) {
+    // set headers
+    let headers = new Headers();
+    headers.append("Accept","application/json");
+
+    // set request option
+    let options = new RequestOptions({headers: headers});
+
+    // set data to be send
+    let postdata = JSON.stringify({
+        data: data
+    });
+
+    return this._http.post(this.global.apiUrl('/sendVerificationCode'), postdata, options).map(res => res.json());
+  }
+
+  // sendVerificationEmail
+  sendVerificationEmail(data: any) {
+    // set headers
+    let headers = new Headers();
+    headers.append("Accept","application/json");
+
+    // set request option
+    let options = new RequestOptions({headers: headers});
+
+    // set data to be send
+    let postdata = JSON.stringify({
+        data: data
+    });
+
+    return this._http.post(this.global.apiUrl('/sendVerificationEmail'), postdata, options).map(res => res.json());
+  }
 }

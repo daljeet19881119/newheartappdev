@@ -9,20 +9,51 @@
   <ion-list>
     <ion-item no-padding class="item-feilds">
       <ion-label floating>First Name*</ion-label>
-      <ion-input type="text" [(ngModel)]="fname"></ion-input>
+      <ion-input type="text" [(ngModel)]="fname" placeholder="Enter First Name"></ion-input>
     </ion-item>
     <ion-item no-padding class="item-feilds">
       <ion-label floating>Last Name*</ion-label>
-      <ion-input type="text" [(ngModel)]="lname"></ion-input>
+      <ion-input type="text" [(ngModel)]="lname" placeholder="Enter Last Name"></ion-input>
     </ion-item>
-    <ion-item no-padding class="item-feilds" *ngIf="verification_type == 'phone'">
-      <ion-label floating>Phone*</ion-label>
-      <ion-input type="number" [(ngModel)]="mobileno"></ion-input>
+    <ion-item no-padding class="item-feilds">
+      <ion-label>
+        Tap here to select country
+      </ion-label>
+      <ion-select interface="popover" [(ngModel)]="country_code" (ionChange)="getCountryDialCode(country_code)">
+        <ng-container *ngFor="let country of all_countries">
+          <ion-option [value]="country.code">{{ country.name }}</ion-option>
+        </ng-container>
+      </ion-select>
     </ion-item>
-    <ion-item no-padding class="item-feilds" *ngIf="verification_type == 'email'">
-      <ion-label floating>Email*</ion-label>
-      <ion-input type="email" [(ngModel)]="email"></ion-input>
+    <div class="textarea-div">
+      <ion-row>
+        <ion-label>Phone<span *ngIf="verification_type == 'mobileno'">*</span></ion-label>
+      </ion-row>
+      <ion-item no-padding class="item-feilds">
+        <ion-label>{{ '+'+dial_code }}</ion-label>
+        <ion-input type="number" [(ngModel)]="mobileno" placeholder="Enter Phone Number" (ionBlur)="sendVerificationCode()"></ion-input>
+      </ion-item>
+    </div>
+    <div class="textarea-div" *ngIf="phone_verifciation_code">
+      <ion-row>
+        <p>To update your phone number please enter the verification code</p>
+      </ion-row>
+      <ion-item class="item-feilds" style="padding-left: 0px;">
+        <ion-input type="number" [(ngModel)]="phone_code" placeholder="Enter Verification Code"></ion-input>
+      </ion-item>
+    </div>
+    <ion-item no-padding class="item-feilds">
+      <ion-label floating>Email<span *ngIf="verification_type == 'email'">*</span></ion-label>
+      <ion-input type="email" [(ngModel)]="email" placeholder="Enter Email" (ionBlur)="sendVerificationEmail()"></ion-input>
     </ion-item>
+    <div class="textarea-div" *ngIf="email_verification_code">
+      <ion-row>
+        <p>To update your email please enter the verification code</p>
+      </ion-row>
+      <ion-item class="item-feilds" style="padding-left: 0px;">
+        <ion-input type="number" [(ngModel)]="email_code" placeholder="Enter Verification Code"></ion-input>
+      </ion-item>
+    </div>
     <div class="textarea-div">
       <ion-row>
         <p>How much you want to donate to causes (0-97%) and to HeartGlobal (3-100%)</p>
@@ -32,6 +63,23 @@
         <ion-label text-right><span class="range-val">HeartGlobal ({{ 100-cause_percentage }}%)</span></ion-label>
         <ion-item no-padding>
           <ion-range min="0" max="97" [(ngModel)]="cause_percentage" color="appColor">
+            <ion-label range-left></ion-label>
+            <ion-label range-right></ion-label>
+          </ion-range>
+        </ion-item>
+      </ion-row>
+    </div>
+    <div class="textarea-div">
+      <ion-row>
+        <p>How much do you want to donate each month?</p>
+      </ion-row>
+      <ion-row>
+        <span class="range-val">{{ '$'+toLocaleString(donation_amount) }}</span>&nbsp;
+        <span class="hc-val">({{ toLocaleString(donation_amount * 100) }} HC)</span>
+      </ion-row>
+      <ion-row>
+        <ion-item no-padding>
+          <ion-range min="10" max="1000" [(ngModel)]="donation_amount" color="appColor" step="100" snaps="true">
             <ion-label range-left></ion-label>
             <ion-label range-right></ion-label>
           </ion-range>
@@ -59,7 +107,7 @@
         </ion-item>
       </ion-col>
     </ion-row>
-    <ion-item no-padding class="item-feilds"  *ngIf="preference_type == 'country'">
+    <ion-item no-padding class="item-feilds" *ngIf="preference_type == 'country'">
       <ion-label>
         Tap here to select country
       </ion-label>
@@ -69,7 +117,7 @@
         </ng-container>
       </ion-select>
     </ion-item>
-    <ion-item no-padding class="item-feilds" *ngIf="preference_type == 'region'">
+    <ion-item no-padding class="item-feilds" *ngIf="preference_type == 'region' || preference_type == ''">
       <ion-label>
         Tap here to select region
       </ion-label>

@@ -18,11 +18,17 @@ export class SettingsPage {
   lname: string;
   mobileno: any;
   email: string;
+  phone_code: number;
+  email_code: number;
+  email_verification_code: number = null;
+  phone_verifciation_code: number = null;
   verification_type: string;
   cause_percentage: any;
   charities: any = [];
   checkCharity: boolean = false;
   all_countries: any = [];
+  dial_code: any;
+  country_code: any;
   all_regions: any = [];
   preference_type: string;
   preference_location: any;
@@ -32,6 +38,9 @@ export class SettingsPage {
 
   uuid: any;
   loader: any;
+  old_mobno: any;
+  old_email: any;
+  donation_amount: any = 20;
   constructor(public navCtrl: NavController, public navParams: NavParams, private global: GlobalProvider, private userService: UserProvider, private loadingCtrl: LoadingController, private modalCtrl: ModalController, private camera: Camera, private transfer: FileTransfer, private alertCtrl: AlertController) {
   }
 
@@ -67,6 +76,8 @@ export class SettingsPage {
         this.fname = data.data.fname;
         this.lname = data.data.lname;
         this.mobileno = data.data.mobileno;
+        this.old_mobno = data.data.mobileno;
+        this.old_email = data.data.email;
         this.email = data.data.email;
         this.verification_type = data.data.verification_type;
         this.cause_percentage = data.data.cause_percentage;
@@ -74,7 +85,9 @@ export class SettingsPage {
         this.preference_location = data.data.preference_location;
         this.userid = data.data.id;
         this.profile_pic_src = data.data.profile_pic_src;
-
+        this.dial_code = data.data.country;
+        this.donation_amount = data.data.donation_amount;
+        
         // string to array conversion
         this.charities = data.data.charity_type;
         this.checkCharity = true;
@@ -89,63 +102,133 @@ export class SettingsPage {
 
   // updateUserData
   updateUserData() {
-    let check = false;
 
-    // check verification type of email
-    if (this.verification_type == 'email' && this.email != '') {
-      check = true;
+    if (this.email_verification_code != null && this.email_code != this.email_verification_code) {
+      this.createAlert("Your email verification code does not matched.");
     }
-
-    // check veification type of mobileno
-    if (this.verification_type == 'mobileno' && this.mobileno != '') {
-      check = true;
-    }
-
-
-    // validate data
-    if (this.fname == '' || this.lname == '' || check == false) {
-      this.createAlert("Please fill out all fields marked with (*)");
+    else if (this.phone_verifciation_code != null && this.phone_code != this.phone_verifciation_code) {
+      this.createAlert("Your phone number verification code does not matched.");
     }
     else {
-      // call createLoader
-      this.createLoader('submitting your request');
+      // declare check variable for checking condition
+      let check = false;
 
-      // calculate hc percentage
-      let hc_percentage = 100 - parseInt(this.cause_percentage);
+      // check verification type of email
+      if (this.verification_type == 'email' && this.email != '') {
+        check = true;
+      }
 
-      // set data to be send
+      // check veification type of mobileno
+      if (this.verification_type == 'mobileno' && this.mobileno != '') {
+        check = true;
+      }
+
+
+      // validate data
+      if (this.fname == '' || this.lname == '' || check == false) {
+        this.createAlert("Please fill out all fields marked with (*)");
+      }
+      else {
+        // call createLoader
+        this.createLoader('submitting your request');
+
+        // calculate hc percentage
+        let hc_percentage = 100 - parseInt(this.cause_percentage);
+
+        let preference_type = this.preference_type;
+
+        // check if prefrence type is empty
+        if (this.preference_type == "") {
+          preference_type = 'region';
+        }
+        // set data to be send
+        let data = {
+          userid: this.userid,
+          uuid: this.uuid,
+          fname: this.fname,
+          lname: this.lname,
+          email: this.email,
+          mobileno: this.mobileno,
+          country: this.dial_code,
+          cause_percentage: this.cause_percentage,
+          preference_location: this.preference_location,
+          hc_percentage: hc_percentage,
+          profile_pic: this.profile_pic,
+          preference_type: preference_type,
+          donation_amount: this.donation_amount
+        };
+
+        this.userService.updateUserInfo(data).subscribe(data => {
+          // check if data successfuly updated
+          if (data.msg == 'success') {
+            this.fname = data.fname;
+            this.lname = data.lname;
+            this.email = data.email;
+            this.mobileno = data.mobileno;
+            this.cause_percentage = data.cause_percentage;
+            this.preference_location = data.preference_location;
+            this.profile_pic_src = data.profile_pic_src;
+            this.email_verification_code = null;
+            this.phone_verifciation_code = null;
+          }
+
+          if (data.msg == 'exists') {
+            this.createAlert("The mobile no or email you have entered is already exists.");
+          }
+
+          if (data.length < 1) {
+            this.createAlert("Server is unable to handle your request. Please try again later.");
+          }
+
+          this.loader.dismiss();
+        }, err => {
+          this.loader.dismiss();
+          console.log(err);
+        });
+      }
+    }
+  }
+
+  // sendVerificationCode
+  sendVerificationCode() {
+    // send sms mobileno not empty
+    if (this.mobileno != '' && this.mobileno != this.old_mobno) {
+
+      let message = `We've sent an SMS with an activation code to your phone <b>+${this.dial_code + ' ' + this.mobileno}</b>`;
+
+      // create alert
+      this.createAlert(message);
+
+      // set sms verification data
       let data = {
-        userid: this.userid,
-        uuid: this.uuid,
-        fname: this.fname,
-        lname: this.lname,
-        email: this.email,
-        mobileno: this.mobileno,
-        cause_percentage: this.cause_percentage,
-        preference_location: this.preference_location,
-        hc_percentage: hc_percentage,
-        profile_pic: this.profile_pic
+        country: this.dial_code,
+        mobileno: this.mobileno
       };
 
-      this.userService.updateUserInfo(data).subscribe(data => {
-        // check if data successfuly updated
-        if (data.msg == 'success') {
-          this.fname = data.fname;
-          this.lname = data.lname;
-          this.email = data.email;
-          this.mobileno = data.mobileno;
-          this.cause_percentage = data.cause_percentage;
-          this.preference_location = data.preference_location;
-          this.profile_pic_src = data.data.profile_pic_src;
-        }
-        else {
-          this.createAlert("Server is unable to handle your request. Please try again later.");
-        }
+      this.userService.sendVerificationCode(data).subscribe(code => {
+        this.phone_verifciation_code = parseInt(code);
+        this.old_mobno = this.mobileno;
+      });
+    }
+  }
 
-        this.loader.dismiss();
-      }, err => {
-        this.loader.dismiss();
-        console.log(err);
+  // sendVerificationEmail
+  sendVerificationEmail() {
+    // send email if not empty
+    if (this.email != '' && this.email != this.old_email) {
+      let message = `We've sent an email with an activation code to your email <b>${this.email}</b>`;
+
+      // create alert
+      this.createAlert(message);
+
+      // set email verification data
+      let data = {
+        email: this.email
+      };
+
+      this.userService.sendVerificationEmail(data).subscribe(code => {
+        this.email_verification_code = parseInt(code);
+        this.old_email = this.email;
       });
     }
   }
@@ -154,11 +237,31 @@ export class SettingsPage {
   getCountries() {
     this.userService.getAllCountries().subscribe(data => {
       this.all_countries = data;
+
+      // GET COUNTRY DIAL CODE BY ITS CODE
+      data.forEach(element => {
+        if (element.code == this.country_code) {
+          this.dial_code = element.dial_code;
+        }
+      });
     }, err => {
       console.log(err);
     });
   }
 
+  // function to getCountryCode
+  getCountryDialCode(code: string) {
+
+    // call user service provider to get country code
+    this.userService.getCountryCodeByCode(code).subscribe(data => {
+      this.dial_code = data.dial_code;
+
+      // dismiss laoder
+      this.loader.dismiss();
+    }, err => {
+      console.log('Oops!' + err);
+    });
+  }
   // getRegions
   getRegions() {
     this.userService.getAllRegions().subscribe(data => {
@@ -349,5 +452,10 @@ export class SettingsPage {
       this.loader.dismiss();
     });
 
+  }
+
+  // toLocaleString
+  toLocaleString(number: any) {
+    return number.toLocaleString();
   }
 }

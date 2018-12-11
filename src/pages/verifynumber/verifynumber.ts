@@ -5,13 +5,6 @@ import { UserProvider } from '../../providers/user/user';
 import { Storage } from '@ionic/storage';
 import { GlobalProvider } from '../../providers/global/global';
 
-/**
- * Generated class for the VerifynumberPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
   selector: 'page-verifynumber',
@@ -65,10 +58,6 @@ export class VerifynumberPage {
       console.log('Oops!');
       this.loader.dismiss();
     });
-
-    // call function getCountryCode
-    // this.getCountryCode(this.code);
-
   }
 
   // function to getCountryCode
