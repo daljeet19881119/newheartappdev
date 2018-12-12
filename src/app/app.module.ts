@@ -44,6 +44,7 @@ import { UserBigheartsPage } from '../pages/user-bighearts/user-bighearts';
 import { ViewNgoPage } from '../pages/view-ngo/view-ngo';
 import { CardIO } from '@ionic-native/card-io';
 import { SettingsPage } from '../pages/settings/settings';
+import { FCM } from '@ionic-native/fcm';
 
 @NgModule({
   declarations: [
@@ -119,7 +120,8 @@ import { SettingsPage } from '../pages/settings/settings';
     Device,
     GlobalProvider,
     BhHomePageProvider,
-    CardIO 
+    CardIO,
+    FCM 
   ]
 })
 export class AppModule {}

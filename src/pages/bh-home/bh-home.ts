@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, Slides, MenuController, Platform, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Slides, MenuController, Platform, LoadingController, AlertController } from 'ionic-angular';
 import { UserProvider } from '../../providers/user/user';
 import { StreamingMedia, StreamingVideoOptions } from '@ionic-native/streaming-media';
 import { HomePageProvider } from '../../providers/home-page/home-page';
@@ -11,6 +11,8 @@ import { FileTransfer, FileTransferObject, FileUploadOptions } from '@ionic-nati
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { GlobalProvider } from '../../providers/global/global';
 import { BhHomePageProvider } from '../../providers/bh-home-page/bh-home-page';
+import { FCM } from '@ionic-native/fcm';
+import { Title } from '@angular/platform-browser';
 
 @IonicPage()
 @Component({
@@ -48,7 +50,7 @@ export class BhHomePage {
   user_id: any;
   hc_balance: any;
   us_balance: any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private global: GlobalProvider, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, private bhHomeService: BhHomePageProvider, public loadingCtrl: LoadingController, private sharing: SocialSharing, private storage: Storage, private mediaCapture: MediaCapture, private transfer: FileTransfer, private androidPermissions: AndroidPermissions) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private global: GlobalProvider, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, private bhHomeService: BhHomePageProvider, public loadingCtrl: LoadingController, private sharing: SocialSharing, private storage: Storage, private mediaCapture: MediaCapture, private transfer: FileTransfer, private androidPermissions: AndroidPermissions, private fcm: FCM, private alertCtrl: AlertController) {
 
     // call function to get device id
     this.getDeviceID();
@@ -150,10 +152,14 @@ export class BhHomePage {
         console.log(err);
       });
     });
+
     // get user causes from storage
     this.storage.get('user_causes').then(data => {
       this.charities = data;
     });
+
+    // call firebaseNotifcation function
+    this.firebaseNotification();
   }
 
   // showTabs
@@ -397,5 +403,29 @@ export class BhHomePage {
     }).catch((err) => {
       console.log(err);
     });
+  }
+
+  // firebaseNotification
+  firebaseNotification() {
+    this.fcm.onNotification().subscribe(data => {
+      if(data.wasTapped) {
+        // notification on background
+        this.notificationAlert(data.title, data.body);
+      }
+      else{
+        // notification on foreground
+        this.notificationAlert(data.title, data.body);
+      }
+    });
+  }
+
+  // notificationAlert
+  notificationAlert(title: string, msg: string) {
+    const alert = this.alertCtrl.create({
+        title: title,
+        message: msg,
+        buttons: ['ok']
+    });
+    alert.present();
   }
 }

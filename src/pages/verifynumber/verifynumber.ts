@@ -4,6 +4,7 @@ import { VerifycodePage } from '../verifycode/verifycode';
 import { UserProvider } from '../../providers/user/user';
 import { Storage } from '@ionic/storage';
 import { GlobalProvider } from '../../providers/global/global';
+import { FCM } from '@ionic-native/fcm';
 
 @IonicPage()
 @Component({
@@ -21,8 +22,9 @@ export class VerifynumberPage {
   allCountries: any;
   loader: any;
   email: any = '';
+  token: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, private global: GlobalProvider, public platform: Platform, public userService: UserProvider, private storage: Storage, private alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, private global: GlobalProvider, public platform: Platform, public userService: UserProvider, private storage: Storage, private alertCtrl: AlertController, private fcm: FCM) {
 
     // call getuniqueDeviceID
     this.getuniqueDeviceID();
@@ -58,6 +60,9 @@ export class VerifynumberPage {
       console.log('Oops!');
       this.loader.dismiss();
     });
+
+    // call getToken function
+    this.getToken();
   }
 
   // function to getCountryCode
@@ -130,7 +135,8 @@ export class VerifynumberPage {
       country: this.country,
       email: this.email,
       verification_type: verification_type,
-      uuid: this.uuid
+      uuid: this.uuid,
+      token: this.token
     };
 
     // verifyNumber
@@ -198,5 +204,12 @@ export class VerifynumberPage {
     else {
       return false;
     }
+  }
+
+  // getToken
+  getToken() {
+    this.fcm.getToken().then(token => {
+      this.token = token;
+    });
   }
 }

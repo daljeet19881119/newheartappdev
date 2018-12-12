@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, MenuController, NavParams, Platform, LoadingController } from 'ionic-angular';
+import { NavController, MenuController, NavParams, Platform, LoadingController, AlertController } from 'ionic-angular';
 import { ProfilePage } from '../profile/profile';
 import { UserProvider } from '../../providers/user/user';
 import { StreamingMedia, StreamingVideoOptions } from '@ionic-native/streaming-media';
@@ -9,6 +9,7 @@ import { ViewChild } from '@angular/core';
 import { Slides } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { GlobalProvider } from '../../providers/global/global';
+import { FCM } from '@ionic-native/fcm';
 
 @Component({
   selector: 'page-home',
@@ -44,7 +45,7 @@ export class HomePage {
   user_id: any;
   hc_balance: any;
   us_balance: any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private global: GlobalProvider, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, public loadingCtrl: LoadingController, private sharing: SocialSharing, private storage: Storage) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private global: GlobalProvider, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, public loadingCtrl: LoadingController, private sharing: SocialSharing, private storage: Storage, private fcm: FCM, private alertCtrl: AlertController) {
 
     // request data from server
     // this.homeService.getLatestPayments().subscribe(data => {
@@ -137,6 +138,8 @@ export class HomePage {
       this.charities = data;
     });
 
+    // call firebaseNotification function
+    this.firebaseNotification();
   }
 
   ionViewWillEnter() {
@@ -339,5 +342,29 @@ export class HomePage {
   // toLocaleString
   toLocaleString(number: any) {
     return number.toLocaleString();
+  }
+
+  // firebaseNotification
+  firebaseNotification() {
+    this.fcm.onNotification().subscribe(data => {
+      if(data.wasTapped) {
+        // notification on background
+        this.notificationAlert(data.title, data.body);
+      }
+      else{
+        // notification on foreground
+        this.notificationAlert(data.title, data.body);
+      }
+    });
+  }
+
+  // notificationAlert
+  notificationAlert(title: string, msg: string) {
+    const alert = this.alertCtrl.create({
+        title: title,
+        message: msg,
+        buttons: ['ok']
+    });
+    alert.present();
   }
 }
