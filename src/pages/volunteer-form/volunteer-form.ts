@@ -255,7 +255,7 @@ export class VolunteerFormPage {
   }
 
   // take picture
-  tackPicture() {
+  takePicture() {
 
     // empty testpic
     this.profilePic = '';
@@ -289,12 +289,17 @@ export class VolunteerFormPage {
       this.profilePicName = timeStr + '_volunteer.jpg';
 
       // send file to server
-      fileTransfer.upload(base64Image, this.global.SITE_URL + '/image-upload.php', uploadOptions).then((data) => {
-        // alert('data'+data.response);
-        this.profilePic = this.global.SITE_URL + '/imgs/volunteer-form/' + timeStr + '_volunteer.jpg';
+      fileTransfer.upload(base64Image, this.global.apiUrl('/uploadImage'), uploadOptions).then((data) => {
+        let res = JSON.parse(data.response);
+
+        // if success
+        if(res.msg == "success") {
+          this.profilePic = this.global.base_url('assets/images/'+ timeStr + '_volunteer.jpg');
+        }
+        
         this.loader.dismiss();
       }).catch((err) => {
-        alert('Server is unable to upload your image please try again later.');
+        // alert('Server is unable to upload your image please try again later.');
         this.loader.dismiss();
       });
 
@@ -340,12 +345,18 @@ export class VolunteerFormPage {
       this.profilePicName = timeStr + '_volunteer.jpg';
 
       // send file to server
-      fileTransfer.upload(base64Image, this.global.SITE_URL + '/image-upload.php', uploadOptions).then((data) => {
-        // alert('data'+data.response);
-        this.profilePic = this.global.SITE_URL + '/imgs/volunteer-form/' + timeStr + '_volunteer.jpg';
+      fileTransfer.upload(base64Image, this.global.apiUrl('/uploadImage'), uploadOptions).then((data) => {
+       
+        let res = JSON.parse(data.response);
+
+        // if success
+        if(res.msg == "success") {
+          this.profilePic = this.global.base_url('assets/images/'+ timeStr + '_volunteer.jpg');
+        }
+        
         this.loader.dismiss();
       }).catch((err) => {
-        alert('Server is unable to upload your image please try again later.');
+        // alert('Server is unable to upload your image please try again later.');
         this.loader.dismiss();
       });
     }, (err) => {

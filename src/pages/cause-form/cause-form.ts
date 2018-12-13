@@ -190,7 +190,6 @@ export class CauseFormPage {
 
     // loop of selected charity
     this.charities.forEach(element => {
-
       // remove starting space from each element and push into charity array
       charities.push(element.trim());
     });
@@ -319,7 +318,7 @@ export class CauseFormPage {
   }
 
   // take picture
-  tackPicture() {
+  takePicture() {
 
     // empty testpic
     this.profilePic = '';
@@ -353,12 +352,18 @@ export class CauseFormPage {
       this.profilePicName = timeStr + '_cause.jpg';
 
       // send file to server
-      fileTransfer.upload(base64Image, this.global.SITE_URL + '/cause-form-image-upload.php', uploadOptions).then((data) => {
-        // alert('data'+data.response);
-        this.profilePic = this.global.SITE_URL + '/imgs/cause-form/' + timeStr + '_cause.jpg';
+      fileTransfer.upload(base64Image, this.global.apiUrl('/uploadImage'), uploadOptions).then((data) => {
+        
+        let res = JSON.parse(data.response);
+
+        // if success
+        if(res.msg == "success") {
+          this.profilePic = this.global.base_url('assets/images/'+ timeStr + '_cause.jpg');
+        }
+        
         this.loader.dismiss();
       }).catch((err) => {
-        alert('Server is unable to upload your image please try again later.');
+        // alert('Server is unable to upload your image please try again later.');
         this.loader.dismiss();
       });
     }, (err) => {
@@ -402,12 +407,17 @@ export class CauseFormPage {
       this.profilePicName = timeStr + '_cause.jpg';
 
       // send file to server
-      fileTransfer.upload(base64Image, this.global.SITE_URL + '/cause-form-image-upload.php', uploadOptions).then((data) => {
-        // alert('data'+data.response);
-        this.profilePic = this.global.SITE_URL + '/imgs/cause-form/' + timeStr + '_cause.jpg';
+      fileTransfer.upload(base64Image, this.global.apiUrl('/uploadImage'), uploadOptions).then((data) => {
+        let res = JSON.parse(data.response);
+
+        // if success 
+        if(res.msg == "success") {
+          this.profilePic = this.global.base_url('assets/images/'+ timeStr + '_cause.jpg');
+        }
+
         this.loader.dismiss();
       }).catch((err) => {
-        alert('Server is unable to upload your image please try again later.');
+        // alert('Server is unable to upload your image please try again later.');
         this.loader.dismiss();
       });
     }, (err) => {
@@ -446,9 +456,13 @@ export class CauseFormPage {
           }
 
           // send file to server
-          fileTransfer.upload(src, this.global.SITE_URL + '/cause-form-image-upload.php', uploadOptions).then((data) => {
-            // alert('data'+data.response);
-            this.multiplePics.push(this.global.SITE_URL + '/imgs/cause-form/' + timeStr + '_cause.jpg');
+          fileTransfer.upload(src, this.global.apiUrl('/uploadImage'), uploadOptions).then((data) => {
+            let res = JSON.parse(data.response);
+            // if success
+            if(res.msg == "succes") {
+              this.multiplePics.push(this.global.base_url('assets/images/'+ timeStr + '_cause.jpg'));
+            }
+            
           }).catch((err) => {
             // alert('Server is unable to upload your image please try again later.');
             this.loader.dismiss();
@@ -461,31 +475,7 @@ export class CauseFormPage {
     }
 
   }
-
-  // uploadPicture
-  uploadPicture() {
-    this.createLoader();
-    const fileTransfer: FileTransferObject = this.transfer.create();
-
-    let options: FileUploadOptions = {
-      fileKey: 'file',
-      fileName: 'volunteer.jpg',
-      chunkedMode: false,
-      httpMethod: 'post',
-      mimeType: "image/jpeg",
-      headers: {}
-    }
-
-    fileTransfer.upload(this.profilePic, this.global.SITE_URL + '/image-upload.php', options)
-      .then((data) => {
-        // success
-        this.loader.dismiss();
-      }, (err) => {
-        // error
-        this.loader.dismiss();
-      });
-  }
-
+  
   // validateEmail
   validateEmail(mail: string) {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
@@ -544,4 +534,5 @@ export class CauseFormPage {
       }
     });
   }
+
 }

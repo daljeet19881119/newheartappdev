@@ -60,7 +60,7 @@
                                         <span class="heart-coin">{{donation.heart_amount}}</span>
                                         <span class="heart-coin">(${{donation.us_amount}})</span>
                                     </p>
-                                    <p class="play-para" (click)="recordThankyouMessage()">
+                                    <p class="play-para" (click)="recordThankyouMessage(donation.id)">
                                         <ion-icon name="play" class="play-icon"></ion-icon>
                                         <span>Add Thankyou Message</span>
                                     </p>

@@ -12,7 +12,6 @@ import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { GlobalProvider } from '../../providers/global/global';
 import { BhHomePageProvider } from '../../providers/bh-home-page/bh-home-page';
 import { FCM } from '@ionic-native/fcm';
-import { Title } from '@angular/platform-browser';
 
 @IonicPage()
 @Component({
@@ -268,7 +267,7 @@ export class BhHomePage {
   }
 
   // recordThankyouMessage
-  recordThankyouMessage() {
+  recordThankyouMessage(user_id: any) {
     let options: CaptureVideoOptions = {
       limit: 1,
       duration: 10,
@@ -279,7 +278,7 @@ export class BhHomePage {
       this.videoId = data[0].fullPath;
       
       // upload video to server
-      this.uploadThankyouMessage();
+      this.uploadThankyouMessage(user_id);
     },
       (err: CaptureError) => {
         console.log(err)
@@ -288,7 +287,7 @@ export class BhHomePage {
   }
 
   // uploadThankyouMessage
-  uploadThankyouMessage() {
+  uploadThankyouMessage(user_id: any) {
     this.createLoader('uploading video');
     const fileTransfer: FileTransferObject = this.transfer.create();
 
@@ -301,9 +300,24 @@ export class BhHomePage {
       headers: {}
     }
 
-    fileTransfer.upload(this.videoId, this.global.SITE_URL + '/video-upload.php', options)
+    fileTransfer.upload(this.videoId, this.global.apiUrl('/uploadThankyouVideo'), options)
       .then((data) => {
-        // success
+        let res = JSON.parse(data.response);
+
+        // if success
+        if(res.msg == "success") {
+          // set notification data
+          let notificaitn_data = {
+              "user_id": user_id,
+              "bh_userid": this.user_id
+          };
+
+          // send thankyou notificaitn to user
+          this.bhHomeService.sendThankyouMessage(notificaitn_data).subscribe(notification_res => {
+            console.log(notification_res);
+          }, err => console.log(err));
+        }
+
         this.loader.dismiss();
       }, (err) => {
         // error
