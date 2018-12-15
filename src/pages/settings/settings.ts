@@ -389,12 +389,12 @@ export class SettingsPage {
       this.profile_pic = timeStr + '_user.jpg';
 
       // send file to server
-      fileTransfer.upload(base64Image, this.global.SITE_URL + '/cause-form-image-upload.php', uploadOptions).then((data) => {
+      fileTransfer.upload(base64Image, this.global.apiUrl('/uploadImage'), uploadOptions).then((data) => {
         // alert('data'+data.response);
-        this.profile_pic_src = this.global.SITE_URL + '/imgs/cause-form/' + timeStr + '_user.jpg';
+        this.profile_pic_src = this.global.base_url('assets/images/'+ timeStr + '_user.jpg');
         this.loader.dismiss();
       }).catch((err) => {
-        alert('Server is unable to upload your image please try again later.');
+        // alert('Server is unable to upload your image please try again later.');
         this.loader.dismiss();
       });
     }, (err) => {
@@ -438,12 +438,12 @@ export class SettingsPage {
       this.profile_pic = timeStr + '_user.jpg';
 
       // send file to server
-      fileTransfer.upload(base64Image, this.global.SITE_URL + '/cause-form-image-upload.php', uploadOptions).then((data) => {
+      fileTransfer.upload(base64Image, this.global.apiUrl('/uploadImage'), uploadOptions).then((data) => {
         // alert('data'+data.response);
-        this.profile_pic_src = this.global.SITE_URL + '/imgs/cause-form/' + timeStr + '_user.jpg';
+        this.profile_pic_src = this.global.base_url('assets/images/'+ timeStr + '_user.jpg');
         this.loader.dismiss();
       }).catch((err) => {
-        alert('Server is unable to upload your image please try again later.');
+        // alert('Server is unable to upload your image please try again later.');
         this.loader.dismiss();
       });
     }, (err) => {

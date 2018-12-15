@@ -251,7 +251,7 @@ export class HomePage {
       orientation: 'portrait'
     };
 
-    this.streamingMedia.playVideo(this.global.SITE_URL + '/videos/small.mp4', options);
+    this.streamingMedia.playVideo(this.global.base_url('assets/videos/small.mp4'), options);
   }
 
 

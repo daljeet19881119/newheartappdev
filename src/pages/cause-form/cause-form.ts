@@ -19,7 +19,7 @@ export class CauseFormPage {
   countries: any;
   fname: string;
   lname: string;
-  country: string;
+  country: string ='';
   city: string;
   fewAboutYourself: string;
   moreAboutYourself: string;
@@ -49,14 +49,14 @@ export class CauseFormPage {
   userid: any;
   uuid: any;
   profilePic: any;
-  profilePicName: any;
+  profilePicName: any = "";
   multiplePics: any;
   multiplePicsArr: any = [];
 
   // varibale for checking that what the user have selected
   prefType: any;
   region: any;
-  regionId: any;
+  regionId: any = '';
 
 
   // variable to store charities
@@ -66,6 +66,7 @@ export class CauseFormPage {
   account_no: any;
   ifsc_code: any;
   paypal_email: any;
+  tax_exemption: boolean = false;
   constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private userService: UserProvider, public loadingCtrl: LoadingController, public alertCtrl: AlertController, private global: GlobalProvider, private camera: Camera, private transfer: FileTransfer, public modalCtrl: ModalController, private platform: Platform, private imagePicker: ImagePicker, public viewCtrl: ViewController) {
 
     // store all countries
@@ -220,6 +221,7 @@ export class CauseFormPage {
           ifsc_code: this.ifsc_code,
           paypal_email: this.paypal_email,
           cause_category: charities,
+          tax_exemption: this.tax_exemption,
           country: this.country,
           region: this.regionId,
           city: this.city,

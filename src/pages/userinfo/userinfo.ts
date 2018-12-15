@@ -48,12 +48,12 @@ export class UserinfoPage {
   current_year: any = new Date().getFullYear();
   dateObj: Date = new Date();
   card_expiry: any = null;
-  all_ngo: any;
+  all_ngo: any = [];
   ngo_id: string;
   ngo_id_arr: any = [];
   referral_code: any;
   verification_type: any;
-
+  tax_exemption: boolean = false;
   constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, public platform: Platform, private global: GlobalProvider, private loadingCtrl: LoadingController, private userService: UserProvider, private storage: Storage, private modalCtrl: ModalController, private cardIO: CardIO) {
 
     // if user try goback then exit app
@@ -380,6 +380,32 @@ export class UserinfoPage {
     });
   }
 
+  // getPreferenceCheck
+  getPreferenceCheck(country: boolean, region: boolean) {
+    // check if country and region false
+    if(country == false && region == false) {
+      this.filterAllNgo();
+    }
+  }
+
+  // filterAllNgo
+  filterAllNgo() {    
+    // check if length of ngo is greater then 0
+    if(this.all_ngo.length > 0 || this.charities.length > 0) {
+      // emtpy all ngo array
+      this.all_ngo = [];
+
+      // get ngo of charities
+      if (this.charities.length > 0) {
+        let selected_charity = [];
+        this.charities.forEach(element => {
+          selected_charity.push(element.trim());
+        });
+        this.getNgoByCharity(selected_charity);
+      }
+    }
+  }
+
   // createLoader
   createLoader(msg: string = 'Please wait...') {
     this.loader = this.loadingCtrl.create({
@@ -447,10 +473,70 @@ export class UserinfoPage {
         }
       });
 
+      // emtpy all ngo array
+      this.all_ngo = [];
+
       // getNgoByCharityIds
       this.userService.getNgoByCharityIds(charity_ids).subscribe(res => {
-        this.all_ngo = res;
+        
+        let  tax_exemption;
+        if(this.tax_exemption == true) {
+          tax_exemption = 'true';
+        }
+        else{
+          tax_exemption = 'false';
+        }
 
+        // check if tax exemption == true
+        if(tax_exemption == 'true') 
+        {
+          // loop of res
+          res.forEach(element => {
+            // check if country is true
+            if(this.checkCountry == true) {
+                // check if elment matched to tax exemption
+                if(element.tax_exemption == tax_exemption && element.country == this.location) {
+                  this.all_ngo.push(element);
+                }
+            }
+            else if(this.checkRegion == true) {
+              if(element.tax_exemption == tax_exemption && element.region == this.location) {
+                this.all_ngo.push(element);
+              }
+            }
+            else if(this.checkRegion == false && this.checkCountry == false) {
+                // check if elment matched to tax exemption
+                if(element.tax_exemption == tax_exemption) {
+                  this.all_ngo.push(element);
+                }
+            }            
+          });             
+          // console.log('tax exemption if condition');
+        }
+        else
+        {          
+          // loop of res
+          res.forEach(element => {
+            // check if country is true
+            if(this.checkCountry == true) {
+                // check if elment matched to tax exemption
+                if(element.country == this.location) {
+                  this.all_ngo.push(element);
+                }
+            }
+            else if(this.checkRegion == true) {
+              if(element.region == this.location) {
+                this.all_ngo.push(element);
+              }
+            }
+            else if(this.checkRegion == false && this.checkCountry == false) {
+              this.all_ngo.push(element);
+            }            
+          });  
+          // console.log('tax exemption else condition');        
+        }
+                
+        
         this.loader.dismiss();
       }, err => {
         console.log(err);

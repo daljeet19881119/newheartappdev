@@ -52,15 +52,15 @@
                                 <img [src]="donation.ngo_founder_img" class="ngo-img" (click)="gotoProfilePage(donation.id)">
                             </ion-avatar>
                             <ion-row>
-                                <ion-col col-6 no-padding>
+                                <ion-col col-5 no-padding>
                                     <h2 class="ngo-name">{{donation.ngo_founder}}</h2>
                                     <p class="ngo-date">{{donation.date}}</p>
                                 </ion-col>
-                                <ion-col col-6 style="text-align: right;" no-padding>
+                                <ion-col col-7 style="text-align: right;" no-padding>
                                     <p>
                                         <ion-icon name="heart-outline" class="heart-small-icon"></ion-icon> 
-                                        <span class="heart-coin">{{donation.heart_amount}}</span> 
-                                        <span class="heart-coin">(${{donation.us_amount}})</span>
+                                        <span class="heart-coin">{{donation.hc_amount_per_ngo}}</span> 
+                                        <span class="heart-coin">(${{donation.us_amount_per_ngo}})</span>
                                     </p>
                                     <p class="play-para" (click)="playVideo()">
                                         <ion-icon name="play" class="play-icon"></ion-icon>

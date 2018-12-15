@@ -85,7 +85,17 @@
         <ion-label floating>Expiry date*</ion-label>
         <ion-datetime displayFormat="MMM/YYYY" [(ngModel)]="card_expiry" [min]="current_year" [max]="current_year + 50"></ion-datetime>
       </ion-item>
-    </div>    
+    </div>  
+    <div class="textarea-div">
+      <ion-row>
+        <ion-col col-1 style="padding-top: 19px;">
+          <ion-checkbox [(ngModel)]="tax_exemption" (ionChange)="filterAllNgo()"></ion-checkbox>
+        </ion-col>
+        <ion-col col-11>
+          <ion-label>Tax Exemption</ion-label>
+        </ion-col>        
+      </ion-row>
+    </div>  
       <ion-item no-padding (click)="gotoCharityPage()" *ngIf="!checkCharity || charities?.length == 0" class="item-feilds"> 
         <ion-label style="color: #999999;">Select charity areas* <ion-icon name="arrow-forward" class="next-arrow"></ion-icon></ion-label>        
       </ion-item>
@@ -104,7 +114,7 @@
             </ion-item>
           </ion-col>
       </ion-row>
-      <div class="textarea-div" *ngIf="all_ngo">
+      <div class="textarea-div" *ngIf="all_ngo.length > 0">
         <ion-row>
           <p>Select any particular BigHeart to which you want to donate to otherwise we will select a few we believe you like</p>
         </ion-row>
@@ -128,13 +138,13 @@
           <ion-col>
             <ion-item class="item-radio">
               <ion-label>Select a specific country</ion-label>
-              <ion-checkbox [(ngModel)]="checkCountry" item-end (ionChange)="checkPreference('country')"></ion-checkbox>
+              <ion-checkbox [(ngModel)]="checkCountry" item-end (ionChange)="checkPreference('country');getPreferenceCheck(checkCountry, checkRegion);"></ion-checkbox>
             </ion-item>
           </ion-col>
           <ion-col>
             <ion-item class="item-radio">
               <ion-label>Select a region</ion-label>
-              <ion-checkbox [(ngModel)]="checkRegion" item-end (ionChange)="checkPreference('region')"></ion-checkbox>
+              <ion-checkbox [(ngModel)]="checkRegion" item-end (ionChange)="checkPreference('region');getPreferenceCheck(checkCountry, checkRegion);"></ion-checkbox>
             </ion-item>
           </ion-col>
         </ion-row>
@@ -143,7 +153,7 @@
         <ion-label>
           Tap here to select country
         </ion-label>
-        <ion-select interface="popover" *ngIf="countries" [(ngModel)]="location">
+        <ion-select interface="popover" *ngIf="countries" [(ngModel)]="location" (ionChange)="filterAllNgo()">
           <ng-container *ngFor="let country of countries">
             <ion-option [value]="country.code">{{ country.name }}</ion-option>
           </ng-container>
@@ -153,7 +163,7 @@
         <ion-label>
           Tap here to select region
         </ion-label>
-        <ion-select interface="popover" *ngIf="allRegions" [(ngModel)]="location">
+        <ion-select interface="popover" *ngIf="allRegions" [(ngModel)]="location" (ionChange)="filterAllNgo()">
           <ng-container *ngFor="let region of allRegions">
             <ion-option [value]="region.id">{{ region.name }}</ion-option>
           </ng-container>

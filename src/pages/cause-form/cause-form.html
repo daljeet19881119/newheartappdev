@@ -82,6 +82,16 @@
         </ion-item>
       </ion-row>
     </div>
+    <div class="textarea-div">
+      <ion-row>
+        <ion-col col-1 style="padding-top: 19px;">
+          <ion-checkbox [(ngModel)]="tax_exemption"></ion-checkbox>
+        </ion-col>
+        <ion-col col-11>
+          <ion-label>Tax Exemption</ion-label>
+        </ion-col>        
+      </ion-row>
+    </div>
     <div class="textarea-div" *ngIf="prefType == 'region'">
       <ion-row>
         <p>Your selected region is:</p>
