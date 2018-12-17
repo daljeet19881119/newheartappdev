@@ -89,10 +89,10 @@
     <div class="textarea-div">
       <ion-row>
         <ion-col col-1 style="padding-top: 19px;">
-          <ion-checkbox [(ngModel)]="tax_exemption" (ionChange)="filterAllNgo()"></ion-checkbox>
+          <ion-checkbox [(ngModel)]="us_tax_deductible" (ionChange)="filterAllNgo()"></ion-checkbox>
         </ion-col>
         <ion-col col-11>
-          <ion-label>Tax Exemption</ion-label>
+          <ion-label>US Tax Deductible Only</ion-label>
         </ion-col>        
       </ion-row>
     </div>  
@@ -114,22 +114,6 @@
             </ion-item>
           </ion-col>
       </ion-row>
-      <div class="textarea-div" *ngIf="all_ngo.length > 0">
-        <ion-row>
-          <p>Select any particular BigHeart to which you want to donate to otherwise we will select a few we believe you like</p>
-        </ion-row>
-        <ion-list class="list-height">
-          <ng-container *ngFor="let ngo of all_ngo">
-            <ion-item class="payment-item">
-              <ion-avatar item-start style="background: #48414130;border-radius: 50%;border: 1px solid #48414130;z-index: 1;" (click)="viewNgoProfile(ngo.id)">                
-                <img [src]="ngo.ngo_founder_img_url" [alt]="ngo.ngo_name">
-              </ion-avatar>
-              <ion-label (click)="viewNgoProfile(ngo.id)" style="z-index: 1;">{{ ngo.ngo_user+' ('+ngo.ngo_name+')' }}</ion-label>
-              <ion-checkbox [(ngModel)]="ngo.checked" (click)="getSelectedNgo(ngo.checked, ngo.id);" item-end></ion-checkbox>
-            </ion-item>
-          </ng-container>
-        </ion-list>
-      </div>      
       <div class="geographic-div">
         <ion-row class="label-row">
           <p>Geographic Preference(s)</p>
@@ -169,6 +153,22 @@
           </ng-container>
         </ion-select>
       </ion-item>
+      <div class="textarea-div" *ngIf="all_ngo.length > 0">
+        <ion-row>
+          <p>Select any particular BigHeart to which you want to donate to otherwise we will select a few we believe you like</p>
+        </ion-row>
+        <ion-list class="list-height">
+          <ng-container *ngFor="let ngo of all_ngo">
+            <ion-item class="payment-item">
+              <ion-avatar item-start style="background: #48414130;border-radius: 50%;border: 1px solid #48414130;z-index: 1;" (click)="viewNgoProfile(ngo.id)">                
+                <img [src]="ngo.ngo_founder_img_url" [alt]="ngo.ngo_name">
+              </ion-avatar>
+              <ion-label (click)="viewNgoProfile(ngo.id)" style="z-index: 1;">{{ ngo.ngo_user+' ('+ngo.ngo_name+')' }}</ion-label>
+              <ion-checkbox [(ngModel)]="ngo.checked" (click)="getSelectedNgo(ngo.checked, ngo.id);" item-end></ion-checkbox>
+            </ion-item>
+          </ng-container>
+        </ion-list>
+      </div> 
       <div class="textarea-div">
         <ion-item no-padding class="item-feilds">
           <ion-label floating>Referral code</ion-label>

@@ -53,7 +53,7 @@ export class UserinfoPage {
   ngo_id_arr: any = [];
   referral_code: any;
   verification_type: any;
-  tax_exemption: boolean = false;
+  us_tax_deductible: boolean = false;
   constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, public platform: Platform, private global: GlobalProvider, private loadingCtrl: LoadingController, private userService: UserProvider, private storage: Storage, private modalCtrl: ModalController, private cardIO: CardIO) {
 
     // if user try goback then exit app
@@ -479,34 +479,34 @@ export class UserinfoPage {
       // getNgoByCharityIds
       this.userService.getNgoByCharityIds(charity_ids).subscribe(res => {
         
-        let  tax_exemption;
-        if(this.tax_exemption == true) {
-          tax_exemption = 'true';
+        let  us_tax_deductible;
+        if(this.us_tax_deductible == true) {
+          us_tax_deductible = 'true';
         }
         else{
-          tax_exemption = 'false';
+          us_tax_deductible = 'false';
         }
 
         // check if tax exemption == true
-        if(tax_exemption == 'true') 
+        if(us_tax_deductible == 'true') 
         {
           // loop of res
           res.forEach(element => {
             // check if country is true
             if(this.checkCountry == true) {
                 // check if elment matched to tax exemption
-                if(element.tax_exemption == tax_exemption && element.country == this.location) {
+                if(element.us_tax_deductible == us_tax_deductible && element.country == this.location) {
                   this.all_ngo.push(element);
                 }
             }
             else if(this.checkRegion == true) {
-              if(element.tax_exemption == tax_exemption && element.region == this.location) {
+              if(element.us_tax_deductible == us_tax_deductible && element.region == this.location) {
                 this.all_ngo.push(element);
               }
             }
             else if(this.checkRegion == false && this.checkCountry == false) {
                 // check if elment matched to tax exemption
-                if(element.tax_exemption == tax_exemption) {
+                if(element.us_tax_deductible == us_tax_deductible) {
                   this.all_ngo.push(element);
                 }
             }            

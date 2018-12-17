@@ -45,6 +45,7 @@ import { ViewNgoPage } from '../pages/view-ngo/view-ngo';
 import { CardIO } from '@ionic-native/card-io';
 import { SettingsPage } from '../pages/settings/settings';
 import { FCM } from '@ionic-native/fcm';
+import { TestPage } from '../pages/test/test';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import { FCM } from '@ionic-native/fcm';
     BhHomePage,
     UserBigheartsPage,
     ViewNgoPage,
-    SettingsPage
+    SettingsPage,
+    TestPage
   ],
   imports: [
     BrowserModule,
@@ -99,7 +101,8 @@ import { FCM } from '@ionic-native/fcm';
     BhHomePage,
     UserBigheartsPage,
     ViewNgoPage,
-    SettingsPage
+    SettingsPage,
+    TestPage
   ],
   providers: [
     StatusBar,
