@@ -33,7 +33,7 @@ export class BhHomePage {
   heloWish: string;
   name: string = 'Loading...';
   uuid: any;
-  showDonationBtn: boolean = true;
+  showDonationBtn: boolean = false;
   showPaymentBtn: boolean = true;
   limit: number = 6;
   paging: number = 1;
@@ -47,6 +47,7 @@ export class BhHomePage {
   loader: any;
   videoId: any;
   user_id: any;
+  videoName: any;
   hc_balance: any;
   us_balance: any;
   constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private global: GlobalProvider, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, private bhHomeService: BhHomePageProvider, public loadingCtrl: LoadingController, private sharing: SocialSharing, private storage: Storage, private mediaCapture: MediaCapture, private transfer: FileTransfer, private androidPermissions: AndroidPermissions, private fcm: FCM, private alertCtrl: AlertController) {
@@ -276,6 +277,7 @@ export class BhHomePage {
 
     this.mediaCapture.captureVideo(options).then((data: MediaFile[]) => {
       this.videoId = data[0].fullPath;
+      this.videoName = data[0].name;
       
       // upload video to server
       this.uploadThankyouMessage(user_id);
@@ -307,13 +309,14 @@ export class BhHomePage {
         // if success
         if(res.msg == "success") {
           // set notification data
-          let notificaitn_data = {
+          let notification_data = {
               "user_id": user_id,
-              "bh_userid": this.user_id
+              "bh_userid": this.user_id,
+              "thankyou_video": this.videoName
           };
 
           // send thankyou notificaitn to user
-          this.bhHomeService.sendThankyouMessage(notificaitn_data).subscribe(notification_res => {
+          this.bhHomeService.sendThankyouMessage(notification_data).subscribe(notification_res => {
             console.log(notification_res);
           }, err => console.log(err));
         }

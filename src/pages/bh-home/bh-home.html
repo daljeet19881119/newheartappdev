@@ -50,11 +50,11 @@
                                 <img [src]="donation.ngo_founder_img" class="ngo-img" (click)="gotoProfilePage(donation.id)">
                             </ion-avatar>
                             <ion-row>
-                                <ion-col col-6 no-padding>
+                                <ion-col col-3 no-padding>
                                     <h2 class="ngo-name">{{donation.username}}</h2>
                                     <p class="ngo-date">{{donation.date}}</p>
                                 </ion-col>
-                                <ion-col col-6 style="text-align: right;" no-padding>
+                                <ion-col col-9 style="text-align: right;" no-padding>
                                     <p>
                                         <ion-icon name="heart-outline" class="heart-small-icon"></ion-icon>
                                         <span class="heart-coin">{{donation.heart_amount}}</span>
@@ -62,7 +62,7 @@
                                     </p>
                                     <p class="play-para" (click)="recordThankyouMessage(donation.id)">
                                         <ion-icon name="play" class="play-icon"></ion-icon>
-                                        <span>Add Thankyou Message</span>
+                                        <span>Record a Thank you message</span>
                                     </p>
                                     <!-- <p class="play-para" (click)="uploadThankyouMessage()">
                                         <ion-icon name="cloud-upload" class="play-icon"></ion-icon>

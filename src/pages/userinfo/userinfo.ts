@@ -30,7 +30,7 @@ export class UserinfoPage {
   loader: any;
   preference: any;
   allRegions: any;
-  countries: any;
+  countries: any = [];
   location: any;
   checkCountry: boolean = false;
   checkRegion: boolean = false;
@@ -54,6 +54,8 @@ export class UserinfoPage {
   referral_code: any;
   verification_type: any;
   us_tax_deductible: boolean = false;
+  recurring_fees: boolean = false;
+  accept_terms: boolean = false;
   constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, public platform: Platform, private global: GlobalProvider, private loadingCtrl: LoadingController, private userService: UserProvider, private storage: Storage, private modalCtrl: ModalController, private cardIO: CardIO) {
 
     // if user try goback then exit app
@@ -130,20 +132,24 @@ export class UserinfoPage {
   checkPreference(preference: string) {
     if (preference == 'country' && this.checkCountry == false) {
       this.checkCountry = false;
+      this.ngo_id_arr = [];
     }
     else if (preference == 'country' && this.checkCountry == true) {
       this.checkCountry = true;
       this.checkRegion = false;
       this.preference = preference;
+      this.ngo_id_arr = [];
     }
 
     if (preference == 'region' && this.checkRegion == false) {
       this.checkRegion = false;
+      this.ngo_id_arr = [];
     }
     else if (preference == 'region' && this.checkRegion == true) {
       this.checkRegion = true;
       this.checkCountry = false;
       this.preference = preference;
+      this.ngo_id_arr = [];
     }
   }
 
@@ -207,11 +213,17 @@ export class UserinfoPage {
 
       if (this.validateEmail(this.email) == true) {
 
-        // check if mobileno and coutnry not empty then 
-        if (this.mobileno !== null && this.country !== null) {
-          // make server request
-          this.makeServerRequest();
+        // if user have not accepted the terms
+        if(this.accept_terms == true) {
+          // check if mobileno and coutnry not empty then 
+          if (this.mobileno !== null && this.country !== null) {
+            // make server request
+            this.makeServerRequest();
+          }
         }
+        else{
+          this.createAlert("please accept the terms and privacy.");
+        }        
       }
       else {
         this.createAlert("please enter valid email");
@@ -253,9 +265,9 @@ export class UserinfoPage {
     let cause_percentage = parseInt(this.cause_percentage);
     let calculated_amount = hc_amount / 100 * cause_percentage;
     let hc_balance = hc_amount - calculated_amount;
-    let us_balance = hc_balance / 100;
-    let us_amount_per_ngo = us_balance / ngo_count;
+    let us_balance = hc_balance / 100;    
     let hc_amount_per_ngo = calculated_amount / ngo_count;
+    let us_amount_per_ngo = hc_amount_per_ngo / 100;
 
     let referral_code = '';
     let referral_amount = '';
@@ -265,6 +277,24 @@ export class UserinfoPage {
       referral_code = this.referral_code;
       referral_amount = '5';
     }
+
+    let accept_terms = ''; 
+    let recurring_fees = '';
+
+    if(this.accept_terms == true) {
+      accept_terms = 'true';
+    }
+    else{
+      accept_terms = 'false'; 
+    }
+
+    if(this.recurring_fees == true) {
+      recurring_fees = 'true';
+    }
+    else{
+      recurring_fees = 'false';
+    }
+
 
     const data = {
       profile_status: 'verified',
@@ -291,7 +321,9 @@ export class UserinfoPage {
       country: this.country,
       referral_code: referral_code,
       referral_amount: referral_amount,
-      verification_type: this.verification_type      
+      verification_type: this.verification_type,
+      accept_terms: accept_terms,
+      recurring_fees: recurring_fees      
     };
 
     this.userService.verifyUserProfile(data).subscribe(data => {
@@ -444,10 +476,10 @@ export class UserinfoPage {
   // loadCountries
   loadCountries() {
     // get countries from storage
-    this.storage.get('countries').then((country) => {
+    this.userService.getAllCountries().subscribe(country => {
       this.countries = country;
-    }).catch((err) => {
-      console.log('error: ' + err);
+    }, err => {
+      console.log('err: ' + err);
     });
   }
 

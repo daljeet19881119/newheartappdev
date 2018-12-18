@@ -124,7 +124,7 @@ export class HomePage {
           if (paging <= 1) {
             this.showDonationBtn = false;
           }
-          else{
+          else {
             this.showDonationBtn = true;
           }
         }
@@ -195,7 +195,7 @@ export class HomePage {
         if (this.paging >= paging) {
           this.showDonationBtn = false;
         }
-        else{
+        else {
           this.showDonationBtn = true;
         }
       }
@@ -244,14 +244,14 @@ export class HomePage {
   }
 
   // playVideo
-  async playVideo() {
+  async playVideo(video: any) {
     let options: StreamingVideoOptions = {
       successCallback: () => { console.log('Video played') },
       errorCallback: (e) => { console.log('Error streaming') },
       orientation: 'portrait'
     };
 
-    this.streamingMedia.playVideo(this.global.base_url('assets/videos/small.mp4'), options);
+    this.streamingMedia.playVideo(this.global.base_url('assets/videos/' + video), options);
   }
 
 
@@ -347,11 +347,11 @@ export class HomePage {
   // firebaseNotification
   firebaseNotification() {
     this.fcm.onNotification().subscribe(data => {
-      if(data.wasTapped) {
+      if (data.wasTapped) {
         // notification on background
         this.notificationAlert(data.title, data.body);
       }
-      else{
+      else {
         // notification on foreground
         this.notificationAlert(data.title, data.body);
       }
@@ -361,9 +361,9 @@ export class HomePage {
   // notificationAlert
   notificationAlert(title: string, msg: string) {
     const alert = this.alertCtrl.create({
-        title: title,
-        message: msg,
-        buttons: ['ok']
+      title: title,
+      message: msg,
+      buttons: ['ok']
     });
     alert.present();
   }

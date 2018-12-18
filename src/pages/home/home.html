@@ -62,7 +62,7 @@
                                         <span class="heart-coin">{{donation.hc_amount_per_ngo}}</span> 
                                         <span class="heart-coin">(${{donation.us_amount_per_ngo}})</span>
                                     </p>
-                                    <p class="play-para" (click)="playVideo()">
+                                    <p class="play-para" (click)="playVideo(donation.thankyou_video)" *ngIf="donation.thankyou_video != ''">
                                         <ion-icon name="play" class="play-icon"></ion-icon>
                                         <span>Thank you Message</span>
                                     </p>

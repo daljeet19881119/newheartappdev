@@ -60,7 +60,7 @@
         </ion-col>
         <ion-col col-11>
           <ion-label>I have a larger one-time donation</ion-label>
-          <ion-label *ngIf="large_donation">one of our team member will contact you</ion-label>
+          <p *ngIf="large_donation">one of our team member will contact you</p>
         </ion-col>        
       </ion-row>
     </div>
@@ -97,7 +97,7 @@
       </ion-row>
     </div>  
       <ion-item no-padding (click)="gotoCharityPage()" *ngIf="!checkCharity || charities?.length == 0" class="item-feilds"> 
-        <ion-label style="color: #999999;">Select charity areas* <ion-icon name="arrow-forward" class="next-arrow"></ion-icon></ion-label>        
+        <ion-label style="color: #999999;">Select Cause category* <ion-icon name="arrow-forward" class="next-arrow"></ion-icon></ion-label>        
       </ion-item>
       <ion-row *ngIf="charities?.length > 0">
           <div class="selected-charity-div">
@@ -137,7 +137,7 @@
         <ion-label>
           Tap here to select country
         </ion-label>
-        <ion-select interface="popover" *ngIf="countries" [(ngModel)]="location" (ionChange)="filterAllNgo()">
+        <ion-select interface="popover" *ngIf="countries.length > 0" [(ngModel)]="location" (ionChange)="filterAllNgo()">
           <ng-container *ngFor="let country of countries">
             <ion-option [value]="country.code">{{ country.name }}</ion-option>
           </ng-container>
@@ -174,6 +174,26 @@
           <ion-label floating>Referral code</ion-label>
           <ion-input type="number" [(ngModel)]="referral_code"></ion-input>
         </ion-item>
+      </div>
+      <div class="textarea-div">
+        <ion-row>
+          <ion-col col-1 style="padding-top: 19px;">
+            <ion-checkbox [(ngModel)]="recurring_fees"></ion-checkbox>
+          </ion-col>
+          <ion-col col-11>
+            <p>I agree to recuring monthly fees that can be changed or cancelled at any time.</p>
+          </ion-col>        
+        </ion-row>
+      </div>
+      <div class="textarea-div">
+        <ion-row>
+          <ion-col col-1 style="padding-top: 19px;">
+            <ion-checkbox [(ngModel)]="accept_terms"></ion-checkbox>
+          </ion-col>
+          <ion-col col-11>
+            <p>I Accept the Terms and Privacy.</p>
+          </ion-col>        
+        </ion-row>
       </div>
     </ion-list>
     <button ion-button block (click)="registerUser()" color="white" class="register-btn">Register</button>

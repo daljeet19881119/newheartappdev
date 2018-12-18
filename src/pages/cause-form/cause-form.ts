@@ -66,7 +66,7 @@ export class CauseFormPage {
   account_no: any;
   ifsc_code: any;
   paypal_email: any;
-  tax_exemption: boolean = false;
+  us_tax_deductible: boolean = false;
   constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private userService: UserProvider, public loadingCtrl: LoadingController, public alertCtrl: AlertController, private global: GlobalProvider, private camera: Camera, private transfer: FileTransfer, public modalCtrl: ModalController, private platform: Platform, private imagePicker: ImagePicker, public viewCtrl: ViewController) {
 
     // store all countries
@@ -221,7 +221,7 @@ export class CauseFormPage {
           ifsc_code: this.ifsc_code,
           paypal_email: this.paypal_email,
           cause_category: charities,
-          tax_exemption: this.tax_exemption,
+          us_tax_deductible: this.us_tax_deductible,
           country: this.country,
           region: this.regionId,
           city: this.city,
