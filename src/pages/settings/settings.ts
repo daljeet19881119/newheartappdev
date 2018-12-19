@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, ModalController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, ModalController, AlertController, Platform } from 'ionic-angular';
 import { GlobalProvider } from '../../providers/global/global';
 import { UserProvider } from '../../providers/user/user';
 import { CharitiesPage } from '../charities/charities';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { FileTransfer, FileTransferObject, FileUploadOptions } from '@ionic-native/file-transfer';
+import { HomePage } from '../home/home';
 
 
 @IonicPage()
@@ -41,7 +42,13 @@ export class SettingsPage {
   old_mobno: any;
   old_email: any;
   donation_amount: any = 20;
-  constructor(public navCtrl: NavController, public navParams: NavParams, private global: GlobalProvider, private userService: UserProvider, private loadingCtrl: LoadingController, private modalCtrl: ModalController, private camera: Camera, private transfer: FileTransfer, private alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private global: GlobalProvider, private userService: UserProvider, private loadingCtrl: LoadingController, private modalCtrl: ModalController, private camera: Camera, private transfer: FileTransfer, private alertCtrl: AlertController, private platform: Platform) {
+
+    // if user try goback then go to homepage
+    this.platform.registerBackButtonAction(() => {
+      this.updateUserData();
+      this.navCtrl.setRoot(HomePage);
+    });
   }
 
   ionViewDidLoad() {
@@ -130,7 +137,7 @@ export class SettingsPage {
       }
       else {
         // call createLoader
-        this.createLoader('submitting your request');
+        this.createLoader('Settings Saved');
 
         // calculate hc percentage
         let hc_percentage = 100 - parseInt(this.cause_percentage);

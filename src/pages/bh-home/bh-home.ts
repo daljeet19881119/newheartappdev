@@ -50,6 +50,7 @@ export class BhHomePage {
   videoName: any;
   hc_balance: any;
   us_balance: any;
+  showRecordMsg: boolean;
   constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private global: GlobalProvider, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, private bhHomeService: BhHomePageProvider, public loadingCtrl: LoadingController, private sharing: SocialSharing, private storage: Storage, private mediaCapture: MediaCapture, private transfer: FileTransfer, private androidPermissions: AndroidPermissions, private fcm: FCM, private alertCtrl: AlertController) {
 
     // call function to get device id
@@ -127,6 +128,11 @@ export class BhHomePage {
       this.user_id = data.data.id;
       this.hc_balance = data.data.hc_balance;
       this.us_balance = data.data.us_balance;
+
+      // check if user have recorded thnak you message
+      if(data.data.thankyou_video == "") {
+        this.showRecordMsg = true;
+      }
     });
 
     // get user data from storage
@@ -308,6 +314,9 @@ export class BhHomePage {
 
         // if success
         if(res.msg == "success") {
+          // hide record a thank you message
+          this.showRecordMsg = false;
+
           // set notification data
           let notification_data = {
               "user_id": user_id,

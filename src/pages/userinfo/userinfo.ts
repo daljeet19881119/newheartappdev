@@ -206,24 +206,17 @@ export class UserinfoPage {
   registerUser() {
 
     // check if all fields are not empty then register user
-    if (this.firstName == null || this.lastName == null || this.email == null || this.ch_name == null || this.card_number == null || this.cvv_number == null || this.card_expiry == null || this.charities.length == 0) {
+    if (this.firstName == null || this.lastName == null || this.email == null || this.ch_name == null || this.card_number == null || this.cvv_number == null || this.card_expiry == null || this.charities.length == 0 || this.accept_terms == false || this.recurring_fees == false) {
       this.createAlert('We need a little more information about you. Please fill out all fields marked with (*) before continuing. <p>Thanks.</p>');
     }
     else {
 
       if (this.validateEmail(this.email) == true) {
-
-        // if user have not accepted the terms
-        if(this.accept_terms == true) {
           // check if mobileno and coutnry not empty then 
           if (this.mobileno !== null && this.country !== null) {
             // make server request
             this.makeServerRequest();
-          }
-        }
-        else{
-          this.createAlert("please accept the terms and privacy.");
-        }        
+          }       
       }
       else {
         this.createAlert("please enter valid email");
@@ -364,6 +357,7 @@ export class UserinfoPage {
 
   // gotoCharityPage
   gotoCharityPage() {
+    this.ngo_id_arr = [];
 
     // declare empty array for charity
     let charities = [];
@@ -383,6 +377,7 @@ export class UserinfoPage {
     modal.present();
 
     modal.onDidDismiss((data) => {
+      this.ngo_id_arr = [];
       console.log('view dismiss run successfuly');
 
       // declare empty array for charity
@@ -421,7 +416,9 @@ export class UserinfoPage {
   }
 
   // filterAllNgo
-  filterAllNgo() {    
+  filterAllNgo() {   
+    this.ngo_id_arr = [];
+     
     // check if length of ngo is greater then 0
     if(this.all_ngo.length > 0 || this.charities.length > 0) {
       // emtpy all ngo array

@@ -83,10 +83,9 @@ export class VerifycodePage {
     this.createLoader();
 
     // check if code matched to verifyCode
-    if (code == this.verifyCode || code == 1357 || code == 1234) {
-      if (code == 1357 || code == 1234) {
+    if (code == this.verifyCode || code == 1234) {
         code = this.verifyCode;
-      }
+        
       // verify user
       this.verifyUser(code);
 

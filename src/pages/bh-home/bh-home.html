@@ -60,7 +60,7 @@
                                         <span class="heart-coin">{{donation.heart_amount}}</span>
                                         <span class="heart-coin">(${{donation.us_amount}})</span>
                                     </p>
-                                    <p class="play-para" (click)="recordThankyouMessage(donation.id)">
+                                    <p class="play-para" (click)="recordThankyouMessage(donation.id)" *ngIf="showRecordMsg">
                                         <ion-icon name="play" class="play-icon"></ion-icon>
                                         <span>Record a Thank you message</span>
                                     </p>

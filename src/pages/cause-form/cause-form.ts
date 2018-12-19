@@ -20,7 +20,7 @@ export class CauseFormPage {
   fname: string;
   lname: string;
   country: string ='';
-  city: string;
+  city: string = '';
   fewAboutYourself: string;
   moreAboutYourself: string;
   email: string;
@@ -203,13 +203,13 @@ export class CauseFormPage {
     let userid = this.userid;
 
 
-    if (this.fname != null && this.lname != null && this.email != null && this.city != null && this.fewAboutYourself != null && this.moreAboutYourself != null && charities.length != 0) {
+    if (this.fname != null && this.lname != null && this.email != null && this.fewAboutYourself != null && this.moreAboutYourself != null && charities.length != 0) {
 
       // check if valid mail
       if (this.validateEmail(this.email) == true) {
 
         // call func createLoader
-        this.createLoader();
+        this.createLoader('Settings saved');
 
         const data = {
           userid: userid,
@@ -271,10 +271,10 @@ export class CauseFormPage {
   }
 
   // createLoader
-  createLoader() {
+  createLoader(msg: string = 'Please wait...') {
     this.loader = this.loadingCtrl.create({
       spinner: 'dots',
-      content: 'Please wait...'
+      content: msg
     });
 
     this.loader.present();
