@@ -46,6 +46,7 @@ import { CardIO } from '@ionic-native/card-io';
 import { SettingsPage } from '../pages/settings/settings';
 import { FCM } from '@ionic-native/fcm';
 import { TestPage } from '../pages/test/test';
+import { Ng2GaugeModule } from 'ng2-gauge';
 
 @NgModule({
   declarations: [
@@ -77,7 +78,8 @@ import { TestPage } from '../pages/test/test';
     HttpModule,
     HttpClientModule,
     IonicModule.forRoot(MyApp),
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+    Ng2GaugeModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

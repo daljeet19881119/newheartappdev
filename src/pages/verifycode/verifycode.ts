@@ -133,7 +133,7 @@ export class VerifycodePage {
         email: this.email
     };
     this.userService.verifyVerificationCode(data).subscribe(data => {
-      console.log(data);
+      // console.log(data);
     }, err => {
       console.log(err);
     });

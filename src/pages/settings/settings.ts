@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, ModalController, AlertController, Platform } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams, LoadingController, ModalController, AlertController, Platform, Navbar } from 'ionic-angular';
 import { GlobalProvider } from '../../providers/global/global';
 import { UserProvider } from '../../providers/user/user';
 import { CharitiesPage } from '../charities/charities';
@@ -14,6 +14,7 @@ import { HomePage } from '../home/home';
   templateUrl: 'settings.html',
 })
 export class SettingsPage {
+  @ViewChild('navbar') navBar: Navbar;
 
   fname: string;
   lname: string;
@@ -48,10 +49,17 @@ export class SettingsPage {
     this.platform.registerBackButtonAction(() => {
       this.updateUserData();
       this.navCtrl.setRoot(HomePage);
-    });
+      this.navCtrl.pop();
+    });    
   }
 
   ionViewDidLoad() {
+    // navbar backbutton click
+    this.navBar.backButtonClick = () => {
+      this.updateUserData();
+      this.navCtrl.pop();
+    };
+
     console.log('ionViewDidLoad SettingsPage');
 
     // store uuid

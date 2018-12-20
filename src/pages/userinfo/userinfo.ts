@@ -39,8 +39,33 @@ export class UserinfoPage {
   charities: any = [];
   checkCharity: boolean = false;
   large_donation: boolean = false;
-  cause_percentage: any = 90;
-  donation_amount: any = 20;
+  cause_percentage: number = 90;
+  donation_amount: number = 25;
+  max: number = 1000;
+  sectors: any = [{
+    from: 0,
+    to: 500,
+    color: 'orange'
+  }, {
+    from: 500,
+    to: 1000,
+    color: 'red'
+  }];
+
+  sectors_1: any = [{
+    from: 0,
+    to: 50,
+    color: 'orange'
+  }, {
+    from: 50,
+    to: 97,
+    color: 'red'
+  }];
+
+  disablePlusBtn: boolean;
+  disableMinusBtn: boolean;
+  disableCausePlusBtn: boolean;
+  disableCauseMinusBtn: boolean;
 
   ch_name: string = null;
   card_number: any = null;
@@ -56,6 +81,7 @@ export class UserinfoPage {
   us_tax_deductible: boolean = false;
   recurring_fees: boolean = false;
   accept_terms: boolean = false;
+
   constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, public platform: Platform, private global: GlobalProvider, private loadingCtrl: LoadingController, private userService: UserProvider, private storage: Storage, private modalCtrl: ModalController, private cardIO: CardIO) {
 
     // if user try goback then exit app
@@ -107,6 +133,15 @@ export class UserinfoPage {
   }
 
   ionViewDidLoad() {
+    if (this.donation_amount < 25) {
+      this.disableMinusBtn = true;
+      this.disablePlusBtn = false;
+    }
+    if (this.donation_amount > 950) {
+      this.disableMinusBtn = false;
+      this.disablePlusBtn = true;
+    }
+
     console.log('ionViewDidLoad UserinfoPage');
 
     // check if have uuid
@@ -126,6 +161,84 @@ export class UserinfoPage {
     this.loadCountries();
     this.loadRegions();
 
+  }
+
+  // incrementDonation
+  incrementDonation() {
+    if (this.donation_amount < 500) {
+      this.donation_amount = this.donation_amount + 25;
+    }
+    else if (this.donation_amount >= 500 && this.donation_amount <= 950) {
+      this.donation_amount = this.donation_amount + 50;
+    }
+
+    if (this.donation_amount > 25 && this.donation_amount < 950) {
+      this.disableMinusBtn = false;
+      this.disablePlusBtn = false;
+    }
+    else if (this.donation_amount > 950) {
+      this.disablePlusBtn = true;
+      this.disableMinusBtn = false;
+    }
+  }
+
+  // decrementDonation
+  decrementDonation() {
+    if (this.donation_amount <= 500) {
+      this.donation_amount = this.donation_amount - 25;
+    }
+    else if (this.donation_amount > 500 && this.donation_amount <= 1000) {
+      this.donation_amount = this.donation_amount - 50;
+    }
+
+    if (this.donation_amount > 25 && this.donation_amount < 1000) {
+      this.disableMinusBtn = false;
+      this.disablePlusBtn = false;
+    }
+    else if (this.donation_amount <= 25) {
+      this.disablePlusBtn = false;
+      this.disableMinusBtn = true;
+    }
+  }
+
+  // incrementCause
+  incrementCause() {   
+    
+    if(this.cause_percentage >= 95) {
+      this.cause_percentage = this.cause_percentage + 2;
+    }
+    else{
+      this.cause_percentage = this.cause_percentage + 5;
+    }
+
+    if(this.cause_percentage > 95) {
+      this.disableCausePlusBtn = true;
+      this.disableCauseMinusBtn = false;
+    }
+    else if(this.cause_percentage < 97 && this.cause_percentage > 1) {
+      this.disableCausePlusBtn = false;
+      this.disableCauseMinusBtn = false;
+    }
+  }
+
+  // decrementCause
+  decrementCause() {
+    
+    if(this.cause_percentage <= 7) {
+      this.cause_percentage = this.cause_percentage - 2;
+    }
+    else{
+      this.cause_percentage = this.cause_percentage - 5;
+    }
+
+    if(this.cause_percentage < 97 && this.cause_percentage > 5) {
+      this.disableCausePlusBtn = false;
+      this.disableCauseMinusBtn = false;
+    }
+    else if(this.cause_percentage <= 5) {
+      this.disableCausePlusBtn = false;
+      this.disableCauseMinusBtn = true;
+    }
   }
 
   // checkPreference
@@ -212,11 +325,11 @@ export class UserinfoPage {
     else {
 
       if (this.validateEmail(this.email) == true) {
-          // check if mobileno and coutnry not empty then 
-          if (this.mobileno !== null && this.country !== null) {
-            // make server request
-            this.makeServerRequest();
-          }       
+        // check if mobileno and coutnry not empty then 
+        if (this.mobileno !== null && this.country !== null) {
+          // make server request
+          this.makeServerRequest();
+        }
       }
       else {
         this.createAlert("please enter valid email");
@@ -255,10 +368,10 @@ export class UserinfoPage {
     // calculate hc amount
     let hc_amount = this.donation_amount * 100;
     let ngo_count = parseInt(this.ngo_id_arr.length);
-    let cause_percentage = parseInt(this.cause_percentage);
+    let cause_percentage = this.cause_percentage;
     let calculated_amount = hc_amount / 100 * cause_percentage;
     let hc_balance = hc_amount - calculated_amount;
-    let us_balance = hc_balance / 100;    
+    let us_balance = hc_balance / 100;
     let hc_amount_per_ngo = calculated_amount / ngo_count;
     let us_amount_per_ngo = hc_amount_per_ngo / 100;
 
@@ -271,20 +384,20 @@ export class UserinfoPage {
       referral_amount = '5';
     }
 
-    let accept_terms = ''; 
+    let accept_terms = '';
     let recurring_fees = '';
 
-    if(this.accept_terms == true) {
+    if (this.accept_terms == true) {
       accept_terms = 'true';
     }
-    else{
-      accept_terms = 'false'; 
+    else {
+      accept_terms = 'false';
     }
 
-    if(this.recurring_fees == true) {
+    if (this.recurring_fees == true) {
       recurring_fees = 'true';
     }
-    else{
+    else {
       recurring_fees = 'false';
     }
 
@@ -316,7 +429,7 @@ export class UserinfoPage {
       referral_amount: referral_amount,
       verification_type: this.verification_type,
       accept_terms: accept_terms,
-      recurring_fees: recurring_fees      
+      recurring_fees: recurring_fees
     };
 
     this.userService.verifyUserProfile(data).subscribe(data => {
@@ -344,7 +457,7 @@ export class UserinfoPage {
       }
 
       // check if msg failed
-      if(data.msg == 'failed') {
+      if (data.msg == 'failed') {
         this.createAlert('Server is unable to submit your request. Please try again later.');
       }
 
@@ -410,17 +523,17 @@ export class UserinfoPage {
   // getPreferenceCheck
   getPreferenceCheck(country: boolean, region: boolean) {
     // check if country and region false
-    if(country == false && region == false) {
+    if (country == false && region == false) {
       this.filterAllNgo();
     }
   }
 
   // filterAllNgo
-  filterAllNgo() {   
+  filterAllNgo() {
     this.ngo_id_arr = [];
-     
+
     // check if length of ngo is greater then 0
-    if(this.all_ngo.length > 0 || this.charities.length > 0) {
+    if (this.all_ngo.length > 0 || this.charities.length > 0) {
       // emtpy all ngo array
       this.all_ngo = [];
 
@@ -507,65 +620,63 @@ export class UserinfoPage {
 
       // getNgoByCharityIds
       this.userService.getNgoByCharityIds(charity_ids).subscribe(res => {
-        
-        let  us_tax_deductible;
-        if(this.us_tax_deductible == true) {
+
+        let us_tax_deductible;
+        if (this.us_tax_deductible == true) {
           us_tax_deductible = 'true';
         }
-        else{
+        else {
           us_tax_deductible = 'false';
         }
 
         // check if tax exemption == true
-        if(us_tax_deductible == 'true') 
-        {
+        if (us_tax_deductible == 'true') {
           // loop of res
           res.forEach(element => {
             // check if country is true
-            if(this.checkCountry == true) {
-                // check if elment matched to tax exemption
-                if(element.us_tax_deductible == us_tax_deductible && element.country == this.location) {
-                  this.all_ngo.push(element);
-                }
-            }
-            else if(this.checkRegion == true) {
-              if(element.us_tax_deductible == us_tax_deductible && element.region == this.location) {
+            if (this.checkCountry == true) {
+              // check if elment matched to tax exemption
+              if (element.us_tax_deductible == us_tax_deductible && element.country == this.location) {
                 this.all_ngo.push(element);
               }
             }
-            else if(this.checkRegion == false && this.checkCountry == false) {
-                // check if elment matched to tax exemption
-                if(element.us_tax_deductible == us_tax_deductible) {
-                  this.all_ngo.push(element);
-                }
-            }            
-          });             
+            else if (this.checkRegion == true) {
+              if (element.us_tax_deductible == us_tax_deductible && element.region == this.location) {
+                this.all_ngo.push(element);
+              }
+            }
+            else if (this.checkRegion == false && this.checkCountry == false) {
+              // check if elment matched to tax exemption
+              if (element.us_tax_deductible == us_tax_deductible) {
+                this.all_ngo.push(element);
+              }
+            }
+          });
           // console.log('tax exemption if condition');
         }
-        else
-        {          
+        else {
           // loop of res
           res.forEach(element => {
             // check if country is true
-            if(this.checkCountry == true) {
-                // check if elment matched to tax exemption
-                if(element.country == this.location) {
-                  this.all_ngo.push(element);
-                }
-            }
-            else if(this.checkRegion == true) {
-              if(element.region == this.location) {
+            if (this.checkCountry == true) {
+              // check if elment matched to tax exemption
+              if (element.country == this.location) {
                 this.all_ngo.push(element);
               }
             }
-            else if(this.checkRegion == false && this.checkCountry == false) {
+            else if (this.checkRegion == true) {
+              if (element.region == this.location) {
+                this.all_ngo.push(element);
+              }
+            }
+            else if (this.checkRegion == false && this.checkCountry == false) {
               this.all_ngo.push(element);
-            }            
-          });  
+            }
+          });
           // console.log('tax exemption else condition');        
         }
-                
-        
+
+
         this.loader.dismiss();
       }, err => {
         console.log(err);

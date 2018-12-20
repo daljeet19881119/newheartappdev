@@ -1,9 +1,3 @@
-<!--
-  Generated template for the TestPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
   <ion-navbar>
@@ -14,5 +8,17 @@
 
 
 <ion-content padding>
-
+  <nga-ng2-gauge 
+  [max]="max" 
+  [input]="input"
+  [sectors]="sectors"
+  [size]="200"
+  [showDigital]="true">
+  </nga-ng2-gauge>
+  <button ion-button (click)="incrementVal()" [disabled]="disablePlusBtn">
+      <ion-icon name="add"></ion-icon>
+  </button>
+  <button ion-button (click)="decrementVal()" [disabled]="disableMinusBtn">
+      <ion-icon name="remove"></ion-icon>
+  </button>
 </ion-content>

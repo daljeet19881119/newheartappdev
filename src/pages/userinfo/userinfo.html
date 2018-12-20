@@ -8,20 +8,20 @@
 
 
 <ion-content padding class="body-color" style="background-color: #ae0433;">
-    <ion-list>
-      <ion-item no-padding class="item-feilds">
-        <ion-label floating>First Name*</ion-label>
-        <ion-input type="text" [(ngModel)]="firstName" (ionBlur)="setCardHolderName()"></ion-input>
-      </ion-item>
-      <ion-item no-padding class="item-feilds">
-          <ion-label floating>Last Name*</ion-label>
-          <ion-input type="text" [(ngModel)]="lastName" (ionBlur)="setCardHolderName()"></ion-input>
-        </ion-item>
-      <ion-item no-padding class="item-feilds">
-        <ion-label floating>Email*</ion-label>
-        <ion-input type="email" [(ngModel)]="email" [readonly]="showEmail"></ion-input>
-      </ion-item>
-      <div class="textarea-div">
+  <ion-list>
+    <ion-item no-padding class="item-feilds">
+      <ion-label floating>First Name*</ion-label>
+      <ion-input type="text" [(ngModel)]="firstName" (ionBlur)="setCardHolderName()"></ion-input>
+    </ion-item>
+    <ion-item no-padding class="item-feilds">
+      <ion-label floating>Last Name*</ion-label>
+      <ion-input type="text" [(ngModel)]="lastName" (ionBlur)="setCardHolderName()"></ion-input>
+    </ion-item>
+    <ion-item no-padding class="item-feilds">
+      <ion-label floating>Email*</ion-label>
+      <ion-input type="email" [(ngModel)]="email" [readonly]="showEmail"></ion-input>
+    </ion-item>
+    <!-- <div class="textarea-div">
       <ion-row>
         <p>How much you want to donate to causes (0-97%) and to HeartGlobal (3-100%)</p>
       </ion-row>
@@ -35,10 +35,41 @@
           </ion-range>
         </ion-item>
       </ion-row>
-    </div>
+    </div> -->
     <div class="textarea-div">
       <ion-row>
-        <p>How much do you want to donate each month?</p>        
+        <p>How much you want to donate to causes (0-97%) and to HeartGlobal (3-100%)</p>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+            <ion-label><span class="range-val">Cause(s) {{ '('+cause_percentage+'%)' }}</span></ion-label>
+        </ion-col>
+        <ion-col>
+            <ion-label text-right><span class="range-val">HeartGlobal ({{ 100-cause_percentage }}%)</span></ion-label>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <div class="gauge-div">
+          <nga-ng2-gauge [max]="100" [input]="cause_percentage" [sectors]="sectors_1" [size]="200" [showDigital]="true">
+          </nga-ng2-gauge>
+        </div>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <button ion-button small (click)="incrementCause()" [disabled]="disableCausePlusBtn">
+            <ion-icon name="add"></ion-icon>
+          </button>
+        </ion-col>
+        <ion-col text-right>
+          <button ion-button small (click)="decrementCause()" [disabled]="disableCauseMinusBtn">
+            <ion-icon name="remove"></ion-icon>
+          </button>
+        </ion-col>
+      </ion-row>
+    </div>
+    <!-- <div class="textarea-div">
+      <ion-row>
+        <p>How much do you want to donate each month?</p>
       </ion-row>
       <ion-row>
         <span class="range-val">{{ '$'+toLocaleString(donation_amount) }}</span>&nbsp;
@@ -52,6 +83,33 @@
           </ion-range>
         </ion-item>
       </ion-row>
+    </div> -->
+    <div class="textarea-div">
+      <ion-row>
+        <p>How much do you want to donate each month?</p>
+      </ion-row>
+      <ion-row>
+        <div class="gauge-div">
+          <nga-ng2-gauge [max]="max" [input]="donation_amount" [sectors]="sectors" [size]="200" [showDigital]="true">
+          </nga-ng2-gauge>
+        </div>
+      </ion-row>
+      <ion-row>
+        <ion-col col-2>
+          <button ion-button small (click)="incrementDonation()" [disabled]="disablePlusBtn">
+            <ion-icon name="add"></ion-icon>
+          </button>
+        </ion-col>
+        <ion-col col-8 text-center>
+          <span class="range-val">{{ '$'+toLocaleString(donation_amount) }}</span>&nbsp;
+          <span class="hc-val">({{ toLocaleString(donation_amount * 100) }} HC)</span>
+        </ion-col>
+        <ion-col text-right col-2>
+          <button ion-button small (click)="decrementDonation()" [disabled]="disableMinusBtn">
+            <ion-icon name="remove"></ion-icon>
+          </button>
+        </ion-col>
+      </ion-row>
     </div>
     <div class="textarea-div">
       <ion-row>
@@ -61,7 +119,7 @@
         <ion-col col-11>
           <ion-label>I have a larger one-time donation</ion-label>
           <p *ngIf="large_donation">one of our team member will contact you</p>
-        </ion-col>        
+        </ion-col>
       </ion-row>
     </div>
     <div class="textarea-div">
@@ -85,7 +143,7 @@
         <ion-label floating>Expiry date*</ion-label>
         <ion-datetime displayFormat="MMM/YYYY" [(ngModel)]="card_expiry" [min]="current_year" [max]="current_year + 50"></ion-datetime>
       </ion-item>
-    </div>  
+    </div>
     <div class="textarea-div">
       <ion-row>
         <ion-col col-1 style="padding-top: 19px;">
@@ -93,108 +151,113 @@
         </ion-col>
         <ion-col col-11>
           <ion-label>US Tax Deductible Only</ion-label>
-        </ion-col>        
+        </ion-col>
       </ion-row>
-    </div>  
-      <ion-item no-padding (click)="gotoCharityPage()" *ngIf="!checkCharity || charities?.length == 0" class="item-feilds"> 
-        <ion-label style="color: #999999;">Select Cause category* <ion-icon name="arrow-forward" class="next-arrow"></ion-icon></ion-label>        
-      </ion-item>
-      <ion-row *ngIf="charities?.length > 0">
-          <div class="selected-charity-div">
-            <span>Selected causes</span>
-          </div>
-          <ion-col col-10 no-padding>
-            <ion-item no-padding class="item-feild-textarea">
-                <ion-textarea [(ngModel)]="charities" readonly text-wrap class="text-area"  (ionFocus)="gotoCharityPage()"></ion-textarea>
-            </ion-item>
-          </ion-col>
-          <ion-col col-2 no-padding (click)="gotoCharityPage()">
-            <ion-item class="item-feild-arrow">
-              <ion-label style="color: #999999;margin:20px 8px 20px 0;"><ion-icon name="arrow-forward" class="next-arrow"></ion-icon></ion-label>
-            </ion-item>
-          </ion-col>
-      </ion-row>
-      <div class="geographic-div">
-        <ion-row class="label-row">
-          <p>Geographic Preference(s)</p>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            <ion-item class="item-radio">
-              <ion-label>Select a specific country</ion-label>
-              <ion-checkbox [(ngModel)]="checkCountry" item-end (ionChange)="checkPreference('country');getPreferenceCheck(checkCountry, checkRegion);"></ion-checkbox>
-            </ion-item>
-          </ion-col>
-          <ion-col>
-            <ion-item class="item-radio">
-              <ion-label>Select a region</ion-label>
-              <ion-checkbox [(ngModel)]="checkRegion" item-end (ionChange)="checkPreference('region');getPreferenceCheck(checkCountry, checkRegion);"></ion-checkbox>
-            </ion-item>
-          </ion-col>
-        </ion-row>
+    </div>
+    <ion-item no-padding (click)="gotoCharityPage()" *ngIf="!checkCharity || charities?.length == 0" class="item-feilds">
+      <ion-label style="color: #999999;">Select Cause category* <ion-icon name="arrow-forward" class="next-arrow"></ion-icon>
+      </ion-label>
+    </ion-item>
+    <ion-row *ngIf="charities?.length > 0">
+      <div class="selected-charity-div">
+        <span>Selected causes</span>
       </div>
-      <ion-item *ngIf="checkCountry" no-padding class="item-feilds">
-        <ion-label>
-          Tap here to select country
-        </ion-label>
-        <ion-select interface="popover" *ngIf="countries.length > 0" [(ngModel)]="location" (ionChange)="filterAllNgo()">
-          <ng-container *ngFor="let country of countries">
-            <ion-option [value]="country.code">{{ country.name }}</ion-option>
-          </ng-container>
-        </ion-select>
-      </ion-item>
-      <ion-item *ngIf="checkRegion" no-padding class="item-feilds">
-        <ion-label>
-          Tap here to select region
-        </ion-label>
-        <ion-select interface="popover" *ngIf="allRegions" [(ngModel)]="location" (ionChange)="filterAllNgo()">
-          <ng-container *ngFor="let region of allRegions">
-            <ion-option [value]="region.id">{{ region.name }}</ion-option>
-          </ng-container>
-        </ion-select>
-      </ion-item>
-      <div class="textarea-div" *ngIf="all_ngo.length > 0">
-        <ion-row>
-          <p>Select any particular BigHeart to which you want to donate to otherwise we will select a few we believe you like</p>
-        </ion-row>
-        <ion-list class="list-height">
-          <ng-container *ngFor="let ngo of all_ngo">
-            <ion-item class="payment-item">
-              <ion-avatar item-start style="background: #48414130;border-radius: 50%;border: 1px solid #48414130;z-index: 1;" (click)="viewNgoProfile(ngo.id)">                
-                <img [src]="ngo.ngo_founder_img_url" [alt]="ngo.ngo_name">
-              </ion-avatar>
-              <ion-label (click)="viewNgoProfile(ngo.id)" style="z-index: 1;">{{ ngo.ngo_user+' ('+ngo.ngo_name+')' }}</ion-label>
-              <ion-checkbox [(ngModel)]="ngo.checked" (click)="getSelectedNgo(ngo.checked, ngo.id);" item-end></ion-checkbox>
-            </ion-item>
-          </ng-container>
-        </ion-list>
-      </div> 
-      <div class="textarea-div">
-        <ion-item no-padding class="item-feilds">
-          <ion-label floating>Referral code</ion-label>
-          <ion-input type="number" [(ngModel)]="referral_code"></ion-input>
+      <ion-col col-10 no-padding>
+        <ion-item no-padding class="item-feild-textarea">
+          <ion-textarea [(ngModel)]="charities" readonly text-wrap class="text-area" (ionFocus)="gotoCharityPage()"></ion-textarea>
         </ion-item>
-      </div>
-      <div class="textarea-div">
-        <ion-row>
-          <ion-col col-1 style="padding-top: 19px;">
-            <ion-checkbox [(ngModel)]="recurring_fees"></ion-checkbox>
-          </ion-col>
-          <ion-col col-11>
-            <p>I agree to recuring monthly fees that can be changed or cancelled at any time.*</p>
-          </ion-col>        
-        </ion-row>
-      </div>
-      <div class="textarea-div">
-        <ion-row>
-          <ion-col col-1 style="padding-top: 19px;">
-            <ion-checkbox [(ngModel)]="accept_terms"></ion-checkbox>
-          </ion-col>
-          <ion-col col-11>
-            <p>I Accept the Terms and Privacy.*</p>
-          </ion-col>        
-        </ion-row>
-      </div>
-    </ion-list>
-    <button ion-button block (click)="registerUser()" color="white" class="register-btn">Register</button>
+      </ion-col>
+      <ion-col col-2 no-padding (click)="gotoCharityPage()">
+        <ion-item class="item-feild-arrow">
+          <ion-label style="color: #999999;margin:20px 8px 20px 0;">
+            <ion-icon name="arrow-forward" class="next-arrow"></ion-icon>
+          </ion-label>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <div class="geographic-div">
+      <ion-row class="label-row">
+        <p>Geographic Preference(s)</p>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item class="item-radio">
+            <ion-label>Select a specific country</ion-label>
+            <ion-checkbox [(ngModel)]="checkCountry" item-end (ionChange)="checkPreference('country');getPreferenceCheck(checkCountry, checkRegion);"></ion-checkbox>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-item class="item-radio">
+            <ion-label>Select a region</ion-label>
+            <ion-checkbox [(ngModel)]="checkRegion" item-end (ionChange)="checkPreference('region');getPreferenceCheck(checkCountry, checkRegion);"></ion-checkbox>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </div>
+    <ion-item *ngIf="checkCountry" no-padding class="item-feilds">
+      <ion-label>
+        Tap here to select country
+      </ion-label>
+      <ion-select interface="popover" *ngIf="countries.length > 0" [(ngModel)]="location" (ionChange)="filterAllNgo()">
+        <ng-container *ngFor="let country of countries">
+          <ion-option [value]="country.code">{{ country.name }}</ion-option>
+        </ng-container>
+      </ion-select>
+    </ion-item>
+    <ion-item *ngIf="checkRegion" no-padding class="item-feilds">
+      <ion-label>
+        Tap here to select region
+      </ion-label>
+      <ion-select interface="popover" *ngIf="allRegions" [(ngModel)]="location" (ionChange)="filterAllNgo()">
+        <ng-container *ngFor="let region of allRegions">
+          <ion-option [value]="region.id">{{ region.name }}</ion-option>
+        </ng-container>
+      </ion-select>
+    </ion-item>
+    <div class="textarea-div" *ngIf="all_ngo.length > 0">
+      <ion-row>
+        <p>Select any particular BigHeart to which you want to donate to otherwise we will select a few we believe you
+          like</p>
+      </ion-row>
+      <ion-list class="list-height">
+        <ng-container *ngFor="let ngo of all_ngo">
+          <ion-item class="payment-item">
+            <ion-avatar item-start style="background: #48414130;border-radius: 50%;border: 1px solid #48414130;z-index: 1;"
+              (click)="viewNgoProfile(ngo.id)">
+              <img [src]="ngo.ngo_founder_img_url" [alt]="ngo.ngo_name">
+            </ion-avatar>
+            <ion-label (click)="viewNgoProfile(ngo.id)" style="z-index: 1;">{{ ngo.ngo_user+' ('+ngo.ngo_name+')' }}</ion-label>
+            <ion-checkbox [(ngModel)]="ngo.checked" (click)="getSelectedNgo(ngo.checked, ngo.id);" item-end></ion-checkbox>
+          </ion-item>
+        </ng-container>
+      </ion-list>
+    </div>
+    <div class="textarea-div">
+      <ion-item no-padding class="item-feilds">
+        <ion-label floating>Referral code</ion-label>
+        <ion-input type="number" [(ngModel)]="referral_code"></ion-input>
+      </ion-item>
+    </div>
+    <div class="textarea-div">
+      <ion-row>
+        <ion-col col-1 style="padding-top: 19px;">
+          <ion-checkbox [(ngModel)]="recurring_fees"></ion-checkbox>
+        </ion-col>
+        <ion-col col-11>
+          <p>I agree to recuring monthly fees that can be changed or cancelled at any time.*</p>
+        </ion-col>
+      </ion-row>
+    </div>
+    <div class="textarea-div">
+      <ion-row>
+        <ion-col col-1 style="padding-top: 19px;">
+          <ion-checkbox [(ngModel)]="accept_terms"></ion-checkbox>
+        </ion-col>
+        <ion-col col-11>
+          <p>I Accept the Terms and Privacy.*</p>
+        </ion-col>
+      </ion-row>
+    </div>
+  </ion-list>
+  <button ion-button block (click)="registerUser()" color="white" class="register-btn">Register</button>
 </ion-content>
