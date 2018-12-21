@@ -40,7 +40,7 @@ export class UserinfoPage {
   checkCharity: boolean = false;
   large_donation: boolean = false;
   cause_percentage: number = 90;
-  donation_amount: number = 25;
+  donation_amount: number = 20;
   max: number = 1000;
   sectors: any = [{
     from: 0,
@@ -49,17 +49,17 @@ export class UserinfoPage {
   }, {
     from: 500,
     to: 1000,
-    color: 'red'
+    color: '#30b32d'
   }];
 
   sectors_1: any = [{
     from: 0,
-    to: 50,
+    to: 45,
     color: 'orange'
   }, {
-    from: 50,
-    to: 97,
-    color: 'red'
+    from: 45,
+    to: 90,
+    color: '#30b32d'
   }];
 
   disablePlusBtn: boolean;
@@ -133,15 +133,25 @@ export class UserinfoPage {
   }
 
   ionViewDidLoad() {
+    // check donation gauge meter
     if (this.donation_amount < 25) {
       this.disableMinusBtn = true;
       this.disablePlusBtn = false;
     }
-    if (this.donation_amount > 950) {
+    if (this.donation_amount >= 950) {
       this.disableMinusBtn = false;
       this.disablePlusBtn = true;
     }
 
+    // check cuase gauge meter
+    if(this.cause_percentage <= 1) {
+      this.disableCauseMinusBtn = true;
+      this.disableCausePlusBtn = false;
+    }
+    if(this.cause_percentage >= 85) {
+      this.disableCausePlusBtn = true;
+      this.disableCauseMinusBtn = false;
+    }
     console.log('ionViewDidLoad UserinfoPage');
 
     // check if have uuid
@@ -165,14 +175,17 @@ export class UserinfoPage {
 
   // incrementDonation
   incrementDonation() {
-    if (this.donation_amount < 500) {
+    if(this.donation_amount < 25) {
+      this.donation_amount = this.donation_amount + 5;
+    }
+    else if (this.donation_amount < 500 && this.donation_amount >= 25) {
       this.donation_amount = this.donation_amount + 25;
     }
     else if (this.donation_amount >= 500 && this.donation_amount <= 950) {
       this.donation_amount = this.donation_amount + 50;
     }
 
-    if (this.donation_amount > 25 && this.donation_amount < 950) {
+    if (this.donation_amount >= 25 && this.donation_amount < 950) {
       this.disableMinusBtn = false;
       this.disablePlusBtn = false;
     }
@@ -184,58 +197,49 @@ export class UserinfoPage {
 
   // decrementDonation
   decrementDonation() {
-    if (this.donation_amount <= 500) {
+    if(this.donation_amount <= 25) {
+      this.donation_amount = this.donation_amount - 5;
+    }
+    else if (this.donation_amount <= 500 && this.donation_amount > 25) {
       this.donation_amount = this.donation_amount - 25;
     }
     else if (this.donation_amount > 500 && this.donation_amount <= 1000) {
       this.donation_amount = this.donation_amount - 50;
     }
 
-    if (this.donation_amount > 25 && this.donation_amount < 1000) {
+    if (this.donation_amount >= 25 && this.donation_amount < 1000) {
       this.disableMinusBtn = false;
       this.disablePlusBtn = false;
     }
-    else if (this.donation_amount <= 25) {
+    else if (this.donation_amount < 25) {
       this.disablePlusBtn = false;
       this.disableMinusBtn = true;
     }
   }
 
   // incrementCause
-  incrementCause() {   
-    
-    if(this.cause_percentage >= 95) {
-      this.cause_percentage = this.cause_percentage + 2;
-    }
-    else{
-      this.cause_percentage = this.cause_percentage + 5;
-    }
+  incrementCause() {  
+    this.cause_percentage = this.cause_percentage + 5;
 
-    if(this.cause_percentage > 95) {
+    if(this.cause_percentage > 85) {
       this.disableCausePlusBtn = true;
       this.disableCauseMinusBtn = false;
     }
-    else if(this.cause_percentage < 97 && this.cause_percentage > 1) {
+    else if(this.cause_percentage < 90 && this.cause_percentage > 1) {
       this.disableCausePlusBtn = false;
       this.disableCauseMinusBtn = false;
     }
   }
 
   // decrementCause
-  decrementCause() {
-    
-    if(this.cause_percentage <= 7) {
-      this.cause_percentage = this.cause_percentage - 2;
-    }
-    else{
-      this.cause_percentage = this.cause_percentage - 5;
-    }
+  decrementCause() {    
+    this.cause_percentage = this.cause_percentage - 5;
 
-    if(this.cause_percentage < 97 && this.cause_percentage > 5) {
+    if(this.cause_percentage < 90 && this.cause_percentage > 1) {
       this.disableCausePlusBtn = false;
       this.disableCauseMinusBtn = false;
     }
-    else if(this.cause_percentage <= 5) {
+    else if(this.cause_percentage <= 1) {
       this.disableCausePlusBtn = false;
       this.disableCauseMinusBtn = true;
     }

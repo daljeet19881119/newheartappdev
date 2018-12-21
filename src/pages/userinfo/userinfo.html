@@ -38,31 +38,31 @@
     </div> -->
     <div class="textarea-div">
       <ion-row>
-        <p>How much you want to donate to causes (0-97%) and to HeartGlobal (3-100%)</p>
+        <p>How much you want to donate to causes (0-90%) and to HeartGlobal (10-100%)</p>
       </ion-row>
       <ion-row>
         <ion-col>
-            <ion-label><span class="range-val">Cause(s) {{ '('+cause_percentage+'%)' }}</span></ion-label>
+          <ion-label><span class="range-val">Cause(s) {{ '('+cause_percentage+'%)' }}</span></ion-label>
         </ion-col>
         <ion-col>
-            <ion-label text-right><span class="range-val">HeartGlobal ({{ 100-cause_percentage }}%)</span></ion-label>
+          <ion-label text-right><span class="range-val">HeartGlobal ({{ 100-cause_percentage }}%)</span></ion-label>
         </ion-col>
       </ion-row>
       <ion-row>
         <div class="gauge-div">
-          <nga-ng2-gauge [max]="100" [input]="cause_percentage" [sectors]="sectors_1" [size]="200" [showDigital]="true">
+          <nga-ng2-gauge [max]="90" [input]="cause_percentage" [sectors]="sectors_1" [size]="200" [showDigital]="true">
           </nga-ng2-gauge>
         </div>
       </ion-row>
       <ion-row>
         <ion-col>
-          <button ion-button small (click)="incrementCause()" [disabled]="disableCausePlusBtn">
-            <ion-icon name="add"></ion-icon>
+          <button ion-button small (click)="decrementCause()" [disabled]="disableCauseMinusBtn" color="appColor">
+            <ion-icon name="remove"></ion-icon>
           </button>
         </ion-col>
         <ion-col text-right>
-          <button ion-button small (click)="decrementCause()" [disabled]="disableCauseMinusBtn">
-            <ion-icon name="remove"></ion-icon>
+          <button ion-button small (click)="incrementCause()" [disabled]="disableCausePlusBtn" color="appColor">
+            <ion-icon name="add"></ion-icon>
           </button>
         </ion-col>
       </ion-row>
@@ -96,8 +96,8 @@
       </ion-row>
       <ion-row>
         <ion-col col-2>
-          <button ion-button small (click)="incrementDonation()" [disabled]="disablePlusBtn">
-            <ion-icon name="add"></ion-icon>
+          <button ion-button small (click)="decrementDonation()" [disabled]="disableMinusBtn" color="appColor">
+            <ion-icon name="remove"></ion-icon>
           </button>
         </ion-col>
         <ion-col col-8 text-center>
@@ -105,8 +105,8 @@
           <span class="hc-val">({{ toLocaleString(donation_amount * 100) }} HC)</span>
         </ion-col>
         <ion-col text-right col-2>
-          <button ion-button small (click)="decrementDonation()" [disabled]="disableMinusBtn">
-            <ion-icon name="remove"></ion-icon>
+          <button ion-button small (click)="incrementDonation()" [disabled]="disablePlusBtn" color="appColor">
+            <ion-icon name="add"></ion-icon>
           </button>
         </ion-col>
       </ion-row>
@@ -125,7 +125,7 @@
     <div class="textarea-div">
       <ion-row>
         <ion-label>Add payment details</ion-label>
-        <button ion-button small float-left (click)="scanCard()">Scan Card</button>
+        <button ion-button small float-left (click)="scanCard()" color="appColor">Scan Card</button>
       </ion-row>
       <ion-item class="payment-item">
         <ion-label floating>Card holder name*</ion-label>
