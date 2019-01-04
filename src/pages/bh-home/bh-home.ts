@@ -51,10 +51,8 @@ export class BhHomePage {
   hc_balance: any;
   us_balance: any;
   showRecordMsg: boolean;
+  transaction_id: any;
   constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private global: GlobalProvider, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, private bhHomeService: BhHomePageProvider, public loadingCtrl: LoadingController, private sharing: SocialSharing, private storage: Storage, private mediaCapture: MediaCapture, private transfer: FileTransfer, private androidPermissions: AndroidPermissions, private fcm: FCM, private alertCtrl: AlertController) {
-
-    // call function to get device id
-    this.getDeviceID();
 
     // request data from server
     // this.homeService.getLatestPayments().subscribe(data => {
@@ -94,8 +92,7 @@ export class BhHomePage {
     this.platform.registerBackButtonAction(() => {
       platform.exitApp();
     });
-    // call func getCharity
-    this.getCharity();
+    
 
     this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE).then(
       result => {
@@ -114,7 +111,7 @@ export class BhHomePage {
   }
 
   ionViewDidLoad() {
-    // call func getDeviceID
+    // getDeviceID
     if (this.global.uuid()) {
       this.uuid = this.global.uuid();
     }
@@ -125,26 +122,17 @@ export class BhHomePage {
     // get login user data
     this.userService.getUserByDeviceId(this.uuid).subscribe((data) => {
       this.name = data.data.fname;
-      this.user_id = data.data.id;
+      this.user_id = data.data.user_id;
       this.hc_balance = data.data.hc_balance;
-      this.us_balance = data.data.us_balance;
-
-      // check if user have recorded thnak you message
-      if(data.data.thankyou_video == "") {
-        this.showRecordMsg = true;
-      }
-    });
-
-    // get user data from storage
-    this.storage.get('user_data').then(data => {
-      this.user_id = data.id;
-
+      this.us_balance = data.data.us_balance;      
+      
       // get user bighearts
       this.bhHomeService.getBigheartUsers(this.user_id).subscribe(res => {
 
         if (res.msg == 'success') {
           // store requested data in the latestDonations
           this.latestDonations = res.data;
+          this.charities = res.bh_charities;
 
           let count = parseInt(res.count);
           let paging = Math.ceil(count / this.limit);
@@ -274,7 +262,7 @@ export class BhHomePage {
   }
 
   // recordThankyouMessage
-  recordThankyouMessage(user_id: any) {
+  recordThankyouMessage(user_id: any, transaction_id: any) {
     let options: CaptureVideoOptions = {
       limit: 1,
       duration: 10,
@@ -286,7 +274,7 @@ export class BhHomePage {
       this.videoName = data[0].name;
       
       // upload video to server
-      this.uploadThankyouMessage(user_id);
+      this.uploadThankyouMessage(user_id, transaction_id);
     },
       (err: CaptureError) => {
         console.log(err)
@@ -295,7 +283,7 @@ export class BhHomePage {
   }
 
   // uploadThankyouMessage
-  uploadThankyouMessage(user_id: any) {
+  uploadThankyouMessage(user_id: any, transaction_id: any) {
     this.createLoader('uploading video');
     const fileTransfer: FileTransferObject = this.transfer.create();
 
@@ -321,9 +309,10 @@ export class BhHomePage {
           let notification_data = {
               "user_id": user_id,
               "bh_userid": this.user_id,
-              "thankyou_video": this.videoName
+              "thankyou_video": this.videoName,
+              'transaction_id': transaction_id
           };
-
+          
           // send thankyou notificaitn to user
           this.bhHomeService.sendThankyouMessage(notification_data).subscribe(notification_res => {
             console.log(notification_res);
@@ -337,15 +326,6 @@ export class BhHomePage {
       });
   }
 
-  // getDeviceID
-  getDeviceID() {
-    if (this.global.uuid()) {
-      this.uuid = this.global.uuid();
-    }
-    else {
-      this.uuid = 'undefined';
-    }
-  }
 
   // getRecommendedBigHearts
   getRecommendedBigHearts() {

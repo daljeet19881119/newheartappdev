@@ -7,7 +7,6 @@ import { HomePageProvider } from '../../providers/home-page/home-page';
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { ViewChild } from '@angular/core';
 import { Slides } from 'ionic-angular';
-import { Storage } from '@ionic/storage';
 import { GlobalProvider } from '../../providers/global/global';
 import { FCM } from '@ionic-native/fcm';
 
@@ -45,7 +44,7 @@ export class HomePage {
   user_id: any;
   hc_balance: any;
   us_balance: any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private global: GlobalProvider, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, public loadingCtrl: LoadingController, private sharing: SocialSharing, private storage: Storage, private fcm: FCM, private alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private global: GlobalProvider, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, public loadingCtrl: LoadingController, private sharing: SocialSharing, private fcm: FCM, private alertCtrl: AlertController) {
 
     // request data from server
     // this.homeService.getLatestPayments().subscribe(data => {
@@ -85,8 +84,6 @@ export class HomePage {
     this.platform.registerBackButtonAction(() => {
       platform.exitApp();
     });
-    // call func getCharity
-    this.getCharity();
 
   }
 
@@ -104,14 +101,10 @@ export class HomePage {
       this.name = data.data.fname;
       this.us_balance = this.toLocaleString(parseFloat(data.data.us_balance).toFixed(2));
       this.hc_balance = this.toLocaleString(parseFloat(data.data.hc_balance).toFixed(2));
-    });
-
-    // get user data from storage
-    this.storage.get('user_data').then(data => {
-      this.user_id = data.id;
+      this.user_id = data.data.user_id;
 
       // get user bighearts
-      this.homeService.getUserBighearts(this.user_id).subscribe(res => {
+      this.homeService.getUserDashboardData(this.user_id).subscribe(res => {
 
         if (res.msg == 'success') {
           // store requested data in the latestDonations
@@ -127,25 +120,20 @@ export class HomePage {
           else {
             this.showDonationBtn = true;
           }
+
+          // store user charities
+          this.charities = res.user_charities;
+
+          // get recommend bigheart
+          this.recommendedBigHearts = res.recommended_bh;
         }
       }, err => {
         console.log(err);
       });
     });
 
-    // get user causes from storage
-    this.storage.get('user_causes').then(data => {
-      this.charities = data;
-    });
-
     // call firebaseNotification function
     this.firebaseNotification();
-  }
-
-  ionViewWillEnter() {
-    console.log('home page loaded');
-    // call function getRecommendedBigHearts
-    this.getRecommendedBigHearts();
   }
 
   // showTabs
@@ -158,7 +146,8 @@ export class HomePage {
 
     // send param and goto profile page
     this.navCtrl.push(ProfilePage, {
-      id: id,
+      bh_id: id,
+      user_id: this.user_id,
       uuid: this.uuid
     });
   }
@@ -177,7 +166,7 @@ export class HomePage {
     let offset = donationList.length;
 
     // get user bighearts
-    this.homeService.getUserBighearts(this.user_id, offset).subscribe(res => {
+    this.homeService.getUserDashboardData(this.user_id, offset).subscribe(res => {
       this.loader.dismiss();
 
       if (res.msg == 'success') {
@@ -252,58 +241,6 @@ export class HomePage {
     };
 
     this.streamingMedia.playVideo(this.global.base_url('assets/videos/' + video), options);
-  }
-
-
-  // getRecommendedBigHearts
-  getRecommendedBigHearts() {
-
-    // store uuid
-    let uuid;
-    uuid = this.uuid;
-    if (this.uuid !== '') {
-      uuid = this.navParams.get('uuid');
-    }
-    else {
-      uuid = 'undefined';
-    }
-
-    // get all recommended bighearts
-    this.homeService.getRecommendedBigHearts(uuid).subscribe(data => {
-
-      // store data
-      this.recommendedBigHearts = data;
-      // console.log(data);
-    }, err => {
-      console.log('Oops!');
-    });
-  }
-
-  // getCharity
-  getCharity() {
-
-    // store uuid
-    let uuid;
-    uuid = this.uuid;
-    if (this.uuid !== '') {
-      uuid = this.navParams.get('uuid');
-    }
-    else {
-      uuid = 'undefined';
-    }
-
-    // call func to get user charities
-    this.userService.getUserByDeviceId(uuid).subscribe(data => {
-
-      // store all user charities
-      let charities = data.data.charity_type;
-
-      // convert charities string to array
-      this.charities = charities.split(',');
-
-    }, err => {
-      console.log('Oops!' + err);
-    });
   }
 
   // createLoader

@@ -45,20 +45,20 @@ export class VerifycodePage {
     this.verification_type = this.navParams.get('verification_type');
 
     // check if verification type
-    if(this.verification_type == 'email') {
+    if (this.verification_type == 'email') {
       this.sendSMS = false;
     }
-    else if(this.verification_type == 'mobileno') {
+    else if (this.verification_type == 'mobileno') {
       this.sendSMS = true;
     }
-    else{
+    else {
       this.sendSMS = true;
     }
 
     if (this.global.uuid()) {
       this.uuid = this.global.uuid();
     }
-    else{
+    else {
       this.uuid = 'undefined';
     }
   }
@@ -84,29 +84,10 @@ export class VerifycodePage {
 
     // check if code matched to verifyCode
     if (code == this.verifyCode || code == 1234) {
-        code = this.verifyCode;
-        
+      code = this.verifyCode;
+
       // verify user
       this.verifyUser(code);
-
-      let page: any;
-      // check if userExists
-      if (this.navParams.get('userExists') == 'true') {
-        page = HomePage;
-        // this.reload();
-      } else {
-        page = UserinfoPage;
-      }
-
-      // gotoUserinfoPage
-      this.navCtrl.setRoot(page, {
-        mobileno: this.mobileno,
-        country: this.country,
-        email: this.email,
-        verification_type: this.verification_type
-      });
-
-      this.loader.dismiss();
     }
     else {
       // show alert
@@ -125,15 +106,31 @@ export class VerifycodePage {
   // verifyUser
   verifyUser(verifyCode: any) {
     const data = {
-        verification: 'verified',
-        mobileno: this.mobileno,
-        country: this.country,
-        verification_code: verifyCode,
-        verification_type: this.verification_type,
-        email: this.email
+      verification: 'verified',
+      mobile_no: this.mobileno,
+      country_dial_code: this.country,
+      verification_code: verifyCode,
+      verification_type: this.verification_type,
+      email: this.email
     };
     this.userService.verifyVerificationCode(data).subscribe(data => {
-      // console.log(data);
+      let page: any;
+      // check if userExists
+      if (this.navParams.get('userExists') == 'true' && data.data.verification == 'verified' && data.data.profile_status == 'verified') {
+        page = HomePage;
+      } else {
+        page = UserinfoPage;
+      }
+
+      // gotoUserinfoPage
+      this.navCtrl.setRoot(page, {
+        mobileno: this.mobileno,
+        country: this.country,
+        email: this.email,
+        verification_type: this.verification_type
+      });
+
+      this.loader.dismiss();
     }, err => {
       console.log(err);
     });
@@ -145,8 +142,8 @@ export class VerifycodePage {
     this.resendAlert();
 
     const data = {
-      mobileno: this.mobileno,
-      country: this.country,
+      mobile_no: this.mobileno,
+      country_dial_code: this.country,
       uuid: this.uuid,
       verification_type: this.verification_type,
       email: this.email
@@ -178,7 +175,7 @@ export class VerifycodePage {
   resendAlert() {
     let message = `We've sent an SMS with an activation code to your phone <b>+${this.country + ' ' + this.mobileno}</b>`;
     // check send sms false
-    if(this.sendSMS == false) {
+    if (this.sendSMS == false) {
       message = `We've sent an email with an activation code to your email <b>${this.email}</b>`;
     }
 

@@ -4,7 +4,6 @@ import { HomePage } from '../home/home';
 import { CharitiesPage } from '../charities/charities';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { UserProvider } from '../../providers/user/user';
-import { Storage } from '@ionic/storage';
 import { GlobalProvider } from '../../providers/global/global';
 import { ProfilePage } from '../profile/profile';
 import { CardIO, CardIOOptions, CardIOResponse } from '@ionic-native/card-io';
@@ -36,7 +35,9 @@ export class UserinfoPage {
   checkRegion: boolean = false;
 
   // variable to store charities
+  all_charities: any = [];
   charities: any = [];
+  selected_charity: any = [];
   checkCharity: boolean = false;
   large_donation: boolean = false;
   cause_percentage: number = 90;
@@ -73,16 +74,16 @@ export class UserinfoPage {
   current_year: any = new Date().getFullYear();
   dateObj: Date = new Date();
   card_expiry: any = null;
-  all_ngo: any = [];
-  ngo_id: string;
-  ngo_id_arr: any = [];
+  all_bh: any = [];
+  bh_id: string;
+  bh_id_arr: any = [];
   referral_code: any;
   verification_type: any;
   us_tax_deductible: boolean = false;
   recurring_fees: boolean = false;
   accept_terms: boolean = false;
 
-  constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, public platform: Platform, private global: GlobalProvider, private loadingCtrl: LoadingController, private userService: UserProvider, private storage: Storage, private modalCtrl: ModalController, private cardIO: CardIO) {
+  constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, public platform: Platform, private global: GlobalProvider, private loadingCtrl: LoadingController, private userService: UserProvider, private modalCtrl: ModalController, private cardIO: CardIO) {
 
     // if user try goback then exit app
     this.platform.registerBackButtonAction(() => {
@@ -249,34 +250,34 @@ export class UserinfoPage {
   checkPreference(preference: string) {
     if (preference == 'country' && this.checkCountry == false) {
       this.checkCountry = false;
-      this.ngo_id_arr = [];
+      this.bh_id_arr = [];
     }
     else if (preference == 'country' && this.checkCountry == true) {
       this.checkCountry = true;
       this.checkRegion = false;
       this.preference = preference;
-      this.ngo_id_arr = [];
+      this.bh_id_arr = [];
     }
 
     if (preference == 'region' && this.checkRegion == false) {
       this.checkRegion = false;
-      this.ngo_id_arr = [];
+      this.bh_id_arr = [];
     }
     else if (preference == 'region' && this.checkRegion == true) {
       this.checkRegion = true;
       this.checkCountry = false;
       this.preference = preference;
-      this.ngo_id_arr = [];
+      this.bh_id_arr = [];
     }
   }
 
   // getSelectedNgo
   getSelectedNgo(checked: any, id: any) {
     if (checked == true) {
-      this.ngo_id_arr.push(id);
+      this.bh_id_arr.push(id);
     }
     else {
-      this.ngo_id_arr.pop(id);
+      this.bh_id_arr.pop(id);
     }
   }
 
@@ -356,22 +357,22 @@ export class UserinfoPage {
     });
 
     // check if none selected ngo then assign automaticaly ngo to member
-    if (this.ngo_id_arr.length < 1) {
+    if (this.bh_id_arr.length < 1) {
       let i = 1;
-      this.all_ngo.forEach(element => {
+      this.all_bh.forEach(element => {
         if (i <= 5) {
-          this.ngo_id_arr.push(element.id);
+          this.bh_id_arr.push(element.user_id);
         }
         i++;
       });
     }
 
     // conver array to stirng
-    this.ngo_id = this.ngo_id_arr.toString();
+    this.bh_id = this.bh_id_arr.toString();
 
     // calculate hc amount
     let hc_amount = this.donation_amount * 100;
-    let ngo_count = parseInt(this.ngo_id_arr.length);
+    let ngo_count = parseInt(this.bh_id_arr.length);
     let cause_percentage = this.cause_percentage;
     let calculated_amount = hc_amount / 100 * cause_percentage;
     let hc_balance = hc_amount - calculated_amount;
@@ -412,23 +413,19 @@ export class UserinfoPage {
       lname: this.lastName,
       email: this.email,
       cause_percentage: this.cause_percentage,
-      donation_amount: this.donation_amount,
+      us_donation_amount: this.donation_amount,
+      hc_donation_amount: hc_amount,
       hc_balance: hc_balance,
       us_balance: us_balance,
-      hc_amount: hc_amount,
       us_amount_per_ngo: us_amount_per_ngo,
       hc_amount_per_ngo: hc_amount_per_ngo,
-      ngo_id: this.ngo_id,
-      ch_name: this.ch_name,
-      card_number: this.card_number,
-      cvv_number: this.cvv_number,
-      card_expiry: this.card_expiry,
+      bh_id: this.bh_id,
       large_donation: this.large_donation,
-      charity_type: charities.toString(),
+      charities: this.selected_charity.toString(),
       preference_type: this.preference,
       preference_location: this.location,
       mobileno: this.mobileno,
-      country: this.country,
+      country_dial_code: this.country,
       referral_code: referral_code,
       referral_amount: referral_amount,
       verification_type: this.verification_type,
@@ -441,21 +438,6 @@ export class UserinfoPage {
 
       // check if profileStatus is null
       if (this.profileStatus !== null && this.profileStatus == 'verified') {
-        // reload the app
-        // this.reload();
-
-        // store user charities in storage
-        let charities = data.data.charity_type;
-
-        // convert charities string to array
-        charities = charities.split(',');
-
-        // save all user charity or causes in storage
-        this.storage.set('user_causes', charities);
-
-        // save user data in storage
-        this.storage.set('user_data', data.data);
-
         // gotodashboard
         this.navCtrl.setRoot(HomePage);
       }
@@ -474,81 +456,74 @@ export class UserinfoPage {
 
   // gotoCharityPage
   gotoCharityPage() {
-    this.ngo_id_arr = [];
-
-    // declare empty array for charity
-    let charities = [];
-
-    // loop of selected charity
-    this.charities.forEach(element => {
-
-      // remove starting or end space from each element and push into charity array
-      charities.push(element.trim());
-    });
+    this.bh_id_arr = [];
+   
 
     // goto charity page
     const modal = this.modalCtrl.create(CharitiesPage, {
-      charities: charities,
+      charities: this.all_charities,
       page: 'userinfo'
     });
     modal.present();
 
-    modal.onDidDismiss((data) => {
-      this.ngo_id_arr = [];
+    modal.onDidDismiss((data) => {      
       console.log('view dismiss run successfuly');
+      this.bh_id_arr = [];
 
-      // declare empty array for charity
+      // declare emtpy variable
       let charities = [];
+      this.all_charities = [];
+      this.selected_charity = [];
 
       // loop of charity
       data.charities.forEach(element => {
         if (element.value == true) {
           // push element to charity arr
+          this.selected_charity.push(element.id);
           charities.push(element.name.trim());
         }
+        this.all_charities.push(element);
       });
 
       this.checkCharity = true;
-
+      
       // store selected charities in charities variable
       this.charities = charities;
-
+      
       // get ngo of charities
-      if (this.charities.length > 0) {
-        let selected_charity = [];
-        this.charities.forEach(element => {
-          selected_charity.push(element.trim());
-        });
-        this.getNgoByCharity(selected_charity);
+      if (this.selected_charity.length > 0) {
+        this.getBHByCharity(this.selected_charity);
       }
     });
+  }
+
+  // recurringCheck
+  recurringCheck() {
+    this.recurring_fees = ! this.recurring_fees;
+  }
+
+  // termsCheck
+  termsCheck() {
+    this.accept_terms = ! this.accept_terms;
   }
 
   // getPreferenceCheck
   getPreferenceCheck(country: boolean, region: boolean) {
     // check if country and region false
     if (country == false && region == false) {
-      this.filterAllNgo();
+      this.filterAllBH();
     }
   }
 
-  // filterAllNgo
-  filterAllNgo() {
-    this.ngo_id_arr = [];
+  // filterAllBH
+  filterAllBH() {
+    this.bh_id_arr = [];
 
     // check if length of ngo is greater then 0
-    if (this.all_ngo.length > 0 || this.charities.length > 0) {
+    if (this.all_bh.length > 0 || this.selected_charity.length > 0) {
       // emtpy all ngo array
-      this.all_ngo = [];
-
-      // get ngo of charities
-      if (this.charities.length > 0) {
-        let selected_charity = [];
-        this.charities.forEach(element => {
-          selected_charity.push(element.trim());
-        });
-        this.getNgoByCharity(selected_charity);
-      }
+      this.all_bh = [];
+      this.getBHByCharity(this.selected_charity);
     }
   }
 
@@ -608,23 +583,16 @@ export class UserinfoPage {
   }
 
   // get ngo by charity name
-  getNgoByCharity(selected_charity: any) {
+  getBHByCharity(selected_charity: any) {
+    
     this.createLoader();
-    this.userService.getAllCharities().subscribe(data => {
-      let charity_ids = [];
-      data.forEach(element => {
-        // check charity name in array then store that id
-        if (selected_charity.indexOf(element.name) != -1) {
-          charity_ids.push(element.id);
-        }
-      });
 
       // emtpy all ngo array
-      this.all_ngo = [];
+      this.all_bh = [];
 
-      // getNgoByCharityIds
-      this.userService.getNgoByCharityIds(charity_ids).subscribe(res => {
-
+      // getBHByCharityIds
+      this.userService.getBHByCharityIds(selected_charity).subscribe(res => {
+        
         let us_tax_deductible;
         if (this.us_tax_deductible == true) {
           us_tax_deductible = 'true';
@@ -640,19 +608,19 @@ export class UserinfoPage {
             // check if country is true
             if (this.checkCountry == true) {
               // check if elment matched to tax exemption
-              if (element.us_tax_deductible == us_tax_deductible && element.country == this.location) {
-                this.all_ngo.push(element);
+              if (element.bh_us_tax_deductible == us_tax_deductible && element.country == this.location) {
+                this.all_bh.push(element);
               }
             }
             else if (this.checkRegion == true) {
-              if (element.us_tax_deductible == us_tax_deductible && element.region == this.location) {
-                this.all_ngo.push(element);
+              if (element.bh_us_tax_deductible == us_tax_deductible && element.region == this.location) {
+                this.all_bh.push(element);
               }
             }
             else if (this.checkRegion == false && this.checkCountry == false) {
               // check if elment matched to tax exemption
-              if (element.us_tax_deductible == us_tax_deductible) {
-                this.all_ngo.push(element);
+              if (element.bh_us_tax_deductible == us_tax_deductible) {
+                this.all_bh.push(element);
               }
             }
           });
@@ -665,16 +633,16 @@ export class UserinfoPage {
             if (this.checkCountry == true) {
               // check if elment matched to tax exemption
               if (element.country == this.location) {
-                this.all_ngo.push(element);
+                this.all_bh.push(element);
               }
             }
             else if (this.checkRegion == true) {
               if (element.region == this.location) {
-                this.all_ngo.push(element);
+                this.all_bh.push(element);
               }
             }
             else if (this.checkRegion == false && this.checkCountry == false) {
-              this.all_ngo.push(element);
+              this.all_bh.push(element);
             }
           });
           // console.log('tax exemption else condition');        
@@ -686,10 +654,6 @@ export class UserinfoPage {
         console.log(err);
         this.loader.dismiss();
       });
-    }, err => {
-      console.log(err);
-      this.loader.dismiss();
-    });
   }
 
   // toLocaleString
@@ -697,10 +661,10 @@ export class UserinfoPage {
     return number.toLocaleString();
   }
 
-  // viewNgoProfile
-  viewNgoProfile(ngoid: any) {
+  // viewBHProfile
+  viewBHProfile(bh_id: any) {
     this.navCtrl.push(ProfilePage, {
-      id: ngoid,
+      bh_id: bh_id,
       page: 'register',
       uuid: this.uuid
     });

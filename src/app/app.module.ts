@@ -47,6 +47,7 @@ import { SettingsPage } from '../pages/settings/settings';
 import { FCM } from '@ionic-native/fcm';
 import { TestPage } from '../pages/test/test';
 import { Ng2GaugeModule } from 'ng2-gauge';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 @NgModule({
   declarations: [
@@ -126,7 +127,8 @@ import { Ng2GaugeModule } from 'ng2-gauge';
     GlobalProvider,
     BhHomePageProvider,
     CardIO,
-    FCM 
+    FCM,
+    InAppBrowser 
   ]
 })
 export class AppModule {}

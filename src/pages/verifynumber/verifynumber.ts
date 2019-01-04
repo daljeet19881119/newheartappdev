@@ -131,8 +131,8 @@ export class VerifynumberPage {
     this.createLoader();
 
     const data = {
-      mobileno: this.mobileno,
-      country: this.country,
+      mobile_no: this.mobileno,
+      country_dial_code: this.country,
       email: this.email,
       verification_type: verification_type,
       uuid: this.uuid,

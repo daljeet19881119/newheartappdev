@@ -21,9 +21,9 @@ export class UserBigheartsPage {
 
   ionViewDidLoad() {
     // get userdata from storage
-    this.storage.get('user_data').then(data => {
-      this.getNgoByCharity(data.charity_type);
-    });
+    // this.storage.get('user_data').then(data => {
+    //   this.getNgoByCharity(data.charity_type);
+    // });
 
     // get uuid
     if (this.global.uuid()) {
@@ -32,6 +32,27 @@ export class UserBigheartsPage {
     else {
       this.uuid = 'undefined';
     }
+
+    // get login user data
+    this.userService.getUserByDeviceId(this.uuid).subscribe(data => {
+        let user_charities = data.data.charities;
+        let user_bighearts = data.data.user_bighearts.split(',');
+
+        // get bigheart by charities
+        this.userService.getBHByCharityIds(user_charities).subscribe(all_bh => {
+            // loop of all_bh
+            all_bh.forEach(element => {
+                // check if bh id in array then store that id
+                if (user_bighearts.indexOf(element.user_id) != -1) {
+                  element.checked = true;
+                  this.ngo_ids.push(element.user_id);
+                }
+            });
+             
+            this.all_ngo = all_bh;
+
+        }, err => console.log(err));
+    }, err => console.log(err));
   }
 
   // get ngo by charity name
@@ -47,7 +68,7 @@ export class UserBigheartsPage {
       });
 
       // getNgoByCharityIds
-      this.userService.getNgoByCharityIds(charity_ids).subscribe(res => {
+      this.userService.getBHByCharityIds(charity_ids).subscribe(res => {
 
         res.forEach(element => {
           // get userdata from storage
@@ -105,7 +126,7 @@ export class UserBigheartsPage {
     this.createLoader();
 
     const data = {
-      ngo_id: this.ngo_ids,
+      bh_id: this.ngo_ids,
       uuid: this.uuid
     };
 

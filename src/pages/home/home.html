@@ -49,24 +49,24 @@
                     <ion-list *ngFor="let donation of latestDonations" class="donations-lists">
                         <ion-item class="donation-items">
                             <ion-avatar item-start class="ngo-avatar">
-                                <img [src]="donation.ngo_founder_img" class="ngo-img" (click)="gotoProfilePage(donation.id)">
+                                <img [src]="donation.bh_founder_img" class="ngo-img" (click)="gotoProfilePage(donation.user_id)">
                             </ion-avatar>
                             <ion-row>
                                 <ion-col col-5 no-padding>
-                                    <h2 class="ngo-name">{{donation.ngo_founder}}</h2>
-                                    <p class="ngo-date">{{donation.date}}</p>
+                                    <h2 class="ngo-name">{{ donation.bh_founder_name}}</h2>
+                                    <p class="ngo-date">{{ donation.transaction_date}}</p>
                                 </ion-col>
                                 <ion-col col-7 style="text-align: right;" no-padding>
                                     <p>
                                         <ion-icon name="heart-outline" class="heart-small-icon"></ion-icon> 
-                                        <span class="heart-coin">{{donation.hc_amount_per_ngo}}</span> 
-                                        <span class="heart-coin">(${{donation.us_amount_per_ngo}})</span>
+                                        <span class="heart-coin">{{ donation.transaction_us_amount}}</span> 
+                                        <span class="heart-coin">(${{ donation.transaction_hc_amount}})</span>
                                     </p>
                                     <p class="play-para" (click)="playVideo(donation.thankyou_video)" *ngIf="donation.thankyou_video != ''">
                                         <ion-icon name="play" class="play-icon"></ion-icon>
                                         <span>Thank you Message</span>
                                     </p>
-                                    <span  class="share-icon" (click)="shareInfo(donation.ngo_name, donation.ngo_founder_img, donation.ngo_founder, donation.ngo_desc, donation.youtube_id)">
+                                    <span  class="share-icon" (click)="shareInfo(donation.bh_name, donation.bh_founder_img, donation.bh_founder_name, donation.bh_desc, donation.bh_youtube_id)">
                                         <ion-icon name="share"></ion-icon>
                                     </span>
                                 </ion-col>
@@ -116,15 +116,15 @@
             <ion-slides loop="true" slidesPerView="3">
                 <ng-container  *ngFor="let recommendHearts of recommendedBigHearts">
                     <ion-slide>
-                        <div class="ngo-img-div" [style.backgroundImage]="'url('+recommendHearts.ngo_founder_img+')'"  (click)="gotoProfilePage(recommendHearts.id)"></div>                    
-                        <p class="ngo-founder">{{ recommendHearts.ngo_founder}}</p> 
+                        <div class="ngo-img-div" [style.backgroundImage]="'url('+recommendHearts.bh_founder_img+')'"  (click)="gotoProfilePage(recommendHearts.user_id)"></div>                    
+                        <p class="ngo-founder">{{ recommendHearts.bh_founder_name}}</p> 
                     </ion-slide>
                 </ng-container>
             </ion-slides>
             <ion-slides [loop]="charityLoop" [autoplay]="charityAutoplay" *ngIf="charities" slidesPerView="1">
                 <ng-container *ngFor="let charity of charities">
                     <ion-slide>
-                        <p class="cat-text">{{ charity }}</p>
+                        <p class="cat-text">{{ charity.name }}</p>
                     </ion-slide>
                 </ng-container>
             </ion-slides>

@@ -26,7 +26,7 @@ export class UserProvider {
     return this._http.get(this.global.apiUrl('/all_charities')).map(res => res.json());
   }
 
-  getNgoByCharityIds(charity_ids: any) {
+  getBHByCharityIds(charity_ids: any) {
     // set headers
     let headers = new Headers();    
     headers.append("Accept", 'application/json');
@@ -39,7 +39,7 @@ export class UserProvider {
         charities: charity_ids
     });
     
-    return this._http.post(this.global.apiUrl('/get_ngo_by_charity'), data, options).map(res => res.json());
+    return this._http.post(this.global.apiUrl('/get_bh_by_charity'), data, options).map(res => res.json());
   }
 
   // getRegionNameById
@@ -132,8 +132,8 @@ export class UserProvider {
   }
 
   // checkInMyBigHearts
-  checkInMyBigHearts(uuid: any, ngo_id: any) {
-    return this._http.get(this.global.apiUrl('/get_user_bighearts/'+uuid+'/'+ngo_id)).map(res => res.json());
+  checkInUserBigHearts(user_id: any, bh_id: any) {
+    return this._http.get(this.global.apiUrl('/get_user_bighearts/'+user_id+'/'+bh_id)).map(res => res.json());
   }
 
   // removeFromMyBigHearts

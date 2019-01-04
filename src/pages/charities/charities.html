@@ -1,8 +1,7 @@
-
 <ion-header>
     <ion-navbar color="appColor" class="profile-nav">
         <ion-row>
-            <ion-col col-3 offset-4  class="heart-col" no-padding>
+            <ion-col col-3 offset-4 class="heart-col" no-padding>
                 <!-- <ion-icon name="heart-outline" class="heart-icon"></ion-icon> -->
                 <div class="logo-div" style="background: url('assets/imgs/logo.png');"></div>
             </ion-col>
@@ -16,30 +15,12 @@
         <p>Which causes do you especially care for?</p>
     </div>
     <ion-list>
-        <ion-item class="charities-list">
-            <ion-label (click)="toggleValue(animal_charity, animal_charity_val)">{{ animal_charity }}</ion-label>
-            <ion-toggle [(ngModel)]="animal_charity_val" color="secondary" (ionChange)="getSelectedCharity(animal_charity, animal_charity_val)"></ion-toggle>
-        </ion-item>
-        <ion-item class="charities-list">
-            <ion-label (click)="toggleValue(economic_development, economic_development_val)">{{ economic_development }}</ion-label>
-            <ion-toggle [(ngModel)]="economic_development_val" color="secondary" (ionChange)="getSelectedCharity(economic_development, economic_development_val)"></ion-toggle>
-        </ion-item>
-        <ion-item class="charities-list">
-            <ion-label (click)="toggleValue(education, education_val)">{{ education }}</ion-label>
-            <ion-toggle [(ngModel)]="education_val" color="secondary" (ionChange)="getSelectedCharity(education, education_val)"></ion-toggle>
-        </ion-item>
-        <ion-item class="charities-list">
-            <ion-label (click)="toggleValue(environment, environment_val)">{{ environment }}</ion-label>
-            <ion-toggle [(ngModel)]="environment_val" color="secondary" (ionChange)="getSelectedCharity(environment, environment_val)"></ion-toggle>
-        </ion-item>
-        <ion-item class="charities-list">
-            <ion-label (click)="toggleValue(human_right, human_right_val)">{{ human_right }}</ion-label>
-            <ion-toggle [(ngModel)]="human_right_val" color="secondary" (ionChange)="getSelectedCharity(human_right, human_right_val)"></ion-toggle>
-        </ion-item>
-        <ion-item class="charities-list">
-            <ion-label (click)="toggleValue(poverty_hunger, poverty_hunger_val)">{{ poverty_hunger }}</ion-label>
-            <ion-toggle [(ngModel)]="poverty_hunger_val" color="secondary" (ionChange)="getSelectedCharity(poverty_hunger, poverty_hunger_val)"></ion-toggle>
-        </ion-item>
+        <ng-container *ngFor="let charity of all_charities">
+            <ion-item class="charities-list">
+                <ion-label (click)="toggleValue(charity.id)">{{ charity.name }}</ion-label>
+                <ion-toggle [(ngModel)]="charity.value" color="secondary"></ion-toggle>
+            </ion-item>
+        </ng-container>
     </ion-list>
     <div class="save-btn">
         <button ion-button color="light" block (click)="gotoUserinfoPage()">Save</button>

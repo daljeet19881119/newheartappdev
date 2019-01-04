@@ -17,8 +17,8 @@
   </div>
   <ion-list>
       <ion-item class="charities-list" *ngFor="let ngo of all_ngo">
-          <ion-label>{{ ngo.ngo_user+' ('+ngo.ngo_name+')' }}</ion-label>
-          <ion-toggle color="secondary" [(ngModel)]="ngo.checked" [checked]="ngo.checked" (ionChange)="getCurrentSelectedNgoId(ngo.id, ngo.checked)"></ion-toggle>
+          <ion-label>{{ ngo.bh_founder_name+' ('+ngo.bh_name+')' }}</ion-label>
+          <ion-toggle color="secondary" [(ngModel)]="ngo.checked" [checked]="ngo.checked" (ionChange)="getCurrentSelectedNgoId(ngo.user_id, ngo.checked)"></ion-toggle>
       </ion-item>
   </ion-list>
   <div class="save-btn">

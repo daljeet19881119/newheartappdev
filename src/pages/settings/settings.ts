@@ -34,7 +34,7 @@ export class SettingsPage {
   all_regions: any = [];
   preference_type: string;
   preference_location: any;
-  profile_pic: any;
+  profile_pic: any = '';
   profile_pic_src: any;
   userid: any;
 
@@ -43,6 +43,8 @@ export class SettingsPage {
   old_mobno: any;
   old_email: any;
   donation_amount: any = 20;
+  selected_charity: any = [];
+  all_charites: any = [];
   constructor(public navCtrl: NavController, public navParams: NavParams, private global: GlobalProvider, private userService: UserProvider, private loadingCtrl: LoadingController, private modalCtrl: ModalController, private camera: Camera, private transfer: FileTransfer, private alertCtrl: AlertController, private platform: Platform) {
 
     // if user try goback then go to homepage
@@ -78,6 +80,7 @@ export class SettingsPage {
 
     // call getRegions
     this.getRegions();
+
   }
 
   // getUserData
@@ -90,21 +93,36 @@ export class SettingsPage {
       if (data.msg == 'success') {
         this.fname = data.data.fname;
         this.lname = data.data.lname;
-        this.mobileno = data.data.mobileno;
-        this.old_mobno = data.data.mobileno;
+        this.mobileno = data.data.mobile_no;
+        this.old_mobno = data.data.mobile_no;
         this.old_email = data.data.email;
         this.email = data.data.email;
         this.verification_type = data.data.verification_type;
         this.cause_percentage = data.data.cause_percentage;
         this.preference_type = data.data.preference_type;
-        this.preference_location = data.data.preference_location;
-        this.userid = data.data.id;
-        this.profile_pic_src = data.data.profile_pic_src;
-        this.dial_code = data.data.country;
-        this.donation_amount = data.data.donation_amount;
+
+        if(this.preference_type == 'country') {
+          this.preference_location = data.data.country;
+        }
+        else if(this.preference_type == 'region') {
+          this.preference_location = data.data.region;
+        }
         
-        // string to array conversion
-        this.charities = data.data.charity_type;
+        this.userid = data.data.user_id;
+        this.profile_pic_src = data.data.profile_pic_src;
+        this.dial_code = data.data.country_dial_code;
+        this.donation_amount = data.data.us_donation_amount;
+        
+        let selected_charity_id: any = [];
+        data.selected_charities.forEach(element => {
+          // string to array conversion
+          this.charities.push(element.name.trim());
+          selected_charity_id.push(element.id);
+        });
+        
+        // call getCharities
+        this.getCharities(selected_charity_id);
+        
         this.checkCharity = true;
       }
 
@@ -164,7 +182,7 @@ export class SettingsPage {
           lname: this.lname,
           email: this.email,
           mobileno: this.mobileno,
-          country: this.dial_code,
+          country_dial_code: this.dial_code,
           cause_percentage: this.cause_percentage,
           preference_location: this.preference_location,
           hc_percentage: hc_percentage,
@@ -179,9 +197,16 @@ export class SettingsPage {
             this.fname = data.fname;
             this.lname = data.lname;
             this.email = data.email;
-            this.mobileno = data.mobileno;
+            this.mobileno = data.mobile_no;
             this.cause_percentage = data.cause_percentage;
-            this.preference_location = data.preference_location;
+
+            if(data.preference_type == 'country') {
+              this.preference_location = data.country;
+            }
+            else if(data.preference_type == 'region') {
+              this.preference_location = data.region;
+            }
+            
             this.profile_pic_src = data.profile_pic_src;
             this.email_verification_code = null;
             this.phone_verifciation_code = null;
@@ -216,7 +241,7 @@ export class SettingsPage {
 
       // set sms verification data
       let data = {
-        country: this.dial_code,
+        country_dial_code: this.dial_code,
         mobileno: this.mobileno
       };
 
@@ -286,28 +311,27 @@ export class SettingsPage {
     });
   }
 
+  // getCharites
+  getCharities(selected_charity: any) {
+    this.userService.getAllCharities().subscribe(charities => {
+
+      charities.forEach(element => {
+          if(selected_charity.indexOf(element.id) != -1) {
+            element.value = true;
+          }
+          else{
+            element.value = false;
+          }
+      });
+      this.all_charites = charities;
+    }, err => console.log(err));
+  }
+
   // gotoCharityPage
   gotoCharityPage() {
-
-    // declare empty array for charity
-    let charities = [];
-
-    // check if string
-    if (typeof (this.charities) == 'string') {
-      // convert string to array
-      this.charities = this.charities.split(',');
-    }
-
-    // loop of selected charity
-    this.charities.forEach(element => {
-
-      // remove starting space from each element and push into charity array
-      charities.push(element.trim());
-    });
-
     // goto charity page
     const modal = this.modalCtrl.create(CharitiesPage, {
-      charities: charities,
+      charities: this.all_charites,
       page: 'settings'
     });
     modal.present();
@@ -317,12 +341,14 @@ export class SettingsPage {
 
       // declare empty array for charity
       let charities = [];
+      this.selected_charity = [];
 
       // loop of charity
       data.charities.forEach(element => {
         if (element.value == true) {
           // push element to charity arr
           charities.push(element.name.trim());
+          this.selected_charity.push(element.id);
         }
       });
 
@@ -331,13 +357,6 @@ export class SettingsPage {
       // store selected charities in charities variable
       this.charities = charities;
 
-      // get ngo of charities
-      if (this.charities.length > 0) {
-        let selected_charity = [];
-        this.charities.forEach(element => {
-          selected_charity.push(element.trim());
-        });
-      }
     });
   }
 

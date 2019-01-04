@@ -67,13 +67,12 @@ export class CauseFormPage {
   ifsc_code: any;
   paypal_email: any;
   us_tax_deductible: boolean = false;
+  all_charities: any = [];
+  selected_charity: any = [];
+  all_regions: any;
   constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private userService: UserProvider, public loadingCtrl: LoadingController, public alertCtrl: AlertController, private global: GlobalProvider, private camera: Camera, private transfer: FileTransfer, public modalCtrl: ModalController, private platform: Platform, private imagePicker: ImagePicker, public viewCtrl: ViewController) {
 
-    // store all countries
-    this.storage.get('countries').then((val) => {
-      this.countries = val;
-    });
-
+ 
     // get data from storage
     this.storage.get('causeForm').then((val) => {
       this.userid = val.userid;
@@ -156,27 +155,22 @@ export class CauseFormPage {
 
     // request to userProvide
     this.userService.getUserByDeviceId(this.uuid).subscribe(data => {
-      this.userid = data.data.id;
+      this.userid = data.data.user_id;
       this.prefType = data.data.preference_type;
+      this.email = data.data.email;
 
       // put value if it is country
       if (this.prefType == 'country') {
-        this.country = data.data.preference_location;
+        this.country = data.data.country;
+
+        this.getCountries();
       }
 
       // put value if it is region
-      if (this.prefType == 'region') {
-        this.regionId = data.data.preference_location;
-        this.createLoader();
-
-        // get region name
-        this.userService.getRegionById(this.regionId).subscribe(data => {
-          this.region = data.name;
-          this.loader.dismiss();
-        }, err => {
-          console.log('err');
-          this.loader.dismiss();
-        });
+      if (this.prefType == 'region' || this.prefType == "") {
+        this.regionId = data.data.region;
+        
+        this.getRegions();        
       }
     }, err => {
       console.log(err);
@@ -186,24 +180,40 @@ export class CauseFormPage {
   // saveData
   saveData() {
 
-    // declare empty array for charity
-    let charities = [];
+    let contact1: any = {
+      c_name: this.contactName1,
+      c_email: this.contactEmail1,
+      c_desc: this.contactDesc1
+    };
 
-    // loop of selected charity
-    this.charities.forEach(element => {
-      // remove starting space from each element and push into charity array
-      charities.push(element.trim());
-    });
+    let contact2: any = {
+      c_name: this.contactName2,
+      c_email: this.contactEmail2,
+      c_desc: this.contactDesc2
+    };
 
-    let contact1 = this.contactName1 + ',' + this.contactEmail1 + ',' + this.contactDesc1;
-    let contact2 = this.contactName2 + ',' + this.contactEmail2 + ',' + this.contactDesc2;
-    let contact3 = this.contactName3 + ',' + this.contactEmail3 + ',' + this.contactDesc3;
-    let contact4 = this.contactName4 + ',' + this.contactEmail4 + ',' + this.contactDesc4;
-    let contact5 = this.contactName5 + ',' + this.contactEmail5 + ',' + this.contactDesc5;
+    let contact3: any = {
+      c_name: this.contactName3,
+      c_email: this.contactEmail3,
+      c_desc: this.contactDesc3
+    };
+
+    let contact4: any = {
+      c_name: this.contactName4,
+      c_email: this.contactEmail4,
+      c_desc: this.contactDesc4
+    };
+
+    let contact5: any = {
+      c_name: this.contactName5,
+      c_email: this.contactEmail5,
+      c_desc: this.contactDesc5
+    };
+
     let userid = this.userid;
 
 
-    if (this.fname != null && this.lname != null && this.email != null && this.fewAboutYourself != null && this.moreAboutYourself != null && charities.length != 0) {
+    if (this.fname != null && this.lname != null && this.email != null && this.fewAboutYourself != null && this.moreAboutYourself != null && this.charities.length != 0) {
 
       // check if valid mail
       if (this.validateEmail(this.email) == true) {
@@ -220,7 +230,7 @@ export class CauseFormPage {
           account_no: this.account_no,
           ifsc_code: this.ifsc_code,
           paypal_email: this.paypal_email,
-          cause_category: charities,
+          cause_category: this.selected_charity,
           us_tax_deductible: this.us_tax_deductible,
           country: this.country,
           region: this.regionId,
@@ -240,7 +250,7 @@ export class CauseFormPage {
         this.userService.saveCauseFormData(data).subscribe(data => {
 
           if (data.msg == 'success') {
-            this.setDataToStorage(userid, this.fname, this.lname, this.email, this.bank_name, this.account_no, this.ifsc_code, this.paypal_email, charities, this.country, this.regionId, this.city, this.fewAboutYourself, this.moreAboutYourself, this.profilePic, this.multiplePicsArr, contact1, contact2, contact3, contact4, contact5);
+            this.setDataToStorage(userid, this.fname, this.lname, this.email, this.bank_name, this.account_no, this.ifsc_code, this.paypal_email, this.charities, this.country, this.regionId, this.city, this.fewAboutYourself, this.moreAboutYourself, this.profilePic, this.multiplePicsArr, contact1, contact2, contact3, contact4, contact5);
           }
           if (data.msg == 'success' && data.status == 'processing') {
             this.createProcessAlert();
@@ -491,19 +501,9 @@ export class CauseFormPage {
   // gotoCharityPage
   gotoCharityPage() {
 
-    // declare empty array for charity
-    let charities = [];
-
-    // loop of selected charity
-    this.charities.forEach(element => {
-
-      // remove starting space from each element and push into charity array
-      charities.push(element.trim());
-    });
-
     // goto charity page
     const modal = this.modalCtrl.create(CharitiesPage, {
-      charities: charities,
+      charities: this.all_charities,
       page: 'cause-form'
     });
     modal.present();
@@ -513,28 +513,55 @@ export class CauseFormPage {
 
       // declare empty array for charity
       let charities = [];
+      this.charities = [];
+      this.all_charities = [];
+      this.selected_charity = [];
 
       // loop of charity
       data.charities.forEach(element => {
         if (element.value == true) {
           // push element to charity arr
+          this.selected_charity.push(element.id);
           charities.push(element.name.trim());
         }
+        this.all_charities.push(element);
       });
 
       this.checkCharity = true;
 
       // store selected charities in charities variable
       this.charities = charities;
-
-      // get ngo of charities
-      if (this.charities.length > 0) {
-        let selected_charity = [];
-        this.charities.forEach(element => {
-          selected_charity.push(element.trim());
-        });
-      }
     });
   }
 
+  // getCountries
+  getCountries() {
+    this.userService.getAllCountries().subscribe(data => {
+      // GET COUNTRY DIAL CODE BY ITS CODE
+      data.forEach(element => {
+        if (element.id == this.country) {
+          this.country = element.id;
+        }
+      });
+
+      this.countries = data;
+    }, err => {
+      console.log(err);
+    });
+  }
+
+  // getRegions
+  getRegions() {
+    this.userService.getAllRegions().subscribe(data => {
+      // GET COUNTRY DIAL CODE BY ITS CODE
+      data.forEach(element => {
+        if (element.id == this.regionId) {
+          this.regionId = element.id;
+        }
+      });
+      this.all_regions = data;
+    }, err => {
+      console.log(err);
+    });
+  }
 }

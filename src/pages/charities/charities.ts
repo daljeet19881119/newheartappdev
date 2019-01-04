@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, AlertController, Platform, ViewController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, AlertController, Platform, ViewController, LoadingController } from 'ionic-angular';
+import { UserProvider } from '../../providers/user/user';
 
 @IonicPage()
 @Component({
@@ -8,123 +9,64 @@ import { IonicPage, NavController, NavParams, ModalController, AlertController, 
 })
 export class CharitiesPage {
 
+  all_charities: any = [];
+  loader: any;
+  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController, public platform: Platform, private viewCtrl: ViewController, private userService: UserProvider, private loadingCtrl: LoadingController) {
 
-  animal_charity: string = 'Animal Support';
-  economic_development: string = 'Economic Development';
-  environment: string = 'Environment';
-  human_right: string = 'Human Rights';
-  poverty_hunger: string = 'Poverty and Hunger';
-  education: string = 'Education';
-
-  animal_charity_val: boolean = false;
-  economic_development_val: boolean = false;
-  environment_val: boolean = false;
-  human_right_val: boolean = false;
-  poverty_hunger_val: boolean = false;
-  education_val: boolean = false;
-
-  // mobileno and ccode from userinfo page
-  mobileNo: any;
-  c_code: any;
-  fname: string;
-  lname: string;
-  email: string;
-  charities: any;
-
-  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController, public platform: Platform, private viewCtrl: ViewController) {
-
-    // get data from nav params
-    this.mobileNo = this.navParams.get('mobileno');
-    this.c_code = this.navParams.get('c_code');
-    this.fname = this.navParams.get('fname');
-    this.lname = this.navParams.get('lname');
-    this.email = this.navParams.get('email');
-    this.charities = this.navParams.get('charities');
-
-    if (this.charities !== null) {
-      // convert from object string into simple string
-      let charities = JSON.stringify(this.charities);
-
-      // replace brackets and then convert into an array
-      let charityArr = charities.replace('[', '').replace(']', '').split(',');
-
-      // start loop of array
-      charityArr.forEach(element => {
-        // check if charity found then show acitve
-        if (element == '"' + this.animal_charity + '"') {
-          this.animal_charity_val = true;
-        }
-        if (element == '"' + this.economic_development + '"') {
-          this.economic_development_val = true;
-        }
-        if (element == '"' + this.environment + '"') {
-          this.environment_val = true;
-        }
-        if (element == '"' + this.human_right + '"') {
-          this.human_right_val = true;
-        }
-        if (element == '"' + this.poverty_hunger + '"') {
-          this.poverty_hunger_val = true;
-        }
-        if (element == '"' + this.education + '"') {
-          this.education_val = true;
-        }
-      });
-
-    }
-
-    // if user click on  goback btn then go back
-    this.platform.registerBackButtonAction(() => {
-      this.navCtrl.pop();
-    });
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CharitiesPage');
+    // crate loader
+    this.createLoader("loading");
+
+    // if charities comming from navparms
+    if(this.navParams.get('charities').length > 0 && this.navParams.get('charities')) {
+        this.all_charities = this.navParams.get('charities');
+        this.loader.dismiss();
+    }
+    else{
+      // get all charities
+      this.userService.getAllCharities().subscribe(charities => {      
+        charities.forEach(element => {
+          element.value = false;
+        });
+        this.all_charities = charities;  
+        this.loader.dismiss();
+      }, err => {
+        console.log(err);
+        this.loader.dismiss();
+      }); 
+    }
+             
   }
 
   // getSelectedCharity
-  getSelectedCharity(name: string, value: boolean) {
-    let switchVal;
-
-    if (value == true) {
-      switchVal = 'on';
-    } else {
-      switchVal = 'off';
-    }
-
-    console.log(name + ' is ' + switchVal);
+  getSelectedCharity(id: string, name: string, value: boolean) {    
+    console.log('id: ' +id+ ', name: ' + name+', value:'+value );
   }
 
   // toggleValue() 
-  toggleValue(name: string, value: boolean) {
-
-    // check if matched then toggle value
-    if (this.animal_charity == name) {
-      this.animal_charity_val = !value;
-    }
-    if (this.economic_development == name) {
-      this.economic_development_val = !value;
-    }
-    if (this.environment == name) {
-      this.environment_val = !value;
-    }
-    if (this.human_right == name) {
-      this.human_right_val = !value;
-    }
-    if (this.poverty_hunger == name) {
-      this.poverty_hunger_val = !value;
-    }
-    if (this.education == name) {
-      this.education_val = !value;
-    }
+  toggleValue(id: string) {
+    this.all_charities.forEach(element => {
+        if(element.id == id) {
+          element.value = !element.value;
+        }
+    });
   }
 
   // gotoUserinfoPage
   gotoUserinfoPage() {
+    let count = 0;
+    
+    this.all_charities.forEach(element => {
+        if(element.value == true) {
+          count++;
+        }
+    });
 
     // check if none of charities selected then show alert
-    if (this.animal_charity_val === false && this.economic_development_val === false && this.environment_val === false && this.human_right_val === false && this.poverty_hunger_val === false && this.education_val === false) {
+    if (count == 0) {
       // create alert
       const alert = this.alertCtrl.create({
         title: 'HeartApp',
@@ -135,43 +77,42 @@ export class CharitiesPage {
     }
     else {
 
-      // send charities to userinfo page
-      let charities = [
-        { name: this.animal_charity, value: this.animal_charity_val },
-        { name: this.economic_development, value: this.economic_development_val },
-        { name: this.environment, value: this.environment_val },
-        { name: this.human_right, value: this.human_right_val },
-        { name: this.poverty_hunger, value: this.poverty_hunger_val },
-        { name: this.education, value: this.education_val }
-      ];
-
       // check if request from userinfo page then gotouserinfo page
       if (this.navParams.get('page') == 'userinfo') {
         this.viewCtrl.dismiss({
-          charities: charities
+          charities: this.all_charities
         });
       }
 
       // check if request from causeForm page then gotocauseform page
       if (this.navParams.get('page') == 'cause-form') {
         this.viewCtrl.dismiss({
-          charities: charities
+          charities: this.all_charities
         });
       }
 
       // check if request from volunteerform page then gotovolunteerform page
       if (this.navParams.get('page') == 'volunteer-form') {
         this.viewCtrl.dismiss({
-          charities: charities,
+          charities: this.all_charities,
         });
       }
 
       // check if request from Settings page then goto setting apge
       if(this.navParams.get('page') == 'settings') {
         this.viewCtrl.dismiss({
-          charities: charities
+          charities: this.all_charities
         });
       }
     }
+  }
+
+  // createLoader
+  createLoader(msg: string) {
+    this.loader = this.loadingCtrl.create({
+      content: msg,
+      spinner: 'dots'
+    });
+    this.loader.present();
   }
 }

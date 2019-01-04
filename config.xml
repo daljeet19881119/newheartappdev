@@ -110,7 +110,8 @@
     <platform name="android">
         <resource-file src="google-services.json" target="app/google-services.json" />
     </platform>
-    <plugin name="com.hutchind.cordova.plugins.streamingmedia" spec="~0.1.4" />
     <plugin name="cordova-plugin-fcm-with-dependecy-updated" spec="2.3.0" />
+    <plugin name="com.hutchind.cordova.plugins.streamingmedia" spec="~0.1.4" />
+    <plugin name="cordova-plugin-inappbrowser" spec="3.0.0" />
     <engine name="android" spec="7.0.0" />
 </widget>

@@ -26,12 +26,12 @@ export class HomePageProvider {
   }
 
   // getUserBighearts
-  getUserBighearts(user_id: any, offset: number = 0) {
+  getUserDashboardData(user_id: any, offset: number = 0) {
     return this.http.get(this.global.apiUrl('/simple_user_dashboard/'+user_id+'/'+offset)).map(res => res.json());
   }
 
   // getNgoById
-  getNgoById(ngo_id: any) {
-    return this.http.get(this.global.apiUrl('/ngo/'+ngo_id)).map(res => res.json());
+  getBHById(ngo_id: any) {
+    return this.http.get(this.global.apiUrl('/bh/'+ngo_id)).map(res => res.json());
   }
 }

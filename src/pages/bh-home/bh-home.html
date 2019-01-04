@@ -47,20 +47,20 @@
                     <ion-list *ngFor="let donation of latestDonations" class="donations-lists">
                         <ion-item class="donation-items">
                             <ion-avatar item-start class="ngo-avatar">
-                                <img [src]="donation.ngo_founder_img" class="ngo-img" (click)="gotoProfilePage(donation.id)">
+                                <img [src]="donation.profile_pic" class="ngo-img">
                             </ion-avatar>
                             <ion-row>
                                 <ion-col col-3 no-padding>
-                                    <h2 class="ngo-name">{{donation.username}}</h2>
-                                    <p class="ngo-date">{{donation.date}}</p>
+                                    <h2 class="ngo-name">{{donation.fname}}</h2>
+                                    <p class="ngo-date">{{donation.transaction_date}}</p>
                                 </ion-col>
                                 <ion-col col-9 style="text-align: right;" no-padding>
                                     <p>
                                         <ion-icon name="heart-outline" class="heart-small-icon"></ion-icon>
-                                        <span class="heart-coin">{{donation.heart_amount}}</span>
-                                        <span class="heart-coin">(${{donation.us_amount}})</span>
+                                        <span class="heart-coin">{{donation.transaction_hc_amount}}</span>
+                                        <span class="heart-coin">(${{donation.transaction_us_amount}})</span>
                                     </p>
-                                    <p class="play-para" (click)="recordThankyouMessage(donation.id)" *ngIf="showRecordMsg">
+                                    <p class="play-para" (click)="recordThankyouMessage(donation.user_id, donation.transaction_id)" *ngIf="donation.thankyou_video == ''">
                                         <ion-icon name="play" class="play-icon"></ion-icon>
                                         <span>Record a Thank you message</span>
                                     </p>
@@ -126,7 +126,7 @@
             <ion-slides [loop]="charityLoop" [autoplay]="charityAutoplay" *ngIf="charities" slidesPerView="1">
                 <ng-container *ngFor="let charity of charities">
                     <ion-slide>
-                        <p class="cat-text">{{ charity }}</p>
+                        <p class="cat-text">{{ charity.name }}</p>
                     </ion-slide>
                 </ng-container>
             </ion-slides>

@@ -46,7 +46,7 @@ export class ViewNgoPage {
     // get the ngoId from previous page
     let id = this.navParams.get('ngoid');
 
-    this.homeService.getNgoById(id).subscribe(data => {
+    this.homeService.getBHById(id).subscribe(data => {
       // store data in the ngoData
       this.ngoFounderImg = data.ngo_founder_img;
       this.ngoFounderName = data.ngo_founder;

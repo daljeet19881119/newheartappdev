@@ -40,11 +40,13 @@ export class ProfilePage {
   // addBigHearts class added-bighearts
   addBigHeartsClass: string = 'add-to-bighearts';
   addBigHeartText: string = 'Add to my BigHearts';
-  uuid: any = [];
+  uuid: any;
 
   // loader
   loader: any;
   showItem: boolean = true;
+  user_id: any;
+  bh_id: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private modalCtrl: ModalController, private screenOrientation: ScreenOrientation, private photoViewer: PhotoViewer, private dom: DomSanitizer, private userProvider: UserProvider, private global: GlobalProvider, public loadingCtrl: LoadingController, private homeService: HomePageProvider) {
 
@@ -60,30 +62,34 @@ export class ProfilePage {
       this.uuid = 'undefined';
     }
 
-    // call function
-    this.checkInUserBigHearts();
-
     // check if nav param page == register page
     if(this.navParams.get('page') && this.navParams.get('page') == 'register'){
       this.showItem = false;
-    }
+    } 
 
     // get the ngoId from previous page
-    let id = this.navParams.get('id');
+    this.bh_id = this.navParams.get('bh_id'); 
 
-    this.homeService.getNgoById(id).subscribe(data => {
+    // check if user id comming in nav params
+    if(this.navParams.get('user_id') && this.navParams.get('bh_id')) {
+       // get user id from nav params
+      this.user_id = this.navParams.get('user_id');
+      // call function
+      this.checkInUserBigHearts(this.user_id, this.bh_id);
+    }
+          
+
+    this.homeService.getBHById(this.bh_id).subscribe(data => {
       // store data in the ngoData
-      this.ngoFounderImg = data.ngo_founder_img;
-      this.ngoFounderName = data.ngo_founder;
-      this.ngoName = data.ngo_name;
-      this.ngoCampaigns = data.campaigns;
-      this.ngoCommunity = data.community;
-      this.ngoContributors = data.contributors;
-      this.ngoTeam = data.team;
-      this.ngoYoutubeId = data.youtube_id;
-      this.ngoDesc = data.ngo_desc;
-      this.ngoFamilyImgs = data.ngo_family_img;
-      this.ngoFamilyFirstImg = data.ngo_family_img[0];
+      this.ngoFounderImg = data.bh_founder_img;
+      this.ngoFounderName = data.bh_founder_name;
+      this.ngoName = data.bh_name;
+      this.ngoCampaigns = data.bh_compaigns;
+      this.ngoTeam = data.bh_team;
+      this.ngoYoutubeId = data.bh_youtube_id;
+      this.ngoDesc = data.bh_desc;
+      this.ngoFamilyImgs = data.bh_family_img;
+      this.ngoFamilyFirstImg = data.bh_family_img[0];
 
       // check if youtube id not empty
       if (this.ngoYoutubeId !== '') {
@@ -95,6 +101,7 @@ export class ProfilePage {
     }, err => {
       console.log(err);
     });
+    
   }
 
   // getYoutubeVideoImgUrl
@@ -286,7 +293,7 @@ export class ProfilePage {
     this.createLoader();
 
     // store ngoid
-    let ngo_id = this.navParams.get('id');
+    let bh_id = this.navParams.get('bh_id');
 
     // store uuid
     let uuid;
@@ -299,7 +306,7 @@ export class ProfilePage {
 
     const data = {
       uuid: uuid,
-      ngo_id: ngo_id
+      bh_id: bh_id
     };
 
     // save ngo_id to users list
@@ -322,24 +329,12 @@ export class ProfilePage {
   }
 
   // check ngo's in the user list
-  checkInUserBigHearts() {
+  checkInUserBigHearts(user_id: any, bh_id: any) {
     // call loader function
     this.createLoader();
 
-    // store ngoid
-    let ngo_id = this.navParams.get('id');
-
-    // store uuid
-    let uuid;
-
-    if (this.uuid !== '') {
-      uuid = this.navParams.get('uuid');
-    } else {
-      uuid = 'undefined';
-    }
-
     // request data from server
-    this.userProvider.checkInMyBigHearts(uuid, ngo_id).subscribe(data => {
+    this.userProvider.checkInUserBigHearts(user_id, bh_id).subscribe(data => {
 
       // check if found true
       if (data.found == 'true') {
@@ -361,7 +356,7 @@ export class ProfilePage {
     this.createLoader();
 
     // store ngoid
-    let ngo_id = this.navParams.get('id');
+    let bh_id = this.navParams.get('bh_id');
 
     // store uuid
     let uuid;
@@ -374,7 +369,7 @@ export class ProfilePage {
 
     const data = {
       uuid: uuid,
-      ngo_id: ngo_id
+      bh_id: bh_id
     };
 
     // request to server

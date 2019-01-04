@@ -16,7 +16,7 @@
     </ion-item>
     <ion-item no-padding class="item-feilds">
       <ion-label floating>Email*</ion-label>
-      <ion-input type="text" [(ngModel)]="email" (ionBlur)="validateEmail(email)"></ion-input>
+      <ion-input type="text" [(ngModel)]="email" (ionBlur)="validateEmail(email)" [readonly]="true"></ion-input>
     </ion-item>
     <div class="textarea-div">
       <ion-row>
@@ -76,7 +76,7 @@
           <ion-label>Tap here to select</ion-label>
           <ion-select interface="popover" [(ngModel)]="country">
             <ng-container *ngFor="let country of countries">
-              <ion-option value="{{ country.code }}">{{ country.name }}</ion-option>
+              <ion-option value="{{ country.id }}">{{ country.name }}</ion-option>
             </ng-container>
           </ion-select>
         </ion-item>
@@ -94,10 +94,14 @@
     </div>
     <div class="textarea-div" *ngIf="prefType == 'region'">
       <ion-row>
-        <p>Your selected region is:</p>
-      </ion-row>
-      <ion-row>
-        <ion-input class="contact-inputs" [readonly]="true" [value]="region"></ion-input>
+        <ion-item no-padding class="item-feilds">
+            <ion-label>Tap here to select a region</ion-label>
+          <ion-select interface="popover" [(ngModel)]="regionId">
+            <ng-container *ngFor="let region of all_regions">
+              <ion-option value="{{ region.id }}">{{ region.name }}</ion-option>
+            </ng-container>
+          </ion-select>
+        </ion-item>
       </ion-row>
     </div>
     <!-- <ion-item no-padding class="item-feilds">

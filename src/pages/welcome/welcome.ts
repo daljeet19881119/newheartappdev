@@ -4,7 +4,6 @@ import { VerifynumberPage } from '../verifynumber/verifynumber';
 import { UserProvider } from '../../providers/user/user';
 import { UserinfoPage } from '../userinfo/userinfo';
 import { HomePage } from '../home/home';
-import { Storage } from '@ionic/storage';
 import { BhHomePage } from '../bh-home/bh-home';
 import { GlobalProvider } from '../../providers/global/global';
 
@@ -16,7 +15,7 @@ import { GlobalProvider } from '../../providers/global/global';
 export class WelcomePage {
 
   uuid: any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, private userService: UserProvider, private global: GlobalProvider, private storage: Storage) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private userService: UserProvider, private global: GlobalProvider) {
   }
 
   ionViewDidLoad() {
@@ -43,12 +42,12 @@ export class WelcomePage {
 
   // requestData
   requestData(uuid: any) {
-    this.userService.getBigheartUserByDeviceId(uuid).subscribe(data => {
+    this.userService.getUserByDeviceId(uuid).subscribe(data => {
       if (data.msg == 'success') {
-        if (data.data.verification == 'notVerified' && data.data.profile_status == 'notVerified') {
+        if (data.data.verification == 'unverified' && data.data.profile_status == 'unverified') {
           this.gotoVerifyPage();
         }
-        if (data.data.verification == 'verified' && data.data.profile_status == 'notVerified') {
+        if (data.data.verification == 'verified' && data.data.profile_status == 'unverified') {
           this.navCtrl.setRoot(UserinfoPage, {
             mobileno: data.data.mobileno,
             country: data.data.country,
@@ -57,20 +56,9 @@ export class WelcomePage {
           });
         }
         if (data.data.verification == 'verified' && data.data.profile_status == 'verified') {
-          // store user charities in storage
-          let charities = data.data.charity_type;
-
-          // convert charities string to array
-          charities = charities.split(',');
-
-          // save all user charity or causes in storage
-          this.storage.set('user_causes', charities);
-
-          // save user data in storage
-          this.storage.set('user_data', data.data);
-
+         
           // check if user is bigheart or not
-          if (data.data.is_bh_user == 'yes') {
+          if (data.data.user_type == 'bh_user') {
             this.navCtrl.setRoot(BhHomePage);
           }
           else {
@@ -78,7 +66,7 @@ export class WelcomePage {
           }
         }
       }
-      if (data.msg == 'error') {
+      if (data.length < 1) {
         this.gotoVerifyPage();
       }
     }, err => {
