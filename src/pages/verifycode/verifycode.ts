@@ -127,7 +127,8 @@ export class VerifycodePage {
         mobileno: this.mobileno,
         country: this.country,
         email: this.email,
-        verification_type: this.verification_type
+        verification_type: this.verification_type,
+        user_id: data.data.user_id
       });
 
       this.loader.dismiss();

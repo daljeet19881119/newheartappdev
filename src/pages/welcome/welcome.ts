@@ -49,10 +49,11 @@ export class WelcomePage {
         }
         if (data.data.verification == 'verified' && data.data.profile_status == 'unverified') {
           this.navCtrl.setRoot(UserinfoPage, {
-            mobileno: data.data.mobileno,
-            country: data.data.country,
+            mobileno: data.data.mobile_no,
+            country: data.data.country_dial_code,
             email: data.data.email,
-            verification_type: data.data.verification_type
+            verification_type: data.data.verification_type,
+            user_id: data.data.user_id
           });
         }
         if (data.data.verification == 'verified' && data.data.profile_status == 'verified') {

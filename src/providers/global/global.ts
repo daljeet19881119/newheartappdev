@@ -5,10 +5,12 @@ import { Device } from '@ionic-native/device';
 export class GlobalProvider {
 
   SITE_URL: string = 'https://ionic.dsl.house/heartAppApi';
-  API_URL: string = 'https://ionic.dsl.house/api/heartglobal';
+  API_URL: string = 'https://ionic.dsl.house/dev/api/heartglobal';
+  // API_URL: string = 'https://ionic.dsl.house/api/heartglobal';
   // API_URL: string = 'http://localhost/restserver/api/heartglobal';
-  BASE_URL: string = "https://ionic.dsl.house/"
-  // BASE_URL: string = "http://localhost/restserver/"
+  BASE_URL: string = "https://ionic.dsl.house/dev/";
+  // BASE_URL: string = "https://ionic.dsl.house/";
+  // BASE_URL: string = "http://localhost/restserver/";
 
   constructor(private device: Device) {
     console.log('Hello GlobalProvider Provider');

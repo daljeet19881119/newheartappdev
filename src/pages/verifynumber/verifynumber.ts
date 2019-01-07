@@ -64,6 +64,7 @@ export class VerifynumberPage {
     // call getToken function
     this.getToken();
   }
+  
 
   // function to getCountryCode
   getCountryCode(code: string) {

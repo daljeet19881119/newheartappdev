@@ -7,6 +7,7 @@ import { UserProvider } from '../../providers/user/user';
 import { GlobalProvider } from '../../providers/global/global';
 import { ProfilePage } from '../profile/profile';
 import { CardIO, CardIOOptions, CardIOResponse } from '@ionic-native/card-io';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 
 @IonicPage()
@@ -82,8 +83,9 @@ export class UserinfoPage {
   us_tax_deductible: boolean = false;
   recurring_fees: boolean = false;
   accept_terms: boolean = false;
+  user_id: any;
 
-  constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, public platform: Platform, private global: GlobalProvider, private loadingCtrl: LoadingController, private userService: UserProvider, private modalCtrl: ModalController, private cardIO: CardIO) {
+  constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, public platform: Platform, private global: GlobalProvider, private loadingCtrl: LoadingController, private userService: UserProvider, private modalCtrl: ModalController, private cardIO: CardIO, private iab: InAppBrowser) {
 
     // if user try goback then exit app
     this.platform.registerBackButtonAction(() => {
@@ -97,6 +99,7 @@ export class UserinfoPage {
     this.lastName = this.navParams.get('lname');
     this.verification_type = this.navParams.get('verification_type');
     this.email = this.navParams.get('email');
+    this.user_id = this.navParams.get('user_id');
 
     // check verificaiton type
     if (this.verification_type == 'email') {
@@ -321,10 +324,10 @@ export class UserinfoPage {
   }
 
   // registerUser
-  registerUser() {
+  registerUser() {   
 
     // check if all fields are not empty then register user
-    if (this.firstName == null || this.lastName == null || this.email == null || this.ch_name == null || this.card_number == null || this.cvv_number == null || this.card_expiry == null || this.charities.length == 0 || this.accept_terms == false || this.recurring_fees == false) {
+    if (this.firstName == null || this.lastName == null || this.email == null || this.charities.length == 0 || this.accept_terms == false || this.recurring_fees == false) {
       this.createAlert('We need a little more information about you. Please fill out all fields marked with (*) before continuing. <p>Thanks.</p>');
     }
     else {
@@ -332,8 +335,8 @@ export class UserinfoPage {
       if (this.validateEmail(this.email) == true) {
         // check if mobileno and coutnry not empty then 
         if (this.mobileno !== null && this.country !== null) {
-          // make server request
-          this.makeServerRequest();
+          // paymentAlert
+          this.paymentAlert();
         }
       }
       else {
@@ -497,11 +500,96 @@ export class UserinfoPage {
     });
   }
 
+  // calcTransactionFees
+  calcTransactionFees(amount: any) {
+    return Math.ceil(amount / 100 * 5);
+  }
+
+  // calcTotalTransaction
+  calcTotalTransaction(amount: any, transactionFees: any) {
+    return amount + transactionFees;
+  }
+
+  // payment alert
+  paymentAlert() {
+    const alert = this.alertCtrl.create({
+      message: "You are now registered and we will now attempt to withdraw $"+ this.calcTotalTransaction(this.donation_amount, this.calcTransactionFees(this.donation_amount)),
+      buttons: [
+        {
+          text: 'Ok',
+          handler: () => {
+            let donation_amount = parseInt(this.calcTotalTransaction(this.donation_amount, this.calcTransactionFees(this.donation_amount)));
+            // let donation_amount = this.donation_amount;
+            let hc_donation_amount = donation_amount * 100;
+            let data = {
+              'user_id': this.user_id,
+              'user_email': this.email,
+              'donation_amount': donation_amount,
+              'hc_donation_amount': hc_donation_amount
+            };
+
+            this.createLoader();
+
+            // make payment
+            this.userService.makePayment(data).subscribe(transactionRes => {
+              this.loader.dismiss();
+
+              // check if transaction res not empty
+              if(transactionRes.length < 1 || transactionRes.msg == 'err') {
+                this.createAlert("Withdrawal Unsuccessful, please check the information provided or change to another card.");
+              }
+              else if(transactionRes.msg == 'success') {
+                this.createAlert("Withdrawal Successful. We will now distribute the withdrawn amount to your Bighearts.");
+                this.makeServerRequest();
+              }
+            }, err => {
+              this.loader.dismiss();
+              this.createAlert("Withdrawal Unsuccessful, please check the information provided or change to another card.");
+            });            
+          }
+        },
+        {
+          text: 'Cancel',
+          handler: () => {
+            this.createAlert("Withdrawal Unsuccessful, please check the information provided or change to another card.");
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  // openWebView
+  addPaymentMethod() {
+    // check if name or email empty then give alert
+    if(this.firstName == null || this.lastName == null || this.email == null) {
+      // create validation alert
+      this.createAlert("please fill your name and email to make payment");
+    }
+    else{
+      let fullname = this.firstName+' '+this.lastName;
+
+      const browser = this.iab.create(this.global.base_url('sqpayment/?name='+fullname+'&email='+this.email+'&user_id='+this.user_id), '_blank', 'location=yes');
+
+      browser.on('loadstop').subscribe(event => {
+        browser.insertCSS({ code: "body{color: #ae0433;" });
+      });
+
+      browser.show();
+
+      browser.on('exit').subscribe(() => {
+        console.log('browser closed');
+      }, err => {
+          console.error(err);
+      });
+    }    
+  }
+
   // recurringCheck
   recurringCheck() {
     this.recurring_fees = ! this.recurring_fees;
   }
-
+  
   // termsCheck
   termsCheck() {
     this.accept_terms = ! this.accept_terms;

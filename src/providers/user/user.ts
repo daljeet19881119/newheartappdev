@@ -10,7 +10,7 @@ export class UserProvider {
   constructor(private _http: Http, private storage: Storage, private global: GlobalProvider) {
   }
 
-  
+
   // getAllCountries
   getAllCountries() {
     return this._http.get(this.global.apiUrl('/all_countries')).map(res => res.json());
@@ -28,104 +28,121 @@ export class UserProvider {
 
   getBHByCharityIds(charity_ids: any) {
     // set headers
-    let headers = new Headers();    
+    let headers = new Headers();
     headers.append("Accept", 'application/json');
-    
+
     // set request option
     let options = new RequestOptions({ headers: headers });
 
     // set data to be send
     let data = JSON.stringify({
-        charities: charity_ids
+      charities: charity_ids
     });
-    
+
     return this._http.post(this.global.apiUrl('/get_bh_by_charity'), data, options).map(res => res.json());
   }
 
   // getRegionNameById
   getRegionById(regionId: any) {
-    return this._http.get(this.global.apiUrl('/all_regions/'+regionId)).map(res => res.json());
+    return this._http.get(this.global.apiUrl('/all_regions/' + regionId)).map(res => res.json());
   }
 
   // getCountryCodeByCode
   getCountryCodeByCode(code: string) {
-    return this._http.get(this.global.apiUrl('/all_countries/'+code)).map(res => res.json());
+    return this._http.get(this.global.apiUrl('/all_countries/' + code)).map(res => res.json());
   }
 
   // getUserByDeviceId
   getUserByDeviceId(uuid: any) {
-    return this._http.get(this.global.apiUrl('/get_user/'+uuid)).map(res => res.json());
+    return this._http.get(this.global.apiUrl('/get_user/' + uuid)).map(res => res.json());
   }
 
   // getVerifiedUserByUUID
   getBigheartUserByDeviceId(uuid: any) {
-    return this._http.get(this.global.apiUrl('/get_bigheart_user/'+uuid)).map(res => res.json());
+    return this._http.get(this.global.apiUrl('/get_bigheart_user/' + uuid)).map(res => res.json());
   }
 
   // verifyNumber
   verifyNumber(data: any) {
     // set headers
-    let headers = new Headers();    
+    let headers = new Headers();
     headers.append("Accept", 'application/json');
-    
+
     // set request option
     let options = new RequestOptions({ headers: headers });
 
     // set data to be send
     let postdata = JSON.stringify({
-        data: data
+      data: data
     });
 
     return this._http.post(this.global.apiUrl('/verify_number'), postdata, options).map(res => res.json());
   }
 
   // verifyVerificationCode
-  verifyVerificationCode(data: any) {    
+  verifyVerificationCode(data: any) {
     // set headers
-    let headers = new Headers();    
+    let headers = new Headers();
     headers.append("Accept", 'application/json');
-    
+
     // set request option
     let options = new RequestOptions({ headers: headers });
 
     // set data to be send
     let postdata = JSON.stringify({
-        data: data
+      data: data
     });
 
     return this._http.post(this.global.apiUrl('/verify_verification_code'), postdata, options).map(res => res.json());
   }
 
   // verifyUserProfile
-  verifyUserProfile(data: any) {    
+  verifyUserProfile(data: any) {
     // set headers
-    let headers = new Headers();    
+    let headers = new Headers();
     headers.append("Accept", 'application/json');
-    
+
     // set request option
     let options = new RequestOptions({ headers: headers });
 
     // set data to be send
     let postdata = JSON.stringify({
-        data: data
+      data: data
     });
 
     return this._http.post(this.global.apiUrl('/verify_user_profile'), postdata, options).map(res => res.json());
   }
 
-  // addToMyBigHearts
-  addToMyBigHearts(data: any) {
-    
+  // makePayment
+  makePayment(data: any) {
     // set headers
-    let headers = new Headers();    
+    let headers = new Headers();
     headers.append("Accept", 'application/json');
-    
+
     // set request option
     let options = new RequestOptions({ headers: headers });
 
     // set data to be send
-    let postdata = JSON.stringify({        
-        data: data
+    let postdata = JSON.stringify({
+      data: data
+    });
+
+    return this._http.post(this.global.apiUrl('/squarePayment'), postdata, options).map(res => res.json());
+  }
+
+  // addToMyBigHearts
+  addToMyBigHearts(data: any) {
+
+    // set headers
+    let headers = new Headers();
+    headers.append("Accept", 'application/json');
+
+    // set request option
+    let options = new RequestOptions({ headers: headers });
+
+    // set data to be send
+    let postdata = JSON.stringify({
+      data: data
     });
 
     return this._http.post(this.global.apiUrl('/add_user_bighearts'), postdata, options).map(res => res.json());
@@ -133,7 +150,7 @@ export class UserProvider {
 
   // checkInMyBigHearts
   checkInUserBigHearts(user_id: any, bh_id: any) {
-    return this._http.get(this.global.apiUrl('/get_user_bighearts/'+user_id+'/'+bh_id)).map(res => res.json());
+    return this._http.get(this.global.apiUrl('/get_user_bighearts/' + user_id + '/' + bh_id)).map(res => res.json());
   }
 
   // removeFromMyBigHearts
@@ -141,14 +158,14 @@ export class UserProvider {
 
     // set headers
     let headers = new Headers();
-    headers.append("Accept","application/json");
+    headers.append("Accept", "application/json");
 
     // set request option
-    let options = new RequestOptions({headers: headers});
+    let options = new RequestOptions({ headers: headers });
 
     // set data to be send
     let postdata = JSON.stringify({
-        data: data
+      data: data
     });
 
     return this._http.post(this.global.apiUrl('/remove_user_bighearts'), postdata, options).map(res => res.json());
@@ -159,53 +176,53 @@ export class UserProvider {
 
     // set headers
     let headers = new Headers();
-    headers.append("Accept","application/json");
+    headers.append("Accept", "application/json");
 
     // set request option
-    let options = new RequestOptions({headers: headers});
+    let options = new RequestOptions({ headers: headers });
 
     // set data to be send
     let postdata = JSON.stringify({
-        data: data
+      data: data
     });
-    
+
     return this._http.post(this.global.apiUrl('/cause_form'), postdata, options).map(res => res.json());
   }
 
   // saveMerchantFormData
   saveMerchantFormData(data: any) {
 
-      // set headers
-      let headers = new Headers();
-      headers.append("Accept", "application/json");
+    // set headers
+    let headers = new Headers();
+    headers.append("Accept", "application/json");
 
-      // set request option
-      let options = new RequestOptions({headers: headers});
+    // set request option
+    let options = new RequestOptions({ headers: headers });
 
-      // set data to be send
-      let postdata = JSON.stringify({
-          data: data
-      });
+    // set data to be send
+    let postdata = JSON.stringify({
+      data: data
+    });
 
-      return this._http.post(this.global.apiUrl('/merchant_form'), postdata, options).map(res => res.json());
+    return this._http.post(this.global.apiUrl('/merchant_form'), postdata, options).map(res => res.json());
   }
 
   // saveVolunteerFormData
   saveVolunteerFormData(data: any) {
 
-      // set headers
-      let headers = new Headers();
-      headers.append("Accept", "application/json");
+    // set headers
+    let headers = new Headers();
+    headers.append("Accept", "application/json");
 
-      // set request option
-      let options = new RequestOptions({headers: headers});
+    // set request option
+    let options = new RequestOptions({ headers: headers });
 
-      // set data to be send
-      let postdata = JSON.stringify({
-          data: data
-      });
+    // set data to be send
+    let postdata = JSON.stringify({
+      data: data
+    });
 
-      return this._http.post(this.global.apiUrl('/volunteer_form'), postdata, options).map(res => res.json());
+    return this._http.post(this.global.apiUrl('/volunteer_form'), postdata, options).map(res => res.json());
   }
 
   // clean storage
@@ -222,11 +239,11 @@ export class UserProvider {
     headers.append("Accept", "application/json");
 
     // set request option
-    let options = new RequestOptions({headers: headers});
+    let options = new RequestOptions({ headers: headers });
 
     // set data to be send
     let postdata = JSON.stringify({
-        data: data
+      data: data
     });
 
     return this._http.post(this.global.apiUrl('/save_user_bighearts'), postdata, options).map(res => res.json());
@@ -236,14 +253,14 @@ export class UserProvider {
   updateUserInfo(data: any) {
     // set headers
     let headers = new Headers();
-    headers.append("Accept","application/json");
+    headers.append("Accept", "application/json");
 
     // set request option
-    let options = new RequestOptions({headers: headers});
+    let options = new RequestOptions({ headers: headers });
 
     // set data to be send
     let postdata = JSON.stringify({
-        data: data
+      data: data
     });
 
     return this._http.post(this.global.apiUrl('/update_user_info'), postdata, options).map(res => res.json());
@@ -253,14 +270,14 @@ export class UserProvider {
   sendVerificationCode(data: any) {
     // set headers
     let headers = new Headers();
-    headers.append("Accept","application/json");
+    headers.append("Accept", "application/json");
 
     // set request option
-    let options = new RequestOptions({headers: headers});
+    let options = new RequestOptions({ headers: headers });
 
     // set data to be send
     let postdata = JSON.stringify({
-        data: data
+      data: data
     });
 
     return this._http.post(this.global.apiUrl('/sendVerificationCode'), postdata, options).map(res => res.json());
@@ -270,14 +287,14 @@ export class UserProvider {
   sendVerificationEmail(data: any) {
     // set headers
     let headers = new Headers();
-    headers.append("Accept","application/json");
+    headers.append("Accept", "application/json");
 
     // set request option
-    let options = new RequestOptions({headers: headers});
+    let options = new RequestOptions({ headers: headers });
 
     // set data to be send
     let postdata = JSON.stringify({
-        data: data
+      data: data
     });
 
     return this._http.post(this.global.apiUrl('/sendVerificationEmail'), postdata, options).map(res => res.json());

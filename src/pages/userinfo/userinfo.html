@@ -92,6 +92,40 @@
     </div>
     <div class="textarea-div">
       <ion-row>
+        <button ion-button block (click)="addPaymentMethod()" color="appColor" style="margin: 10px 0;">Add Payment
+          Method</button>
+      </ion-row>
+      <div style="padding: 30px 0;">
+        <ion-row>
+          <h4>Total Transaction</h4>
+        </ion-row>
+        <ion-row>
+          <ion-col col-6>
+            <span>Subtotal:</span>
+          </ion-col>
+          <ion-col col-6>
+            <span>${{ donation_amount }}</span>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col col-6>
+            <span>Credit Card Charge (5%):</span>
+          </ion-col>
+          <ion-col col-6>
+            <span> ${{ calcTransactionFees(donation_amount) }}</span>
+          </ion-col>
+        </ion-row>
+        <ion-item-divider></ion-item-divider>
+        <ion-row>
+          <ion-col col-6>
+            <span>Total:</span>
+          </ion-col>
+          <ion-col col-6>
+            <span>${{ calcTotalTransaction(donation_amount, calcTransactionFees(donation_amount)) }}</span>
+          </ion-col>
+        </ion-row>
+      </div>
+      <!-- <ion-row>
         <ion-label>Add payment details</ion-label>
         <button ion-button small float-left (click)="scanCard()" color="appColor">Scan Card</button>
       </ion-row>
@@ -110,7 +144,7 @@
       <ion-item class="payment-item">
         <ion-label floating>Expiry date*</ion-label>
         <ion-datetime displayFormat="MMM/YYYY" [(ngModel)]="card_expiry" [min]="current_year" [max]="current_year + 50"></ion-datetime>
-      </ion-item>
+      </ion-item> -->
     </div>
     <div class="textarea-div">
       <ion-row>
@@ -194,7 +228,8 @@
               (click)="viewBHProfile(bh.user_id)">
               <img [src]="bh.bh_founder_img_url" [alt]="bh.bh_name">
             </ion-avatar>
-            <ion-label (click)="viewBHProfile(bh.user_id)" style="z-index: 1;">{{ bh.bh_founder_name+' ('+bh.bh_name+')' }}</ion-label>
+            <ion-label (click)="viewBHProfile(bh.user_id)" style="z-index: 1;">{{ bh.bh_founder_name+'
+              ('+bh.bh_name+')' }}</ion-label>
             <ion-checkbox [(ngModel)]="bh.checked" (click)="getSelectedNgo(bh.checked, bh.user_id);" item-end></ion-checkbox>
           </ion-item>
         </ng-container>
