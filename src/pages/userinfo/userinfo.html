@@ -92,8 +92,10 @@
     </div>
     <div class="textarea-div">
       <ion-row>
-        <button ion-button block (click)="addPaymentMethod()" color="appColor" style="margin: 10px 0;">Add Payment
-          Method</button>
+        <button ion-button block (click)="addPaymentMethod()" color="appColor" style="margin: 10px 0;">Tap to Add Card</button>
+      </ion-row>
+      <ion-row>
+        <button ion-button block color="appColor" style="margin: 10px 0;">Add Bank Payment (zero charge)</button>
       </ion-row>
       <div style="padding: 30px 0;">
         <ion-row>
@@ -188,6 +190,8 @@
             <ion-checkbox [(ngModel)]="checkCountry" item-end (ionChange)="checkPreference('country');getPreferenceCheck(checkCountry, checkRegion);"></ion-checkbox>
           </ion-item>
         </ion-col>
+      </ion-row>
+      <ion-row>
         <ion-col>
           <ion-item class="item-radio">
             <ion-label>Select a region</ion-label>

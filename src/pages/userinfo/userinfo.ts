@@ -84,7 +84,6 @@ export class UserinfoPage {
   recurring_fees: boolean = false;
   accept_terms: boolean = false;
   user_id: any;
-
   constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, public platform: Platform, private global: GlobalProvider, private loadingCtrl: LoadingController, private userService: UserProvider, private modalCtrl: ModalController, private cardIO: CardIO, private iab: InAppBrowser) {
 
     // if user try goback then exit app
@@ -272,6 +271,10 @@ export class UserinfoPage {
       this.preference = preference;
       this.bh_id_arr = [];
     }
+
+    if(this.checkRegion == false && this.checkCountry == false) {
+      this.preference = '';
+    }
   }
 
   // getSelectedNgo
@@ -409,6 +412,8 @@ export class UserinfoPage {
       recurring_fees = 'false';
     }
 
+    let us_donation_amount = this.donation_amount / 100 * 5 + this.donation_amount;
+    let hc_donation_amount = us_donation_amount * 100;
 
     const data = {
       profile_status: 'verified',
@@ -416,8 +421,8 @@ export class UserinfoPage {
       lname: this.lastName,
       email: this.email,
       cause_percentage: this.cause_percentage,
-      us_donation_amount: this.donation_amount,
-      hc_donation_amount: hc_amount,
+      us_donation_amount: us_donation_amount,
+      hc_donation_amount: hc_donation_amount,
       hc_balance: hc_balance,
       us_balance: us_balance,
       us_amount_per_ngo: us_amount_per_ngo,
@@ -525,6 +530,7 @@ export class UserinfoPage {
               'user_id': this.user_id,
               'user_email': this.email,
               'donation_amount': donation_amount,
+              'transaction_fees': this.calcTransactionFees(this.donation_amount),
               'hc_donation_amount': hc_donation_amount
             };
 
@@ -571,14 +577,22 @@ export class UserinfoPage {
 
       const browser = this.iab.create(this.global.base_url('sqpayment/?name='+fullname+'&email='+this.email+'&user_id='+this.user_id), '_blank', 'location=yes');
 
+      browser.show();      
+      
       browser.on('loadstop').subscribe(event => {
-        browser.insertCSS({ code: "body{color: #ae0433;" });
-      });
+        browser.insertCSS({ code: "body{color: #ae0433;}h4{padding: 10px;}.btn-div{margin: 50px 0;}button#back_to_app{margin: 0px auto;display: block;padding: 15px 40px;color: #fff;background: #ae0433;border-radius: 5px;}" });      
 
-      browser.show();
+        let getCardDigit = function() {
+            // alert('card no: '+document.getElementById('card-digits').va);
+        };
+
+        browser.executeScript({code: "document.getElementById('back_to_app').onclick = "+getCardDigit+";"});   
+        
+      });      
 
       browser.on('exit').subscribe(() => {
         console.log('browser closed');
+        alert('card no: '+this.card_number);
       }, err => {
           console.error(err);
       });

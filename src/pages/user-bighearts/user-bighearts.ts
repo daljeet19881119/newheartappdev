@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-an
 import { Storage } from '@ionic/storage';
 import { UserProvider } from '../../providers/user/user';
 import { GlobalProvider } from '../../providers/global/global';
+import { ProfilePage } from '../profile/profile';
 
 
 @IonicPage()
@@ -13,17 +14,14 @@ import { GlobalProvider } from '../../providers/global/global';
 export class UserBigheartsPage {
 
   loader: any;
-  all_ngo: any;
+  all_ngo: any = [];
   uuid: any;
   ngo_ids: any = [];
+  user_id: any;
   constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private userService: UserProvider, public loadingCtrl: LoadingController, private global: GlobalProvider) {
   }
 
   ionViewDidLoad() {
-    // get userdata from storage
-    // this.storage.get('user_data').then(data => {
-    //   this.getNgoByCharity(data.charity_type);
-    // });
 
     // get uuid
     if (this.global.uuid()) {
@@ -32,26 +30,33 @@ export class UserBigheartsPage {
     else {
       this.uuid = 'undefined';
     }
-
+    
     // get login user data
     this.userService.getUserByDeviceId(this.uuid).subscribe(data => {
-        let user_charities = data.data.charities;
-        let user_bighearts = data.data.user_bighearts.split(',');
+      let user_bighearts = data.data.user_bighearts.split(',');
+      this.user_id = data.data.user_id;
 
-        // get bigheart by charities
-        this.userService.getBHByCharityIds(user_charities).subscribe(all_bh => {
-            // loop of all_bh
-            all_bh.forEach(element => {
-                // check if bh id in array then store that id
-                if (user_bighearts.indexOf(element.user_id) != -1) {
-                  element.checked = true;
-                  this.ngo_ids.push(element.user_id);
-                }
-            });
-             
-            this.all_ngo = all_bh;
+      // create loader
+      this.createLoader();
 
-        }, err => console.log(err));
+      // getAllBHOfUser
+      this.userService.getAllBHOfUser(this.user_id).subscribe(all_bh => {
+        // loop of all_bh
+        all_bh.forEach(element => {
+          // check if bh id in array then store that id
+          if (user_bighearts.indexOf(element.user_id) != -1) {
+            element.checked = true;
+            this.ngo_ids.push(element.user_id);
+          }
+        });
+
+        this.all_ngo = all_bh;
+
+        this.loader.dismiss();
+      }, err => {
+        console.log(err);
+        this.loader.dismiss();
+      });
     }, err => console.log(err));
   }
 
@@ -131,14 +136,24 @@ export class UserBigheartsPage {
     };
 
     this.userService.saveUserBighearts(data).subscribe(data => {
-      if(data.msg == 'success')
-      {
+      if (data.msg == 'success') {
         this.storage.set('user_data', data);
-      }      
+      }
       this.loader.dismiss();
     }, err => {
       console.log(err);
       this.loader.dismiss();
+    });
+  }
+
+  // viewBHProfile
+  viewBHProfile(id: any) {
+    
+    // send param and goto profile page
+    this.navCtrl.push(ProfilePage, {
+      bh_id: id,
+      user_id: this.user_id,
+      uuid: this.uuid
     });
   }
 }

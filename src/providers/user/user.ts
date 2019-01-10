@@ -299,4 +299,9 @@ export class UserProvider {
 
     return this._http.post(this.global.apiUrl('/sendVerificationEmail'), postdata, options).map(res => res.json());
   }
+
+  // getAllBHOfUser
+  getAllBHOfUser(user_id: any) {
+    return this._http.get(this.global.apiUrl('/getAllBHOfUser/'+user_id)).map(res => res.json());
+  }
 }

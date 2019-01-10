@@ -15,13 +15,20 @@
   <div class="charity-div">
       <p>My all BigHearts</p>
   </div>
-  <ion-list>
-      <ion-item class="charities-list" *ngFor="let ngo of all_ngo">
-          <ion-label>{{ ngo.bh_founder_name+' ('+ngo.bh_name+')' }}</ion-label>
-          <ion-toggle color="secondary" [(ngModel)]="ngo.checked" [checked]="ngo.checked" (ionChange)="getCurrentSelectedNgoId(ngo.user_id, ngo.checked)"></ion-toggle>
+  <ion-list class="list-height">
+    <ng-container *ngFor="let bh of all_ngo">
+      <ion-item class="payment-item">
+        <ion-avatar item-start style="background: #48414130;border-radius: 50%;border: 1px solid #48414130;z-index: 1;"
+          (click)="viewBHProfile(bh.user_id)">
+          <img [src]="bh.bh_founder_img_url" [alt]="bh.bh_name">
+        </ion-avatar>
+        <ion-label (click)="viewBHProfile(bh.user_id)" style="z-index: 1;">{{ bh.bh_founder_name+'
+          ('+bh.bh_name+')' }}</ion-label>
+        <ion-checkbox [(ngModel)]="bh.checked" (click)="getCurrentSelectedNgoId(bh.user_id, bh.checked);" item-end></ion-checkbox>
       </ion-item>
+    </ng-container>
   </ion-list>
-  <div class="save-btn">
+  <div class="save-btn" *ngIf="all_ngo.length > 0">
       <button ion-button color="light" block (click)="saveUserBigheart()">Save</button>
   </div>
 </ion-content>
