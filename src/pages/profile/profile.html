@@ -15,12 +15,12 @@
 <ion-content no-padding>
     <div class="upper-empty-container"></div>
     <div class="founder-img-div">
-        <img [src]="ngoFounderImg" class="founder-img">
+        <div class="founder-img" [style.backgroundImage]="'url('+ ngoFounderImg +')'"></div>
         <!-- <img src="assets/imgs/address-card.png" class="address-card" *ngIf="showItem"> -->
     </div> 
     <div class="profile-info">
         <h2 class="founder-name">{{ ngoFounderName }}</h2>
-        <p class="ngo-name">Co-Founder of {{ ngoName }}</p>
+        <p class="ngo-name">Associated with {{ ngoName }}</p>
         <ng-container *ngIf="showItem">
             <button ion-button small [ngClass]="addBigHeartsClass" color="appColor" (click)="addToUserBigHearts()"  *ngIf="addBigHeartsClass === 'add-to-bighearts'">
                     {{ addBigHeartText }}
@@ -31,7 +31,7 @@
             </button>
             <button ion-button small color="appColor" class="add-to-bighearts" (click)="gotoUserBigheartsPage()">My Bighearts</button>
         </ng-container>        
-        <p class="ngo-desc" id="ngo-desc" (click)="showWords()">{{ getWords()+'.....' }}</p>
+        <p class="ngo-desc" id="ngo-desc" (click)="showWords()" [innerHTML]="getWords()"></p>
         <span class="read-more" (click)="showAllWords()" *ngIf="showMore">
             <ion-icon name="arrow-dropdown"></ion-icon>
         </span>
@@ -72,7 +72,10 @@
                 <!-- <img src="assets/imgs/youtube.png" alt="Youtube" class="youtube-img" (click)="showFullVideo()" *ngIf="ngoYoutubeId !==''"> -->
             </div>
             <div class="iframe-div" *ngIf="showIframediv">
-                <iframe  id="iframe-video" [src]="getIframeUrl()" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                <!-- <iframe  id="iframe-video" [src]="getIframeUrl()" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe> -->
+                <div class="iframe-div" id="iframe-div" [style.backgroundImage]="'url('+ getYoutubeVideoImgUrl() +')'"  (click)="showFullImg($event)">
+                        <img src="assets/imgs/youtube.png" alt="Youtube" class="iframe-youtube-img" (click)="showFullVideo()" *ngIf="ngoYoutubeId !==''">
+                    </div>
             </div>
         </div>
         <ion-row>

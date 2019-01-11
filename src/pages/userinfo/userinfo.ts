@@ -72,6 +72,7 @@ export class UserinfoPage {
   ch_name: string = null;
   card_number: any = null;
   cvv_number: any = null;
+  card_btn: boolean = false;
   current_year: any = new Date().getFullYear();
   dateObj: Date = new Date();
   card_expiry: any = null;
@@ -582,17 +583,23 @@ export class UserinfoPage {
       browser.on('loadstop').subscribe(event => {
         browser.insertCSS({ code: "body{color: #ae0433;}h4{padding: 10px;}.btn-div{margin: 50px 0;}button#back_to_app{margin: 0px auto;display: block;padding: 15px 40px;color: #fff;background: #ae0433;border-radius: 5px;}" });      
 
-        let getCardDigit = function() {
-            // alert('card no: '+document.getElementById('card-digits').va);
-        };
-
-        browser.executeScript({code: "document.getElementById('back_to_app').onclick = "+getCardDigit+";"});   
+        browser.executeScript({code: "document.getElementById('back_to_app').onclick = browser.close();"});   
         
       });      
 
       browser.on('exit').subscribe(() => {
-        console.log('browser closed');
-        alert('card no: '+this.card_number);
+        // create loader
+        this.createLoader();
+
+        // getUserById
+        this.userService.getUserById(this.user_id).subscribe(data => {
+            this.card_number = data.card_last_digit;
+            this.card_btn = true;
+
+          this.loader.dismiss();
+        }, err => {
+          this.loader.dismiss();
+        });
       }, err => {
           console.error(err);
       });

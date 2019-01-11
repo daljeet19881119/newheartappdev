@@ -92,7 +92,8 @@
     </div>
     <div class="textarea-div">
       <ion-row>
-        <button ion-button block (click)="addPaymentMethod()" color="appColor" style="margin: 10px 0;">Tap to Add Card</button>
+        <button ion-button block (click)="addPaymentMethod()" color="appColor" style="margin: 10px 0;" *ngIf="!card_btn">Tap to Add Card</button>
+        <button ion-button block color="appColor" style="margin: 10px 0;" *ngIf="card_btn">{{ 'xxxxxxxxxxxx'+ card_number + ' card exist' }}</button>
       </ion-row>
       <ion-row>
         <button ion-button block color="appColor" style="margin: 10px 0;">Add Bank Payment (zero charge)</button>

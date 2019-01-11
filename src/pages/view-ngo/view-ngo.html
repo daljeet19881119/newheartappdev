@@ -1,31 +1,88 @@
 <ion-header>
-    <ion-navbar color="appColor" class="profile-nav">
-        <ion-row>
-            <ion-col col-3 offset-3  class="heart-col" no-padding>
-                <!-- <ion-icon name="heart-outline" class="heart-icon"></ion-icon> -->
-                <div class="logo-div" style="background: url('assets/imgs/logo.png');"></div>
-            </ion-col>
-            <ion-col col-6 class="pay-col" no-padding>
-                <!-- <span class="header-pay">Pay</span> -->
-            </ion-col>
-        </ion-row>
-    </ion-navbar>
-</ion-header>
-
-<ion-content no-padding>
-    <div class="upper-empty-container"></div>
-    <div class="founder-img-div">
-        <img [src]="ngoFounderImg" class="founder-img">
-    </div> 
-    <div class="profile-info">
-        <h2 class="founder-name">{{ ngoFounderName }}</h2>
-        <p class="ngo-name">Co-Founder of {{ ngoName }}</p>
-        <p class="ngo-desc" id="ngo-desc" (click)="showWords()">{{ getWords()+'.....' }}</p>
-        <span class="read-more" (click)="showAllWords()" *ngIf="showMore">
-            <ion-icon name="arrow-dropdown"></ion-icon>
-        </span>
-        <span class="read-less" (click)="showLessWords()" *ngIf="!showMore">
-            <ion-icon name="arrow-dropup"></ion-icon> 
-        </span>  
-    </div>
-</ion-content>
+        <ion-navbar color="appColor" class="profile-nav">
+            <ion-row>
+                <ion-col col-3 offset-3  class="heart-col" no-padding>
+                    <!-- <ion-icon name="heart-outline" class="heart-icon"></ion-icon> -->
+                    <div class="logo-div" style="background: url('assets/imgs/logo.png');"></div>
+                </ion-col>
+                <ion-col col-6 class="pay-col" no-padding>
+                    <!-- <span class="header-pay">Pay</span> -->
+                </ion-col>
+            </ion-row>
+        </ion-navbar>
+    </ion-header>
+    
+    <ion-content no-padding>
+        <div class="upper-empty-container"></div>
+        <div class="founder-img-div">
+            <div class="founder-img" [style.backgroundImage]="'url('+ ngoFounderImg +')'"></div>
+            <!-- <img src="assets/imgs/address-card.png" class="address-card" *ngIf="showItem"> -->
+        </div> 
+        <div class="profile-info">
+            <h2 class="founder-name">{{ ngoFounderName }}</h2>
+            <p class="ngo-name">Associated with {{ ngoName }}</p>
+            <ng-container *ngIf="showItem">
+                <button ion-button small [ngClass]="addBigHeartsClass" color="appColor" (click)="addToUserBigHearts()"  *ngIf="addBigHeartsClass === 'add-to-bighearts'">
+                        {{ addBigHeartText }}
+                </button>
+                <button ion-button small [ngClass]="addBigHeartsClass" color="appColor" *ngIf="addBigHeartsClass === 'added-bighearts'" (click)="removeFromUserBigHearts()">
+                    <ion-icon name="checkmark" class="add-checkmark"></ion-icon>&nbsp;
+                    {{ addBigHeartText }}
+                </button>
+                <button ion-button small color="appColor" class="add-to-bighearts" (click)="gotoUserBigheartsPage()">My Bighearts</button>
+            </ng-container>        
+            <p class="ngo-desc" id="ngo-desc" (click)="showWords()" [innerHTML]="getWords()"></p>
+            <span class="read-more" (click)="showAllWords()" *ngIf="showMore">
+                <ion-icon name="arrow-dropdown"></ion-icon>
+            </span>
+            <span class="read-less" (click)="showLessWords()" *ngIf="!showMore">
+                <ion-icon name="arrow-dropup"></ion-icon> 
+            </span>  
+        </div>    
+        <div class="lists-part" *ngIf="showItem">
+            <ion-list class="ngo-list">
+                <ion-item class="list-item campaigns" (click)="gotoCampignPage()">
+                    <span class="list-text-color">Campaigns</span> 
+                    <span class="count list-text-color">{{ ngoCampaigns }} <ion-icon name="arrow-forward" class="count-arrow"></ion-icon></span>
+                </ion-item>  
+            </ion-list>
+            <!-- <ion-list class="ngo-list">
+                <ion-item class="list-item community" (click)="gotoCommunityPage()">
+                    <span class="list-text-color">Community</span> 
+                    <span class="count list-text-color">{{ ngoCommunity }} <ion-icon name="arrow-forward" class="count-arrow"></ion-icon></span>
+                </ion-item>  
+            </ion-list>
+            <ion-list class="ngo-list">
+                <ion-item class="list-item contributors" (click)="gotoContributorPage()">
+                    <span class="list-text-color">Contributors</span> 
+                    <span class="count list-text-color">{{ ngoContributors }} <ion-icon name="arrow-forward" class="count-arrow"></ion-icon></span>
+                </ion-item>  
+            </ion-list> -->
+            <ion-list class="ngo-list">
+                <ion-item class="list-item team" (click)="gotoTeamPage()">
+                    <span class="list-text-color">Team</span> 
+                    <span class="count list-text-color">{{ ngoTeam }} <ion-icon name="arrow-forward" class="count-arrow"></ion-icon></span>
+                </ion-item>  
+            </ion-list>
+        </div>
+        <div class="media-div" padding>
+            <p class="list-text-color media">Media</p>
+            <div class="ytvideo">
+                <div class="iframe-div" id="iframe-div" [style.backgroundImage]="'url('+ getYoutubeVideoImgUrl() +')'"  (click)="showFullImg($event)">
+                    <!-- <img src="assets/imgs/youtube.png" alt="Youtube" class="youtube-img" (click)="showFullVideo()" *ngIf="ngoYoutubeId !==''"> -->
+                </div>
+                <div class="iframe-div" *ngIf="showIframediv">
+                    <iframe  id="iframe-video" [src]="getIframeUrl()" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                </div>
+            </div>
+            <ion-row>
+                <ng-container *ngFor="let familyImg of ngoFamilyImgs; let i = index">
+                    <ion-col col-3 class="family-imgs" *ngIf="ngoFamilyImgs?.length > 0 && getYoutubeVideoImgUrl() !== familyImg">
+                        <img src="assets/imgs/youtube.png" alt="Youtube" class="youtube-img" data-show-img="hide" id="{{ i }}" (click)="changeImage($event);"> 
+                        <div [style.backgroundImage]="'url('+ familyImg +')'" (click)="interchangeImg($event);" id="{{ i+'-small' }}"></div>
+                    </ion-col>
+                </ng-container>
+            </ion-row>
+        </div>
+    </ion-content>
+    

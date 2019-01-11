@@ -57,6 +57,11 @@ export class UserProvider {
     return this._http.get(this.global.apiUrl('/get_user/' + uuid)).map(res => res.json());
   }
 
+  // get_user_by_id
+  getUserById(user_id: any) {
+    return this._http.get(this.global.apiUrl('/get_user_by_id/'+user_id)).map(res => res.json());
+  }
+
   // getVerifiedUserByUUID
   getBigheartUserByDeviceId(uuid: any) {
     return this._http.get(this.global.apiUrl('/get_bigheart_user/' + uuid)).map(res => res.json());

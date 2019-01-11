@@ -117,8 +117,6 @@
       "cordova-plugin-fcm-with-dependecy-updated": {},
       "cordova-plugin-inappbrowser": {}
     },
-    "platforms": [
-      "android"
-    ]
+    "platforms": []
   }
 }

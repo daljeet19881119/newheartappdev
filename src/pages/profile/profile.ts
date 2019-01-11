@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController, LoadingController } from 'ionic-angular';
 import { YtvideoPage } from '../ytvideo/ytvideo';
-import { ScreenOrientation } from '@ionic-native/screen-orientation';
+// import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { PhotoViewer } from '@ionic-native/photo-viewer';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CampaignsPage } from '../campaigns/campaigns';
@@ -48,7 +48,7 @@ export class ProfilePage {
   user_id: any;
   bh_id: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private modalCtrl: ModalController, private screenOrientation: ScreenOrientation, private photoViewer: PhotoViewer, private dom: DomSanitizer, private userProvider: UserProvider, private global: GlobalProvider, public loadingCtrl: LoadingController, private homeService: HomePageProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private modalCtrl: ModalController,private photoViewer: PhotoViewer, private dom: DomSanitizer, private userProvider: UserProvider, private global: GlobalProvider, public loadingCtrl: LoadingController, private homeService: HomePageProvider) {
 
   }
 
@@ -122,21 +122,24 @@ export class ProfilePage {
 
   // showFullVideo
   showFullVideo() {
-
+     // store youtube video url
+     let videoUrl = this.youtubeUrl + this.ngoYoutubeId;
+     let viewModal = this.modalCtrl.create(YtvideoPage, { videoUrl: videoUrl });
+     viewModal.present();
     // detect orientation changes
-    this.screenOrientation.onChange().subscribe(
-      () => {
-        // alert("Orientation Changed to : "+this.screenOrientation.type);
+    // this.screenOrientation.onChange().subscribe(
+    //   () => {
+    //     // alert("Orientation Changed to : "+this.screenOrientation.type);
 
-        // check if screen is in landscape
-        if (this.screenOrientation.ORIENTATIONS.LANDSCAPE) {
-          // store youtube video url
-          let videoUrl = this.youtubeUrl + this.ngoYoutubeId;
-          let viewModal = this.modalCtrl.create(YtvideoPage, { videoUrl: videoUrl });
-          viewModal.present();
-        }
-      }
-    );
+    //     // check if screen is in landscape
+    //     // if (this.screenOrientation.ORIENTATIONS.LANDSCAPE) {
+    //     //   // store youtube video url
+    //     //   let videoUrl = this.youtubeUrl + this.ngoYoutubeId;
+    //     //   let viewModal = this.modalCtrl.create(YtvideoPage, { videoUrl: videoUrl });
+    //     //   viewModal.present();
+    //     // }
+    //   }
+    // );
   }
 
   // getWords
@@ -145,7 +148,7 @@ export class ProfilePage {
     // return this.ngoDesc.split(/\s+/).slice(0,16).join(" ");
 
     // return only 30 character
-    return this.ngoDesc.slice(0, 80);
+    return this.ngoDesc.slice(0, 80) + '.....';
   }
 
   // show all words

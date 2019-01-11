@@ -18,7 +18,7 @@
         </ion-row>
     </ion-navbar>
     <div class="upper-part">
-        <span class="upper-text">{{ heloWish }} {{ name }}</span>
+        <span class="upper-text">{{ heloWish }} {{ name | titlecase }}</span>
         <ng-container *ngIf="hc_balance">
             <span class="upper-text">Your account balance is</span>
             <p class="balance-para">
@@ -56,6 +56,9 @@
                                 <ion-col col-5 no-padding>
                                     <h2 class="ngo-name">{{ donation.bh_founder_name}}</h2>
                                     <p class="ngo-date">{{ donation.transaction_date}}</p>
+                                    <p class="ngo-date" *ngIf="donation.user_type == 'bh_user'">{{ 'Donation to '+ donation.bh_name}}</p>
+                                    <p class="ngo-date" *ngIf="donation.user_type == 'user'">{{ 'Add to wallet'}}</p>
+                                    <p class="ngo-date" *ngIf="donation.user_type == 'hg_user'">{{ 'Transaction fees'}}</p>
                                 </ion-col>
                                 <ion-col col-7 style="text-align: right;" no-padding>
                                     <p>
@@ -119,16 +122,17 @@
                     <ion-slide>
                         <div class="ngo-img-div" [style.backgroundImage]="'url('+recommendHearts.bh_founder_img+')'"  (click)="gotoProfilePage(recommendHearts.user_id)"></div>                    
                         <p class="ngo-founder">{{ recommendHearts.bh_founder_name}}</p> 
+                        <p class="ngo-date">{{ recommendHearts.bh_charity_name}}</p> 
                     </ion-slide>
                 </ng-container>
             </ion-slides>
-            <ion-slides [loop]="charityLoop" [autoplay]="charityAutoplay" *ngIf="charities" slidesPerView="1">
+            <!-- <ion-slides [loop]="charityLoop" [autoplay]="charityAutoplay" *ngIf="charities" slidesPerView="1">
                 <ng-container *ngFor="let charity of charities">
                     <ion-slide>
                         <p class="cat-text">{{ charity.name }}</p>
                     </ion-slide>
                 </ng-container>
-            </ion-slides>
+            </ion-slides> -->
         </div>
     </ion-toolbar>
 </ion-footer>
