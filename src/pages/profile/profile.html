@@ -20,7 +20,7 @@
     </div> 
     <div class="profile-info">
         <h2 class="founder-name">{{ ngoFounderName }}</h2>
-        <p class="ngo-name">Associated with {{ ngoName }}</p>
+        <p class="ngo-name">Associated Non-Profit with {{ bhNonProfit }}</p>
         <ng-container *ngIf="showItem">
             <button ion-button small [ngClass]="addBigHeartsClass" color="appColor" (click)="addToUserBigHearts()"  *ngIf="addBigHeartsClass === 'add-to-bighearts'">
                     {{ addBigHeartText }}

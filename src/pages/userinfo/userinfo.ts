@@ -581,9 +581,9 @@ export class UserinfoPage {
       browser.show();      
       
       browser.on('loadstop').subscribe(event => {
-        browser.insertCSS({ code: "body{color: #ae0433;}h4{padding: 10px;}.btn-div{margin: 50px 0;}button#back_to_app{margin: 0px auto;display: block;padding: 15px 40px;color: #fff;background: #ae0433;border-radius: 5px;}" });      
-
-        browser.executeScript({code: "document.getElementById('back_to_app').onclick = browser.close();"});   
+        browser.insertCSS({ code: "body{color: #ae0433;}h4{padding: 10px;}.btn-div{margin: 50px 0;display:none;}button#back_to_app{margin: 0px auto;display: block;padding: 15px 40px;color: #fff;background: #ae0433;border-radius: 5px;}" });  
+        
+        // browser.executeScript({code: ""});   
         
       });      
 
@@ -676,6 +676,7 @@ export class UserinfoPage {
     // get countries from storage
     this.userService.getAllCountries().subscribe(country => {
       this.countries = country;
+      this.location = this.countries[0].id;
     }, err => {
       console.log('err: ' + err);
     });
@@ -686,6 +687,7 @@ export class UserinfoPage {
     // request region from server
     this.userService.getAllRegions().subscribe(data => {
       this.allRegions = data;
+      this.location = this.allRegions[0].id;
     }, err => {
       console.log('err: ' + err);
     });

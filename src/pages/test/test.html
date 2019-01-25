@@ -1,24 +1,25 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>test</ion-title>
+    <ion-title>Create New Topic</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-  <nga-ng2-gauge 
-  [max]="max" 
-  [input]="input"
-  [sectors]="sectors"
-  [size]="200"
-  [showDigital]="true">
-  </nga-ng2-gauge>
-  <button ion-button (click)="incrementVal()" [disabled]="disablePlusBtn">
-      <ion-icon name="add"></ion-icon>
-  </button>
-  <button ion-button (click)="decrementVal()" [disabled]="disableMinusBtn">
-      <ion-icon name="remove"></ion-icon>
-  </button>
+  <ion-list>
+    <div class="item-div">
+      <ion-item no-lines class="item-tag">
+        <ion-avatar item-start style="margin-right: 10px;">
+          <div style="background-image: url('assets/imgs/EarthHelp.jpg')" class="custom_image"></div>
+        </ion-avatar>
+        <p class="username">Jonathan Collins</p>
+        <p class="hour"> 6 hour ago</p>
+      </ion-item>
+      <ion-row class="item-row">
+          Faulty thought patterns that put you at risk of a smoking relapse
+      </ion-row>
+    </div>
+  </ion-list>
 </ion-content>

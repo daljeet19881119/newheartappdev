@@ -1,3 +1,28 @@
 page-test {
-
+    .custom_image{
+        background-size: cover;
+        height: 40px;
+        width: 40px;
+        border-radius: 50%;
+    }
+    .item-div{
+        border-bottom: 1px solid #ddd;
+        background: #ffffff;
+        padding: 10px 0 20px;
+    }
+    .item-row{
+        padding: 0px 10px;
+        font-size: 17px;
+        font-weight: 200;
+    }
+    .username{
+        font-size: 14px;
+        font-weight: 400;
+    }
+    .hour{
+        font-size: 12px;
+    }
+    .item-tag{
+        padding: 0 10px !important;
+    }
 }

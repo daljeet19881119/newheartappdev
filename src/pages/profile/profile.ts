@@ -24,6 +24,7 @@ export class ProfilePage {
   ngoFounderImg: string = 'assets/imgs/background.png';
   ngoFounderName: string = 'Loading...';
   ngoName: string = 'Loading...';
+  bhNonProfit: string = '';
   ngoCampaigns: string = 'Loading...';
   ngoCommunity: string = 'Loading...';
   ngoContributors: string = 'Loading...';
@@ -84,6 +85,15 @@ export class ProfilePage {
       this.ngoFounderImg = data.bh_founder_img;
       this.ngoFounderName = data.bh_founder_name;
       this.ngoName = data.bh_name;
+
+      // check if non profit main not emtpy
+      if(data.bh_associated_non_profit != '') {
+        this.bhNonProfit = data.bh_associated_non_profit;
+      }
+      else{
+        this.bhNonProfit = data.bh_name;
+      }
+
       this.ngoCampaigns = data.bh_compaigns;
       this.ngoTeam = data.bh_team;
       this.ngoYoutubeId = data.bh_youtube_id;
@@ -126,20 +136,7 @@ export class ProfilePage {
      let videoUrl = this.youtubeUrl + this.ngoYoutubeId;
      let viewModal = this.modalCtrl.create(YtvideoPage, { videoUrl: videoUrl });
      viewModal.present();
-    // detect orientation changes
-    // this.screenOrientation.onChange().subscribe(
-    //   () => {
-    //     // alert("Orientation Changed to : "+this.screenOrientation.type);
-
-    //     // check if screen is in landscape
-    //     // if (this.screenOrientation.ORIENTATIONS.LANDSCAPE) {
-    //     //   // store youtube video url
-    //     //   let videoUrl = this.youtubeUrl + this.ngoYoutubeId;
-    //     //   let viewModal = this.modalCtrl.create(YtvideoPage, { videoUrl: videoUrl });
-    //     //   viewModal.present();
-    //     // }
-    //   }
-    // );
+    
   }
 
   // getWords
