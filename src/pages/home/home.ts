@@ -44,6 +44,7 @@ export class HomePage {
   user_id: any;
   hc_balance: any;
   us_balance: any;
+  cc_number: any;
   constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private global: GlobalProvider, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, public loadingCtrl: LoadingController, private sharing: SocialSharing, private fcm: FCM, private alertCtrl: AlertController) {
 
     // request data from server
@@ -102,6 +103,7 @@ export class HomePage {
       this.us_balance = this.toLocaleString(parseFloat(data.data.us_balance).toFixed(2));
       this.hc_balance = this.toLocaleString(parseFloat(data.data.hc_balance).toFixed(2));
       this.user_id = data.data.user_id;
+      this.cc_number = data.data.card_last_digit;
 
       // get user bighearts
       this.homeService.getUserDashboardData(this.user_id).subscribe(res => {

@@ -92,8 +92,8 @@
     </div>
     <div class="textarea-div">
       <ion-row>
-        <button ion-button block (click)="addPaymentMethod()" color="appColor" style="margin: 10px 0;" *ngIf="!card_btn">Tap to Add Card</button>
-        <button ion-button block color="appColor" style="margin: 10px 0;" *ngIf="card_btn">{{ '************'+ card_number + ' card exist' }}</button>
+        <button ion-button block (click)="addPaymentMethod()" color="appColor" style="margin: 10px 0;text-transform: inherit;" *ngIf="!card_btn">Tap to Add Card</button>
+        <button ion-button block color="appColor" style="margin: 10px 0;text-transform: inherit;" *ngIf="card_btn">{{ 'card **'+ card_number + ' registered' }}</button>
       </ion-row>
       <!-- <ion-row>
         <button ion-button block color="appColor" style="margin: 10px 0;">Add Bank Payment (zero charge)</button>
@@ -156,7 +156,7 @@
         </ion-col>
         <ion-col col-11>
           <p *ngIf="!card_btn">US Tax Deductible Only</p>
-          <p *ngIf="card_btn">US Tax Deductible Only {{ '****'+card_number }}</p>
+          <p *ngIf="card_btn">US Tax Deductible Only</p>
         </ion-col>
       </ion-row>
     </div>
@@ -241,7 +241,7 @@
         </ng-container>
       </ion-list>
     </div>
-    <div class="textarea-div" *ngIf="all_bh.length < 1">
+    <div class="textarea-div" *ngIf="all_bh.length < 1 && selected_charity.length > 0">
       <ion-row>
         <p>There are no BigHeart in these selected causes. Please select other causes.</p>
       </ion-row>

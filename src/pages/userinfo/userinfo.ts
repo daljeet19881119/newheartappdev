@@ -275,6 +275,7 @@ export class UserinfoPage {
 
     if(this.checkRegion == false && this.checkCountry == false) {
       this.preference = '';
+      this.bh_id_arr = [];
     }
   }
 
@@ -337,11 +338,20 @@ export class UserinfoPage {
     else {
 
       if (this.validateEmail(this.email) == true) {
-        // check if mobileno and coutnry not empty then 
-        if (this.mobileno !== null && this.country !== null) {
-          // paymentAlert
-          this.paymentAlert();
+        // check if card registered
+        if(this.card_btn == false || this.card_number == null || this.card_number == "") {
+          this.createAlert("Your card is not registered. Please register your card.");
         }
+        else if(this.bh_id_arr.length < 1) {
+          this.createAlert("There is no Bigheart in selected causes. Please select other causes to donate to Bighearts.");
+        }
+        else{
+          // check if mobileno and coutnry not empty then 
+          if (this.mobileno !== null && this.country !== null) {
+            // paymentAlert
+            this.paymentAlert();
+          }
+        }        
       }
       else {
         this.createAlert("please enter valid email");
@@ -350,8 +360,7 @@ export class UserinfoPage {
   }
 
   // makeServerRequest
-  makeServerRequest() {
-    this.createLoader('submitting your request');
+  makeServerRequest() {   
 
     // declare empty array for charity
     let charities = [];
@@ -442,25 +451,26 @@ export class UserinfoPage {
       recurring_fees: recurring_fees
     };
 
-    this.userService.verifyUserProfile(data).subscribe(data => {
-      this.profileStatus = data.data.profile_status;
-
-      // check if profileStatus is null
-      if (this.profileStatus !== null && this.profileStatus == 'verified') {
-        // gotodashboard
-        this.navCtrl.setRoot(HomePage);
-      }
-
-      // check if msg failed
-      if (data.msg == 'failed') {
-        this.createAlert('Server is unable to submit your request. Please try again later.');
-      }
-
-      this.loader.dismiss();
-    }, err => {
-      console.log(err);
-      this.loader.dismiss();
-    });
+      this.createLoader('submitting your request');
+      this.userService.verifyUserProfile(data).subscribe(data => {
+        this.profileStatus = data.data.profile_status;
+  
+        // check if profileStatus is null
+        if (this.profileStatus !== null && this.profileStatus == 'verified') {
+          // gotodashboard
+          this.navCtrl.setRoot(HomePage);
+        }
+  
+        // check if msg failed
+        if (data.msg == 'failed') {
+          this.createAlert('Server is unable to submit your request. Please try again later.');
+        }
+  
+        this.loader.dismiss();
+      }, err => {
+        console.log(err);
+        this.loader.dismiss();
+      });   
   }
 
   // gotoCharityPage
@@ -581,10 +591,7 @@ export class UserinfoPage {
       browser.show();      
       
       browser.on('loadstop').subscribe(event => {
-        browser.insertCSS({ code: "body{color: #ae0433;}h4{padding: 10px;}.btn-div{margin: 50px 0;display:none;}button#back_to_app{margin: 0px auto;display: block;padding: 15px 40px;color: #fff;background: #ae0433;border-radius: 5px;}" });  
-        
-        // browser.executeScript({code: ""});   
-        
+        browser.insertCSS({ code: "body{color: #ae0433;}h4{padding: 10px;}" });  
       });      
 
       browser.on('exit').subscribe(() => {
@@ -594,7 +601,10 @@ export class UserinfoPage {
         // getUserById
         this.userService.getUserById(this.user_id).subscribe(data => {
             this.card_number = data.card_last_digit;
-            this.card_btn = true;
+
+            if(this.card_number != "" || this.card_number != null) {
+              this.card_btn = true;
+            }           
 
           this.loader.dismiss();
         }, err => {
@@ -618,6 +628,7 @@ export class UserinfoPage {
 
   // getPreferenceCheck
   getPreferenceCheck(country: boolean, region: boolean) {
+    this.location = "";
     // check if country and region false
     if (country == false && region == false) {
       this.filterAllBH();
@@ -676,7 +687,6 @@ export class UserinfoPage {
     // get countries from storage
     this.userService.getAllCountries().subscribe(country => {
       this.countries = country;
-      this.location = this.countries[0].id;
     }, err => {
       console.log('err: ' + err);
     });
@@ -687,7 +697,6 @@ export class UserinfoPage {
     // request region from server
     this.userService.getAllRegions().subscribe(data => {
       this.allRegions = data;
-      this.location = this.allRegions[0].id;
     }, err => {
       console.log('err: ' + err);
     });
