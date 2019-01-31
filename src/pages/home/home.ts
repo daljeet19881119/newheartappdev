@@ -306,4 +306,13 @@ export class HomePage {
     });
     alert.present();
   }
+
+  // getWords
+  getWords(text: string) {
+    // return only 5 words
+    // return this.ngoDesc.split(/\s+/).slice(0,16).join(" ");
+    
+    // return only 30 character
+    return text.slice(0, 20) + '.....';
+  }
 }

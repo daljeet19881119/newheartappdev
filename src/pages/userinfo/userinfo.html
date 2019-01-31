@@ -92,8 +92,8 @@
     </div>
     <div class="textarea-div">
       <ion-row>
-        <button ion-button block (click)="addPaymentMethod()" color="appColor" style="margin: 10px 0;text-transform: inherit;" *ngIf="!card_btn">Tap to Add Card</button>
-        <button ion-button block color="appColor" style="margin: 10px 0;text-transform: inherit;" *ngIf="card_btn">{{ 'card **'+ card_number + ' registered' }}</button>
+        <button ion-button block (click)="addPaymentMethod()" color="appColor" style="margin: 10px 0;text-transform: inherit;" *ngIf="!card_btn">Tap to Add Card*</button>
+        <button ion-button block color="appColor" style="margin: 10px 0;text-transform: inherit;" *ngIf="card_btn">{{ 'Card **'+ card_number + ' registered' }}</button>
       </ion-row>
       <!-- <ion-row>
         <button ion-button block color="appColor" style="margin: 10px 0;">Add Bank Payment (zero charge)</button>
@@ -234,8 +234,8 @@
               (click)="viewBHProfile(bh.user_id)">
               <img [src]="bh.bh_founder_img_url" [alt]="bh.bh_name">
             </ion-avatar>
-            <ion-label (click)="viewBHProfile(bh.user_id)" style="z-index: 1;">{{ bh.bh_founder_name+'
-              ('+bh.bh_name+')' }}</ion-label>
+            <ion-label (click)="viewBHProfile(bh.user_id)" style="z-index: 1;">{{ (bh.bh_associated_non_profit!="")? bh.bh_founder_name+'
+              ('+bh.bh_associated_non_profit+')' : bh.bh_founder_name }}</ion-label>
             <ion-checkbox [(ngModel)]="bh.checked" (click)="getSelectedNgo(bh.checked, bh.user_id);" item-end></ion-checkbox>
           </ion-item>
         </ng-container>
@@ -269,6 +269,17 @@
         </ion-col>
         <ion-col col-11 (click)="termsCheck()">
           <p>I Accept the Terms and Privacy.*</p>
+        </ion-col>
+      </ion-row>
+    </div>
+    <div class="textarea-div">
+      <ion-row>
+        <p class="upload-para">Upload image of yourself or take a picture</p>
+        <ion-col col-7 class="profile-col">
+          <button ion-button small color="white" class="upload-btn" (click)="pictureAlert()">Choose file</button>
+          <button ion-button small color="white" class="upload-btn" (click)="pictureAlert()">
+            <ion-icon name="camera"></ion-icon>
+          </button>
         </ion-col>
       </ion-row>
     </div>

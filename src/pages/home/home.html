@@ -29,9 +29,6 @@
         </ng-container>        
         <ion-toolbar color="appColor" class="payment-toolbar">
             <ion-segment [(ngModel)]="latestTabs" (click)="showTabs()">
-                <!-- <ion-segment-button value="payments" class="payment-segments">
-                    <span>Latest <span class="segment-span">Payments</span></span>
-                </ion-segment-button> -->
                 <ion-segment-button value="donations" class="payment-segments">
                     <span>Latest <span class="segment-span">Donations</span></span>
                 </ion-segment-button>
@@ -48,20 +45,21 @@
                 <div class="donation-list" id="donation-list">
                     <ion-list *ngFor="let donation of latestDonations" class="donations-lists">
                         <ion-item class="donation-items">
-                            <ion-avatar item-start class="ngo-avatar">
-                                <img [src]="donation.bh_founder_img" class="ngo-img" (click)="gotoProfilePage(donation.user_id)" *ngIf="donation.user_type == 'bh_user'">
-                                <img [src]="donation.bh_founder_img" class="ngo-img" *ngIf="donation.user_type != 'bh_user'">
-                            </ion-avatar>
+                            <ion-avatar item-start>
+                                <div class="ngo-img-div" [style.backgroundImage]="'url('+donation.bh_founder_img+')'"  (click)="gotoProfilePage(donation.user_id)" *ngIf="donation.user_type == 'bh_user'"></div>
+                                <div class="ngo-img-div" [style.backgroundImage]="'url('+donation.bh_founder_img+')'"  *ngIf="donation.user_type == 'user'"></div>
+                                <div class="ngo-img-div" [style.backgroundImage]="'url(assets/imgs/logo.png)'"  *ngIf="donation.user_type == 'hg_user'"></div>
+                            </ion-avatar>                            
                             <ion-row>
                                 <ion-col col-5 no-padding>
-                                    <h2 class="ngo-name">{{ donation.bh_founder_name}}</h2>
+                                    <h2 class="ngo-name">{{ (donation.bh_founder_name.length > 20) ? getWords(donation.bh_founder_name) : donation.bh_founder_name}}</h2>
                                     <p class="ngo-date">{{ donation.transaction_date}}</p>
                                     <p class="ngo-date" *ngIf="donation.user_type == 'bh_user'">{{ 'Donation to '+ donation.bh_name}}</p>
-                                    <p class="ngo-date" *ngIf="donation.user_type == 'user'">{{ 'Deposit from cc **'+ cc_number}}</p>
+                                    <p class="ngo-date" *ngIf="donation.user_type == 'user'">{{ 'Deposit from Card no. **'+ cc_number}}</p>
                                     <p class="ngo-date" *ngIf="donation.user_type == 'hg_user'">{{ 'cc fee'}}</p>
                                 </ion-col>
                                 <ion-col col-7 style="text-align: right;" no-padding>
-                                    <p>
+                                    <p style="font-size:12px;">
                                         <ion-icon name="heart-outline" class="heart-small-icon"></ion-icon> 
                                         <span class="heart-coin">{{ (donation.user_type == 'user') ? '+'+donation.transaction_hc_amount : '-'+donation.transaction_hc_amount }}</span> 
                                         <span class="heart-coin">({{ (donation.user_type == 'user') ? '+$'+donation.transaction_us_amount : '-$'+donation.transaction_us_amount }})</span>
@@ -79,31 +77,6 @@
                     </ion-list>
                 </div>                
             </div> 
-            <!-- <div class="list-part" *ngSwitchCase="'payments'">
-                <div class="donation-list" id="payment-list">
-                    <ion-list *ngFor="let payment of latestPayments" class="payments-lists">
-                        <ion-item class="donation-items">
-                            <ion-row>
-                                <ion-col col-6 no-padding>
-                                    <h2 class="ngo-name">{{ payment.type }}</h2>
-                                    <p class="ngo-date">{{ payment.date }}</p>
-                                </ion-col>
-                                <ion-col col-6 style="text-align: right;" no-padding>
-                                    <p>
-                                        <ion-icon name="heart-outline" class="heart-small-icon"></ion-icon> 
-                                        <span class="heart-coin">{{ payment.heart_amount }}</span> 
-                                        <span class="heart-coin-dollor">(${{ payment.us_amount }})</span>
-                                    </p>
-                                    <p class="play-para">
-                                        <ion-icon name="heart-outline" class="heart-small-icon"></ion-icon> 
-                                        <span>{{ payment.balance }}</span>
-                                    </p>
-                                </ion-col>
-                            </ion-row>                
-                        </ion-item>
-                    </ion-list>
-                </div>                
-            </div> -->
         </div>
     </div>    
 </ion-content>
@@ -111,9 +84,6 @@
     <div class="view-all" (click)="viewAll()" id="view-all" *ngIf="latestTabs == 'donations' && showDonationBtn">
         <button ion-button color="appColor" small>View All</button>
     </div> 
-    <!-- <div class="view-all" id="view-all-payments" *ngIf="latestTabs == 'payments' && showPaymentBtn" (click)="viewAllPayments()">
-        <button ion-button color="appColor" small>View All</button>
-    </div>      -->
     <ion-toolbar no-padding>             
         <div class="recomended-hearts">
             <p class="para-footer">Recommended BigHearts</p>
@@ -126,13 +96,6 @@
                     </ion-slide>
                 </ng-container>
             </ion-slides>
-            <!-- <ion-slides [loop]="charityLoop" [autoplay]="charityAutoplay" *ngIf="charities" slidesPerView="1">
-                <ng-container *ngFor="let charity of charities">
-                    <ion-slide>
-                        <p class="cat-text">{{ charity.name }}</p>
-                    </ion-slide>
-                </ng-container>
-            </ion-slides> -->
         </div>
     </ion-toolbar>
 </ion-footer>

@@ -46,8 +46,8 @@
                 <div class="donation-list" id="donation-list">
                     <ion-list *ngFor="let donation of latestDonations" class="donations-lists">
                         <ion-item class="donation-items">
-                            <ion-avatar item-start class="ngo-avatar">
-                                <img [src]="donation.profile_pic" class="ngo-img">
+                            <ion-avatar item-start>
+                                <div class="ngo-img-div" [style.backgroundImage]="'url('+donation.profile_pic+')'"></div>
                             </ion-avatar>
                             <ion-row>
                                 <ion-col col-3 no-padding>
@@ -55,7 +55,7 @@
                                     <p class="ngo-date">{{donation.transaction_date}}</p>
                                 </ion-col>
                                 <ion-col col-9 style="text-align: right;" no-padding>
-                                    <p>
+                                    <p style="font-size: 12px;">
                                         <ion-icon name="heart-outline" class="heart-small-icon"></ion-icon>
                                         <span class="heart-coin">{{ '+'+donation.transaction_hc_amount}}</span>
                                         <span class="heart-coin">(+${{donation.transaction_us_amount}})</span>

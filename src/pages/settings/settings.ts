@@ -24,8 +24,7 @@ export class SettingsPage {
   email_code: number;
   email_verification_code: number = null;
   phone_verifciation_code: number = null;
-  verification_type: string;
-  cause_percentage: any;
+  verification_type: string;  
   charities: any = [];
   checkCharity: boolean = false;
   all_countries: any = [];
@@ -42,14 +41,41 @@ export class SettingsPage {
   loader: any;
   old_mobno: any;
   old_email: any;
-  donation_amount: any = 20;
+  
   selected_charity: any = [];
   all_charites: any = [];
+  cause_percentage: number = 90;
+  donation_amount: number = 20;
+  max: number = 1000;
+  sectors: any = [{
+    from: 0,
+    to: 500,
+    color: 'orange'
+  }, {
+    from: 500,
+    to: 1000,
+    color: '#30b32d'
+  }];
+
+  sectors_1: any = [{
+    from: 0,
+    to: 45,
+    color: 'orange'
+  }, {
+    from: 45,
+    to: 90,
+    color: '#30b32d'
+  }];
+
+  disablePlusBtn: boolean;
+  disableMinusBtn: boolean;
+  disableCausePlusBtn: boolean;
+  disableCauseMinusBtn: boolean;
   constructor(public navCtrl: NavController, public navParams: NavParams, private global: GlobalProvider, private userService: UserProvider, private loadingCtrl: LoadingController, private modalCtrl: ModalController, private camera: Camera, private transfer: FileTransfer, private alertCtrl: AlertController, private platform: Platform) {
 
     // if user try goback then go to homepage
     this.platform.registerBackButtonAction(() => {
-      this.updateUserData();
+      // this.updateUserData();
       this.navCtrl.setRoot(HomePage);
       this.navCtrl.pop();
     });    
@@ -58,7 +84,7 @@ export class SettingsPage {
   ionViewDidLoad() {
     // navbar backbutton click
     this.navBar.backButtonClick = () => {
-      this.updateUserData();
+      // this.updateUserData();
       this.navCtrl.pop();
     };
 
@@ -80,7 +106,79 @@ export class SettingsPage {
 
     // call getRegions
     this.getRegions();
+  }
 
+  // incrementDonation
+  incrementDonation() {
+    if(this.donation_amount < 25) {      
+      this.donation_amount = this.donation_amount + 5;
+      this.donation_amount = 25;
+    }
+    else if (this.donation_amount < 500 && this.donation_amount >= 25) {
+      this.donation_amount = this.donation_amount + 25;
+    }
+    else if (this.donation_amount >= 500 && this.donation_amount <= 950) {
+      this.donation_amount = this.donation_amount + 50;
+    }
+
+    if (this.donation_amount >= 25 && this.donation_amount < 950) {
+      this.disableMinusBtn = false;
+      this.disablePlusBtn = false;
+    }
+    else if (this.donation_amount > 950) {
+      this.disablePlusBtn = true;
+      this.disableMinusBtn = false;
+    }
+  }
+
+  // decrementDonation
+  decrementDonation() {
+    if(this.donation_amount <= 25) {
+      this.donation_amount = this.donation_amount - 5;
+    }
+    else if (this.donation_amount <= 500 && this.donation_amount > 25) {
+      this.donation_amount = this.donation_amount - 25;
+    }
+    else if (this.donation_amount > 500 && this.donation_amount <= 1000) {
+      this.donation_amount = this.donation_amount - 50;
+    }
+
+    if (this.donation_amount >= 25 && this.donation_amount < 1000) {
+      this.disableMinusBtn = false;
+      this.disablePlusBtn = false;
+    }
+    else if (this.donation_amount < 25) {
+      this.disablePlusBtn = false;
+      this.disableMinusBtn = true;
+    }
+  }
+
+  // incrementCause
+  incrementCause() {  
+    this.cause_percentage = this.cause_percentage + 5;
+
+    if(this.cause_percentage > 85) {
+      this.disableCausePlusBtn = true;
+      this.disableCauseMinusBtn = false;
+    }
+    else if(this.cause_percentage < 90 && this.cause_percentage > 1) {
+      this.disableCausePlusBtn = false;
+      this.disableCauseMinusBtn = false;
+    }
+  }
+
+  // decrementCause
+  decrementCause() {    
+    this.cause_percentage = this.cause_percentage - 5;
+
+    if(this.cause_percentage < 90 && this.cause_percentage > 1) {
+      this.disableCausePlusBtn = false;
+      this.disableCauseMinusBtn = false;
+    }
+    else if(this.cause_percentage <= 1) {
+      this.disableCausePlusBtn = false;
+      this.disableCauseMinusBtn = true;
+    }
   }
 
   // getUserData
@@ -98,9 +196,23 @@ export class SettingsPage {
         this.old_email = data.data.email;
         this.email = data.data.email;
         this.verification_type = data.data.verification_type;
-        this.cause_percentage = data.data.cause_percentage;
+        this.cause_percentage = parseInt(data.data.cause_percentage);
         this.preference_type = data.data.preference_type;
 
+        // check cuase gauge meter
+        if(this.cause_percentage <= 5) {
+          this.disableCauseMinusBtn = true;
+          this.disableCausePlusBtn = false;
+        }
+        if(this.cause_percentage > 5 && this.cause_percentage < 85){
+          this.disableCausePlusBtn = false;
+          this.disableCauseMinusBtn = false;
+        }
+        if(this.cause_percentage >= 85) {
+          this.disableCausePlusBtn = true;
+          this.disableCauseMinusBtn = false;
+        }
+        
         if(this.preference_type == 'country') {
           this.preference_location = data.data.country;
         }
@@ -111,7 +223,21 @@ export class SettingsPage {
         this.userid = data.data.user_id;
         this.profile_pic_src = data.data.profile_pic_src;
         this.dial_code = data.data.country_dial_code;
-        this.donation_amount = data.data.us_donation_amount;
+        this.donation_amount = parseInt(data.data.us_donation_amount);
+        
+        // check donation gauge meter
+        if (this.donation_amount <= 25) {
+          this.disableMinusBtn = true;
+          this.disablePlusBtn = false;
+        }
+        if(this.donation_amount > 25 && this.donation_amount < 950) {
+          this.disableMinusBtn = false;
+          this.disablePlusBtn = false;
+        }
+        if (this.donation_amount >= 950) {
+          this.disableMinusBtn = false;
+          this.disablePlusBtn = true;
+        }
         
         let selected_charity_id: any = [];
         data.selected_charities.forEach(element => {
@@ -166,7 +292,7 @@ export class SettingsPage {
         this.createLoader('Settings Saved');
 
         // calculate hc percentage
-        let hc_percentage = 100 - parseInt(this.cause_percentage);
+        let hc_percentage = 100 - this.cause_percentage;
 
         let preference_type = this.preference_type;
 

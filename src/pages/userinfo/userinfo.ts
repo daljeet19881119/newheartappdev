@@ -342,7 +342,7 @@ export class UserinfoPage {
         if(this.card_btn == false || this.card_number == null || this.card_number == "") {
           this.createAlert("Your card is not registered. Please register your card.");
         }
-        else if(this.bh_id_arr.length < 1) {
+        else if(this.bh_id_arr.length < 1 && this.all_bh.length < 1) {
           this.createAlert("There is no Bigheart in selected causes. Please select other causes to donate to Bighearts.");
         }
         else{
@@ -556,7 +556,7 @@ export class UserinfoPage {
                 this.createAlert("Withdrawal Unsuccessful, please check the information provided or change to another card.");
               }
               else if(transactionRes.msg == 'success') {
-                this.createAlert("Withdrawal Successful. We will now distribute the withdrawn amount to your Bighearts.");
+                this.createAlert("Withdrawal Successful. And we have distributed funds to your selected BigHearts!");
                 this.makeServerRequest();
               }
             }, err => {
@@ -788,5 +788,9 @@ export class UserinfoPage {
       page: 'register',
       uuid: this.uuid
     });
+  }
+
+  pictureAlert() {
+    this.createAlert("You can do this later");
   }
 }

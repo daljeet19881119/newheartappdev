@@ -101,21 +101,18 @@ page-home {
     .donation-items{
         border-top: 0px!important;
     }
-    .ngo-avatar{
-        border: 2px solid #ae0433;
-        border-radius: 50%;
-    }
     .ngo-img{
         width: 50px!important;
         height: 50px!important;
     }
     .ngo-name{
         color: #ae0433; 
-        font-weight: 500;   
+        font-weight: 500; 
+        font-size: 14px;  
     }
     .ngo-date{
-        margin: 5px 0;
-        font-size: 13px;
+        margin: 4px 1px;
+        font-size: 12px;
     }
     .heart-small-icon{
         transform: rotate(270deg);
@@ -131,7 +128,7 @@ page-home {
     }
     .heart-coin{
         color: #ae0433;
-        font-size: 14px;
+        font-size: 13px;
     }
     .heart-coin-dollor{
         font-size: 13px;
@@ -173,11 +170,12 @@ page-home {
         margin: 5px 0 10px 0;
     }
     .ngo-img-div{
-        width: 60px;
-        height: 60px;
+        width: 50px;
+        height: 50px;
         margin-left: auto;
         margin-right: auto;
         border: 1px solid #ae0433;
+        background-color: #ae0433;
         border-radius: 50%;
         background-position: center;
         background-size: cover;
@@ -199,11 +197,10 @@ page-home {
     }
     .list-part{
         height: 400px;
-        // overflow: scroll;
+        overflow: scroll;
+        position: relative;
     }
-    .donation-list{
-        height: 100%;
-        overflow: auto;        
+    .donation-list{       
         margin-top: 100px;
         margin-bottom: 50px;
     }
@@ -222,8 +219,7 @@ page-home {
         height: 0px;
     }
     .bottom-part.tab-donations{
-        // height: 148px;
-        overflow: scroll;
+        height: 100%;
     }
     .cat-text{
         color: #ae0433;
