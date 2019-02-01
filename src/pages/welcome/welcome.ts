@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { VerifynumberPage } from '../verifynumber/verifynumber';
 import { UserProvider } from '../../providers/user/user';
 import { UserinfoPage } from '../userinfo/userinfo';
 import { HomePage } from '../home/home';
 import { BhHomePage } from '../bh-home/bh-home';
 import { GlobalProvider } from '../../providers/global/global';
+import { SigninPage } from '../signin/signin';
 
 @IonicPage()
 @Component({
@@ -32,11 +32,11 @@ export class WelcomePage {
     this.requestData(this.uuid);
   }
 
-  // gotoVerifyPage
-  gotoVerifyPage() {
+  // gotoLoginPage
+  gotoLoginPage() {
     setTimeout(() => {
       this.cleanStorage();
-      this.navCtrl.setRoot(VerifynumberPage);
+      this.navCtrl.setRoot(SigninPage);
     }, 2000);
   }
 
@@ -45,7 +45,7 @@ export class WelcomePage {
     this.userService.getUserByDeviceId(uuid).subscribe(data => {
       if (data.msg == 'success') {
         if (data.data.verification == 'unverified' && data.data.profile_status == 'unverified') {
-          this.gotoVerifyPage();
+          this.gotoLoginPage();
         }
         if (data.data.verification == 'verified' && data.data.profile_status == 'unverified') {
           this.navCtrl.setRoot(UserinfoPage, {
@@ -68,10 +68,10 @@ export class WelcomePage {
         }
       }
       if (data.length < 1) {
-        this.gotoVerifyPage();
+        this.gotoLoginPage();
       }
     }, err => {
-      this.gotoVerifyPage();
+      this.gotoLoginPage();
     });
   }
 

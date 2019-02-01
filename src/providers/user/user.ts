@@ -309,4 +309,55 @@ export class UserProvider {
   getAllBHOfUser(user_id: any) {
     return this._http.get(this.global.apiUrl('/getAllBHOfUser/'+user_id)).map(res => res.json());
   }
+
+  // logout user
+  logout(uuid: any) {
+    // set headers
+    let headers = new Headers();
+    headers.append("Accept", "application/json");
+
+    // set request option
+    let options = new RequestOptions({ headers: headers });
+
+    // set data to be send
+    let postdata = JSON.stringify({
+      uuid: uuid
+    });
+
+    return this._http.post(this.global.apiUrl('/logout'), postdata, options).map(res => res.json());
+  }
+
+  // login user
+  login(data: any) {
+    // set headers
+    let headers = new Headers();
+    headers.append("Accept", "application/json");
+
+    // set request option
+    let options = new RequestOptions({ headers: headers });
+
+    // set data to be send
+    let postdata = JSON.stringify({
+      data: data
+    });
+
+    return this._http.post(this.global.apiUrl('/login'), postdata, options).map(res => res.json());
+  }
+
+  // send forgot mail
+  sendMail(email: string) {
+    // set headers
+    let headers = new Headers();
+    headers.append("Accept", "application/json");
+
+    // set request option
+    let options = new RequestOptions({ headers: headers });
+
+    // set data to be send
+    let postdata = JSON.stringify({
+      email: email
+    });
+
+    return this._http.post(this.global.apiUrl('/forgotPassword'), postdata, options).map(res => res.json());
+  }
 }

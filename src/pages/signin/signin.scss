@@ -1,0 +1,28 @@
+page-signin {
+    .logo-div{
+        background-position: center!important;
+        height: 60px;
+        width: 60px;
+        margin-left: auto;
+        background-size: cover!important;
+        margin-right: auto;
+        display: block;        
+    }
+    .item-feilds{
+        border-radius: 5px;
+        margin: 10px 0;
+        padding: 0 10px;
+    }
+    .register-btn{
+        height: 3em;
+        color: #ae0433;
+        font-size: 18px;
+        font-weight: 400;
+        border-radius: 5px;
+    }
+    .forgot-para{
+        color: #fff;
+        font-size: 15px;
+        text-decoration: underline;
+    }
+}

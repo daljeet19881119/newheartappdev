@@ -45,9 +45,10 @@ import { ViewNgoPage } from '../pages/view-ngo/view-ngo';
 import { CardIO } from '@ionic-native/card-io';
 import { SettingsPage } from '../pages/settings/settings';
 import { FCM } from '@ionic-native/fcm';
-import { TestPage } from '../pages/test/test';
 import { Ng2GaugeModule } from 'ng2-gauge';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
+import { SigninPage } from '../pages/signin/signin';
+import { ForgotPasswordPage } from '../pages/forgot-password/forgot-password';
 
 @NgModule({
   declarations: [
@@ -72,7 +73,8 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
     UserBigheartsPage,
     ViewNgoPage,
     SettingsPage,
-    TestPage
+    SigninPage,
+    ForgotPasswordPage
   ],
   imports: [
     BrowserModule,
@@ -105,7 +107,8 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
     UserBigheartsPage,
     ViewNgoPage,
     SettingsPage,
-    TestPage
+    SigninPage,
+    ForgotPasswordPage
   ],
   providers: [
     StatusBar,

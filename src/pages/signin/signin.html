@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-navbar color="appColor">
+    <ion-row>
+      <ion-col no-padding>
+        <div class="logo-div" style="background: url('assets/imgs/logo.png');"></div>
+      </ion-col>
+    </ion-row>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding style="background: #ae0433;">
+  <h3 text-center style="color: #ffffff;">Sing In</h3>
+  <ion-list style="margin-top: 100px;">
+    <ion-item no-padding class="item-feilds">
+      <ion-label fixed>Username</ion-label>
+      <ion-input type="text" [(ngModel)]="email"></ion-input>
+    </ion-item>
+    <ion-item no-padding class="item-feilds">
+      <ion-label fixed>Password</ion-label>
+      <ion-input type="password" [(ngModel)]="password"></ion-input>
+    </ion-item>    
+  </ion-list>
+  <button ion-button block color="white" class="register-btn" (click)="signin()">Login</button>
+  <p text-center class="forgot-para" (click)="forgotPassword()">Forgot Password?</p>
+  <h3 text-center style="color: #ffffff;margin: 50px 0;">OR</h3>
+  <button ion-button block color="white" class="register-btn" (click)="register()">Register</button>
+</ion-content>

@@ -121,10 +121,25 @@ export class BhHomePage {
 
     // get login user data
     this.userService.getUserByDeviceId(this.uuid).subscribe((data) => {
-      this.name = data.data.fname;
+      if(data.data.fname == "") {
+        this.name = data.data.bh_name;
+      }
+      else{
+        this.name = data.data.fname;
+      }
+      if(data.data.hc_balance == "") {
+        this.hc_balance = 0;
+      }
+      else{
+        this.hc_balance = data.data.hc_balance;
+      }
+      if(data.data.us_balance == "") {
+        this.us_balance = 0;
+      }
+      else{
+        this.us_balance = data.data.us_balance;
+      }
       this.user_id = data.data.user_id;
-      this.hc_balance = data.data.hc_balance;
-      this.us_balance = data.data.us_balance;      
       
       // get user bighearts
       this.bhHomeService.getBigheartUsers(this.user_id).subscribe(res => {

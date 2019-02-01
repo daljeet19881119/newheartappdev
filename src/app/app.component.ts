@@ -8,6 +8,9 @@ import { MerchantFormPage } from '../pages/merchant-form/merchant-form';
 import { VolunteerFormPage } from '../pages/volunteer-form/volunteer-form';
 import { UserProfilePage } from '../pages/user-profile/user-profile';
 import { SettingsPage } from '../pages/settings/settings';
+import { SigninPage } from '../pages/signin/signin';
+import { UserProvider } from '../providers/user/user';
+import { GlobalProvider } from '../providers/global/global';
 
 
 @Component({
@@ -19,7 +22,7 @@ export class MyApp {
 
   @ViewChild(Nav) nav: Nav;
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private userService: UserProvider, private global: GlobalProvider) {
     platform.ready().then(() => {
 
       // Okay, so the platform is ready and our plugins are available.
@@ -53,6 +56,16 @@ export class MyApp {
   // gotoSettingsPage
   gotoSettingsPage() {
     this.nav.push(SettingsPage);
+  }
+
+  // logout
+  logout() {
+    const uuid = this.global.uuid();
+    this.userService.logout(uuid).subscribe(data => {
+      if(data.msg == 'success') {
+        this.nav.setRoot(SigninPage);
+      }      
+    });    
   }
 }
 
