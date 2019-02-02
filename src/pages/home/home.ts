@@ -258,7 +258,7 @@ export class HomePage {
   // shareInfo
   shareInfo(ngoName: string, ngoFounderImg: string, ngoFounderName: string, ngoFounderDesc: string, videoUrl: string = null) {
 
-    let message = ngoFounderDesc;
+    let message = "I just donated from my HeartApp Link. \n"+ ngoFounderDesc;
     let subject = ngoFounderName + ' founder of ' + ngoName;
     let file = ngoFounderImg;
     let url;

@@ -30,7 +30,7 @@
         <ion-toolbar color="appColor" class="payment-toolbar">
             <ion-segment [(ngModel)]="latestTabs" (click)="showTabs()">
                 <ion-segment-button value="donations" class="payment-segments">
-                    <span>Latest <span class="segment-span">Donations</span></span>
+                    <span>HeartApp <span class="segment-span">Activities</span></span>
                 </ion-segment-button>
             </ion-segment>
         </ion-toolbar>
@@ -56,7 +56,8 @@
                                     <p class="ngo-date">{{ donation.transaction_date}}</p>
                                     <p class="ngo-date" *ngIf="donation.user_type == 'bh_user'">{{ 'Donation to '+ donation.bh_name}}</p>
                                     <p class="ngo-date" *ngIf="donation.user_type == 'user'">{{ 'Deposit from Card no. **'+ cc_number}}</p>
-                                    <p class="ngo-date" *ngIf="donation.user_type == 'hg_user'">{{ 'cc fee'}}</p>
+                                    <p class="ngo-date" *ngIf="donation.user_type == 'hg_user' && donation.fees_type == 'cc_fee'">{{ 'cc fee'}}</p>
+                                    <p class="ngo-date" *ngIf="donation.user_type == 'hg_user' && donation.fees_type == 'hg_user_fee'">{{ 'Donation to '+donation.bh_founder_name}}</p>
                                 </ion-col>
                                 <ion-col col-7 style="text-align: right;" no-padding>
                                     <p style="font-size:12px;">

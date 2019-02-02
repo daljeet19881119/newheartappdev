@@ -339,10 +339,10 @@ export class UserinfoPage {
 
       if (this.validateEmail(this.email) == true) {
         // check if card registered
-        if(this.card_btn == false || this.card_number == null || this.card_number == "") {
-          this.createAlert("Your card is not registered. Please register your card.");
-        }
-        else if(this.bh_id_arr.length < 1 && this.all_bh.length < 1) {
+        // if(this.card_btn == false || this.card_number == null || this.card_number == "") {
+        //   this.createAlert("Your card is not registered. Please register your card.");
+        // }
+         if(this.bh_id_arr.length < 1 && this.all_bh.length < 1) {
           this.createAlert("There is no Bigheart in selected causes. Please select other causes to donate to Bighearts.");
         }
         else{
@@ -390,11 +390,16 @@ export class UserinfoPage {
     let hc_amount = this.donation_amount * 100;
     let ngo_count = parseInt(this.bh_id_arr.length);
     let cause_percentage = this.cause_percentage;
-    let calculated_amount = hc_amount / 100 * cause_percentage;
-    let hc_balance = hc_amount - calculated_amount;
-    let us_balance = hc_balance / 100;
+    let calculated_amount = hc_amount / 100 * cause_percentage;    
     let hc_amount_per_ngo = calculated_amount / ngo_count;
     let us_amount_per_ngo = hc_amount_per_ngo / 100;
+
+    // calculate hg user fees 10%
+    let hg_hc_amount = hc_amount / 100 * 10;
+    let hg_us_amount = hg_hc_amount / 100;
+
+    let hc_balance = hc_amount - calculated_amount - hg_hc_amount;
+    let us_balance = hc_balance / 100;
 
     let referral_code = '';
     let referral_amount = '';
@@ -422,7 +427,8 @@ export class UserinfoPage {
       recurring_fees = 'false';
     }
 
-    let us_donation_amount = this.donation_amount / 100 * 5 + this.donation_amount;
+    // let us_donation_amount = this.donation_amount / 100 * 5 + this.donation_amount;
+    let us_donation_amount = this.donation_amount;
     let hc_donation_amount = us_donation_amount * 100;
 
     const data = {
@@ -448,9 +454,11 @@ export class UserinfoPage {
       referral_amount: referral_amount,
       verification_type: this.verification_type,
       accept_terms: accept_terms,
-      recurring_fees: recurring_fees
+      recurring_fees: recurring_fees,
+      hg_hc_amount: hg_hc_amount,
+      hg_us_amount: hg_us_amount
     };
-
+    
       this.createLoader('submitting your request');
       this.userService.verifyUserProfile(data).subscribe(data => {
         this.profileStatus = data.data.profile_status;
