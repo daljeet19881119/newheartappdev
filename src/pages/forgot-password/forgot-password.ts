@@ -21,15 +21,15 @@ export class ForgotPasswordPage {
   // sendMail
   sendMail() {
     if(this.email == "") {
-      this.global.createAlert("Please fill the email.");
+      this.global.createAlert("","Please fill the email.");
     }
     else{
       this.userService.sendMail(this.email).subscribe(data => {
           if(data.length < 1) {
-            this.global.createAlert("We did not found your email. Please type the registered email.");
+            this.global.createAlert("","We did not found your email. Please type the registered email.");
           }
           if(data.msg == "success") {
-            this.global.createAlert("We have send the password in your email.");
+            this.global.createAlert("","We have send the password in your email.");
           }
           this.email = "";
       });

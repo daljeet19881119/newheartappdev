@@ -34,7 +34,7 @@ export class SigninPage {
   // signin
   signin() {
     if(this.email == "" || this.password == "") {
-      this.global.createAlert("Please fill both email and password.");
+      this.global.createAlert('', "Please fill both email and password.");
     }
     else{
       const token = this.getToken();
@@ -48,7 +48,7 @@ export class SigninPage {
       this.global.createLoader("Signin");
       this.userService.login(data).subscribe(response => {
           if(response.length < 1) {
-            this.global.createAlert("Either your email or password is incorrect.");
+            this.global.createAlert('', "Either your email or password is incorrect.");
           }        
           // check if user is bigheart or not
           if (response.user_type == 'bh_user') {

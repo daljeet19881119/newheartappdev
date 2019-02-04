@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, AlertController, Platform, ViewController, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, Platform, ViewController } from 'ionic-angular';
 import { UserProvider } from '../../providers/user/user';
+import { GlobalProvider } from '../../providers/global/global';
 
 @IonicPage()
 @Component({
@@ -10,20 +11,19 @@ import { UserProvider } from '../../providers/user/user';
 export class CharitiesPage {
 
   all_charities: any = [];
-  loader: any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController, public platform: Platform, private viewCtrl: ViewController, private userService: UserProvider, private loadingCtrl: LoadingController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public platform: Platform, private viewCtrl: ViewController, private userService: UserProvider, public global: GlobalProvider) {
 
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CharitiesPage');
     // crate loader
-    this.createLoader("loading");
+    this.global.createLoader("loading");
 
     // if charities comming from navparms
     if(this.navParams.get('charities').length > 0 && this.navParams.get('charities')) {
         this.all_charities = this.navParams.get('charities');
-        this.loader.dismiss();
+        this.global.dismissLoader();
     }
     else{
       // get all charities
@@ -32,10 +32,10 @@ export class CharitiesPage {
           element.value = false;
         });
         this.all_charities = charities;  
-        this.loader.dismiss();
+        this.global.dismissLoader();
       }, err => {
         console.log(err);
-        this.loader.dismiss();
+        this.global.dismissLoader();
       }); 
     }
              
@@ -68,12 +68,7 @@ export class CharitiesPage {
     // check if none of charities selected then show alert
     if (count == 0) {
       // create alert
-      const alert = this.alertCtrl.create({
-        title: 'HeartApp',
-        message: 'Please select at least one charity type.',
-        buttons: ['ok']
-      });
-      alert.present();
+      this.global.createAlert('HeartApp','Please select at least one charity type.');
     }
     else {
 
@@ -105,14 +100,5 @@ export class CharitiesPage {
         });
       }
     }
-  }
-
-  // createLoader
-  createLoader(msg: string) {
-    this.loader = this.loadingCtrl.create({
-      content: msg,
-      spinner: 'dots'
-    });
-    this.loader.present();
   }
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, LoadingController, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { UserProvider } from '../../providers/user/user';
 import { Storage } from '@ionic/storage';
 import { HomePage } from '../home/home';
@@ -18,11 +18,10 @@ export class MerchantFormPage {
   shortDesc: string;
   aboutTeam: string;
 
-  loader: any;
   userid: any;
   uuid: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private userService: UserProvider, public alertCtrl: AlertController, public loadingCtrl: LoadingController, private global: GlobalProvider, private storage: Storage, private platform: Platform) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private userService: UserProvider, private global: GlobalProvider, private storage: Storage, private platform: Platform) {
 
     // get data from storage
     this.storage.get('merchantForm').then((val) => {
@@ -63,7 +62,7 @@ export class MerchantFormPage {
     let userid = this.userid;
 
     if (this.fname != null && this.lname != null && this.shortDesc != null && this.aboutTeam != null) {
-      this.createLoader();
+      this.global.createLoader('Please wait...');
 
       const data = {
         user_id: userid,
@@ -77,35 +76,16 @@ export class MerchantFormPage {
       this.userService.saveMerchantFormData(data).subscribe(data => {
         // alert(data.msg);
         this.setDataToStorage(userid, this.fname, this.lname, this.shortDesc, this.aboutTeam);
-        this.loader.dismiss();
+        this.global.dismissLoader();
       }, err => {
         console.log(err);
-        this.loader.dismiss();
+        this.global.dismissLoader();
       });
     }
     else {
-      this.createAlert();
+      this.global.createAlert('', 'Please fill out the required fields.');
     }
 
-  }
-
-  // createAlert
-  createAlert() {
-    const alert = this.alertCtrl.create({
-      message: 'Please fill out the required fields.',
-      buttons: ['ok']
-    });
-
-    alert.present();
-  }
-
-  // createLoader
-  createLoader() {
-    this.loader = this.loadingCtrl.create({
-      spinner: 'dots',
-      content: 'Please wait...'
-    });
-    this.loader.present();
   }
 
   // setDataToStorage

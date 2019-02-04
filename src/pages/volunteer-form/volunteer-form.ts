@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, AlertController, ModalController, Platform, ViewController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, Platform, ViewController } from 'ionic-angular';
 import { UserProvider } from '../../providers/user/user';
 import { Storage } from '@ionic/storage';
 import { Camera, CameraOptions } from '@ionic-native/camera';
@@ -17,7 +17,6 @@ import { HomePage } from '../home/home';
 export class VolunteerFormPage {
 
   countries: any;
-  loader: any;
   uuid: any;
 
   // form variables
@@ -55,7 +54,7 @@ export class VolunteerFormPage {
   charities: any = [];
   checkCharity: boolean = false;
 
-  constructor(private transfer: FileTransfer, public navCtrl: NavController, public navParams: NavParams, private userService: UserProvider, private storage: Storage, public loadingCtrl: LoadingController, public alertCtrl: AlertController, private global: GlobalProvider, private camera: Camera, public modalCtrl: ModalController, private platform: Platform, public viewCtrl: ViewController) {
+  constructor(private transfer: FileTransfer, public navCtrl: NavController, public navParams: NavParams, private userService: UserProvider, private storage: Storage, private global: GlobalProvider, private camera: Camera, public modalCtrl: ModalController, private platform: Platform, public viewCtrl: ViewController) {
 
     // get countries from storage
     this.storage.get('countries').then((country) => {
@@ -175,7 +174,7 @@ export class VolunteerFormPage {
     if (this.fname != null && this.lname != null && this.email != null && this.volunteerLocation != null && this.fewAboutYourself != null && this.moreAboutYourself != null && charities.length != 0) {
       // check if email is valid
       if (this.validateEmail(this.email) == true) {
-        this.createLoader();
+        this.global.createLoader('Please wait...');
         
         const postdata = {
           userid: userid,
@@ -198,10 +197,10 @@ export class VolunteerFormPage {
           // alert(data.msg);
           this.setDataToStorage(userid, this.fname, this.lname, this.email, charities, this.volunteerLocation, this.fewAboutYourself, this.moreAboutYourself, this.profilePic, contact1, contact2, contact3, contact4, contact5);
 
-          this.loader.dismiss();
+          this.global.dismissLoader();
         }, err => {
           console.log('error: ' + err);
-          this.loader.dismiss();
+          this.global.dismissLoader();
         });
       }
       else {
@@ -209,27 +208,8 @@ export class VolunteerFormPage {
       }
     }
     else {
-      this.createAlert();
+      this.global.createAlert('', 'Please fill out the required fields.');
     }
-  }
-
-  // createAlert
-  createAlert() {
-    const alert = this.alertCtrl.create({
-      message: 'Please fill out the required fields.',
-      buttons: ['ok']
-    });
-
-    alert.present();
-  }
-
-  // createLoader
-  createLoader() {
-    this.loader = this.loadingCtrl.create({
-      spinner: 'dots',
-      content: 'Please wait...'
-    });
-    this.loader.present();
   }
 
   // setDataToStorage
@@ -260,7 +240,7 @@ export class VolunteerFormPage {
     // empty testpic
     this.profilePic = '';
 
-    this.createLoader();
+    this.global.createLoader('Please wait...');
 
     const options: CameraOptions = {
       quality: 50,
@@ -297,16 +277,16 @@ export class VolunteerFormPage {
           this.profilePic = this.global.base_url('assets/images/'+ timeStr + '_volunteer.jpg');
         }
         
-        this.loader.dismiss();
+        this.global.dismissLoader();
       }).catch((err) => {
         // alert('Server is unable to upload your image please try again later.');
-        this.loader.dismiss();
+        this.global.dismissLoader();
       });
 
     }, (err) => {
       // Handle error
       console.log(err);
-      this.loader.dismiss();
+      this.global.dismissLoader();
     });
   }
 
@@ -316,7 +296,7 @@ export class VolunteerFormPage {
     // empty testpic
     this.profilePic = '';
 
-    this.createLoader();
+    this.global.createLoader('Please wait...');
 
     const options: CameraOptions = {
       quality: 50,
@@ -354,15 +334,15 @@ export class VolunteerFormPage {
           this.profilePic = this.global.base_url('assets/images/'+ timeStr + '_volunteer.jpg');
         }
         
-        this.loader.dismiss();
+        this.global.dismissLoader();
       }).catch((err) => {
         // alert('Server is unable to upload your image please try again later.');
-        this.loader.dismiss();
+        this.global.dismissLoader();
       });
     }, (err) => {
       // Handle error
       console.log(err);
-      this.loader.dismiss();
+      this.global.dismissLoader();
     });
 
   }

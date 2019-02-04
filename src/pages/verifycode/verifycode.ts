@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, Platform, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { UserinfoPage } from '../userinfo/userinfo';
 import { HomePage } from '../home/home';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -21,12 +21,11 @@ export class VerifycodePage {
   verifyCode: number;
   uuid: any;
   btnDisable: boolean = true;
-  loader: any;
   email: any;
   verification_type: any;
   sendSMS: boolean;
 
-  constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, private alertCtrl: AlertController, public platform: Platform, private global: GlobalProvider, public loadingCtrl: LoadingController, private userService: UserProvider) {
+  constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public platform: Platform, private global: GlobalProvider, private userService: UserProvider) {
 
     // if user try goback then exit app
     this.platform.registerBackButtonAction(() => {
@@ -80,7 +79,7 @@ export class VerifycodePage {
   checkVerifyCode(code: number) {
 
     // call createLoader
-    this.createLoader();
+    this.global.createLoader('Please wait...');
 
     // check if code matched to verifyCode
     if (code == this.verifyCode || code == 1234) {
@@ -91,14 +90,9 @@ export class VerifycodePage {
     }
     else {
       // show alert
-      const alert = this.alertCtrl.create({
-        title: 'Heart App',
-        message: 'Your verification code does not match.',
-        buttons: ['ok']
-      });
-      alert.present();
+      this.global.createAlert('Heart App', 'Your verification code does not match.');
 
-      this.loader.dismiss();
+      this.global.dismissLoader();
       console.log('Oops code not matched!');
     }
   }
@@ -131,7 +125,7 @@ export class VerifycodePage {
         user_id: data.data.user_id
       });
 
-      this.loader.dismiss();
+      this.global.dismissLoader();
     }, err => {
       console.log(err);
     });
@@ -157,16 +151,6 @@ export class VerifycodePage {
     });
   }
 
-  // createLoader
-  createLoader() {
-    this.loader = this.loadingCtrl.create({
-      spinner: 'dots',
-      content: 'Please wait...'
-    });
-
-    this.loader.present();
-  }
-
   // reload
   reload() {
     this.splashScreen.show();
@@ -180,10 +164,6 @@ export class VerifycodePage {
       message = `We've sent an email with an activation code to your email <b>${this.email}</b>`;
     }
 
-    const alert = this.alertCtrl.create({
-      message: message,
-      buttons: ['ok']
-    });
-    alert.present();
+    this.global.createAlert('', message);
   }
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { UserProvider } from '../../providers/user/user';
 import { GlobalProvider } from '../../providers/global/global';
@@ -13,12 +13,11 @@ import { ProfilePage } from '../profile/profile';
 })
 export class UserBigheartsPage {
 
-  loader: any;
   all_ngo: any = [];
   uuid: any;
   ngo_ids: any = [];
   user_id: any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private userService: UserProvider, public loadingCtrl: LoadingController, private global: GlobalProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private userService: UserProvider, private global: GlobalProvider) {
   }
 
   ionViewDidLoad() {
@@ -37,7 +36,7 @@ export class UserBigheartsPage {
       this.user_id = data.data.user_id;
 
       // create loader
-      this.createLoader();
+      this.global.createLoader('loading');
 
       // getAllBHOfUser
       this.userService.getAllBHOfUser(this.user_id).subscribe(all_bh => {
@@ -52,17 +51,17 @@ export class UserBigheartsPage {
 
         this.all_ngo = all_bh;
 
-        this.loader.dismiss();
+        this.global.dismissLoader();
       }, err => {
         console.log(err);
-        this.loader.dismiss();
+        this.global.dismissLoader();
       });
     }, err => console.log(err));
   }
 
   // get ngo by charity name
   getNgoByCharity(selected_charity: any) {
-    this.createLoader();
+    this.global.createLoader('loading');
     this.userService.getAllCharities().subscribe(data => {
       let charity_ids = [];
       data.forEach(element => {
@@ -88,14 +87,14 @@ export class UserBigheartsPage {
         });
         this.all_ngo = res;
 
-        this.loader.dismiss();
+        this.global.dismissLoader();
       }, err => {
         console.log(err);
-        this.loader.dismiss();
+        this.global.dismissLoader();
       });
     }, err => {
       console.log(err);
-      this.loader.dismiss();
+      this.global.dismissLoader();
     });
   }
 
@@ -116,19 +115,9 @@ export class UserBigheartsPage {
     }
   }
 
-  // createLoader
-  createLoader(msg: string = "loading") {
-    this.loader = this.loadingCtrl.create({
-      spinner: 'dots',
-      content: msg
-    });
-
-    this.loader.present();
-  }
-
   // saveUserBighearts
   saveUserBigheart() {
-    this.createLoader();
+    this.global.createLoader('loading');
 
     const data = {
       bh_id: this.ngo_ids,
@@ -139,10 +128,10 @@ export class UserBigheartsPage {
       if (data.msg == 'success') {
         this.storage.set('user_data', data);
       }
-      this.loader.dismiss();
+      this.global.dismissLoader();
     }, err => {
       console.log(err);
-      this.loader.dismiss();
+      this.global.dismissLoader();
     });
   }
 

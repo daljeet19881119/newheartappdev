@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, ModalController, AlertController, Platform, Navbar } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, Platform, Navbar, Select } from 'ionic-angular';
 import { GlobalProvider } from '../../providers/global/global';
 import { UserProvider } from '../../providers/user/user';
 import { CharitiesPage } from '../charities/charities';
@@ -15,6 +15,7 @@ import { HomePage } from '../home/home';
 })
 export class SettingsPage {
   @ViewChild('navbar') navBar: Navbar;
+  @ViewChild('selectCountry') selectCountry: Select;
 
   fname: string;
   lname: string;
@@ -29,18 +30,19 @@ export class SettingsPage {
   checkCharity: boolean = false;
   all_countries: any = [];
   dial_code: any;
-  country_code: any;
+  old_dial_code: any;
   all_regions: any = [];
   preference_type: string;
-  preference_location: any;
   profile_pic: any = '';
   profile_pic_src: any;
   userid: any;
 
   uuid: any;
-  loader: any;
   old_mobno: any;
   old_email: any;
+  country: any;
+  region: any;
+
   
   selected_charity: any = [];
   all_charites: any = [];
@@ -71,11 +73,11 @@ export class SettingsPage {
   disableMinusBtn: boolean;
   disableCausePlusBtn: boolean;
   disableCauseMinusBtn: boolean;
-  constructor(public navCtrl: NavController, public navParams: NavParams, private global: GlobalProvider, private userService: UserProvider, private loadingCtrl: LoadingController, private modalCtrl: ModalController, private camera: Camera, private transfer: FileTransfer, private alertCtrl: AlertController, private platform: Platform) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private global: GlobalProvider, private userService: UserProvider, private modalCtrl: ModalController, private camera: Camera, private transfer: FileTransfer, private platform: Platform) {
 
     // if user try goback then go to homepage
     this.platform.registerBackButtonAction(() => {
-      // this.updateUserData();
+      this.updateUserData();
       this.navCtrl.setRoot(HomePage);
       this.navCtrl.pop();
     });    
@@ -84,7 +86,7 @@ export class SettingsPage {
   ionViewDidLoad() {
     // navbar backbutton click
     this.navBar.backButtonClick = () => {
-      // this.updateUserData();
+      this.updateUserData();
       this.navCtrl.pop();
     };
 
@@ -184,7 +186,7 @@ export class SettingsPage {
   // getUserData
   getUserData() {
     // call createLoader
-    this.createLoader("Loading...");
+    this.global.createLoader("Loading...");
 
     this.userService.getUserByDeviceId(this.uuid).subscribe(data => {
       // check if msg success
@@ -214,15 +216,20 @@ export class SettingsPage {
         }
         
         if(this.preference_type == 'country') {
-          this.preference_location = data.data.country;
+          this.country = data.data.country;
         }
         else if(this.preference_type == 'region') {
-          this.preference_location = data.data.region;
+          this.region = data.data.region;
+        }
+        else if(this.preference_type == 'both') {
+          this.country = data.data.country;
+          this.region = data.data.region;
         }
         
         this.userid = data.data.user_id;
         this.profile_pic_src = data.data.profile_pic_src;
         this.dial_code = data.data.country_dial_code;
+        this.old_dial_code = data.data.country_dial_code;
         this.donation_amount = parseInt(data.data.us_donation_amount);
         
         // check donation gauge meter
@@ -252,9 +259,9 @@ export class SettingsPage {
         this.checkCharity = true;
       }
 
-      this.loader.dismiss();
+      this.global.dismissLoader();
     }, err => {
-      this.loader.dismiss();
+      this.global.dismissLoader();
       console.log(err);
     });
   }
@@ -263,10 +270,10 @@ export class SettingsPage {
   updateUserData() {
 
     if (this.email_verification_code != null && this.email_code != this.email_verification_code) {
-      this.createAlert("Your email verification code does not matched.");
+      this.global.createAlert('',"Your email verification code does not matched.");
     }
     else if (this.phone_verifciation_code != null && this.phone_code != this.phone_verifciation_code) {
-      this.createAlert("Your phone number verification code does not matched.");
+      this.global.createAlert('',"Your phone number verification code does not matched.");
     }
     else {
       // declare check variable for checking condition
@@ -281,25 +288,27 @@ export class SettingsPage {
       if (this.verification_type == 'mobileno' && this.mobileno != '') {
         check = true;
       }
-
+      // check veification type for both
+      if (this.verification_type == 'both' && this.mobileno != '' && this.email != '') {
+        check = true;
+      }
 
       // validate data
       if (this.fname == '' || this.lname == '' || check == false) {
-        this.createAlert("Please fill out all fields marked with (*)");
+        this.global.createAlert('',"Please fill out all fields marked with (*)");
       }
       else {
         // call createLoader
-        this.createLoader('Settings Saved');
+        // this.global.createLoader('Settings Saved');
 
         // calculate hc percentage
         let hc_percentage = 100 - this.cause_percentage;
 
-        let preference_type = this.preference_type;
-
         // check if prefrence type is empty
-        if (this.preference_type == "") {
-          preference_type = 'region';
+        if (this.country != "" && this.region !="") {
+          this.preference_type = 'both';
         }
+
         // set data to be send
         let data = {
           userid: this.userid,
@@ -310,10 +319,11 @@ export class SettingsPage {
           mobileno: this.mobileno,
           country_dial_code: this.dial_code,
           cause_percentage: this.cause_percentage,
-          preference_location: this.preference_location,
+          preference_type: this.preference_type,
+          country: this.country,
+          region: this.region,
           hc_percentage: hc_percentage,
           profile_pic: this.profile_pic,
-          preference_type: preference_type,
           donation_amount: this.donation_amount
         };
 
@@ -325,13 +335,8 @@ export class SettingsPage {
             this.email = data.email;
             this.mobileno = data.mobile_no;
             this.cause_percentage = data.cause_percentage;
-
-            if(data.preference_type == 'country') {
-              this.preference_location = data.country;
-            }
-            else if(data.preference_type == 'region') {
-              this.preference_location = data.region;
-            }
+            this.country = data.country;
+            this.region = data.region;
             
             this.profile_pic_src = data.profile_pic_src;
             this.email_verification_code = null;
@@ -339,16 +344,16 @@ export class SettingsPage {
           }
 
           if (data.msg == 'exists') {
-            this.createAlert("The mobile no or email you have entered is already exists.");
+            this.global.createAlert('',"The mobile no or email you have entered is already exists.");
           }
 
           if (data.length < 1) {
-            this.createAlert("Server is unable to handle your request. Please try again later.");
+            this.global.createAlert('',"Server is unable to handle your request. Please try again later.");
           }
 
-          this.loader.dismiss();
+          // this.global.dismissLoader();
         }, err => {
-          this.loader.dismiss();
+          // this.global.dismissLoader();
           console.log(err);
         });
       }
@@ -363,7 +368,30 @@ export class SettingsPage {
       let message = `We've sent an SMS with an activation code to your phone <b>+${this.dial_code + ' ' + this.mobileno}</b>`;
 
       // create alert
-      this.createAlert(message);
+      this.global.createAlert('', message);
+
+      // set sms verification data
+      let data = {
+        country_dial_code: this.dial_code,
+        mobileno: this.mobileno
+      };
+
+      this.userService.sendVerificationCode(data).subscribe(code => {
+        this.phone_verifciation_code = parseInt(code);
+        this.old_mobno = this.mobileno;
+      });
+    }
+  }
+
+  // countryCodeChange
+  countryCodeChange() {
+    // send sms mobileno not empty
+    if (this.dial_code != '' && this.dial_code != this.old_dial_code) {
+
+      let message = `We've sent an SMS with an activation code to your phone <b>+${this.dial_code + ' ' + this.mobileno}</b>`;
+
+      // create alert
+      this.global.createAlert('', message);
 
       // set sms verification data
       let data = {
@@ -385,7 +413,7 @@ export class SettingsPage {
       let message = `We've sent an email with an activation code to your email <b>${this.email}</b>`;
 
       // create alert
-      this.createAlert(message);
+      this.global.createAlert('', message);
 
       // set email verification data
       let data = {
@@ -403,31 +431,11 @@ export class SettingsPage {
   getCountries() {
     this.userService.getAllCountries().subscribe(data => {
       this.all_countries = data;
-
-      // GET COUNTRY DIAL CODE BY ITS CODE
-      data.forEach(element => {
-        if (element.code == this.country_code) {
-          this.dial_code = element.dial_code;
-        }
-      });
     }, err => {
       console.log(err);
     });
   }
 
-  // function to getCountryCode
-  getCountryDialCode(code: string) {
-
-    // call user service provider to get country code
-    this.userService.getCountryCodeByCode(code).subscribe(data => {
-      this.dial_code = data.dial_code;
-
-      // dismiss laoder
-      this.loader.dismiss();
-    }, err => {
-      console.log('Oops!' + err);
-    });
-  }
   // getRegions
   getRegions() {
     this.userService.getAllRegions().subscribe(data => {
@@ -486,23 +494,6 @@ export class SettingsPage {
     });
   }
 
-  // createLoader
-  createLoader(msg: string) {
-    this.loader = this.loadingCtrl.create({
-      content: msg,
-      spinner: 'dots'
-    });
-    this.loader.present();
-  }
-
-  // createAlert
-  createAlert(msg: string) {
-    const alert = this.alertCtrl.create({
-      message: msg,
-      buttons: ['ok']
-    });
-    alert.present();
-  }
 
   // validateEmail
   validateEmail(mail: string) {
@@ -520,7 +511,7 @@ export class SettingsPage {
     // empty testpic
     this.profile_pic = '';
 
-    this.createLoader('Please wait...');
+    this.global.createLoader('Please wait...');
 
     const options: CameraOptions = {
       quality: 50,
@@ -552,15 +543,15 @@ export class SettingsPage {
       fileTransfer.upload(base64Image, this.global.apiUrl('/uploadImage'), uploadOptions).then((data) => {
         // alert('data'+data.response);
         this.profile_pic_src = this.global.base_url('assets/images/'+ timeStr + '_user.jpg');
-        this.loader.dismiss();
+        this.global.dismissLoader();
       }).catch((err) => {
         // alert('Server is unable to upload your image please try again later.');
-        this.loader.dismiss();
+        this.global.dismissLoader();
       });
     }, (err) => {
       // Handle error
       console.log(err);
-      this.loader.dismiss();
+      this.global.dismissLoader();
     });
   }
 
@@ -569,7 +560,7 @@ export class SettingsPage {
     // empty testpic
     this.profile_pic = '';
 
-    this.createLoader('Please wait...');
+    this.global.createLoader('Please wait...');
 
     const options: CameraOptions = {
       quality: 50,
@@ -601,15 +592,15 @@ export class SettingsPage {
       fileTransfer.upload(base64Image, this.global.apiUrl('/uploadImage'), uploadOptions).then((data) => {
         // alert('data'+data.response);
         this.profile_pic_src = this.global.base_url('assets/images/'+ timeStr + '_user.jpg');
-        this.loader.dismiss();
+        this.global.dismissLoader();
       }).catch((err) => {
         // alert('Server is unable to upload your image please try again later.');
-        this.loader.dismiss();
+        this.global.dismissLoader();
       });
     }, (err) => {
       // Handle error
       console.log(err);
-      this.loader.dismiss();
+      this.global.dismissLoader();
     });
 
   }
@@ -617,5 +608,10 @@ export class SettingsPage {
   // toLocaleString
   toLocaleString(number: any) {
     return number.toLocaleString();
+  }
+
+  // open country 
+  openCountry() {
+    this.selectCountry.open();
   }
 }

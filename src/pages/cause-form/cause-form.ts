@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, AlertController, ModalController, Platform, ViewController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, Platform, ViewController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { UserProvider } from '../../providers/user/user';
 import { Camera, CameraOptions } from '@ionic-native/camera';
@@ -45,7 +45,6 @@ export class CauseFormPage {
   contactEmail5: string = '';
   contactDesc5: string = '';
 
-  loader: any;
   userid: any;
   uuid: any;
   profilePic: any;
@@ -70,7 +69,7 @@ export class CauseFormPage {
   all_charities: any = [];
   selected_charity: any = [];
   all_regions: any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private userService: UserProvider, public loadingCtrl: LoadingController, public alertCtrl: AlertController, private global: GlobalProvider, private camera: Camera, private transfer: FileTransfer, public modalCtrl: ModalController, private platform: Platform, private imagePicker: ImagePicker, public viewCtrl: ViewController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private userService: UserProvider, private global: GlobalProvider, private camera: Camera, private transfer: FileTransfer, public modalCtrl: ModalController, private platform: Platform, private imagePicker: ImagePicker, public viewCtrl: ViewController) {
 
  
     // get data from storage
@@ -219,7 +218,7 @@ export class CauseFormPage {
       if (this.validateEmail(this.email) == true) {
 
         // call func createLoader
-        this.createLoader('Settings saved');
+        this.global.createLoader('Settings saved');
 
         const data = {
           userid: userid,
@@ -253,13 +252,13 @@ export class CauseFormPage {
             this.setDataToStorage(userid, this.fname, this.lname, this.email, this.bank_name, this.account_no, this.ifsc_code, this.paypal_email, this.charities, this.country, this.regionId, this.city, this.fewAboutYourself, this.moreAboutYourself, this.profilePic, this.multiplePicsArr, contact1, contact2, contact3, contact4, contact5);
           }
           if (data.msg == 'success' && data.status == 'processing') {
-            this.createProcessAlert();
+            this.global.createAlert('','We have already received your request and will return when it is processed. <p>Thank you.</p>');
           }
           
-          this.loader.dismiss();
+          this.global.dismissLoader();
         }, err => {
           console.log('error: ' + err);
-          this.loader.dismiss();
+          this.global.dismissLoader();
         });
       }
       else {
@@ -267,37 +266,8 @@ export class CauseFormPage {
       }
     }
     else {
-      this.createAlert();
+      this.global.createAlert('','Please fill out the required fields.');
     }
-  }
-
-  // createProcessAlert
-  createProcessAlert() {
-    const alert = this.alertCtrl.create({
-      message: 'We have already received your request and will return when it is processed. <p>Thank you.</p>',
-      buttons: ['ok']
-    });
-    alert.present();
-  }
-
-  // createLoader
-  createLoader(msg: string = 'Please wait...') {
-    this.loader = this.loadingCtrl.create({
-      spinner: 'dots',
-      content: msg
-    });
-
-    this.loader.present();
-  }
-
-  // createAlert
-  createAlert() {
-    const alert = this.alertCtrl.create({
-      message: 'Please fill out the required fields.',
-      buttons: ['ok']
-    });
-
-    alert.present();
   }
 
   // setDataToStorage
@@ -335,7 +305,7 @@ export class CauseFormPage {
     // empty testpic
     this.profilePic = '';
 
-    this.createLoader();
+    this.global.createLoader();
 
     const options: CameraOptions = {
       quality: 50,
@@ -373,15 +343,15 @@ export class CauseFormPage {
           this.profilePic = this.global.base_url('assets/images/'+ timeStr + '_cause.jpg');
         }
         
-        this.loader.dismiss();
+        this.global.dismissLoader();
       }).catch((err) => {
         // alert('Server is unable to upload your image please try again later.');
-        this.loader.dismiss();
+        this.global.dismissLoader();
       });
     }, (err) => {
       // Handle error
       console.log(err);
-      this.loader.dismiss();
+      this.global.dismissLoader();
     });
   }
 
@@ -390,7 +360,7 @@ export class CauseFormPage {
     // empty testpic
     this.profilePic = '';
 
-    this.createLoader();
+    this.global.createLoader();
 
     const options: CameraOptions = {
       quality: 50,
@@ -427,15 +397,15 @@ export class CauseFormPage {
           this.profilePic = this.global.base_url('assets/images/'+ timeStr + '_cause.jpg');
         }
 
-        this.loader.dismiss();
+        this.global.dismissLoader();
       }).catch((err) => {
         // alert('Server is unable to upload your image please try again later.');
-        this.loader.dismiss();
+        this.global.dismissLoader();
       });
     }, (err) => {
       // Handle error
       console.log(err);
-      this.loader.dismiss();
+      this.global.dismissLoader();
     });
 
   }
@@ -477,7 +447,7 @@ export class CauseFormPage {
             
           }).catch((err) => {
             // alert('Server is unable to upload your image please try again later.');
-            this.loader.dismiss();
+            this.global.dismissLoader();
           });
         }
       }, (err) => { });

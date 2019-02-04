@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, Platform, LoadingController, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, Platform, ModalController } from 'ionic-angular';
 import { HomePage } from '../home/home';
 import { CharitiesPage } from '../charities/charities';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -27,7 +27,6 @@ export class UserinfoPage {
   country: number = null;
   profileStatus: string = null;
   uuid: any = null;
-  loader: any;
   preference: any;
   allRegions: any;
   countries: any = [];
@@ -85,7 +84,7 @@ export class UserinfoPage {
   recurring_fees: boolean = false;
   accept_terms: boolean = false;
   user_id: any;
-  constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, public platform: Platform, private global: GlobalProvider, private loadingCtrl: LoadingController, private userService: UserProvider, private modalCtrl: ModalController, private cardIO: CardIO, private iab: InAppBrowser) {
+  constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, public platform: Platform, private global: GlobalProvider, private userService: UserProvider, private modalCtrl: ModalController, private cardIO: CardIO, private iab: InAppBrowser) {
 
     // if user try goback then exit app
     this.platform.registerBackButtonAction(() => {
@@ -333,17 +332,17 @@ export class UserinfoPage {
 
     // check if all fields are not empty then register user
     if (this.firstName == null || this.lastName == null || this.email == null || this.charities.length == 0 || this.accept_terms == false || this.recurring_fees == false) {
-      this.createAlert('We need a little more information about you. Please fill out all fields marked with (*) before continuing. <p>Thanks.</p>');
+      this.global.createAlert('', 'We need a little more information about you. Please fill out all fields marked with (*) before continuing. <p>Thanks.</p>');
     }
     else {
 
       if (this.validateEmail(this.email) == true) {
         // check if card registered
-        // if(this.card_btn == false || this.card_number == null || this.card_number == "") {
-        //   this.createAlert("Your card is not registered. Please register your card.");
-        // }
-         if(this.bh_id_arr.length < 1 && this.all_bh.length < 1) {
-          this.createAlert("There is no Bigheart in selected causes. Please select other causes to donate to Bighearts.");
+        if(this.card_btn == false || this.card_number == null || this.card_number == "") {
+          this.global.createAlert('', "Your card is not registered. Please register your card.");
+        }
+        else if(this.bh_id_arr.length < 1 && this.all_bh.length < 1) {
+          this.global.createAlert('', "There is no Bigheart in selected causes. Please select other causes to donate to Bighearts.");
         }
         else{
           // check if mobileno and coutnry not empty then 
@@ -354,7 +353,7 @@ export class UserinfoPage {
         }        
       }
       else {
-        this.createAlert("please enter valid email");
+        this.global.createAlert('', "please enter valid email");
       }
     }
   }
@@ -459,7 +458,7 @@ export class UserinfoPage {
       hg_us_amount: hg_us_amount
     };
     
-      this.createLoader('submitting your request');
+      this.global.createLoader('submitting your request');
       this.userService.verifyUserProfile(data).subscribe(data => {
         this.profileStatus = data.data.profile_status;
   
@@ -471,13 +470,13 @@ export class UserinfoPage {
   
         // check if msg failed
         if (data.msg == 'failed') {
-          this.createAlert('Server is unable to submit your request. Please try again later.');
+          this.global.createAlert('', 'Server is unable to submit your request. Please try again later.');
         }
   
-        this.loader.dismiss();
+        this.global.dismissLoader();
       }, err => {
         console.log(err);
-        this.loader.dismiss();
+        this.global.dismissLoader();
       });   
   }
 
@@ -553,30 +552,30 @@ export class UserinfoPage {
               'hc_donation_amount': hc_donation_amount
             };
 
-            this.createLoader();
+            this.global.createLoader('Please wait...');
 
             // make payment
             this.userService.makePayment(data).subscribe(transactionRes => {
-              this.loader.dismiss();
+              this.global.dismissLoader();
 
               // check if transaction res not empty
               if(transactionRes.length < 1 || transactionRes.msg == 'err') {
-                this.createAlert("Withdrawal Unsuccessful, please check the information provided or change to another card.");
+                this.global.createAlert('',"Withdrawal Unsuccessful, please check the information provided or change to another card.");
               }
               else if(transactionRes.msg == 'success') {
-                this.createAlert("Withdrawal Successful. And we have distributed funds to your selected BigHearts!");
+                this.global.createAlert('', "Withdrawal Successful. And we have distributed funds to your selected BigHearts!");
                 this.makeServerRequest();
               }
             }, err => {
-              this.loader.dismiss();
-              this.createAlert("Withdrawal Unsuccessful, please check the information provided or change to another card.");
+              this.global.dismissLoader();
+              this.global.createAlert('', "Withdrawal Unsuccessful, please check the information provided or change to another card.");
             });            
           }
         },
         {
           text: 'Cancel',
           handler: () => {
-            this.createAlert("Withdrawal Unsuccessful, please check the information provided or change to another card.");
+            this.global.createAlert('', "Withdrawal Unsuccessful, please check the information provided or change to another card.");
           }
         }
       ]
@@ -589,7 +588,7 @@ export class UserinfoPage {
     // check if name or email empty then give alert
     if(this.firstName == null || this.lastName == null || this.email == null) {
       // create validation alert
-      this.createAlert("please fill your name and email to make payment");
+      this.global.createAlert('', "please fill your name and email to make payment");
     }
     else{
       let fullname = this.firstName+' '+this.lastName;
@@ -604,7 +603,7 @@ export class UserinfoPage {
 
       browser.on('exit').subscribe(() => {
         // create loader
-        this.createLoader();
+        this.global.createLoader('Please wait...');
 
         // getUserById
         this.userService.getUserById(this.user_id).subscribe(data => {
@@ -614,9 +613,9 @@ export class UserinfoPage {
               this.card_btn = true;
             }           
 
-          this.loader.dismiss();
+          this.global.dismissLoader();
         }, err => {
-          this.loader.dismiss();
+          this.global.dismissLoader();
         });
       }, err => {
           console.error(err);
@@ -653,25 +652,6 @@ export class UserinfoPage {
       this.all_bh = [];
       this.getBHByCharity(this.selected_charity);
     }
-  }
-
-  // createLoader
-  createLoader(msg: string = 'Please wait...') {
-    this.loader = this.loadingCtrl.create({
-      spinner: 'dots',
-      content: msg
-    });
-
-    this.loader.present();
-  }
-
-  // createAlert
-  createAlert(msg: string) {
-    const alert = this.alertCtrl.create({
-      message: msg,
-      buttons: ['ok']
-    });
-    alert.present();
   }
 
   // reload
@@ -713,7 +693,7 @@ export class UserinfoPage {
   // get ngo by charity name
   getBHByCharity(selected_charity: any) {
     
-    this.createLoader();
+    this.global.createLoader('Please wait...');
 
       // emtpy all ngo array
       this.all_bh = [];
@@ -777,10 +757,10 @@ export class UserinfoPage {
         }
 
 
-        this.loader.dismiss();
+        this.global.dismissLoader();
       }, err => {
         console.log(err);
-        this.loader.dismiss();
+        this.global.dismissLoader();
       });
   }
 
@@ -799,6 +779,6 @@ export class UserinfoPage {
   }
 
   pictureAlert() {
-    this.createAlert("You can do this later");
+    this.global.createAlert('', "You can do this later");
   }
 }

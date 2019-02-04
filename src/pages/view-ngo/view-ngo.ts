@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 import { YtvideoPage } from '../ytvideo/ytvideo';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { PhotoViewer } from '@ionic-native/photo-viewer';
@@ -43,13 +43,11 @@ export class ViewNgoPage {
   addBigHeartText: string = 'Add to my BigHearts';
   uuid: any;
 
-  // loader
-  loader: any;
   showItem: boolean = true;
   user_id: any;
   bh_id: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private modalCtrl: ModalController, private screenOrientation: ScreenOrientation, private photoViewer: PhotoViewer, private dom: DomSanitizer, private userProvider: UserProvider, private global: GlobalProvider, public loadingCtrl: LoadingController, private homeService: HomePageProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private modalCtrl: ModalController, private screenOrientation: ScreenOrientation, private photoViewer: PhotoViewer, private dom: DomSanitizer, private userProvider: UserProvider, private global: GlobalProvider, private homeService: HomePageProvider) {
 
   }
 
@@ -291,7 +289,7 @@ export class ViewNgoPage {
   addToUserBigHearts() {
 
     // call func createLoader
-    this.createLoader();
+    this.global.createLoader('Please wait...');
 
     // store ngoid
     let bh_id = this.navParams.get('bh_id');
@@ -314,7 +312,7 @@ export class ViewNgoPage {
     this.userProvider.addToMyBigHearts(data).subscribe(data => {
 
       // dismiss the loader
-      this.loader.dismiss();
+      this.global.dismissLoader();
 
       // check if found true
       if (data.found == 'true') {
@@ -324,7 +322,7 @@ export class ViewNgoPage {
       }
     }, err => {
       // dismiss the loader
-      this.loader.dismiss();
+      this.global.dismissLoader();
     });
 
   }
@@ -332,7 +330,7 @@ export class ViewNgoPage {
   // check ngo's in the user list
   checkInUserBigHearts(user_id: any, bh_id: any) {
     // call loader function
-    this.createLoader();
+    this.global.createLoader('Please wait...');
 
     // request data from server
     this.userProvider.checkInUserBigHearts(user_id, bh_id).subscribe(data => {
@@ -343,10 +341,10 @@ export class ViewNgoPage {
         this.addBigHeartsClass = 'added-bighearts';
         this.addBigHeartText = 'Unselect from My BigHearts';
       }
-      this.loader.dismiss();
+      this.global.dismissLoader();
     }, err => {
       console.log('Oops!');
-      this.loader.dismiss();
+      this.global.dismissLoader();
     });
   }
 
@@ -354,7 +352,7 @@ export class ViewNgoPage {
   removeFromUserBigHearts() {
 
     // call func createLoader
-    this.createLoader();
+    this.global.createLoader('Please wait...');
 
     // store ngoid
     let bh_id = this.navParams.get('bh_id');
@@ -377,7 +375,7 @@ export class ViewNgoPage {
     this.userProvider.removeFromMyBigHearts(data).subscribe(data => {
 
       // dismiss the loader
-      this.loader.dismiss();
+      this.global.dismissLoader();
 
       // check if found true
       if (data.found == 'true') {
@@ -387,18 +385,8 @@ export class ViewNgoPage {
       }
     }, err => {
       // dismiss the loader
-      this.loader.dismiss();
+      this.global.dismissLoader();
     });
-  }
-
-  // createLoader
-  createLoader() {
-    this.loader = this.loadingCtrl.create({
-      spinner: 'dots',
-      content: 'Please wait...'
-    });
-
-    this.loader.present();
   }
 
   // gotoUserBigheartsPage

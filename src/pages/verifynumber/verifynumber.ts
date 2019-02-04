@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, Platform, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { VerifycodePage } from '../verifycode/verifycode';
 import { UserProvider } from '../../providers/user/user';
 import { Storage } from '@ionic/storage';
@@ -20,11 +20,10 @@ export class VerifynumberPage {
   verficationCode: any;
   uuid: any;
   allCountries: any;
-  loader: any;
   email: any = '';
   token: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, private global: GlobalProvider, public platform: Platform, public userService: UserProvider, private storage: Storage, private alertCtrl: AlertController, private fcm: FCM) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private global: GlobalProvider, public platform: Platform, public userService: UserProvider, private storage: Storage, private fcm: FCM) {
 
     // call getuniqueDeviceID
     this.getuniqueDeviceID();
@@ -35,7 +34,7 @@ export class VerifynumberPage {
     });
 
     // call function createLoader
-    this.createLoader();
+    this.global.createLoader('Please wait...');
   }
 
   ionViewDidLoad() {
@@ -55,10 +54,10 @@ export class VerifynumberPage {
       // set a countries in storage
       this.storage.set('countries', this.allCountries);
 
-      this.loader.dismiss();
+      this.global.dismissLoader();
     }, error => {
       console.log('Oops!');
-      this.loader.dismiss();
+      this.global.dismissLoader();
     });
 
     // call getToken function
@@ -74,7 +73,7 @@ export class VerifynumberPage {
       this.country = data.dial_code;
 
       // dismiss laoder
-      this.loader.dismiss();
+      this.global.dismissLoader();
     }, err => {
       console.log('Oops!' + err);
     });
@@ -85,10 +84,10 @@ export class VerifynumberPage {
     // check if not empty email or number
     if (this.mobileno != '' && this.email != '') {      
       if(!Number(parseInt(this.mobileno))) {
-        this.createAlert('Please enter valid number');
+        this.global.createAlert('', 'Please enter valid number');
       }
       else if(this.validateEmail(this.email) == false) {
-        this.createAlert('Please enter valid email');
+        this.global.createAlert('', 'Please enter valid email');
       }
       else{
         this.sendSMS('both');
@@ -96,7 +95,7 @@ export class VerifynumberPage {
     }
     else if(this.mobileno != '' && this.email == '') {
       if(!Number(parseInt(this.mobileno))) {
-        this.createAlert('Please enter valid number');
+        this.global.createAlert('', 'Please enter valid number');
       }
       else{
         this.sendSMS('mobileno');
@@ -104,14 +103,14 @@ export class VerifynumberPage {
     }
     else if(this.email != '' && this.mobileno == '') {
       if(this.validateEmail(this.email) == false) {
-        this.createAlert('Please enter valid email');
+        this.global.createAlert('', 'Please enter valid email');
       }
       else{
         this.sendSMS('email');
       }
     }
     else if (this.mobileno == '' && this.email == ''){
-      this.createAlert('Please enter your mobile number or email.');
+      this.global.createAlert('', 'Please enter your mobile number or email.');
     }
   }
 
@@ -129,7 +128,7 @@ export class VerifynumberPage {
   sendSMS(verification_type: string) {
 
     // call createLoader
-    this.createLoader();
+    this.global.createLoader('Please wait...');
 
     const data = {
       mobile_no: this.mobileno,
@@ -170,31 +169,12 @@ export class VerifynumberPage {
           verification_type: verification_type,
           userExists: userExists
         });
-        this.loader.dismiss();
+        this.global.dismissLoader();
       }
     }, err => {
       console.log(err);
-      this.loader.dismiss();
+      this.global.dismissLoader();
     });
-  }
-
-  // createAlert
-  createAlert(msg: string) {
-    const alert = this.alertCtrl.create({
-      message: msg,
-      buttons: ['ok']
-    });
-    alert.present();
-  }
-
-  // createLoader
-  createLoader() {
-    this.loader = this.loadingCtrl.create({
-      spinner: 'dots',
-      content: 'Please wait...'
-    });
-
-    this.loader.present();
   }
 
   // validateEmail

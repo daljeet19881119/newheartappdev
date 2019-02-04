@@ -47,8 +47,9 @@ export class GlobalProvider {
   }
 
   // createAlert
-  createAlert(msg: string) {
+  createAlert(title: string, msg: string) {
     const alert = this.alertCtrl.create({
+      title: title,
       message: msg,
       buttons: ['ok']
     });

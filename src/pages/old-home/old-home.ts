@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, MenuController, NavParams, Platform, LoadingController, IonicPage } from 'ionic-angular';
+import { NavController, MenuController, NavParams, Platform, IonicPage } from 'ionic-angular';
 import { ProfilePage } from '../profile/profile';
 import { UserProvider } from '../../providers/user/user';
 import { StreamingMedia, StreamingVideoOptions } from '@ionic-native/streaming-media';
@@ -42,8 +42,7 @@ export class OldHomePage {
   charities: any;
   charityAutoplay: number = 3000;
   charityLoop: boolean = true;
-  loader: any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private global: GlobalProvider, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, public loadingCtrl: LoadingController, private sharing: SocialSharing, private storage: Storage) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private global: GlobalProvider, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, private sharing: SocialSharing, private storage: Storage) {
 
     // call function to get device id
     this.getDeviceID();
@@ -151,7 +150,7 @@ export class OldHomePage {
   // viewAll
   viewAll() {
 
-    this.createLoader();
+    this.global.createLoader('Please wait...');
 
     // increment paging
     this.paging++;
@@ -164,7 +163,7 @@ export class OldHomePage {
     // request data from server
     this.homeService.getLatestDonations(offset).subscribe(data => {
 
-      this.loader.dismiss();
+      this.global.dismissLoader();
 
       // loop of data
       data.res.forEach(element => {
@@ -190,7 +189,7 @@ export class OldHomePage {
   // viewAllPayments
   viewAllPayments() {
 
-    this.createLoader();
+    this.global.createLoader('Please wait...');
 
     // increment paging
     this.paymentPaging++;
@@ -202,7 +201,7 @@ export class OldHomePage {
     // request data from server
     this.homeService.getLatestPayments(offset).subscribe(data => {
 
-      this.loader.dismiss();
+      this.global.dismissLoader();
 
       // loop of data
       data.res.forEach(element => {
@@ -296,16 +295,6 @@ export class OldHomePage {
     }, err => {
       console.log('Oops!' + err);
     });
-  }
-
-  // createLoader
-  createLoader() {
-    this.loader = this.loadingCtrl.create({
-      spinner: 'dots',
-      content: 'Please wait...'
-    });
-
-    this.loader.present();
   }
 
   // shareInfo

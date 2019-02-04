@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, Slides, MenuController, Platform, LoadingController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Slides, MenuController, Platform } from 'ionic-angular';
 import { UserProvider } from '../../providers/user/user';
 import { StreamingMedia, StreamingVideoOptions } from '@ionic-native/streaming-media';
 import { HomePageProvider } from '../../providers/home-page/home-page';
@@ -44,7 +44,6 @@ export class BhHomePage {
   charities: any;
   charityAutoplay: number = 3000;
   charityLoop: boolean = true;
-  loader: any;
   videoId: any;
   user_id: any;
   videoName: any;
@@ -52,7 +51,7 @@ export class BhHomePage {
   us_balance: any;
   showRecordMsg: boolean;
   transaction_id: any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private global: GlobalProvider, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, private bhHomeService: BhHomePageProvider, public loadingCtrl: LoadingController, private sharing: SocialSharing, private storage: Storage, private mediaCapture: MediaCapture, private transfer: FileTransfer, private androidPermissions: AndroidPermissions, private fcm: FCM, private alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private global: GlobalProvider, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, private bhHomeService: BhHomePageProvider, private sharing: SocialSharing, private storage: Storage, private mediaCapture: MediaCapture, private transfer: FileTransfer, private androidPermissions: AndroidPermissions, private fcm: FCM) {
 
     // request data from server
     // this.homeService.getLatestPayments().subscribe(data => {
@@ -189,7 +188,7 @@ export class BhHomePage {
   // viewAll
   viewAll() {
 
-    this.createLoader();
+    this.global.createLoader();
 
     // increment paging
     this.paging++;
@@ -201,7 +200,7 @@ export class BhHomePage {
 
     // get user bighearts
     this.bhHomeService.getBigheartUsers(this.user_id, offset).subscribe(res => {
-      this.loader.dismiss();
+      this.global.dismissLoader();
 
       if(res.msg == 'success') 
       {
@@ -222,7 +221,7 @@ export class BhHomePage {
           }
       }            
     }, err => {
-      this.loader.dismiss();
+      this.global.dismissLoader();
       console.log(err);
     });
   }
@@ -230,7 +229,7 @@ export class BhHomePage {
   // viewAllPayments
   viewAllPayments() {
 
-    this.createLoader();
+    this.global.createLoader();
 
     // increment paging
     this.paymentPaging++;
@@ -242,7 +241,7 @@ export class BhHomePage {
     // request data from server
     this.homeService.getLatestPayments(offset).subscribe(data => {
 
-      this.loader.dismiss();
+      this.global.dismissLoader();
 
       // loop of data
       data.res.forEach(element => {
@@ -299,7 +298,7 @@ export class BhHomePage {
 
   // uploadThankyouMessage
   uploadThankyouMessage(user_id: any, transaction_id: any) {
-    this.createLoader('uploading video');
+    this.global.createLoader('uploading video');
     const fileTransfer: FileTransferObject = this.transfer.create();
 
     let options: FileUploadOptions = {
@@ -334,10 +333,10 @@ export class BhHomePage {
           }, err => console.log(err));
         }
 
-        this.loader.dismiss();
+        this.global.dismissLoader();
       }, (err) => {
         // error
-        this.loader.dismiss();
+        this.global.dismissLoader();
       });
   }
 
@@ -393,15 +392,6 @@ export class BhHomePage {
     });
   }
 
-  // createLoader
-  createLoader(msg: string = 'Please wait') {
-    this.loader = this.loadingCtrl.create({
-      spinner: 'dots',
-      content: msg + '...'
-    });
-
-    this.loader.present();
-  }
 
   // shareInfo
   shareInfo(ngoName: string, ngoFounderImg: string, ngoFounderName: string, ngoFounderDesc: string, videoUrl: string = null) {
@@ -442,11 +432,6 @@ export class BhHomePage {
 
   // notificationAlert
   notificationAlert(title: string, msg: string) {
-    const alert = this.alertCtrl.create({
-        title: title,
-        message: msg,
-        buttons: ['ok']
-    });
-    alert.present();
+    this.global.createAlert(title, msg);
   }
 }

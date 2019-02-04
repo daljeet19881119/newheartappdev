@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, MenuController, NavParams, Platform, LoadingController, AlertController } from 'ionic-angular';
+import { NavController, MenuController, NavParams, Platform } from 'ionic-angular';
 import { ProfilePage } from '../profile/profile';
 import { UserProvider } from '../../providers/user/user';
 import { StreamingMedia, StreamingVideoOptions } from '@ionic-native/streaming-media';
@@ -45,7 +45,7 @@ export class HomePage {
   hc_balance: any;
   us_balance: any;
   cc_number: any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private global: GlobalProvider, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, public loadingCtrl: LoadingController, private sharing: SocialSharing, private fcm: FCM, private alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private global: GlobalProvider, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, private sharing: SocialSharing, private fcm: FCM) {
 
     // request data from server
     // this.homeService.getLatestPayments().subscribe(data => {
@@ -157,7 +157,7 @@ export class HomePage {
   // viewAll
   viewAll() {
 
-    this.createLoader();
+    this.global.createLoader('Please wait...');
 
     // increment paging
     this.paging++;
@@ -169,7 +169,7 @@ export class HomePage {
 
     // get user bighearts
     this.homeService.getUserDashboardData(this.user_id, offset).subscribe(res => {
-      this.loader.dismiss();
+      this.global.dismissLoader();
 
       if (res.msg == 'success') {
         // loop of data
@@ -191,7 +191,7 @@ export class HomePage {
         }
       }
     }, err => {
-      this.loader.dismiss();
+      this.global.dismissLoader();
       console.log(err);
     });
   }
@@ -199,7 +199,7 @@ export class HomePage {
   // viewAllPayments
   viewAllPayments() {
 
-    this.createLoader();
+    this.global.createLoader('Please wait...');
 
     // increment paging
     this.paymentPaging++;
@@ -211,7 +211,7 @@ export class HomePage {
     // request data from server
     this.homeService.getLatestPayments(offset).subscribe(data => {
 
-      this.loader.dismiss();
+      this.global.dismissLoader();
 
       // loop of data
       data.res.forEach(element => {
@@ -243,16 +243,6 @@ export class HomePage {
     };
 
     this.streamingMedia.playVideo(this.global.base_url('assets/videos/' + video), options);
-  }
-
-  // createLoader
-  createLoader() {
-    this.loader = this.loadingCtrl.create({
-      spinner: 'dots',
-      content: 'Please wait...'
-    });
-
-    this.loader.present();
   }
 
   // shareInfo
@@ -299,12 +289,7 @@ export class HomePage {
 
   // notificationAlert
   notificationAlert(title: string, msg: string) {
-    const alert = this.alertCtrl.create({
-      title: title,
-      message: msg,
-      buttons: ['ok']
-    });
-    alert.present();
+    this.global.createAlert(title, msg);
   }
 
   // getWords
