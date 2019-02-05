@@ -721,7 +721,8 @@ export class UserinfoPage {
               }
             }
             else if (this.checkRegion == true) {
-              if (element.bh_us_tax_deductible == us_tax_deductible && element.region == this.location) {
+              let allRegions = this.getCountryOfRegion(this.location);              
+              if (allRegions.indexOf(parseInt(element.country)) != -1 && element.bh_us_tax_deductible == us_tax_deductible) {
                 this.all_bh.push(element);
               }
             }
@@ -739,13 +740,13 @@ export class UserinfoPage {
           res.forEach(element => {
             // check if country is true
             if (this.checkCountry == true) {
-              // check if elment matched to tax exemption
               if (element.country == this.location) {
                 this.all_bh.push(element);
               }
             }
             else if (this.checkRegion == true) {
-              if (element.region == this.location) {
+              let allRegions = this.getCountryOfRegion(this.location);              
+              if (allRegions.indexOf(parseInt(element.country)) != -1) {
                 this.all_bh.push(element);
               }
             }
@@ -754,14 +755,30 @@ export class UserinfoPage {
             }
           });
           // console.log('tax exemption else condition');        
-        }
-
+        }        
 
         this.global.dismissLoader();
       }, err => {
         console.log(err);
         this.global.dismissLoader();
       });
+  }
+
+  // getCountryFromRegion
+  getCountryOfRegion(region_id: any) {
+    let bh_arr = [];
+    if(this.allRegions.length > 0) {
+      this.allRegions.forEach(element => {
+        if(element.id == region_id) {
+          // convert string to array
+          let id_arr = element.country_id.split(",");
+          id_arr.forEach(element => {
+            bh_arr.push(parseInt(element.trim()));
+          });
+        }        
+      });
+    }
+    return bh_arr;
   }
 
   // toLocaleString

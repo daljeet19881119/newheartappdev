@@ -28,16 +28,12 @@ export class BhHomePage {
   // latestDonations
   latestDonations: any;
 
-  // latestPayments array
-  latestPayments: any = [];
   heloWish: string;
   name: string = 'Loading...';
   uuid: any;
   showDonationBtn: boolean = false;
-  showPaymentBtn: boolean = true;
   limit: number = 6;
   paging: number = 1;
-  paymentPaging: number = 1;
   recommendedBigHearts: any;
 
   // user selected charities
@@ -53,24 +49,6 @@ export class BhHomePage {
   transaction_id: any;
   constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private global: GlobalProvider, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, private bhHomeService: BhHomePageProvider, private sharing: SocialSharing, private storage: Storage, private mediaCapture: MediaCapture, private transfer: FileTransfer, private androidPermissions: AndroidPermissions, private fcm: FCM) {
 
-    // request data from server
-    // this.homeService.getLatestPayments().subscribe(data => {
-
-    //   // store requested data in the latestPayments
-    //   this.latestPayments = data.res;
-
-    //   let count = parseInt(data.count);
-    //   let paging = Math.ceil(count / this.limit);
-
-    //   // hide button if count is <= 5
-    //   if (paging <= 1) {
-    //     this.showPaymentBtn = false;
-    //   }
-    //   // console.log(this.latestPayments);
-    // },
-    //   err => {
-    //     console.log('Oops!');
-    //   });
 
     // date object to store heloWish
     let d = new Date();
@@ -223,44 +201,6 @@ export class BhHomePage {
     }, err => {
       this.global.dismissLoader();
       console.log(err);
-    });
-  }
-
-  // viewAllPayments
-  viewAllPayments() {
-
-    this.global.createLoader();
-
-    // increment paging
-    this.paymentPaging++;
-
-    // select the donation list
-    let paymentList = document.getElementsByClassName('payments-lists');
-    let offset = paymentList.length;
-
-    // request data from server
-    this.homeService.getLatestPayments(offset).subscribe(data => {
-
-      this.global.dismissLoader();
-
-      // loop of data
-      data.res.forEach(element => {
-
-        // push data into latestDonations
-        this.latestPayments.push(element);
-      });
-
-      let count = parseInt(data.count);
-      let paging = Math.ceil(count / this.limit);
-
-      // hide button if count is <= 5
-      if (this.paymentPaging >= paging) {
-        this.showPaymentBtn = false;
-      }
-
-      console.log(data);
-    }, err => {
-      console.log('Oops!');
     });
   }
 

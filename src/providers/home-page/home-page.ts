@@ -14,12 +14,7 @@ export class HomePageProvider {
   getLatestDonations(offset: number = 0) {
       return this.http.get(this.global.apiUrl('/all_ngo/'+offset)).map(res => res.json());
   }
-
-  // getLatestPayments
-  getLatestPayments(offset: number = 0) {
-    return this.http.get(this.global.SITE_URL + "/new-latest-payments.php?offset="+offset).map(res => res.json());
-  }
-
+  
   // getRecommendedBigHearts()
   getRecommendedBigHearts(uuid: any) {
       return this.http.get(this.global.apiUrl('/recommended_bighearts/'+uuid)).map(res => res.json());

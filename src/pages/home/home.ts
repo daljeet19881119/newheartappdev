@@ -24,47 +24,23 @@ export class HomePage {
   // latestDonations
   latestDonations: any;
 
-  // latestPayments array
-  latestPayments: any = [];
   heloWish: string;
   name: string = 'Loading...';
   uuid: any;
   showDonationBtn: boolean;
-  showPaymentBtn: boolean = true;
   limit: number = 5;
   paging: number = 1;
-  paymentPaging: number = 1;
   recommendedBigHearts: any;
 
   // user selected charities
   charities: any;
   charityAutoplay: number = 3000;
   charityLoop: boolean = true;
-  loader: any;
   user_id: any;
   hc_balance: any;
   us_balance: any;
   cc_number: any;
   constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private global: GlobalProvider, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, private sharing: SocialSharing, private fcm: FCM) {
-
-    // request data from server
-    // this.homeService.getLatestPayments().subscribe(data => {
-
-    //   // store requested data in the latestPayments
-    //   this.latestPayments = data.res;
-
-    //   let count = parseInt(data.count);
-    //   let paging = Math.ceil(count / this.limit);
-
-    //   // hide button if count is <= 5
-    //   if (paging <= 1) {
-    //     this.showPaymentBtn = false;
-    //   }
-    //   // console.log(this.latestPayments);
-    // },
-    //   err => {
-    //     console.log('Oops!');
-    //   });
 
     // date object to store heloWish
     let d = new Date();
@@ -196,43 +172,6 @@ export class HomePage {
     });
   }
 
-  // viewAllPayments
-  viewAllPayments() {
-
-    this.global.createLoader('Please wait...');
-
-    // increment paging
-    this.paymentPaging++;
-
-    // select the donation list
-    let paymentList = document.getElementsByClassName('payments-lists');
-    let offset = paymentList.length;
-
-    // request data from server
-    this.homeService.getLatestPayments(offset).subscribe(data => {
-
-      this.global.dismissLoader();
-
-      // loop of data
-      data.res.forEach(element => {
-
-        // push data into latestDonations
-        this.latestPayments.push(element);
-      });
-
-      let count = parseInt(data.count);
-      let paging = Math.ceil(count / this.limit);
-
-      // hide button if count is <= 5
-      if (this.paymentPaging >= paging) {
-        this.showPaymentBtn = false;
-      }
-
-      console.log(data);
-    }, err => {
-      console.log('Oops!');
-    });
-  }
 
   // playVideo
   async playVideo(video: any) {

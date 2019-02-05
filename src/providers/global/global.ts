@@ -5,7 +5,6 @@ import { LoadingController, AlertController } from 'ionic-angular';
 @Injectable()
 export class GlobalProvider {
 
-  SITE_URL: string = 'https://ionic.dsl.house/heartAppApi';
   API_URL: string = 'https://ionic.dsl.house/dev/api/heartglobal';
   // API_URL: string = 'https://ionic.dsl.house/api/heartglobal';
   // API_URL: string = 'http://localhost/dsl.house/api/heartglobal';
