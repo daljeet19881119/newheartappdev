@@ -57,7 +57,7 @@
                                         <span class="heart-coin">{{ '+'+donation.transaction_hc_amount}}</span>
                                         <span class="heart-coin">(+${{donation.transaction_us_amount}})</span>
                                     </p>
-                                    <p class="play-para" (click)="recordThankyouMessage(donation.user_id, donation.transaction_id)" *ngIf="donation.thankyou_video == ''">
+                                    <p class="play-para" (click)="recordThankyouMessage(donation.user_id, donation.transaction_id)" *ngIf="donation.thankyou_video == '' && showRecordMsg">
                                         <ion-icon name="play" class="play-icon"></ion-icon>
                                         <span>Record a Thank you message</span>
                                     </p>

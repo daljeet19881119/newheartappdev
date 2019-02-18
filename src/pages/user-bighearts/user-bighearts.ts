@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams, Navbar } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { UserProvider } from '../../providers/user/user';
 import { GlobalProvider } from '../../providers/global/global';
@@ -12,6 +12,7 @@ import { ProfilePage } from '../profile/profile';
   templateUrl: 'user-bighearts.html',
 })
 export class UserBigheartsPage {
+  @ViewChild('navbar') navbar: Navbar;
 
   all_ngo: any = [];
   uuid: any;
@@ -57,6 +58,11 @@ export class UserBigheartsPage {
         this.global.dismissLoader();
       });
     }, err => console.log(err));
+
+    // save user bighearts on navbar back arrow click
+    this.navbar.backButtonClick = () => {
+      this.saveUserBigheart();
+    };
   }
 
   // get ngo by charity name

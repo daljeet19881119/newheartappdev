@@ -88,7 +88,7 @@
     <ion-toolbar no-padding>             
         <div class="recomended-hearts">
             <p class="para-footer">Recommended BigHearts</p>
-            <ion-slides loop="true" slidesPerView="3">
+            <ion-slides loop="true" slidesPerView="3" autoplay="10000" *ngIf="recommendedBigHearts">
                 <ng-container  *ngFor="let recommendHearts of recommendedBigHearts">
                     <ion-slide>
                         <div class="ngo-img-div" [style.backgroundImage]="'url('+recommendHearts.bh_founder_img+')'"  (click)="gotoProfilePage(recommendHearts.user_id)"></div>                    

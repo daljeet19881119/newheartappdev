@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, Platform, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, ModalController } from 'ionic-angular';
 import { HomePage } from '../home/home';
 import { CharitiesPage } from '../charities/charities';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -41,7 +41,7 @@ export class UserinfoPage {
   checkCharity: boolean = false;
   large_donation: boolean = false;
   cause_percentage: number = 90;
-  donation_amount: number = 20;
+  donation_amount: number = 25;
   max: number = 1000;
   sectors: any = [{
     from: 0,
@@ -84,12 +84,8 @@ export class UserinfoPage {
   recurring_fees: boolean = false;
   accept_terms: boolean = false;
   user_id: any;
-  constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, public platform: Platform, private global: GlobalProvider, private userService: UserProvider, private modalCtrl: ModalController, private cardIO: CardIO, private iab: InAppBrowser) {
+  constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,  private global: GlobalProvider, private userService: UserProvider, private modalCtrl: ModalController, private cardIO: CardIO, private iab: InAppBrowser) {
 
-    // if user try goback then exit app
-    this.platform.registerBackButtonAction(() => {
-      platform.exitApp();
-    });
 
     // get params from previous opened page
     this.mobileno = this.navParams.get('mobileno');
@@ -137,7 +133,7 @@ export class UserinfoPage {
 
   ionViewDidLoad() {
     // check donation gauge meter
-    if (this.donation_amount < 25) {
+    if (this.donation_amount <= 25) {
       this.disableMinusBtn = true;
       this.disablePlusBtn = false;
     }
@@ -178,10 +174,10 @@ export class UserinfoPage {
 
   // incrementDonation
   incrementDonation() {
-    if(this.donation_amount < 25) {
-      this.donation_amount = this.donation_amount + 5;
-    }
-    else if (this.donation_amount < 500 && this.donation_amount >= 25) {
+    // if(this.donation_amount < 25) {
+    //   this.donation_amount = this.donation_amount + 5;
+    // }
+    if (this.donation_amount < 500 && this.donation_amount >= 25) {
       this.donation_amount = this.donation_amount + 25;
     }
     else if (this.donation_amount >= 500 && this.donation_amount <= 950) {
@@ -200,21 +196,21 @@ export class UserinfoPage {
 
   // decrementDonation
   decrementDonation() {
-    if(this.donation_amount <= 25) {
-      this.donation_amount = this.donation_amount - 5;
-    }
-    else if (this.donation_amount <= 500 && this.donation_amount > 25) {
+    // if(this.donation_amount <= 25) {
+    //   this.donation_amount = this.donation_amount - 5;
+    // }
+    if (this.donation_amount <= 500 && this.donation_amount > 25) {
       this.donation_amount = this.donation_amount - 25;
     }
     else if (this.donation_amount > 500 && this.donation_amount <= 1000) {
       this.donation_amount = this.donation_amount - 50;
     }
 
-    if (this.donation_amount >= 25 && this.donation_amount < 1000) {
+    if (this.donation_amount > 25 && this.donation_amount < 1000) {
       this.disableMinusBtn = false;
       this.disablePlusBtn = false;
     }
-    else if (this.donation_amount < 25) {
+    else if (this.donation_amount <= 25) {
       this.disablePlusBtn = false;
       this.disableMinusBtn = true;
     }

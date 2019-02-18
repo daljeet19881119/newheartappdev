@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, MenuController, NavParams, Platform } from 'ionic-angular';
+import { NavController, MenuController, NavParams, Platform, ModalController } from 'ionic-angular';
 import { ProfilePage } from '../profile/profile';
 import { UserProvider } from '../../providers/user/user';
 import { StreamingMedia, StreamingVideoOptions } from '@ionic-native/streaming-media';
@@ -9,6 +9,7 @@ import { ViewChild } from '@angular/core';
 import { Slides } from 'ionic-angular';
 import { GlobalProvider } from '../../providers/global/global';
 import { FCM } from '@ionic-native/fcm';
+import { ThankyouVideoPage } from '../thankyou-video/thankyou-video';
 
 @Component({
   selector: 'page-home',
@@ -28,7 +29,7 @@ export class HomePage {
   name: string = 'Loading...';
   uuid: any;
   showDonationBtn: boolean;
-  limit: number = 5;
+  limit: number = 20;
   paging: number = 1;
   recommendedBigHearts: any;
 
@@ -40,7 +41,7 @@ export class HomePage {
   hc_balance: any;
   us_balance: any;
   cc_number: any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private global: GlobalProvider, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, private sharing: SocialSharing, private fcm: FCM) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private global: GlobalProvider, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, private sharing: SocialSharing, private fcm: FCM, private modalCtrl: ModalController) {
 
     // date object to store heloWish
     let d = new Date();
@@ -73,6 +74,11 @@ export class HomePage {
       this.uuid = 'undefined';
     }
 
+    // call firebaseNotification function
+    this.firebaseNotification();
+  }
+
+  ionViewWillEnter() {
     // get login user data
     this.userService.getUserByDeviceId(this.uuid).subscribe((data) => {
       this.name = data.data.fname;
@@ -109,9 +115,6 @@ export class HomePage {
         console.log(err);
       });
     });
-
-    // call firebaseNotification function
-    this.firebaseNotification();
   }
 
   // showTabs
@@ -181,7 +184,15 @@ export class HomePage {
       orientation: 'portrait'
     };
 
-    this.streamingMedia.playVideo(this.global.base_url('assets/videos/' + video), options);
+    this.streamingMedia.playVideo(video, options);
+  }
+
+  // playVideo
+  playThankyouVideo(video: string) {
+    const modal = this.modalCtrl.create(ThankyouVideoPage, {
+      videoUrl: video
+    });
+    modal.present();
   }
 
   // shareInfo

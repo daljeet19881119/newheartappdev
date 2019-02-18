@@ -31,10 +31,11 @@
       </ion-row>
       <ion-row>
         <ion-col col-2 (click)="openCountry()" style="color: #000000;">
-            <ion-label>{{ '+'+dial_code }}</ion-label>
+          <ion-label>{{ '+'+dial_code }}</ion-label>
         </ion-col>
         <ion-col col-10 style="color: #000000;">
-            <ion-input type="number" [(ngModel)]="mobileno" placeholder="Enter Phone Number" (ionBlur)="sendVerificationCode()"></ion-input>
+          <ion-input type="number" [(ngModel)]="mobileno" placeholder="Enter Phone Number"
+            (ionBlur)="sendVerificationCode()"></ion-input>
         </ion-col>
       </ion-row>
     </div>
@@ -48,7 +49,8 @@
     </div>
     <ion-item no-padding class="item-feilds">
       <ion-label floating>Email<span *ngIf="verification_type == 'email'">*</span></ion-label>
-      <ion-input type="email" [(ngModel)]="email" placeholder="Enter Email" (ionBlur)="sendVerificationEmail()"></ion-input>
+      <ion-input type="email" [(ngModel)]="email" placeholder="Enter Email" (ionBlur)="sendVerificationEmail()">
+      </ion-input>
     </ion-item>
     <div class="textarea-div" *ngIf="email_verification_code">
       <ion-row>
@@ -59,25 +61,52 @@
       </ion-item>
     </div>
     <ion-item no-padding class="item-feilds">
-        <ion-label>
-          Tap here to select country
-        </ion-label>
-        <ion-select interface="popover" [(ngModel)]="country">
-          <ng-container *ngFor="let country of all_countries">
-            <ion-option [value]="country.id">{{ country.name }}</ion-option>
-          </ng-container>
-        </ion-select>
-      </ion-item>
-      <ion-item no-padding class="item-feilds">
-        <ion-label>
-          Tap here to select region
-        </ion-label>
-        <ion-select interface="popover" [(ngModel)]="region">
-          <ng-container *ngFor="let region of all_regions">
-            <ion-option [value]="region.id">{{ region.name }}</ion-option>
-          </ng-container>
-        </ion-select>
-      </ion-item>
+      <ion-label>
+        Tap here to select country
+      </ion-label>
+      <ion-select interface="popover" [(ngModel)]="country">
+        <ng-container *ngFor="let country of all_countries">
+          <ion-option [value]="country.id">{{ country.name }}</ion-option>
+        </ng-container>
+      </ion-select>
+    </ion-item>
+    <ion-item no-padding class="item-feilds">
+      <ion-label>
+        Tap here to select region
+      </ion-label>
+      <ion-select interface="popover" [(ngModel)]="region">
+        <ng-container *ngFor="let region of all_regions">
+          <ion-option [value]="region.id">{{ region.name }}</ion-option>
+        </ng-container>
+      </ion-select>
+    </ion-item>
+    <div class="textarea-div">
+      <ion-row>
+        <p>How much do you want to donate each month?</p>
+      </ion-row>
+      <ion-row>
+        <div class="gauge-div">
+          <nga-ng2-gauge [max]="max" [input]="donation_amount" [sectors]="sectors" [size]="200" [showDigital]="true">
+          </nga-ng2-gauge>
+        </div>
+      </ion-row>
+      <ion-row>
+        <ion-col col-2>
+          <button ion-button small (click)="decrementDonation()" [disabled]="disableMinusBtn" color="appColor">
+            <ion-icon name="remove"></ion-icon>
+          </button>
+        </ion-col>
+        <ion-col col-8 text-center>
+          <!-- <span class="range-val">{{ '$'+toLocaleString(donation_amount) }}</span>&nbsp;
+            <span class="hc-val">({{ toLocaleString(donation_amount * 100) }} HC)</span> -->
+        </ion-col>
+        <ion-col text-right col-2>
+          <button ion-button small (click)="incrementDonation()" [disabled]="disablePlusBtn" color="appColor">
+            <ion-icon name="add"></ion-icon>
+          </button>
+        </ion-col>
+      </ion-row>
+    </div>
     <div class="textarea-div">
       <ion-row>
         <p>How much you want to donate to causes (0-90%) and to HeartGlobal (10-100%)</p>
@@ -109,35 +138,10 @@
         </ion-col>
       </ion-row>
     </div>
-    <div class="textarea-div">
-      <ion-row>
-        <p>How much do you want to donate each month?</p>
-      </ion-row>
-      <ion-row>
-        <div class="gauge-div">
-          <nga-ng2-gauge [max]="max" [input]="donation_amount" [sectors]="sectors" [size]="200" [showDigital]="true">
-          </nga-ng2-gauge>
-        </div>
-      </ion-row>
-      <ion-row>
-        <ion-col col-2>
-          <button ion-button small (click)="decrementDonation()" [disabled]="disableMinusBtn" color="appColor">
-            <ion-icon name="remove"></ion-icon>
-          </button>
-        </ion-col>
-        <ion-col col-8 text-center>
-          <!-- <span class="range-val">{{ '$'+toLocaleString(donation_amount) }}</span>&nbsp;
-          <span class="hc-val">({{ toLocaleString(donation_amount * 100) }} HC)</span> -->
-        </ion-col>
-        <ion-col text-right col-2>
-          <button ion-button small (click)="incrementDonation()" [disabled]="disablePlusBtn" color="appColor">
-            <ion-icon name="add"></ion-icon>
-          </button>
-        </ion-col>
-      </ion-row>
-    </div>
-    <ion-item no-padding (click)="gotoCharityPage()" *ngIf="!checkCharity || charities?.length == 0" class="item-feilds">
-      <ion-label style="color: #999999;">Select charity areas <ion-icon name="arrow-forward" class="next-arrow"></ion-icon>
+    <ion-item no-padding (click)="gotoCharityPage()" *ngIf="!checkCharity || charities?.length == 0"
+      class="item-feilds">
+      <ion-label style="color: #999999;">Select charity areas <ion-icon name="arrow-forward" class="next-arrow">
+        </ion-icon>
       </ion-label>
     </ion-item>
     <ion-row *ngIf="charities?.length > 0">
@@ -146,7 +150,8 @@
       </div>
       <ion-col col-10 no-padding>
         <ion-item no-padding class="item-feild-textarea">
-          <ion-textarea [(ngModel)]="charities" readonly text-wrap class="text-area" (ionFocus)="gotoCharityPage()"></ion-textarea>
+          <ion-textarea [(ngModel)]="charities" readonly text-wrap class="text-area" (ionFocus)="gotoCharityPage()">
+          </ion-textarea>
         </ion-item>
       </ion-col>
       <ion-col col-2 no-padding (click)="gotoCharityPage()">
@@ -156,7 +161,7 @@
           </ion-label>
         </ion-item>
       </ion-col>
-    </ion-row>    
+    </ion-row>
     <div class="textarea-div">
       <ion-row>
         <p class="upload-para">Upload image of yourself or take a picture</p>

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { UserinfoPage } from '../userinfo/userinfo';
 import { HomePage } from '../home/home';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -25,12 +25,8 @@ export class VerifycodePage {
   verification_type: any;
   sendSMS: boolean;
 
-  constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public platform: Platform, private global: GlobalProvider, private userService: UserProvider) {
+  constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, private global: GlobalProvider, private userService: UserProvider) {
 
-    // if user try goback then exit app
-    this.platform.registerBackButtonAction(() => {
-      platform.exitApp();
-    });
   }
 
   ionViewDidLoad() {

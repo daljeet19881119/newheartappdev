@@ -23,6 +23,33 @@
     </ion-item>
     <div class="textarea-div">
       <ion-row>
+        <p>How much do you want to donate each month?</p>
+      </ion-row>
+      <ion-row>
+        <div class="gauge-div">
+          <nga-ng2-gauge [max]="max" [input]="donation_amount" [sectors]="sectors" [size]="200" [showDigital]="true">
+          </nga-ng2-gauge>
+        </div>
+      </ion-row>
+      <ion-row>
+        <ion-col col-2>
+          <button ion-button small (click)="decrementDonation()" [disabled]="disableMinusBtn" color="appColor">
+            <ion-icon name="remove"></ion-icon>
+          </button>
+        </ion-col>
+        <ion-col col-8 text-center>
+          <span class="range-val">{{ '$'+toLocaleString(donation_amount) }}</span>&nbsp;
+          <span class="hc-val">({{ toLocaleString(donation_amount * 100) }} HC)</span>
+        </ion-col>
+        <ion-col text-right col-2>
+          <button ion-button small (click)="incrementDonation()" [disabled]="disablePlusBtn" color="appColor">
+            <ion-icon name="add"></ion-icon>
+          </button>
+        </ion-col>
+      </ion-row>
+    </div>
+    <div class="textarea-div">
+      <ion-row>
         <p>How much you want to donate to causes (0-90%) and to HeartGlobal (10-100%)</p>
       </ion-row>
       <ion-row>
@@ -54,33 +81,6 @@
     </div>
     <div class="textarea-div">
       <ion-row>
-        <p>How much do you want to donate each month?</p>
-      </ion-row>
-      <ion-row>
-        <div class="gauge-div">
-          <nga-ng2-gauge [max]="max" [input]="donation_amount" [sectors]="sectors" [size]="200" [showDigital]="true">
-          </nga-ng2-gauge>
-        </div>
-      </ion-row>
-      <ion-row>
-        <ion-col col-2>
-          <button ion-button small (click)="decrementDonation()" [disabled]="disableMinusBtn" color="appColor">
-            <ion-icon name="remove"></ion-icon>
-          </button>
-        </ion-col>
-        <ion-col col-8 text-center>
-          <span class="range-val">{{ '$'+toLocaleString(donation_amount) }}</span>&nbsp;
-          <span class="hc-val">({{ toLocaleString(donation_amount * 100) }} HC)</span>
-        </ion-col>
-        <ion-col text-right col-2>
-          <button ion-button small (click)="incrementDonation()" [disabled]="disablePlusBtn" color="appColor">
-            <ion-icon name="add"></ion-icon>
-          </button>
-        </ion-col>
-      </ion-row>
-    </div>
-    <div class="textarea-div">
-      <ion-row>
         <ion-col col-1 style="padding-top: 19px;">
           <ion-checkbox [(ngModel)]="large_donation"></ion-checkbox>
         </ion-col>
@@ -92,8 +92,10 @@
     </div>
     <div class="textarea-div">
       <ion-row>
-        <button ion-button block (click)="addPaymentMethod()" color="appColor" style="margin: 10px 0;text-transform: inherit;" *ngIf="!card_btn">Tap to Add Card*</button>
-        <button ion-button block color="appColor" style="margin: 10px 0;text-transform: inherit;" *ngIf="card_btn">{{ 'Card **'+ card_number + ' registered' }}</button>
+        <button ion-button block (click)="addPaymentMethod()" color="appColor"
+          style="margin: 10px 0;text-transform: inherit;" *ngIf="!card_btn">Tap to Add Card*</button>
+        <button ion-button block color="appColor" style="margin: 10px 0;text-transform: inherit;"
+          *ngIf="card_btn">{{ 'Card **'+ card_number + ' registered' }}</button>
       </ion-row>
       <!-- <ion-row>
         <button ion-button block color="appColor" style="margin: 10px 0;">Add Bank Payment (zero charge)</button>
@@ -160,8 +162,10 @@
         </ion-col>
       </ion-row>
     </div>
-    <ion-item no-padding (click)="gotoCharityPage()" *ngIf="!checkCharity || charities?.length == 0" class="item-feilds">
-      <ion-label style="color: #999999;">Select Cause category* <ion-icon name="arrow-forward" class="next-arrow"></ion-icon>
+    <ion-item no-padding (click)="gotoCharityPage()" *ngIf="!checkCharity || charities?.length == 0"
+      class="item-feilds">
+      <ion-label style="color: #999999;">Select Cause category* <ion-icon name="arrow-forward" class="next-arrow">
+        </ion-icon>
       </ion-label>
     </ion-item>
     <ion-row *ngIf="charities?.length > 0">
@@ -170,7 +174,8 @@
       </div>
       <ion-col col-10 no-padding>
         <ion-item no-padding class="item-feild-textarea">
-          <ion-textarea [(ngModel)]="charities" readonly text-wrap class="text-area" (ionFocus)="gotoCharityPage()"></ion-textarea>
+          <ion-textarea [(ngModel)]="charities" readonly text-wrap class="text-area" (ionFocus)="gotoCharityPage()">
+          </ion-textarea>
         </ion-item>
       </ion-col>
       <ion-col col-2 no-padding (click)="gotoCharityPage()">
@@ -189,7 +194,8 @@
         <ion-col>
           <ion-item class="item-radio">
             <ion-label>Select a specific country</ion-label>
-            <ion-checkbox [(ngModel)]="checkCountry" item-end (ionChange)="checkPreference('country');getPreferenceCheck(checkCountry, checkRegion);"></ion-checkbox>
+            <ion-checkbox [(ngModel)]="checkCountry" item-end
+              (ionChange)="checkPreference('country');getPreferenceCheck(checkCountry, checkRegion);"></ion-checkbox>
           </ion-item>
         </ion-col>
       </ion-row>
@@ -197,7 +203,8 @@
         <ion-col>
           <ion-item class="item-radio">
             <ion-label>Select a region</ion-label>
-            <ion-checkbox [(ngModel)]="checkRegion" item-end (ionChange)="checkPreference('region');getPreferenceCheck(checkCountry, checkRegion);"></ion-checkbox>
+            <ion-checkbox [(ngModel)]="checkRegion" item-end
+              (ionChange)="checkPreference('region');getPreferenceCheck(checkCountry, checkRegion);"></ion-checkbox>
           </ion-item>
         </ion-col>
       </ion-row>
@@ -230,13 +237,15 @@
       <ion-list class="list-height">
         <ng-container *ngFor="let bh of all_bh">
           <ion-item class="payment-item">
-            <ion-avatar item-start style="background: #48414130;border-radius: 50%;border: 1px solid #48414130;z-index: 1;"
+            <ion-avatar item-start
+              style="background: #48414130;border-radius: 50%;border: 1px solid #48414130;z-index: 1;"
               (click)="viewBHProfile(bh.user_id)">
               <img [src]="bh.bh_founder_img_url" [alt]="bh.bh_name">
             </ion-avatar>
             <ion-label (click)="viewBHProfile(bh.user_id)" style="z-index: 1;">{{ (bh.bh_associated_non_profit!="")? bh.bh_founder_name+'
               ('+bh.bh_associated_non_profit+')' : bh.bh_founder_name }}</ion-label>
-            <ion-checkbox [(ngModel)]="bh.checked" (click)="getSelectedNgo(bh.checked, bh.user_id);" item-end></ion-checkbox>
+            <ion-checkbox [(ngModel)]="bh.checked" (click)="getSelectedNgo(bh.checked, bh.user_id);" item-end>
+            </ion-checkbox>
           </ion-item>
         </ng-container>
       </ion-list>

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "825519825337",
+    "firebase_url": "https://heartglobalapp.firebaseio.com",
+    "project_id": "heartglobalapp",
+    "storage_bucket": "heartglobalapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:825519825337:android:ad4980f1e8e91c29",
+        "android_client_info": {
+          "package_name": "org.heartcash.heartapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "825519825337-ln5ata84v2dn3f82s4lokqv397rc7s4e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIuipttE5eS7U8ME5XPa7QwXp61Fwr9TY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

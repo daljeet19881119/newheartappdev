@@ -29,7 +29,7 @@ export class ForgotPasswordPage {
             this.global.createAlert("","We did not found your email. Please type the registered email.");
           }
           if(data.msg == "success") {
-            this.global.createAlert("","We have send the password in your email.");
+            this.global.createAlert("","We have send the password to your email.");
           }
           this.email = "";
       });

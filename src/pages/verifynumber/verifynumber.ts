@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { VerifycodePage } from '../verifycode/verifycode';
 import { UserProvider } from '../../providers/user/user';
 import { Storage } from '@ionic/storage';
@@ -23,15 +23,10 @@ export class VerifynumberPage {
   email: any = '';
   token: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private global: GlobalProvider, public platform: Platform, public userService: UserProvider, private storage: Storage, private fcm: FCM) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private global: GlobalProvider, public userService: UserProvider, private storage: Storage, private fcm: FCM) {
 
     // call getuniqueDeviceID
     this.getuniqueDeviceID();
-
-    // if user try goback then exit app
-    this.platform.registerBackButtonAction(() => {
-      platform.exitApp();
-    });
 
     // call function createLoader
     this.global.createLoader('Please wait...');

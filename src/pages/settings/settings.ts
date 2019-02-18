@@ -47,7 +47,7 @@ export class SettingsPage {
   selected_charity: any = [];
   all_charites: any = [];
   cause_percentage: number = 90;
-  donation_amount: number = 20;
+  donation_amount: number = 25;
   max: number = 1000;
   sectors: any = [{
     from: 0,
@@ -83,6 +83,10 @@ export class SettingsPage {
     });    
   }
 
+  ionViewWillLeave() {
+    this.updateUserData();
+  }
+
   ionViewDidLoad() {
     // navbar backbutton click
     this.navBar.backButtonClick = () => {
@@ -116,14 +120,14 @@ export class SettingsPage {
       this.donation_amount = this.donation_amount + 5;
       this.donation_amount = 25;
     }
-    else if (this.donation_amount < 500 && this.donation_amount >= 25) {
+    if (this.donation_amount < 500 && this.donation_amount >= 25) {
       this.donation_amount = this.donation_amount + 25;
     }
     else if (this.donation_amount >= 500 && this.donation_amount <= 950) {
       this.donation_amount = this.donation_amount + 50;
     }
 
-    if (this.donation_amount >= 25 && this.donation_amount < 950) {
+    if (this.donation_amount > 25 && this.donation_amount < 950) {
       this.disableMinusBtn = false;
       this.disablePlusBtn = false;
     }
@@ -135,21 +139,21 @@ export class SettingsPage {
 
   // decrementDonation
   decrementDonation() {
-    if(this.donation_amount <= 25) {
-      this.donation_amount = this.donation_amount - 5;
-    }
-    else if (this.donation_amount <= 500 && this.donation_amount > 25) {
+    // if(this.donation_amount <= 25) {
+    //   this.donation_amount = this.donation_amount - 5;
+    // }
+    if (this.donation_amount <= 500 && this.donation_amount > 25) {
       this.donation_amount = this.donation_amount - 25;
     }
     else if (this.donation_amount > 500 && this.donation_amount <= 1000) {
       this.donation_amount = this.donation_amount - 50;
     }
 
-    if (this.donation_amount >= 25 && this.donation_amount < 1000) {
+    if (this.donation_amount > 25 && this.donation_amount < 1000) {
       this.disableMinusBtn = false;
       this.disablePlusBtn = false;
     }
-    else if (this.donation_amount < 25) {
+    else if (this.donation_amount <= 25) {
       this.disablePlusBtn = false;
       this.disableMinusBtn = true;
     }
@@ -309,6 +313,7 @@ export class SettingsPage {
           this.preference_type = 'both';
         }
 
+
         // set data to be send
         let data = {
           userid: this.userid,
@@ -322,6 +327,7 @@ export class SettingsPage {
           preference_type: this.preference_type,
           country: this.country,
           region: this.region,
+          charities: this.selected_charity,
           hc_percentage: hc_percentage,
           profile_pic: this.profile_pic,
           donation_amount: this.donation_amount
@@ -365,7 +371,7 @@ export class SettingsPage {
     // send sms mobileno not empty
     if (this.mobileno != '' && this.mobileno != this.old_mobno) {
 
-      let message = `We've sent an SMS with an activation code to your phone <b>+${this.dial_code + ' ' + this.mobileno}</b>`;
+      let message = `We've sent an SMS with an activation code to your phone <b>+${this.dial_code + ' ' + this.old_mobno}</b>`;
 
       // create alert
       this.global.createAlert('', message);
@@ -373,7 +379,7 @@ export class SettingsPage {
       // set sms verification data
       let data = {
         country_dial_code: this.dial_code,
-        mobileno: this.mobileno
+        mobileno: this.old_mobno
       };
 
       this.userService.sendVerificationCode(data).subscribe(code => {
@@ -410,14 +416,14 @@ export class SettingsPage {
   sendVerificationEmail() {
     // send email if not empty
     if (this.email != '' && this.email != this.old_email) {
-      let message = `We've sent an email with an activation code to your email <b>${this.email}</b>`;
+      let message = `We've sent an email with an activation code to your email <b>${this.old_email}</b>`;
 
       // create alert
       this.global.createAlert('', message);
 
       // set email verification data
       let data = {
-        email: this.email
+        email: this.old_email
       };
 
       this.userService.sendVerificationEmail(data).subscribe(code => {
@@ -452,6 +458,7 @@ export class SettingsPage {
       charities.forEach(element => {
           if(selected_charity.indexOf(element.id) != -1) {
             element.value = true;
+            this.selected_charity.push(parseInt(element.id));
           }
           else{
             element.value = false;
@@ -482,7 +489,7 @@ export class SettingsPage {
         if (element.value == true) {
           // push element to charity arr
           charities.push(element.name.trim());
-          this.selected_charity.push(element.id);
+          this.selected_charity.push(parseInt(element.id));
         }
       });
 

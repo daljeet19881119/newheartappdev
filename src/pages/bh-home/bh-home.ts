@@ -45,7 +45,7 @@ export class BhHomePage {
   videoName: any;
   hc_balance: any;
   us_balance: any;
-  showRecordMsg: boolean;
+  showRecordMsg: boolean = true;
   transaction_id: any;
   constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public platform: Platform, public userService: UserProvider, private global: GlobalProvider, private streamingMedia: StreamingMedia, private homeService: HomePageProvider, private bhHomeService: BhHomePageProvider, private sharing: SocialSharing, private storage: Storage, private mediaCapture: MediaCapture, private transfer: FileTransfer, private androidPermissions: AndroidPermissions, private fcm: FCM) {
 
@@ -269,7 +269,8 @@ export class BhHomePage {
           
           // send thankyou notificaitn to user
           this.bhHomeService.sendThankyouMessage(notification_data).subscribe(notification_res => {
-            console.log(notification_res);
+            // show alert
+            this.global.createAlert('','Your thankyou video upload successfully.');
           }, err => console.log(err));
         }
 

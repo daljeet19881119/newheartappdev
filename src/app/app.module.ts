@@ -49,6 +49,8 @@ import { Ng2GaugeModule } from 'ng2-gauge';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { SigninPage } from '../pages/signin/signin';
 import { ForgotPasswordPage } from '../pages/forgot-password/forgot-password';
+import { ThankyouVideoPage } from '../pages/thankyou-video/thankyou-video';
+import { Network } from '@ionic-native/network';
 
 @NgModule({
   declarations: [
@@ -74,7 +76,8 @@ import { ForgotPasswordPage } from '../pages/forgot-password/forgot-password';
     ViewNgoPage,
     SettingsPage,
     SigninPage,
-    ForgotPasswordPage
+    ForgotPasswordPage,
+    ThankyouVideoPage
   ],
   imports: [
     BrowserModule,
@@ -108,7 +111,8 @@ import { ForgotPasswordPage } from '../pages/forgot-password/forgot-password';
     ViewNgoPage,
     SettingsPage,
     SigninPage,
-    ForgotPasswordPage
+    ForgotPasswordPage,
+    ThankyouVideoPage
   ],
   providers: [
     StatusBar,
@@ -131,7 +135,8 @@ import { ForgotPasswordPage } from '../pages/forgot-password/forgot-password';
     BhHomePageProvider,
     CardIO,
     FCM,
-    InAppBrowser 
+    InAppBrowser,
+    Network
   ]
 })
 export class AppModule {}

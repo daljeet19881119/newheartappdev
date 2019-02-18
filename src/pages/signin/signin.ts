@@ -45,7 +45,7 @@ export class SigninPage {
         token: (token == null) ? "" : token
       }; 
       // call loader
-      this.global.createLoader("Signin");
+      this.global.createLoader("Signing In");
       this.userService.login(data).subscribe(response => {
           if(response.length < 1) {
             this.global.createAlert('', "Either your email or password is incorrect.");
