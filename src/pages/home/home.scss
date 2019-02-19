@@ -46,7 +46,7 @@ page-home {
     .balance-para{
         text-align: center;
         color: #fff;
-        font-size: 30px;
+        font-size: 27px;
         display: block;
         margin: 5px 0px;
     }
@@ -79,7 +79,6 @@ page-home {
         color: #ae0433!important;      
     }
     .payment-toolbar{
-        margin-top: 30px;
         margin-left: 2.5%;
         margin-right: 2.5%;
         width: 95%;
@@ -227,6 +226,14 @@ page-home {
         margin: 5px 0;
     }
     .share-icon{
+        color: #ae0433;
+    }
+    .add-to-bighearts{
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+        margin-bottom: 15px;
+        margin-top: 10px;
         color: #ae0433;
     }
 }

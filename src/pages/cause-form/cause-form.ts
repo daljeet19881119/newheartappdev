@@ -157,7 +157,9 @@ export class CauseFormPage {
       this.userid = data.data.user_id;
       this.prefType = data.data.preference_type;
       this.email = data.data.email;
-
+      this.fname = data.data.fname;
+      this.lname = data.data.lname;
+      
       // put value if it is country
       if (this.prefType == 'country') {
         this.country = data.data.country;

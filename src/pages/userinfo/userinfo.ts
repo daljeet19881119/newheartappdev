@@ -790,8 +790,4 @@ export class UserinfoPage {
       uuid: this.uuid
     });
   }
-
-  pictureAlert() {
-    this.global.createAlert('', "You can do this later");
-  }
 }

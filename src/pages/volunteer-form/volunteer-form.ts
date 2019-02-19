@@ -136,6 +136,9 @@ export class VolunteerFormPage {
     // request to userProvide
     this.userService.getUserByDeviceId(this.uuid).subscribe(data => {
       this.userid = data.data.id;
+      this.email = data.data.email;
+      this.fname = data.data.fname;
+      this.lname = data.data.lname;
     }, err => {
       console.log(err);
     });

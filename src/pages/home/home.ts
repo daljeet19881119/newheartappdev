@@ -10,6 +10,7 @@ import { Slides } from 'ionic-angular';
 import { GlobalProvider } from '../../providers/global/global';
 import { FCM } from '@ionic-native/fcm';
 import { ThankyouVideoPage } from '../thankyou-video/thankyou-video';
+import { UserBigheartsPage } from '../user-bighearts/user-bighearts';
 
 @Component({
   selector: 'page-home',
@@ -249,5 +250,10 @@ export class HomePage {
     
     // return only 30 character
     return text.slice(0, 20) + '.....';
+  }
+
+  // gotoUserBigheartsPage
+  gotoUserBigheartsPage() {
+    this.navCtrl.push(UserBigheartsPage);
   }
 }

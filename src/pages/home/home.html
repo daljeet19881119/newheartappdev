@@ -13,7 +13,8 @@
                 <div class="logo-div" style="background: url('assets/imgs/logo.png');"></div>
             </ion-col>
             <ion-col col-4 class="pay-col" no-padding>
-                <!-- <span class="header-pay">Pay</span> -->
+                <button ion-button small color="white" class="add-to-bighearts" (click)="gotoUserBigheartsPage()">My
+                    Bighearts</button>
             </ion-col>
         </ion-row>
     </ion-navbar>
@@ -26,7 +27,7 @@
                 <span class="balance">{{ hc_balance }}</span>
             </p>
             <span class="usd-balance">{{ '($'+ us_balance +')' }}</span>
-        </ng-container>        
+        </ng-container>
         <ion-toolbar color="appColor" class="payment-toolbar">
             <ion-segment [(ngModel)]="latestTabs" (click)="showTabs()">
                 <ion-segment-button value="donations" class="payment-segments">
@@ -38,62 +39,74 @@
 </ion-header>
 
 <ion-content no-padding>
-    <div class="bottom-part" [ngClass]="tabClass">
-        <!-- switch case part -->
-        <div [ngSwitch]="latestTabs">
-            <div class="list-part" *ngSwitchCase="'donations'">
-                <div class="donation-list" id="donation-list">
-                    <ion-list *ngFor="let donation of latestDonations" class="donations-lists">
-                        <ion-item class="donation-items">
-                            <ion-avatar item-start>
-                                <div class="ngo-img-div" [style.backgroundImage]="'url('+donation.bh_founder_img+')'"  (click)="gotoProfilePage(donation.user_id)" *ngIf="donation.user_type == 'bh_user'"></div>
-                                <div class="ngo-img-div" [style.backgroundImage]="'url('+donation.bh_founder_img+')'"  *ngIf="donation.user_type == 'user'"></div>
-                                <div class="ngo-img-div" [style.backgroundImage]="'url(assets/imgs/logo.png)'"  *ngIf="donation.user_type == 'hg_user'"></div>
-                            </ion-avatar>                            
-                            <ion-row>
-                                <ion-col col-5 no-padding>
-                                    <h2 class="ngo-name">{{ (donation.bh_founder_name.length > 20) ? getWords(donation.bh_founder_name) : donation.bh_founder_name}}</h2>
-                                    <p class="ngo-date">{{ donation.transaction_date}}</p>
-                                    <p class="ngo-date" *ngIf="donation.user_type == 'bh_user'">{{ 'Donation to '+ donation.bh_name}}</p>
-                                    <p class="ngo-date" *ngIf="donation.user_type == 'user'">{{ 'Deposit from Card no. **'+ cc_number}}</p>
-                                    <p class="ngo-date" *ngIf="donation.user_type == 'hg_user' && donation.fees_type == 'cc_fee'">{{ 'cc fee'}}</p>
-                                    <p class="ngo-date" *ngIf="donation.user_type == 'hg_user' && donation.fees_type == 'hg_user_fee'">{{ 'Donation to '+donation.bh_founder_name}}</p>
-                                </ion-col>
-                                <ion-col col-7 style="text-align: right;" no-padding>
-                                    <p style="font-size:12px;">
-                                        <ion-icon name="heart-outline" class="heart-small-icon"></ion-icon> 
-                                        <span class="heart-coin">{{ (donation.user_type == 'user') ? '+'+donation.transaction_hc_amount : '-'+donation.transaction_hc_amount }}</span> 
-                                        <span class="heart-coin">({{ (donation.user_type == 'user') ? '+$'+donation.transaction_us_amount : '-$'+donation.transaction_us_amount }})</span>
-                                    </p>
-                                    <p class="play-para" (click)="playVideo(donation.thankyou_video)" *ngIf="donation.thankyou_video != '' && donation.user_type == 'bh_user'">
-                                        <ion-icon name="play" class="play-icon"></ion-icon>
-                                        <span>Thank you Message</span>
-                                    </p>
-                                    <span  class="share-icon" (click)="shareInfo(donation.bh_name, donation.bh_founder_img, donation.bh_founder_name, donation.bh_desc, donation.bh_youtube_id)" *ngIf="donation.user_type == 'bh_user'">
-                                        <ion-icon name="share"></ion-icon>
-                                    </span>
-                                </ion-col>
-                            </ion-row>                
-                        </ion-item>
-                    </ion-list>
-                </div>                
-            </div> 
-        </div>
-    </div>    
+    <ion-list>
+        <ng-container *ngFor="let donation of latestDonations" class="donations-lists">
+            <ion-item class="donation-items">
+                <ion-avatar item-start>
+                    <div class="ngo-img-div" [style.backgroundImage]="'url('+donation.bh_founder_img+')'"
+                        (click)="gotoProfilePage(donation.user_id)" *ngIf="donation.user_type == 'bh_user'"></div>
+                    <div class="ngo-img-div" [style.backgroundImage]="'url('+donation.bh_founder_img+')'"
+                        *ngIf="donation.user_type == 'user'"></div>
+                    <div class="ngo-img-div" [style.backgroundImage]="'url(assets/imgs/logo.png)'"
+                        *ngIf="donation.user_type == 'hg_user'"></div>
+                </ion-avatar>
+                <ion-row>
+                    <ion-col col-5 no-padding>
+                        <h2 class="ngo-name">
+                            {{ (donation.bh_founder_name.length > 20) ? getWords(donation.bh_founder_name) : donation.bh_founder_name}}
+                        </h2>
+                        <p class="ngo-date">{{ donation.transaction_date}}</p>
+                        <p class="ngo-date" *ngIf="donation.user_type == 'bh_user'">
+                            {{ 'Donation to '+ donation.bh_name}}
+                        </p>
+                        <p class="ngo-date" *ngIf="donation.user_type == 'user'">
+                            {{ 'Deposit from Card no. **'+ cc_number}}
+                        </p>
+                        <p class="ngo-date" *ngIf="donation.user_type == 'hg_user' && donation.fees_type == 'cc_fee'">
+                            {{ 'cc fee'}}</p>
+                        <p class="ngo-date"
+                            *ngIf="donation.user_type == 'hg_user' && donation.fees_type == 'hg_user_fee'">
+                            {{ 'Donation to '+donation.bh_founder_name}}</p>
+                    </ion-col>
+                    <ion-col col-7 style="text-align: right;" no-padding>
+                        <p style="font-size:12px;">
+                            <ion-icon name="heart-outline" class="heart-small-icon"></ion-icon>
+                            <span
+                                class="heart-coin">{{ (donation.user_type == 'user') ? '+'+donation.transaction_hc_amount : '-'+donation.transaction_hc_amount }}</span>
+                            <span
+                                class="heart-coin">({{ (donation.user_type == 'user') ? '+$'+donation.transaction_us_amount : '-$'+donation.transaction_us_amount }})</span>
+                        </p>
+                        <p class="play-para" (click)="playVideo(donation.thankyou_video)"
+                            *ngIf="donation.thankyou_video != '' && donation.user_type == 'bh_user'">
+                            <ion-icon name="play" class="play-icon"></ion-icon>
+                            <span>Thank you Message</span>
+                        </p>
+                        <span class="share-icon"
+                            (click)="shareInfo(donation.bh_name, donation.bh_founder_img, donation.bh_founder_name, donation.bh_desc, donation.bh_youtube_id)"
+                            *ngIf="donation.user_type == 'bh_user'">
+                            <ion-icon name="share"></ion-icon>
+                        </span>
+                    </ion-col>
+                </ion-row>
+            </ion-item>
+        </ng-container>
+    </ion-list>
+    <div style="height: 10rem;"></div>   
 </ion-content>
-<ion-footer class="home-footer">   
+<ion-footer class="home-footer">
     <div class="view-all" (click)="viewAll()" id="view-all" *ngIf="latestTabs == 'donations' && showDonationBtn">
         <button ion-button color="appColor" small>View All</button>
-    </div> 
-    <ion-toolbar no-padding>             
+    </div>
+    <ion-toolbar no-padding>
         <div class="recomended-hearts">
             <p class="para-footer">Recommended BigHearts</p>
             <ion-slides loop="true" slidesPerView="3" autoplay="10000" *ngIf="recommendedBigHearts">
-                <ng-container  *ngFor="let recommendHearts of recommendedBigHearts">
+                <ng-container *ngFor="let recommendHearts of recommendedBigHearts">
                     <ion-slide>
-                        <div class="ngo-img-div" [style.backgroundImage]="'url('+recommendHearts.bh_founder_img+')'"  (click)="gotoProfilePage(recommendHearts.user_id)"></div>                    
-                        <p class="ngo-founder">{{ recommendHearts.bh_founder_name}}</p> 
-                        <p class="ngo-date">{{ recommendHearts.bh_charity_name}}</p> 
+                        <div class="ngo-img-div" [style.backgroundImage]="'url('+recommendHearts.bh_founder_img+')'"
+                            (click)="gotoProfilePage(recommendHearts.user_id)"></div>
+                        <p class="ngo-founder">{{ recommendHearts.bh_founder_name}}</p>
+                        <p class="ngo-date">{{ recommendHearts.bh_charity_name}}</p>
                     </ion-slide>
                 </ng-container>
             </ion-slides>

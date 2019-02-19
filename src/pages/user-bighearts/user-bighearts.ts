@@ -62,6 +62,7 @@ export class UserBigheartsPage {
     // save user bighearts on navbar back arrow click
     this.navbar.backButtonClick = () => {
       this.saveUserBigheart();
+      this.navCtrl.pop();
     };
   }
 
