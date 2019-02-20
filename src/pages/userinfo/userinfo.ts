@@ -588,8 +588,10 @@ export class UserinfoPage {
     }
     else{
       let fullname = this.firstName+' '+this.lastName;
+      let date = new Date();
+      let random_no = date.getTime();
 
-      const browser = this.iab.create(this.global.base_url('sqpayment/?name='+fullname+'&email='+this.email+'&user_id='+this.user_id), '_blank', 'location=yes');
+      const browser = this.iab.create(this.global.base_url('sqpayment/?name='+fullname+'&email='+this.email+'&user_id='+this.user_id+'&unique_no='+random_no), '_blank', 'location=yes');
 
       browser.show();      
       
@@ -603,11 +605,14 @@ export class UserinfoPage {
 
         // getUserById
         this.userService.getUserById(this.user_id).subscribe(data => {
-            this.card_number = data.card_last_digit;
+            // check if unique no mathces
+            if(data.unique_no == random_no) {
+              this.card_number = data.card_last_digit;
 
-            if(this.card_number != "" || this.card_number != null) {
-              this.card_btn = true;
-            }           
+              if(this.card_number != "" || this.card_number != null) {
+                this.card_btn = true;
+              }  
+            }                     
 
           this.global.dismissLoader();
         }, err => {

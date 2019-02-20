@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { GlobalProvider } from '../../providers/global/global';
 import { UserProvider } from '../../providers/user/user';
 import { BhHomePage } from '../bh-home/bh-home';
@@ -18,10 +18,14 @@ export class SigninPage {
 
   email: string = "";
   password: string = "";
-  constructor(public navCtrl: NavController, public navParams: NavParams, private global: GlobalProvider, private userService: UserProvider, private fcm: FCM) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private global: GlobalProvider, private userService: UserProvider, private fcm: FCM, private platform: Platform) {
   }
 
   ionViewDidLoad() {
+    // exit app on back button click
+    this.platform.registerBackButtonAction(() => {
+      this.platform.exitApp();
+    });
   }
 
   // getToken
