@@ -176,6 +176,29 @@
         </ion-col>
       </ion-row>
     </div>
+    <div class="textarea-div">
+      <ion-row style="padding: 20px 10px 0px;color: #333;">
+        <h4>Change Password</h4>
+      </ion-row>
+      <ion-item no-padding class="item-feilds">
+        <ion-label floating>Current Password</ion-label>
+        <ion-input type="password" [(ngModel)]="current_password">
+        </ion-input>
+      </ion-item>
+      <ion-item no-padding class="item-feilds">
+        <ion-label floating>New Password</ion-label>
+        <ion-input type="password" [(ngModel)]="new_password">
+        </ion-input>
+      </ion-item>
+      <ion-item no-padding class="item-feilds">
+        <ion-label floating>Confirm Password</ion-label>
+        <ion-input type="password" [(ngModel)]="confirm_password">
+        </ion-input>
+      </ion-item>
+      <ion-row style="padding:10px;">
+        <button ion-button small color="appColor" (click)="changePassword()">Update Password</button>
+      </ion-row>
+    </div>
   </ion-list>
   <!-- <button ion-button block color="white" class="register-btn" (click)="updateUserData()">Save</button> -->
 </ion-content>

@@ -21,7 +21,7 @@
       </ion-item>
       <div class="textarea-div">
           <ion-row>
-            <ion-label>Select the Charity(ies) you are engaged in*</ion-label>
+            <p>Which charitable field(s) are you interested in?*</p>
           </ion-row>
           <ion-item no-padding (click)="gotoCharityPage()" *ngIf="!checkCharity || charities?.length == 0" class="item-feilds"> 
             <ion-label style="color: #999999;">Tap here to select <ion-icon name="arrow-forward" class="next-arrow"></ion-icon></ion-label>       
@@ -41,7 +41,7 @@
       </div>
       <div class="textarea-div">
         <ion-row>
-          <p>Enter the location you're interested volunteering in*</p>
+          <p>Where in the world would you like to volunteer?*</p>
         </ion-row>
         <ion-row>
           <ion-textarea [(ngModel)]="volunteerLocation" class="contact-inputs"></ion-textarea>
@@ -49,7 +49,7 @@
       </div>
       <div class="textarea-div">
         <ion-row>
-          <p>Tell in a few words about yourself (max 40 char)*</p>
+          <p>Introduce Yourself with a sentence or two! (max 40 char)*</p>
         </ion-row>
         <ion-row>
           <ion-textarea [(ngModel)]="fewAboutYourself" class="contact-inputs" maxlength="40"></ion-textarea>
@@ -79,7 +79,7 @@
       </div>
       <ion-row>
           <ion-card class="contacts-card">
-            <p class="contacts-card-header">List up to 5 contacts that can us more about you</p>
+            <p class="contacts-card-header">Please Provide at least Two References</p>
             <ion-card-content class="contacts-card-content">
               <div class="contact-div">
                 <ion-item class="contact-item">

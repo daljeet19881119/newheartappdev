@@ -92,8 +92,11 @@
     </div>
     <div class="textarea-div">
       <ion-row>
+        <p>Please add your Payment Card Information by Pressing the Add Card Button</p>
+      </ion-row>
+      <ion-row>
         <button ion-button block (click)="addPaymentMethod()" color="appColor"
-          style="margin: 10px 0;text-transform: inherit;" *ngIf="!card_btn">Tap to Add Card*</button>
+          style="margin: 10px 0;text-transform: inherit;" *ngIf="!card_btn">Add Card*</button>
         <button ion-button block color="appColor" style="margin: 10px 0;text-transform: inherit;"
           *ngIf="card_btn">{{ 'Card **'+ card_number + ' registered' }}</button>
       </ion-row>

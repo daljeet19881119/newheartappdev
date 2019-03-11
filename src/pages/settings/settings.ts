@@ -1,11 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, Platform, Navbar, Select } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, Platform, Navbar, Select, AlertController } from 'ionic-angular';
 import { GlobalProvider } from '../../providers/global/global';
 import { UserProvider } from '../../providers/user/user';
 import { CharitiesPage } from '../charities/charities';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { FileTransfer, FileTransferObject, FileUploadOptions } from '@ionic-native/file-transfer';
 import { HomePage } from '../home/home';
+import { SigninPage } from '../signin/signin';
 
 
 @IonicPage()
@@ -73,7 +74,10 @@ export class SettingsPage {
   disableMinusBtn: boolean;
   disableCausePlusBtn: boolean;
   disableCauseMinusBtn: boolean;
-  constructor(public navCtrl: NavController, public navParams: NavParams, private global: GlobalProvider, private userService: UserProvider, private modalCtrl: ModalController, private camera: Camera, private transfer: FileTransfer, private platform: Platform) {
+  current_password: string ="";
+  new_password: string ="";
+  confirm_password: string ="";
+  constructor(public navCtrl: NavController, public navParams: NavParams, private global: GlobalProvider, private userService: UserProvider, private modalCtrl: ModalController, private camera: Camera, private transfer: FileTransfer, private platform: Platform, public alertCtrl: AlertController) {
 
     // if user try goback then go to homepage
     this.platform.registerBackButtonAction(() => {
@@ -620,5 +624,57 @@ export class SettingsPage {
   // open country 
   openCountry() {
     this.selectCountry.open();
+  }
+
+  // chagePassword
+  changePassword() {
+    if(this.current_password =="" || this.new_password == "" || this.confirm_password == "")
+    {
+      this.global.createAlert('','Please type your current password and new password to update your password.');
+    }
+    else{
+      if(this.new_password != this.confirm_password) {
+        this.global.createAlert('','Your new password and confirm password did not matched.');
+      }
+      else{
+        // set data
+        const data = {
+          'email': this.email,
+          'current_password': this.current_password,
+          'new_password': this.new_password
+        };
+
+        this.userService.updatePassword(data).subscribe(data => {
+           if(data.msg == 'success') {
+              const alert = this.alertCtrl.create({
+                message: 'Your password updated successfully.',
+                buttons: [{
+                  text: 'ok',
+                  handler: () => {
+                    this.logout();
+                  }
+                }]
+              });      
+              alert.present();        
+           }
+           else{
+             this.global.createAlert('','Your current password did not matched.');
+           }
+        });
+      }
+    }
+  }
+
+  // logout
+  logout() {
+    this.global.createLoader();
+
+    const uuid = this.global.uuid();
+    this.userService.logout(uuid).subscribe(data => {
+      if(data.msg == 'success') {
+        this.navCtrl.setRoot(SigninPage);
+      }
+      this.global.dismissLoader();      
+    });    
   }
 }

@@ -175,6 +175,7 @@ export class VolunteerFormPage {
     let userid = this.userid;
 
     if (this.fname != null && this.lname != null && this.email != null && this.volunteerLocation != null && this.fewAboutYourself != null && this.moreAboutYourself != null && charities.length != 0) {
+      
       // check if email is valid
       if (this.validateEmail(this.email) == true) {
         this.global.createLoader('Please wait...');
@@ -197,6 +198,9 @@ export class VolunteerFormPage {
         };
         // request to server
         this.userService.saveVolunteerFormData(postdata).subscribe(data => {
+          // call createAlert
+          this.global.createAlert("","Saved! We will reach out to you when we have a great fit. Thanks for your support!");
+
           // alert(data.msg);
           this.setDataToStorage(userid, this.fname, this.lname, this.email, charities, this.volunteerLocation, this.fewAboutYourself, this.moreAboutYourself, this.profilePic, contact1, contact2, contact3, contact4, contact5);
 

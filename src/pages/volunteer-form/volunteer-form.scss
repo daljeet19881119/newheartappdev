@@ -32,6 +32,10 @@ page-volunteer-form {
         margin: 0px;
         border-radius: 5px;
     }
+    .contacts-card-content{
+        padding-left: 0px;
+        padding-right: 0px;
+    }
     .contact-item{
         padding-left: 0px;
     }
@@ -40,7 +44,8 @@ page-volunteer-form {
         font-size: 16px;
     }
     .contact-div{
-        border-bottom: 1px solid #ddd;
+        border-bottom: 2px solid #ddd;
+        padding: 0 20px;
     }
     .contact-div:nth-child(5){
         border-bottom: 0px;

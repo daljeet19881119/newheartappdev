@@ -59,11 +59,13 @@ export class MyApp {
 
   // logout
   logout() {
+    this.global.createLoader();
     const uuid = this.global.uuid();
     this.userService.logout(uuid).subscribe(data => {
       if(data.msg == 'success') {
         this.nav.setRoot(SigninPage);
       }      
+      this.global.dismissLoader();
     });    
   }
 }
