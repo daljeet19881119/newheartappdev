@@ -133,8 +133,7 @@ export class ProfilePage {
      // store youtube video url
      let videoUrl = this.youtubeUrl + this.ngoYoutubeId;
      let viewModal = this.modalCtrl.create(YtvideoPage, { videoUrl: videoUrl });
-     viewModal.present();
-    
+     viewModal.present();    
   }
 
   // getWords

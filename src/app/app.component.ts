@@ -11,6 +11,7 @@ import { SettingsPage } from '../pages/settings/settings';
 import { SigninPage } from '../pages/signin/signin';
 import { UserProvider } from '../providers/user/user';
 import { GlobalProvider } from '../providers/global/global';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 
 @Component({
@@ -22,7 +23,7 @@ export class MyApp {
 
   @ViewChild(Nav) nav: Nav;
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private userService: UserProvider, private global: GlobalProvider) {
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private userService: UserProvider, private global: GlobalProvider, private iab: InAppBrowser) {
     platform.ready().then(() => {      
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -67,6 +68,15 @@ export class MyApp {
       }      
       this.global.dismissLoader();
     });    
+  }
+
+  // privacyPolicy
+  privacyPolicy() {
+    const url = 'http://heartglobal.world/home-3/terms/';
+
+    // open web view
+    const browser = this.iab.create(url);
+    browser.show();
   }
 }
 

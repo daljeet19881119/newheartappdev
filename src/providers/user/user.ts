@@ -59,7 +59,41 @@ export class UserProvider {
 
   // get_user_by_id
   getUserById(user_id: any) {
-    return this._http.get(this.global.apiUrl('/get_user_by_id/'+user_id)).map(res => res.json());
+    return this._http.get(this.global.apiUrl('/get_user_by_id/' + user_id)).map(res => res.json());
+  }
+
+  // get user card
+  getUserActiveCard(data: any) {
+    // set headers
+    let headers = new Headers();
+    headers.append("Accept", 'application/json');
+
+    // set request option
+    let options = new RequestOptions({ headers: headers });
+
+    // set data to be send
+    let postdata = JSON.stringify({
+      data: data
+    });
+
+    return this._http.post(this.global.apiUrl('/get_user_active_card'), postdata, options).map(res => res.json());
+  }
+
+  // get user cards
+  getUserCards(data: any) {
+    // set headers
+    let headers = new Headers();
+    headers.append("Accept", 'application/json');
+
+    // set request option
+    let options = new RequestOptions({ headers: headers });
+
+    // set data to be send
+    let postdata = JSON.stringify({
+      data: data
+    });
+
+    return this._http.post(this.global.apiUrl('/get_user_cards'), postdata, options).map(res => res.json());
   }
 
   // getVerifiedUserByUUID
@@ -133,6 +167,40 @@ export class UserProvider {
     });
 
     return this._http.post(this.global.apiUrl('/squarePayment'), postdata, options).map(res => res.json());
+  }
+
+  // deleteUserCard
+  deleteUserCard(data: any) {
+    // set headers
+    let headers = new Headers();
+    headers.append("Accept", 'application/json');
+
+    // set request option
+    let options = new RequestOptions({ headers: headers });
+
+    // set data to be send
+    let postdata = JSON.stringify({
+      data: data
+    });
+
+    return this._http.post(this.global.apiUrl('/delete_user_card'), postdata, options).map(res => res.json());
+  }
+
+  // makeDefaultCard
+  makeDefaultCard(data: any) {
+    // set headers
+    let headers = new Headers();
+    headers.append("Accept", 'application/json');
+
+    // set request option
+    let options = new RequestOptions({ headers: headers });
+
+    // set data to be send
+    let postdata = JSON.stringify({
+      data: data
+    });
+
+    return this._http.post(this.global.apiUrl('/make_default_card'), postdata, options).map(res => res.json());
   }
 
   // addToMyBigHearts
@@ -307,7 +375,7 @@ export class UserProvider {
 
   // getAllBHOfUser
   getAllBHOfUser(user_id: any) {
-    return this._http.get(this.global.apiUrl('/getAllBHOfUser/'+user_id)).map(res => res.json());
+    return this._http.get(this.global.apiUrl('/getAllBHOfUser/' + user_id)).map(res => res.json());
   }
 
   // logout user

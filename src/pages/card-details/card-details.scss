@@ -1,0 +1,22 @@
+page-card-details {
+    .new-card{
+        font-size: 22px;
+        margin: 0;
+        color: #ae0433;
+        font-weight: 500;
+    }
+    .add-new{
+        font-size: 35px;        
+        color: #ae0433;
+    }
+    .btn-card .label{
+        margin: 0;
+    }
+    .btn-card .item-inner{
+        padding-right: 0px !important;
+    }
+    .badge-notactive{
+        color: #ebebeb;
+        background-color: #bdbdbd;
+    }
+}

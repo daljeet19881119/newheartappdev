@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-navbar color="appColor">
+    <ion-title>Cards</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding style="background-color: #ae0433;">
+  <ion-card style="width: 100%;margin:0;border-radius: 4px;">
+    <ion-card-content style="padding:5px;">
+      <ion-list>
+        <button ion-item (click)="addNewCard()">
+          <ion-icon name="add-circle" item-start class="add-new" style="margin: 0;"></ion-icon>
+          <h2 class="new-card">Add New Card</h2>
+        </button>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  <ng-container *ngFor="let card of user_cards">
+    <ion-card style="width: 100%;margin:10px 0;border-radius: 4px;">
+      <ion-card-content style="padding: 10px">
+        <button ion-item no-padding style="min-height:2.8rem;" class="btn-card">
+          <h2 style="margin-bottom:10px;">{{ card.card_brand }}</h2>
+          <p>{{ '****'+card.card_last_digit }}</p>
+          <ion-badge item-end [color]="card.status == '1' ? 'secondary' : 'light'" style="margin: 0 15px 0 0;" [ngClass]="card.status == '0' ? 'badge-notactive' : ''" (click)="makeDefaultCard(card)">Default</ion-badge>
+          <ion-icon name="close-circle" item-end style="margin: 0;color: #ae0433;" *ngIf="card.status == '0'" (click)="deleteCard(card.card_id)"></ion-icon>          
+        </button>
+      </ion-card-content>
+    </ion-card>
+  </ng-container>  
+  <!-- <ion-card style="width: 100%;margin:10px 0;border-radius: 4px;">
+    <ion-card-content style="padding: 10px;">
+      <button ion-item no-padding style="min-height:2.8rem;" class="btn-card">
+        <h2 style="margin-bottom:10px;">VISA</h2>
+        <p>****3012</p>
+        <ion-badge item-end color="secondary" style="margin: 0 15px 0 0;">Default</ion-badge>
+        <ion-icon name="close-circle" item-end style="margin: 0;color: #ae0433;"></ion-icon>        
+      </button>
+    </ion-card-content>
+  </ion-card> -->
+</ion-content>

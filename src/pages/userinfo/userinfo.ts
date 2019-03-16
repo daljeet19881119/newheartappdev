@@ -603,8 +603,13 @@ export class UserinfoPage {
         // create loader
         this.global.createLoader('Please wait...');
 
+        // set data to get user card
+        const card_data = {
+          user_id: this.user_id
+        };
+
         // getUserById
-        this.userService.getUserById(this.user_id).subscribe(data => {
+        this.userService.getUserActiveCard(card_data).subscribe(data => {
             // check if unique no mathces
             if(data.unique_no == random_no) {
               this.card_number = data.card_last_digit;

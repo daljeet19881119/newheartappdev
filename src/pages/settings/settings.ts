@@ -7,6 +7,7 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 import { FileTransfer, FileTransferObject, FileUploadOptions } from '@ionic-native/file-transfer';
 import { HomePage } from '../home/home';
 import { SigninPage } from '../signin/signin';
+import { CardDetailsPage } from '../card-details/card-details';
 
 
 @IonicPage()
@@ -77,6 +78,7 @@ export class SettingsPage {
   current_password: string ="";
   new_password: string ="";
   confirm_password: string ="";
+  userObj: any;
   constructor(public navCtrl: NavController, public navParams: NavParams, private global: GlobalProvider, private userService: UserProvider, private modalCtrl: ModalController, private camera: Camera, private transfer: FileTransfer, private platform: Platform, public alertCtrl: AlertController) {
 
     // if user try goback then go to homepage
@@ -199,6 +201,7 @@ export class SettingsPage {
     this.userService.getUserByDeviceId(this.uuid).subscribe(data => {
       // check if msg success
       if (data.msg == 'success') {
+        this.userObj = data.data;
         this.fname = data.data.fname;
         this.lname = data.data.lname;
         this.mobileno = data.data.mobile_no;
@@ -676,5 +679,10 @@ export class SettingsPage {
       }
       this.global.dismissLoader();      
     });    
+  }
+
+  // cardDetailPage
+  cardDetailPage() {
+    this.navCtrl.push(CardDetailsPage, {userObj: this.userObj});
   }
 }

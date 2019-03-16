@@ -51,6 +51,7 @@ import { SigninPage } from '../pages/signin/signin';
 import { ForgotPasswordPage } from '../pages/forgot-password/forgot-password';
 import { ThankyouVideoPage } from '../pages/thankyou-video/thankyou-video';
 import { Network } from '@ionic-native/network';
+import { CardDetailsPage } from '../pages/card-details/card-details';
 
 @NgModule({
   declarations: [
@@ -77,7 +78,8 @@ import { Network } from '@ionic-native/network';
     SettingsPage,
     SigninPage,
     ForgotPasswordPage,
-    ThankyouVideoPage
+    ThankyouVideoPage,
+    CardDetailsPage
   ],
   imports: [
     BrowserModule,
@@ -112,7 +114,8 @@ import { Network } from '@ionic-native/network';
     SettingsPage,
     SigninPage,
     ForgotPasswordPage,
-    ThankyouVideoPage
+    ThankyouVideoPage,
+    CardDetailsPage
   ],
   providers: [
     StatusBar,

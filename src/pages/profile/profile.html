@@ -72,8 +72,8 @@
                 <!-- <img src="assets/imgs/youtube.png" alt="Youtube" class="youtube-img" (click)="showFullVideo()" *ngIf="ngoYoutubeId !==''"> -->
             </div>
             <div class="iframe-div" *ngIf="showIframediv">
-                <!-- <iframe  id="iframe-video" [src]="getIframeUrl()" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe> -->
-                <div class="iframe-div" id="iframe-div" [style.backgroundImage]="'url('+ getYoutubeVideoImgUrl() +')'"  (click)="showFullImg($event)">
+                <iframe  *ngIf="ngoYoutubeId !==''" id="iframe-video" [src]="getIframeUrl()" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                <div *ngIf="ngoYoutubeId ==''" class="iframe-div" id="iframe-div" [style.backgroundImage]="'url('+ getYoutubeVideoImgUrl() +')'"  (click)="showFullImg($event)">
                         <img src="assets/imgs/youtube.png" alt="Youtube" class="iframe-youtube-img" (click)="showFullVideo()" *ngIf="ngoYoutubeId !==''">
                     </div>
             </div>
