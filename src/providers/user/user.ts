@@ -13,17 +13,26 @@ export class UserProvider {
 
   // getAllCountries
   getAllCountries() {
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
     return this._http.get(this.global.apiUrl('/all_countries')).map(res => res.json());
+    }
   }
 
   // getAllRegions
   getAllRegions() {
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
     return this._http.get(this.global.apiUrl('/all_regions')).map(res => res.json());
+    }
   }
 
   // getAllCharities
   getAllCharities() {
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
     return this._http.get(this.global.apiUrl('/all_charities')).map(res => res.json());
+    }
   }
 
   getBHByCharityIds(charity_ids: any) {
@@ -39,27 +48,42 @@ export class UserProvider {
       charities: charity_ids
     });
 
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
     return this._http.post(this.global.apiUrl('/get_bh_by_charity'), data, options).map(res => res.json());
+    }
   }
 
   // getRegionNameById
   getRegionById(regionId: any) {
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
     return this._http.get(this.global.apiUrl('/all_regions/' + regionId)).map(res => res.json());
+    }
   }
 
   // getCountryCodeByCode
   getCountryCodeByCode(code: string) {
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
     return this._http.get(this.global.apiUrl('/all_countries/' + code)).map(res => res.json());
+    }
   }
 
   // getUserByDeviceId
   getUserByDeviceId(uuid: any) {
-    return this._http.get(this.global.apiUrl('/get_user/' + uuid)).map(res => res.json());
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
+      return this._http.get(this.global.apiUrl('/get_user/' + uuid)).map(res => res.json());
+    }
   }
 
   // get_user_by_id
   getUserById(user_id: any) {
-    return this._http.get(this.global.apiUrl('/get_user_by_id/' + user_id)).map(res => res.json());
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
+      return this._http.get(this.global.apiUrl('/get_user_by_id/' + user_id)).map(res => res.json());
+    }
   }
 
   // get user card
@@ -76,7 +100,10 @@ export class UserProvider {
       data: data
     });
 
-    return this._http.post(this.global.apiUrl('/get_user_active_card'), postdata, options).map(res => res.json());
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
+      return this._http.post(this.global.apiUrl('/get_user_active_card'), postdata, options).map(res => res.json());
+    }
   }
 
   // get user cards
@@ -93,12 +120,18 @@ export class UserProvider {
       data: data
     });
 
-    return this._http.post(this.global.apiUrl('/get_user_cards'), postdata, options).map(res => res.json());
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
+      return this._http.post(this.global.apiUrl('/get_user_cards'), postdata, options).map(res => res.json());
+    }
   }
 
   // getVerifiedUserByUUID
   getBigheartUserByDeviceId(uuid: any) {
-    return this._http.get(this.global.apiUrl('/get_bigheart_user/' + uuid)).map(res => res.json());
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
+      return this._http.get(this.global.apiUrl('/get_bigheart_user/' + uuid)).map(res => res.json());
+    }
   }
 
   // verifyNumber
@@ -115,7 +148,10 @@ export class UserProvider {
       data: data
     });
 
-    return this._http.post(this.global.apiUrl('/verify_number'), postdata, options).map(res => res.json());
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
+      return this._http.post(this.global.apiUrl('/verify_number'), postdata, options).map(res => res.json());
+    }
   }
 
   // verifyVerificationCode
@@ -132,7 +168,10 @@ export class UserProvider {
       data: data
     });
 
-    return this._http.post(this.global.apiUrl('/verify_verification_code'), postdata, options).map(res => res.json());
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
+      return this._http.post(this.global.apiUrl('/verify_verification_code'), postdata, options).map(res => res.json());
+    }
   }
 
   // verifyUserProfile
@@ -149,7 +188,10 @@ export class UserProvider {
       data: data
     });
 
-    return this._http.post(this.global.apiUrl('/verify_user_profile'), postdata, options).map(res => res.json());
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
+      return this._http.post(this.global.apiUrl('/verify_user_profile'), postdata, options).map(res => res.json());
+    }
   }
 
   // makePayment
@@ -166,7 +208,10 @@ export class UserProvider {
       data: data
     });
 
-    return this._http.post(this.global.apiUrl('/squarePayment'), postdata, options).map(res => res.json());
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
+      return this._http.post(this.global.apiUrl('/squarePayment'), postdata, options).map(res => res.json());
+    }
   }
 
   // deleteUserCard
@@ -183,7 +228,10 @@ export class UserProvider {
       data: data
     });
 
-    return this._http.post(this.global.apiUrl('/delete_user_card'), postdata, options).map(res => res.json());
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
+      return this._http.post(this.global.apiUrl('/delete_user_card'), postdata, options).map(res => res.json());
+    }
   }
 
   // makeDefaultCard
@@ -200,7 +248,10 @@ export class UserProvider {
       data: data
     });
 
-    return this._http.post(this.global.apiUrl('/make_default_card'), postdata, options).map(res => res.json());
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
+      return this._http.post(this.global.apiUrl('/make_default_card'), postdata, options).map(res => res.json());
+    }
   }
 
   // addToMyBigHearts
@@ -218,12 +269,18 @@ export class UserProvider {
       data: data
     });
 
-    return this._http.post(this.global.apiUrl('/add_user_bighearts'), postdata, options).map(res => res.json());
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
+      return this._http.post(this.global.apiUrl('/add_user_bighearts'), postdata, options).map(res => res.json());
+    }
   }
 
   // checkInMyBigHearts
   checkInUserBigHearts(user_id: any, bh_id: any) {
-    return this._http.get(this.global.apiUrl('/get_user_bighearts/' + user_id + '/' + bh_id)).map(res => res.json());
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
+      return this._http.get(this.global.apiUrl('/get_user_bighearts/' + user_id + '/' + bh_id)).map(res => res.json());
+    }
   }
 
   // removeFromMyBigHearts
@@ -241,7 +298,10 @@ export class UserProvider {
       data: data
     });
 
-    return this._http.post(this.global.apiUrl('/remove_user_bighearts'), postdata, options).map(res => res.json());
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
+     return this._http.post(this.global.apiUrl('/remove_user_bighearts'), postdata, options).map(res => res.json());
+    }
   }
 
   // saveCauseFormData
@@ -259,7 +319,10 @@ export class UserProvider {
       data: data
     });
 
-    return this._http.post(this.global.apiUrl('/cause_form'), postdata, options).map(res => res.json());
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
+      return this._http.post(this.global.apiUrl('/cause_form'), postdata, options).map(res => res.json());
+    }
   }
 
   // saveMerchantFormData
@@ -277,7 +340,10 @@ export class UserProvider {
       data: data
     });
 
-    return this._http.post(this.global.apiUrl('/merchant_form'), postdata, options).map(res => res.json());
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
+     return this._http.post(this.global.apiUrl('/merchant_form'), postdata, options).map(res => res.json());
+    }
   }
 
   // saveVolunteerFormData
@@ -295,7 +361,10 @@ export class UserProvider {
       data: data
     });
 
-    return this._http.post(this.global.apiUrl('/volunteer_form'), postdata, options).map(res => res.json());
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
+      return this._http.post(this.global.apiUrl('/volunteer_form'), postdata, options).map(res => res.json());
+    }
   }
 
   // clean storage
@@ -319,7 +388,10 @@ export class UserProvider {
       data: data
     });
 
-    return this._http.post(this.global.apiUrl('/save_user_bighearts'), postdata, options).map(res => res.json());
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
+      return this._http.post(this.global.apiUrl('/save_user_bighearts'), postdata, options).map(res => res.json());
+    }
   }
 
   // updateUserInfo
@@ -336,7 +408,10 @@ export class UserProvider {
       data: data
     });
 
-    return this._http.post(this.global.apiUrl('/update_user_info'), postdata, options).map(res => res.json());
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
+      return this._http.post(this.global.apiUrl('/update_user_info'), postdata, options).map(res => res.json());
+    }
   }
 
   // sendVerificationCode
@@ -353,7 +428,10 @@ export class UserProvider {
       data: data
     });
 
-    return this._http.post(this.global.apiUrl('/sendVerificationCode'), postdata, options).map(res => res.json());
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
+      return this._http.post(this.global.apiUrl('/sendVerificationCode'), postdata, options).map(res => res.json());
+    }
   }
 
   // sendVerificationEmail
@@ -370,12 +448,18 @@ export class UserProvider {
       data: data
     });
 
-    return this._http.post(this.global.apiUrl('/sendVerificationEmail'), postdata, options).map(res => res.json());
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
+      return this._http.post(this.global.apiUrl('/sendVerificationEmail'), postdata, options).map(res => res.json());
+    }
   }
 
   // getAllBHOfUser
   getAllBHOfUser(user_id: any) {
-    return this._http.get(this.global.apiUrl('/getAllBHOfUser/' + user_id)).map(res => res.json());
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
+      return this._http.get(this.global.apiUrl('/getAllBHOfUser/' + user_id)).map(res => res.json());
+    }
   }
 
   // logout user
@@ -392,7 +476,10 @@ export class UserProvider {
       uuid: uuid
     });
 
-    return this._http.post(this.global.apiUrl('/logout'), postdata, options).map(res => res.json());
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
+      return this._http.post(this.global.apiUrl('/logout'), postdata, options).map(res => res.json());
+    }
   }
 
   // login user
@@ -409,7 +496,10 @@ export class UserProvider {
       data: data
     });
 
-    return this._http.post(this.global.apiUrl('/login'), postdata, options).map(res => res.json());
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
+      return this._http.post(this.global.apiUrl('/login'), postdata, options).map(res => res.json());
+    }
   }
 
   // send forgot mail
@@ -426,7 +516,10 @@ export class UserProvider {
       email: email
     });
 
-    return this._http.post(this.global.apiUrl('/forgotPassword'), postdata, options).map(res => res.json());
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
+      return this._http.post(this.global.apiUrl('/forgotPassword'), postdata, options).map(res => res.json());
+    }
   }
 
   // update password
@@ -443,6 +536,9 @@ export class UserProvider {
       data: data
     });
 
-    return this._http.post(this.global.apiUrl('/updatePassword'), postdata, options).map(res => res.json());
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
+      return this._http.post(this.global.apiUrl('/updatePassword'), postdata, options).map(res => res.json());
+    }        
   }
 }

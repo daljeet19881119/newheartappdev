@@ -19,6 +19,7 @@ export class SigninPage {
   email: string = "";
   password: string = "";
   constructor(public navCtrl: NavController, public navParams: NavParams, private global: GlobalProvider, private userService: UserProvider, private fcm: FCM, private platform: Platform) {
+
   }
 
   ionViewDidLoad() {

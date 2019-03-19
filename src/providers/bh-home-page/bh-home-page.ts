@@ -12,7 +12,10 @@ export class BhHomePageProvider {
   }
 
   getBigheartUsers(user_id: any, offset: number = 0) {
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
     return this.http.get(this.global.apiUrl('/bigheart_user_dashboard/'+user_id+'/'+offset)).map(res => res.json());
+    }
   }
 
   // sendThankyouMessage
@@ -29,6 +32,9 @@ export class BhHomePageProvider {
         data: data
     });
     
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
     return this.http.post(this.global.apiUrl('/sendThankyouNotification'), postdata, options).map(res => res.json());
+    }
   }
 }

@@ -12,21 +12,33 @@ export class HomePageProvider {
 
   // getLatestDonations
   getLatestDonations(offset: number = 0) {
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
       return this.http.get(this.global.apiUrl('/all_ngo/'+offset)).map(res => res.json());
+    }
   }
   
   // getRecommendedBigHearts()
   getRecommendedBigHearts(uuid: any) {
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
       return this.http.get(this.global.apiUrl('/recommended_bighearts/'+uuid)).map(res => res.json());
+    }
   }
 
   // getUserBighearts
   getUserDashboardData(user_id: any, offset: number = 0) {
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
     return this.http.get(this.global.apiUrl('/simple_user_dashboard/'+user_id+'/'+offset)).map(res => res.json());
+    }
   }
 
   // getNgoById
   getBHById(ngo_id: any) {
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
     return this.http.get(this.global.apiUrl('/bh/'+ngo_id)).map(res => res.json());
+    }
   }
 }
