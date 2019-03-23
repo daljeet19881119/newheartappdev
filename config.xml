@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="org.heartcash.heartapp" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="world.heartglobal.humble" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>HumbleHeart</name>
     <description>A global currency specifically deisgned to give back by helping those in need! And you are invited...</description>
     <author email="daljeet19881119@gmail.com" href="http://nxgenso.com/">Daljeet</author>
