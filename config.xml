@@ -107,10 +107,14 @@
     <platform name="android">
         <resource-file src="google-services.json" target="app/google-services.json" />
     </platform>
+    <platform name="ios">
+        <resource-file src="GoogleService-Info.plist" target="app/GoogleService-Info.plist" />
+    </platform>
     <plugin name="cordova-plugin-fcm-with-dependecy-updated" spec="2.3.0" />
     <plugin name="cordova-plugin-inappbrowser" spec="3.0.0" />
     <plugin name="cordova-plugin-screen-orientation" spec="3.0.1" />
     <plugin name="cordova-plugin-streaming-media" spec="2.2.0" />
     <plugin name="cordova-plugin-network-information" spec="^2.0.1" />
     <engine name="android" spec="7.1.4" />
+    <engine name="ios" spec="4.5.5" />
 </widget>
