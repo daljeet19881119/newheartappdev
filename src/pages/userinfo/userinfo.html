@@ -27,7 +27,7 @@
       </ion-row>
       <ion-row>
         <div class="gauge-div">
-          <nga-ng2-gauge [max]="max" [input]="donation_amount" [sectors]="sectors" [size]="200" [showDigital]="true">
+          <nga-ng2-gauge [max]="max" [input]="donation_amount" [sectors]="sectors" [size]="200" [showDigital]="false" [unit]="'$'+donation_amount">
           </nga-ng2-gauge>
         </div>
       </ion-row>
@@ -62,7 +62,7 @@
       </ion-row>
       <ion-row>
         <div class="gauge-div">
-          <nga-ng2-gauge [max]="90" [input]="cause_percentage" [sectors]="sectors_1" [size]="200" [showDigital]="true">
+          <nga-ng2-gauge [max]="90" [input]="cause_percentage" [sectors]="sectors_1" [size]="200" [showDigital]="false" [unit]="cause_percentage+'%'">
           </nga-ng2-gauge>
         </div>
       </ion-row>
