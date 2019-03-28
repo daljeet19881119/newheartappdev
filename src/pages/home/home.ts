@@ -86,7 +86,7 @@ export class HomePage {
       this.us_balance = this.toLocaleString(parseFloat(data.data.us_balance).toFixed(2));
       this.hc_balance = this.toLocaleString(parseFloat(data.data.hc_balance).toFixed(2));
       this.user_id = data.data.user_id;
-      this.cc_number = data.data.card_last_digit;
+      this.cc_number = data.data.card_details.card_last_digit;
 
       // get user bighearts
       this.homeService.getUserDashboardData(this.user_id).subscribe(res => {

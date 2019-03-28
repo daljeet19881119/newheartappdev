@@ -8,6 +8,7 @@ import { GlobalProvider } from '../../providers/global/global';
 import { ProfilePage } from '../profile/profile';
 import { CardIO, CardIOOptions, CardIOResponse } from '@ionic-native/card-io';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
+import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 
 
 @IonicPage()
@@ -84,7 +85,7 @@ export class UserinfoPage {
   recurring_fees: boolean = false;
   accept_terms: boolean = false;
   user_id: any;
-  constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,  private global: GlobalProvider, private userService: UserProvider, private modalCtrl: ModalController, private cardIO: CardIO, private iab: InAppBrowser) {
+  constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,  private global: GlobalProvider, private userService: UserProvider, private modalCtrl: ModalController, private cardIO: CardIO, private iab: InAppBrowser,private safariViewController: SafariViewController) {
 
 
     // get params from previous opened page
@@ -590,42 +591,68 @@ export class UserinfoPage {
       let fullname = this.firstName+' '+this.lastName;
       let date = new Date();
       let random_no = date.getTime();
-
-      const browser = this.iab.create(this.global.base_url('sqpayment/?name='+fullname+'&email='+this.email+'&user_id='+this.user_id+'&unique_no='+random_no), '_blank', 'location=yes');
-
-      browser.show();      
       
-      browser.on('loadstop').subscribe(event => {
-        browser.insertCSS({ code: "body{color: #ae0433;}h4{padding: 10px;}" });  
-      });      
+      this.safariViewController.isAvailable()
+        .then((available: boolean) => {
+            if (available) {
 
-      browser.on('exit').subscribe(() => {
-        // create loader
-        this.global.createLoader('Please wait...');
+              this.safariViewController.show({
+                url: this.global.base_url('sqpayment/?name='+fullname+'&email='+this.email+'&user_id='+this.user_id+'&unique_no='+random_no),
+                hidden: false,
+                animated: false,
+                transition: 'curl',
+                enterReaderModeIfAvailable: true,
+                tintColor: '#ff0000'
+              })
+              .subscribe((result: any) => {
+                  if(result.event === 'opened') console.log('Opened');
+                  else if(result.event === 'loaded') console.log('Loaded');
+                  else if(result.event === 'closed') console.log('Closed');
+                },
+                (error: any) => console.error(error)
+              );
 
-        // set data to get user card
-        const card_data = {
-          user_id: this.user_id
-        };
+            } 
+            else {
+              // use fallback browser, example InAppBrowser
+              const browser = this.iab.create(this.global.base_url('sqpayment/?name='+fullname+'&email='+this.email+'&user_id='+this.user_id+'&unique_no='+random_no), '_blank', 'location=yes');
 
-        // getUserById
-        this.userService.getUserActiveCard(card_data).subscribe(data => {
-            // check if unique no mathces
-            if(data.unique_no == random_no) {
-              this.card_number = data.card_last_digit;
+              browser.show();      
+              
+              browser.on('loadstop').subscribe(event => {
+                browser.insertCSS({ code: "body{color: #ae0433;}h4{padding: 10px;}" });  
+              });      
 
-              if(this.card_number != "" || this.card_number != null) {
-                this.card_btn = true;
-              }  
-            }                     
+              browser.on('exit').subscribe(() => {
+                // create loader
+                this.global.createLoader('Please wait...');
 
-          this.global.dismissLoader();
-        }, err => {
-          this.global.dismissLoader();
-        });
-      }, err => {
-          console.error(err);
-      });
+                // set data to get user card
+                const card_data = {
+                  user_id: this.user_id
+                };
+
+                // getUserById
+                this.userService.getUserActiveCard(card_data).subscribe(data => {
+                    // check if unique no mathces
+                    if(data.unique_no == random_no) {
+                      this.card_number = data.card_last_digit;
+
+                      if(this.card_number != "" || this.card_number != null) {
+                        this.card_btn = true;
+                      }  
+                    }                     
+
+                  this.global.dismissLoader();
+                }, err => {
+                  this.global.dismissLoader();
+                });
+              }, err => {
+                  console.error(err);
+              });
+            }
+          }
+        );
     }    
   }
 

@@ -53,6 +53,7 @@ import { ThankyouVideoPage } from '../pages/thankyou-video/thankyou-video';
 import { Network } from '@ionic-native/network';
 import { CardDetailsPage } from '../pages/card-details/card-details';
 import { PrivacyPolicyPage } from '../pages/privacy-policy/privacy-policy';
+import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 
 @NgModule({
   declarations: [
@@ -142,7 +143,8 @@ import { PrivacyPolicyPage } from '../pages/privacy-policy/privacy-policy';
     CardIO,
     FCM,
     InAppBrowser,
-    Network
+    Network,
+    SafariViewController
   ]
 })
 export class AppModule {}
