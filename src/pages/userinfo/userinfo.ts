@@ -335,7 +335,12 @@ export class UserinfoPage {
       if (this.validateEmail(this.email) == true) {
         // check if card registered
         if(this.card_btn == false || this.card_number == null || this.card_number == "") {
-          this.global.createAlert('', "Your card is not registered. Please register your card.");
+          if(this.platform.is('ios')) {
+            this.global.createAlert('', 'Your card is not registered. Please click on add card button to register your card.');
+          }
+          else{
+            this.global.createAlert('', "Your card is not registered. Please register your card.");
+          }
         }
         else if(this.bh_id_arr.length < 1 && this.all_bh.length < 1) {
           this.global.createAlert('', "There is no Bigheart in selected causes. Please select other causes to donate to Bighearts.");
@@ -593,7 +598,47 @@ export class UserinfoPage {
       
       // check platform
       if(this.platform.is('ios')) {
-        this.global.createAlert('humbleHEART','You are in ios');
+        // open link in safari
+        const ios_browser = this.iab.create(this.global.base_url('sqpayment/?name='+fullname+'&email='+this.email+'&user_id='+this.user_id+'&unique_no='+random_no), '_system', 'location=yes');
+        
+        ios_browser.show();
+
+        // create payment card alert
+        const ios_alert = this.global.alertCtrl.create({
+          title: '',
+          message: 'We have open a link in your browser where you can add your card to make donations.',
+          buttons: [{
+            text: 'Okay',
+            handler: () => {
+              // checking your card
+              this.global.createLoader('Checking your card');
+
+              // set card data to check user card
+              const card_data = {
+                'user_id': this.user_id
+              };
+
+              // get user card
+              this.userService.getUserActiveCard(card_data).subscribe(data => {
+                // check if unique no mathces
+                if(data.unique_no == random_no) {
+                  this.card_number = data.card_last_digit;
+
+                  if(this.card_number != "" || this.card_number != null) {
+                    this.card_btn = true;
+                  }  
+                }
+                // dismissLoader
+                this.global.dismissLoader();
+              });
+            }
+          }]
+        });
+
+        // show alert after 1 second
+        setTimeout(() => {
+          ios_alert.present();  
+        }, 1000);        
       }
       else{
         // use fallback browser, example InAppBrowser

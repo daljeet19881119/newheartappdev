@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { UserProvider } from '../../providers/user/user';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { GlobalProvider } from '../../providers/global/global';
@@ -14,7 +14,7 @@ export class CardDetailsPage {
 
   user_cards: any;
   userObj: any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, private userService: UserProvider, private iab: InAppBrowser, public global: GlobalProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private userService: UserProvider, private iab: InAppBrowser, public global: GlobalProvider, private platform: Platform) {
     this.userObj = this.navParams.get('userObj');
   }
 
@@ -39,32 +39,71 @@ export class CardDetailsPage {
     let date = new Date();
     let random_no = date.getTime();
 
-    const browser = this.iab.create(this.global.base_url('sqpayment/?name=' + fullname + '&email=' + email + '&user_id=' + user_id + '&unique_no=' + random_no), '_blank', 'location=yes');
+    // check platform
+    if(this.platform.is('ios')) {
+      // open link in safari
+      const ios_browser = this.iab.create(this.global.base_url('sqpayment/?name=' + fullname + '&email=' + email + '&user_id=' + user_id + '&unique_no=' + random_no), '_system', 'location=yes');
+        
+      ios_browser.show();
 
-    browser.show();
+      // create payment card alert
+      const ios_alert = this.global.alertCtrl.create({
+        title: '',
+        message: 'We have open a link in your browser where you can add your card to make donations.',
+        buttons: [{
+          text: 'Okay',
+          handler: () => {
+            // create loader
+            this.global.createLoader('Please wait...');
 
-    browser.on('loadstop').subscribe(event => {
-      browser.insertCSS({ code: "body{color: #ae0433;}h4{padding: 10px;}" });
-    });
+            // set data to get user card
+            const card_data = {
+              user_id: this.userObj.user_id
+            };
 
-    browser.on('exit').subscribe(() => {
-      // create loader
-      this.global.createLoader('Please wait...');
+            // getUserById
+            this.userService.getUserCards(card_data).subscribe(data => {
+              this.user_cards = data;
 
-      // set data to get user card
-      const card_data = {
-        user_id: this.userObj.user_id
-      };
-
-      // getUserById
-      this.userService.getUserCards(card_data).subscribe(data => {
-        this.user_cards = data;
-
-        this.global.dismissLoader();
+              this.global.dismissLoader();
+            });
+          }
+        }]
       });
-    }, err => {
-      console.error(err);
-    });
+
+      // show alert after 1 second
+      setTimeout(() => {
+        ios_alert.present();  
+      }, 1000); 
+    }
+    else{
+      const browser = this.iab.create(this.global.base_url('sqpayment/?name=' + fullname + '&email=' + email + '&user_id=' + user_id + '&unique_no=' + random_no), '_blank', 'location=yes');
+
+      browser.show();
+
+      browser.on('loadstop').subscribe(event => {
+        browser.insertCSS({ code: "body{color: #ae0433;}h4{padding: 10px;}" });
+      });
+
+      browser.on('exit').subscribe(() => {
+        // create loader
+        this.global.createLoader('Please wait...');
+
+        // set data to get user card
+        const card_data = {
+          user_id: this.userObj.user_id
+        };
+
+        // getUserById
+        this.userService.getUserCards(card_data).subscribe(data => {
+          this.user_cards = data;
+
+          this.global.dismissLoader();
+        });
+      }, err => {
+        console.error(err);
+      });
+    }
   }
 
   // delete user card

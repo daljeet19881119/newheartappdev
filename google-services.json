@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "825519825337",
-    "firebase_url": "https://heartglobalapp.firebaseio.com",
-    "project_id": "heartglobalapp",
-    "storage_bucket": "heartglobalapp.appspot.com"
+    "project_number": "267255260533",
+    "firebase_url": "https://humbleheart-15da8.firebaseio.com",
+    "project_id": "humbleheart-15da8",
+    "storage_bucket": "humbleheart-15da8.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:825519825337:android:ad4980f1e8e91c29",
+        "mobilesdk_app_id": "1:267255260533:android:8ca1f22cf886ee3e",
         "android_client_info": {
-          "package_name": "org.heartcash.heartapp"
+          "package_name": "world.heartglobal.humble"
         }
       },
       "oauth_client": [
         {
-          "client_id": "825519825337-ln5ata84v2dn3f82s4lokqv397rc7s4e.apps.googleusercontent.com",
+          "client_id": "267255260533-b5cct8u95s85eaia82n2o92gc212sfvg.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAIuipttE5eS7U8ME5XPa7QwXp61Fwr9TY"
+          "current_key": "AIzaSyDlV7Hs9MCgnrUrVKlhQk0XiR4PHBz-cAU"
         }
       ],
       "services": {
