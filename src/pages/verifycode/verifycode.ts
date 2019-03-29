@@ -77,8 +77,8 @@ export class VerifycodePage {
     // call createLoader
     this.global.createLoader('Please wait...');
 
-    // check if code matched to verifyCode
-    if (code == this.verifyCode || code == 1234) {
+    // check if code matched to verifyCode (code == 1234)
+    if (code == this.verifyCode) {
       code = this.verifyCode;
 
       // verify user
