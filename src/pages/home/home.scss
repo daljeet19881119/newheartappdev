@@ -230,10 +230,32 @@ page-home {
     }
     .add-to-bighearts{
         margin-left: auto;
-        margin-right: auto;
+        margin-right: 5px;
         display: block;
         margin-bottom: 15px;
         margin-top: 10px;
         color: #ae0433;
+    }
+
+    @media (min-width: 1024px) and (max-width: 1366px) {
+        .ngo-img-div{
+            width: 70px;
+            height: 70px;
+        }
+        .ngo-name{
+            font-size: 18px;
+        }
+        .ngo-date{
+            font-size: 14px;
+        }
+        .heart-coin{
+            font-size: 16px;
+        }
+        .share-icon{
+            font-size: 20px;
+        }
+        .add-to-bighearts{
+            font-size: 18px;
+        }
     }
 }

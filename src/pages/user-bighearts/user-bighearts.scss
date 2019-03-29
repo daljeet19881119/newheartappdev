@@ -33,4 +33,11 @@ page-user-bighearts {
         border-radius: 5px;
         font-size: 16px;
     }
+
+    @media (min-width: 1024px) and (max-width: 1366px) {
+        ion-avatar img.bh-image{
+           width: 60px;
+           height: 60px;
+       }
+    }
 }

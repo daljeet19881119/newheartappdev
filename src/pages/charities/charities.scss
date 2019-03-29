@@ -33,4 +33,10 @@ page-charities {
         border-radius: 5px;
         font-size: 16px;
     }
+
+    @media (min-width: 1024px) and (max-width: 1366px) {
+        .save-btn span.button-inner{
+            font-size: 20px;
+        }
+    }
 }

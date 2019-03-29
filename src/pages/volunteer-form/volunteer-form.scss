@@ -69,4 +69,16 @@ page-volunteer-form {
     .next-arrow{
         float: right;
     }
+
+    @media (min-width: 1024px) and (max-width: 1366px) {
+        .save-btn span.button-inner{
+            font-size: 20px;
+        }
+        .upload-btn{
+            font-size: 16px;
+        }
+        .profile-col{
+            text-align: right;
+        }
+    }
 }

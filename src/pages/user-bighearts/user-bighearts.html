@@ -20,7 +20,7 @@
       <ion-item class="payment-item">
         <ion-avatar item-start style="background: #48414130;border-radius: 50%;border: 1px solid #48414130;z-index: 1;"
           (click)="viewBHProfile(bh.user_id)">
-          <img [src]="bh.bh_founder_img_url" [alt]="bh.bh_name">
+          <img [src]="bh.bh_founder_img_url" [alt]="bh.bh_name" class="bh-image">
         </ion-avatar>
         <ion-label (click)="viewBHProfile(bh.user_id)" style="z-index: 1;">{{ bh.bh_founder_name+'
           ('+bh.bh_name+')' }}</ion-label>

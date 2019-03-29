@@ -6,12 +6,12 @@ import { Network } from '@ionic-native/network';
 @Injectable()
 export class GlobalProvider {
 
-  API_URL: string = 'https://ionic.dsl.house/dev/api/heartglobal';
-  // API_URL: string = 'https://ionic.dsl.house/api/heartglobal';
+  // API_URL: string = 'https://ionic.dsl.house/dev/api/heartglobal';
+  API_URL: string = 'https://ionic.dsl.house/api/heartglobal';
   // API_URL: string = 'http://localhost/dsl.house/api/heartglobal';
-  BASE_URL: string = "https://ionic.dsl.house/dev/";
+  // BASE_URL: string = "https://ionic.dsl.house/dev/";
   // BASE_URL: string = "https://ionic.dsl.house/";
-  // BASE_URL: string = "http://localhost/dsl.house/";
+  BASE_URL: string = "http://localhost/dsl.house/";
 
   loader: any
   constructor(private device: Device, public loadingCtrl: LoadingController, public alertCtrl: AlertController, private network: Network) {

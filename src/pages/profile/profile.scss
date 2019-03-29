@@ -170,4 +170,27 @@ page-profile {
     .heart-col.col{
         padding: 0 40px 0 0;
     }
+
+    @media (min-width: 1024px) and (max-width: 1366px) {
+        .family-imgs div{
+            height: 200px;
+        }
+        .iframe-div{
+            height: 350px;
+        }
+        .youtube-img{
+            left: 40%;
+            top: 40%;
+            width: 40px;
+        }
+        .add-to-bighearts, .added-bighearts{
+            font-size: 16px;
+        }
+        .add-checkmark{
+            font-size: 25px;
+        }
+        span.read-more, span.read-less{
+            font-size: 20px;
+        }
+    }
 }

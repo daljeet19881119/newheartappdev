@@ -11,7 +11,8 @@
       <ion-list>
         <button ion-item (click)="addNewCard()" no-lines>
           <ion-icon name="add-circle" item-start class="add-new" style="margin: 0;"></ion-icon>
-          <h2 class="new-card">Add New Card</h2>
+          <h2 class="new-card" showWhen="android">Add New Card</h2>
+          <h2 class="new-card-ios" showWhen="ios">Add New Card</h2>
         </button>
       </ion-list>
     </ion-card-content>
