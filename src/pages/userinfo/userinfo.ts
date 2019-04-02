@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, ModalController, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, ModalController, Platform, ToastController } from 'ionic-angular';
 import { HomePage } from '../home/home';
 import { CharitiesPage } from '../charities/charities';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -84,7 +84,7 @@ export class UserinfoPage {
   recurring_fees: boolean = false;
   accept_terms: boolean = false;
   user_id: any;
-  constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,  private global: GlobalProvider, private userService: UserProvider, private modalCtrl: ModalController, private cardIO: CardIO, private iab: InAppBrowser, private platform: Platform) {
+  constructor(private splashScreen: SplashScreen, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,  private global: GlobalProvider, private userService: UserProvider, private modalCtrl: ModalController, private cardIO: CardIO, private iab: InAppBrowser, private platform: Platform, private toastCtrl: ToastController) {
 
 
     // get params from previous opened page
@@ -852,5 +852,50 @@ export class UserinfoPage {
       page: 'register',
       uuid: this.uuid
     });
+  }
+
+  // toast variables
+  nameToast: boolean = false;
+  policyCheckbox: boolean = false;
+  country_region: boolean = false;
+  cardToast: boolean = false;
+  donationToast: boolean = false;
+  campaignToast: boolean = false;  
+
+  // show toast
+  showToast(fieldName: string, fval: boolean, msg: string) {
+    const infoToast = this.toastCtrl.create({
+      message: msg,
+      duration: 5000,
+      position: 'top',
+      closeButtonText: 'Close',
+      showCloseButton: true
+    });
+
+    // check fieldName
+    if(fieldName == 'name' && fval == false) {
+      infoToast.present();
+      this.nameToast = true;
+    }
+    else if(fieldName == 'policy'&& fval == false) {
+      infoToast.present();
+      this.policyCheckbox = true;
+    }
+    else if(fieldName == 'country_region'&& fval == false) {
+      infoToast.present();
+      this.country_region = true;
+    }
+    else if(fieldName == 'card'&& fval == false) {
+      infoToast.present();
+      this.cardToast = true;
+    }
+    else if(fieldName == 'donation'&& fval == false) {
+      infoToast.present();
+      this.donationToast = true;
+    }
+    else if(fieldName == 'campaign'&& fval == false) {
+      infoToast.present();
+      this.campaignToast = true;
+    }
   }
 }

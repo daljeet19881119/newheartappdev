@@ -11,11 +11,11 @@
   <ion-list>
     <ion-item no-padding class="item-feilds">
       <ion-label floating>First Name*</ion-label>
-      <ion-input type="text" [(ngModel)]="firstName" (ionBlur)="setCardHolderName()"></ion-input>
+      <ion-input type="text" [(ngModel)]="firstName" (ionBlur)="setCardHolderName();showToast('name', nameToast, 'Start with filling out your first/last name');"></ion-input>
     </ion-item>
     <ion-item no-padding class="item-feilds">
       <ion-label floating>Last Name*</ion-label>
-      <ion-input type="text" [(ngModel)]="lastName" (ionBlur)="setCardHolderName()"></ion-input>
+      <ion-input type="text" [(ngModel)]="lastName" (ionBlur)="setCardHolderName();showToast('name', nameToast, 'Start with filling out your first/last name');"></ion-input>
     </ion-item>
     <ion-item no-padding class="item-feilds">
       <ion-label floating>Email*</ion-label>
@@ -42,7 +42,7 @@
           <span class="hc-val">({{ toLocaleString(donation_amount * 100) }} HC)</span>
         </ion-col>
         <ion-col text-right col-2>
-          <button ion-button small (click)="incrementDonation()" [disabled]="disablePlusBtn" color="appColor">
+          <button ion-button small (click)="incrementDonation();showToast('donation', donationToast, 'Select now the monthly amount you want to donate');" [disabled]="disablePlusBtn" color="appColor">
             <ion-icon name="add"></ion-icon>
           </button>
         </ion-col>
@@ -68,7 +68,7 @@
       </ion-row>
       <ion-row>
         <ion-col>
-          <button ion-button small (click)="decrementCause()" [disabled]="disableCauseMinusBtn" color="appColor">
+          <button ion-button small (click)="decrementCause();showToast('campaign', campaignToast, 'Now its time to select how much you will give to HeartGlobal campaigns, and how much to our associated Non-profits');" [disabled]="disableCauseMinusBtn" color="appColor">
             <ion-icon name="remove"></ion-icon>
           </button>
         </ion-col>
@@ -95,7 +95,7 @@
         <p>Please add your Payment Card Information by Pressing the Add Card Button</p>
       </ion-row>
       <ion-row>
-        <button ion-button block (click)="addPaymentMethod()" color="appColor"
+        <button ion-button block (click)="addPaymentMethod();showToast('card', cardToast, 'Now tap here to add your card details');" color="appColor"
           style="margin: 10px 0;text-transform: inherit;" *ngIf="!card_btn">Add Card*</button>
         <button ion-button block color="appColor" style="margin: 10px 0;text-transform: inherit;"
           *ngIf="card_btn">{{ 'Card **'+ card_number + ' registered' }}</button>
@@ -198,7 +198,7 @@
           <ion-item class="item-radio">
             <ion-label>Select a specific country</ion-label>
             <ion-checkbox [(ngModel)]="checkCountry" item-end
-              (ionChange)="checkPreference('country');getPreferenceCheck(checkCountry, checkRegion);"></ion-checkbox>
+              (ionChange)="checkPreference('country');getPreferenceCheck(checkCountry, checkRegion);showToast('country_region', country_region, 'If you are interested to support a specific region or country, select here');"></ion-checkbox>
           </ion-item>
         </ion-col>
       </ion-row>
@@ -207,7 +207,7 @@
           <ion-item class="item-radio">
             <ion-label>Select a region</ion-label>
             <ion-checkbox [(ngModel)]="checkRegion" item-end
-              (ionChange)="checkPreference('region');getPreferenceCheck(checkCountry, checkRegion);"></ion-checkbox>
+              (ionChange)="checkPreference('region');getPreferenceCheck(checkCountry, checkRegion);showToast('country_region', country_region, 'If you are interested to support a specific region or country, select here');"></ion-checkbox>
           </ion-item>
         </ion-col>
       </ion-row>
@@ -269,7 +269,7 @@
         <ion-col col-1 style="padding-top: 19px;">
           <ion-checkbox [(ngModel)]="recurring_fees"></ion-checkbox>
         </ion-col>
-        <ion-col col-11 (click)="recurringCheck()">
+        <ion-col col-11 (click)="recurringCheck();showToast('policy', policyCheckbox, 'Now select both check boxes to get started');">
           <p style="margin: 5px 0;">I agree to recuring monthly fees that can be changed or cancelled at any time.*</p>
         </ion-col>
       </ion-row>
@@ -279,7 +279,7 @@
         <ion-col col-1 style="padding-top: 19px;">
           <ion-checkbox [(ngModel)]="accept_terms"></ion-checkbox>
         </ion-col>
-        <ion-col col-11 (click)="termsCheck()">
+        <ion-col col-11 (click)="termsCheck();showToast('policy', policyCheckbox, 'Now select both check boxes to get started');">
           <p style="margin: 13px 0;">I Accept the Terms and Privacy.*</p>
         </ion-col>
       </ion-row>
