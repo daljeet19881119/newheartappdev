@@ -61,9 +61,9 @@ export class CauseFormPage {
   // variable to store charities
   charities: any = [];
   checkCharity: boolean = false;
-  bank_name: string;
-  account_no: any;
-  ifsc_code: any;
+  // bank_name: string;
+  // account_no: any;
+  // ifsc_code: any;
   paypal_email: any;
   us_tax_deductible: boolean = false;
   all_charities: any = [];
@@ -78,9 +78,9 @@ export class CauseFormPage {
       this.fname = val.fname;
       this.lname = val.lname;
       this.email = val.email;
-      this.bank_name = val.bank_name;
-      this.account_no = val.account_no;
-      this.ifsc_code = val.ifsc_code;
+      // this.bank_name = val.bank_name;
+      // this.account_no = val.account_no;
+      // this.ifsc_code = val.ifsc_code;
       this.paypal_email = val.paypal_email;
       this.charities = val.causeCat;
       this.checkCharity = true;
@@ -227,9 +227,9 @@ export class CauseFormPage {
           fname: this.fname,
           lname: this.lname,
           email: this.email,
-          bank_name: this.bank_name,
-          account_no: this.account_no,
-          ifsc_code: this.ifsc_code,
+          // bank_name: this.bank_name,
+          // account_no: this.account_no,
+          // ifsc_code: this.ifsc_code,
           paypal_email: this.paypal_email,
           cause_category: this.selected_charity,
           us_tax_deductible: this.us_tax_deductible,
@@ -251,7 +251,7 @@ export class CauseFormPage {
         this.userService.saveCauseFormData(data).subscribe(data => {
 
           if (data.msg == 'success') {
-            this.setDataToStorage(userid, this.fname, this.lname, this.email, this.bank_name, this.account_no, this.ifsc_code, this.paypal_email, this.charities, this.country, this.regionId, this.city, this.fewAboutYourself, this.moreAboutYourself, this.profilePic, this.multiplePicsArr, contact1, contact2, contact3, contact4, contact5);
+            this.setDataToStorage(userid, this.fname, this.lname, this.email,  this.paypal_email, this.charities, this.country, this.regionId, this.city, this.fewAboutYourself, this.moreAboutYourself, this.profilePic, this.multiplePicsArr, contact1, contact2, contact3, contact4, contact5);
           }
           if (data.msg == 'success' && data.status == 'processing') {
             this.global.createAlert('','We have already received your request and will return when it is processed. <p>Thank you.</p>');
@@ -273,15 +273,15 @@ export class CauseFormPage {
   }
 
   // setDataToStorage
-  setDataToStorage(userid: number, fname: string, lname: string, email: string, bank_name: string, account_no: any, ifsc_code: any, paypal_email: any, charities: any, country: any, region: any, city: string, fewAboutYourself: string, moreAboutYourself: string, profilePic: string, multiplePics: any, contact1: string = '', contact2: string = '', contact3: string = '', contact4: string = '', contact5: string = '') {
+  setDataToStorage(userid: number, fname: string, lname: string, email: string, paypal_email: any, charities: any, country: any, region: any, city: string, fewAboutYourself: string, moreAboutYourself: string, profilePic: string, multiplePics: any, contact1: string = '', contact2: string = '', contact3: string = '', contact4: string = '', contact5: string = '') {
     let data = {
       userid: userid,
       fname: fname,
       lname: lname,
       email: email,
-      bank_name: bank_name,
-      account_no: account_no,
-      ifsc_code: ifsc_code,
+      // bank_name: bank_name,
+      // account_no: account_no,
+      // ifsc_code: ifsc_code,
       paypal_email: paypal_email,
       causeCat: charities,
       country: country,
