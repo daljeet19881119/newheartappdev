@@ -294,6 +294,9 @@ export class ProfilePage {
 
     // store uuid
     let uuid;
+	
+	// store user_id
+	let user_id = this.navParams.get('user_id');
 
     if (this.uuid !== '') {
       uuid = this.navParams.get('uuid');
@@ -303,7 +306,8 @@ export class ProfilePage {
 
     const data = {
       uuid: uuid,
-      bh_id: bh_id
+      bh_id: bh_id,
+	  user_id: user_id
     };
 
     // save ngo_id to users list
@@ -357,6 +361,9 @@ export class ProfilePage {
 
     // store uuid
     let uuid;
+	
+	// store user_id
+	let user_id = this.navParams.get('user_id');
 
     if (this.uuid !== '') {
       uuid = this.navParams.get('uuid');
@@ -366,7 +373,8 @@ export class ProfilePage {
 
     const data = {
       uuid: uuid,
-      bh_id: bh_id
+      bh_id: bh_id,
+	  user_id: user_id
     };
 
     // request to server
@@ -380,6 +388,10 @@ export class ProfilePage {
         // store added class to btn
         this.addBigHeartsClass = 'add-to-bighearts';
         this.addBigHeartText = 'Add to my BigHearts';
+		
+		// redirect to all my bighearts page 
+		this.navCtrl.push(UserBigheartsPage);
+		
       }
     }, err => {
       // dismiss the loader

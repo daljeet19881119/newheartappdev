@@ -11,6 +11,7 @@ export class GlobalProvider {
 
   API_URL: string = 'https://ionic.dsl.house/api/heartglobal'; 
   BASE_URL: string = "https://ionic.dsl.house/";
+  USER_ID: string = "";
   
   // API_URL: string = 'http://localhost/dsl.house/api/heartglobal';
   // BASE_URL: string = "http://localhost/dsl.house/";
@@ -87,4 +88,15 @@ export class GlobalProvider {
       this.dismissLoader();
     }
   }
+  
+    // set user id
+	SetUserId(user_id: string){
+		this.USER_ID	= user_id;
+	}
+	
+	// get user id
+	GetUserId(){
+		return this.USER_ID;
+	}
+  
 }

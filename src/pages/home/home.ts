@@ -80,42 +80,83 @@ export class HomePage {
   }
 
   ionViewWillEnter() {
+	  
     // get login user data
-    this.userService.getUserByDeviceId(this.uuid).subscribe((data) => {
-      this.name = data.data.fname;
-      this.us_balance = this.toLocaleString(parseFloat(data.data.us_balance).toFixed(2));
-      this.hc_balance = this.toLocaleString(parseFloat(data.data.hc_balance).toFixed(2));
-      this.user_id = data.data.user_id;
-      this.cc_number = data.data.card_details.card_last_digit;
+		
+		// check if device id is present then get user data by device id otherwise get by user id 
+		if(this.uuid!='undefined'){
+			  this.userService.getUserByDeviceId(this.uuid).subscribe((data) => {
+			  this.name = data.data.fname;
+			  this.us_balance = this.toLocaleString(parseFloat(data.data.us_balance).toFixed(2));
+			  this.hc_balance = this.toLocaleString(parseFloat(data.data.hc_balance).toFixed(2));
+			  this.user_id = data.data.user_id;
+			  this.cc_number = data.data.card_details.card_last_digit;
 
-      // get user bighearts
-      this.homeService.getUserDashboardData(this.user_id).subscribe(res => {
+			  // get user bighearts
+			  this.homeService.getUserDashboardData(this.user_id).subscribe(res => {
 
-        if (res.msg == 'success') {
-          // store requested data in the latestDonations
-          this.latestDonations = res.data;
+				if (res.msg == 'success') {
+				  // store requested data in the latestDonations
+				  this.latestDonations = res.data;
 
-          let count = parseInt(res.count);
-          let paging = Math.ceil(count / this.limit);
+				  let count = parseInt(res.count);
+				  let paging = Math.ceil(count / this.limit);
 
-          // hide button if count is <= 5
-          if (paging <= 1) {
-            this.showDonationBtn = false;
-          }
-          else {
-            this.showDonationBtn = true;
-          }
+				  // hide button if count is <= 5
+				  if (paging <= 1) {
+					this.showDonationBtn = false;
+				  }
+				  else {
+					this.showDonationBtn = true;
+				  }
 
-          // store user charities
-          this.charities = res.user_charities;
+				  // store user charities
+				  this.charities = res.user_charities;
 
-          // get recommend bigheart
-          this.recommendedBigHearts = res.recommended_bh;
-        }
-      }, err => {
-        console.log(err);
-      });
-    });
+				  // get recommend bigheart
+				  this.recommendedBigHearts = res.recommended_bh;
+				}
+			  }, err => {
+				console.log(err);
+			  });
+			});
+			}else{
+				  this.userService.getLoggedUserByUserId(this.global.GetUserId()).subscribe((data) => {
+				  this.name = data.data.fname;
+				  this.us_balance = this.toLocaleString(parseFloat(data.data.us_balance).toFixed(2));
+				  this.hc_balance = this.toLocaleString(parseFloat(data.data.hc_balance).toFixed(2));
+				  this.user_id = data.data.user_id;
+				  this.cc_number = data.data.card_details.card_last_digit;
+
+				  // get user bighearts
+				  this.homeService.getUserDashboardData(this.user_id).subscribe(res => {
+
+					if (res.msg == 'success') {
+					  // store requested data in the latestDonations
+					  this.latestDonations = res.data;
+
+					  let count = parseInt(res.count);
+					  let paging = Math.ceil(count / this.limit);
+
+					  // hide button if count is <= 5
+					  if (paging <= 1) {
+						this.showDonationBtn = false;
+					  }
+					  else {
+						this.showDonationBtn = true;
+					  }
+
+					  // store user charities
+					  this.charities = res.user_charities;
+
+					  // get recommend bigheart
+					  this.recommendedBigHearts = res.recommended_bh;
+					}
+				  }, err => {
+					console.log(err);
+				  });
+				});
+			}
   }
 
   // showTabs

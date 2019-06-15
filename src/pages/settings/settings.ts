@@ -195,86 +195,171 @@ export class SettingsPage {
 
   // getUserData
   getUserData() {
+	  
     // call createLoader
     this.global.createLoader("Loading...");
+	
+	// check if device id is present then get user data by device id otherwise get by user id 
+	if(this.uuid!='undefined'){
+		
+		this.userService.getUserByDeviceId(this.uuid).subscribe(data => {
+			  // check if msg success
+			  if (data.msg == 'success') {
+				this.userObj = data.data;
+				this.fname = data.data.fname;
+				this.lname = data.data.lname;
+				this.mobileno = data.data.mobile_no;
+				this.old_mobno = data.data.mobile_no;
+				this.old_email = data.data.email;
+				this.email = data.data.email;
+				this.verification_type = data.data.verification_type;
+				this.cause_percentage = parseInt(data.data.cause_percentage);
+				this.preference_type = data.data.preference_type;
 
-    this.userService.getUserByDeviceId(this.uuid).subscribe(data => {
-      // check if msg success
-      if (data.msg == 'success') {
-        this.userObj = data.data;
-        this.fname = data.data.fname;
-        this.lname = data.data.lname;
-        this.mobileno = data.data.mobile_no;
-        this.old_mobno = data.data.mobile_no;
-        this.old_email = data.data.email;
-        this.email = data.data.email;
-        this.verification_type = data.data.verification_type;
-        this.cause_percentage = parseInt(data.data.cause_percentage);
-        this.preference_type = data.data.preference_type;
+				// check cuase gauge meter
+				if(this.cause_percentage <= 5) {
+				  this.disableCauseMinusBtn = true;
+				  this.disableCausePlusBtn = false;
+				}
+				if(this.cause_percentage > 5 && this.cause_percentage < 85){
+				  this.disableCausePlusBtn = false;
+				  this.disableCauseMinusBtn = false;
+				}
+				if(this.cause_percentage >= 85) {
+				  this.disableCausePlusBtn = true;
+				  this.disableCauseMinusBtn = false;
+				}
+				
+				if(this.preference_type == 'country') {
+				  this.country = data.data.country;
+				}
+				else if(this.preference_type == 'region') {
+				  this.region = data.data.region;
+				}
+				else if(this.preference_type == 'both') {
+				  this.country = data.data.country;
+				  this.region = data.data.region;
+				}
+				
+				this.userid = data.data.user_id;
+				this.profile_pic_src = data.data.profile_pic_src;
+				this.dial_code = data.data.country_dial_code;
+				this.old_dial_code = data.data.country_dial_code;
+				this.donation_amount = parseInt(data.data.us_donation_amount);
+				
+				// check donation gauge meter
+				if (this.donation_amount <= 25) {
+				  this.disableMinusBtn = true;
+				  this.disablePlusBtn = false;
+				}
+				if(this.donation_amount > 25 && this.donation_amount < 950) {
+				  this.disableMinusBtn = false;
+				  this.disablePlusBtn = false;
+				}
+				if (this.donation_amount >= 950) {
+				  this.disableMinusBtn = false;
+				  this.disablePlusBtn = true;
+				}
+				
+				let selected_charity_id: any = [];
+				data.selected_charities.forEach(element => {
+				  // string to array conversion
+				  this.charities.push(element.name.trim());
+				  selected_charity_id.push(element.id);
+				});
+				
+				// call getCharities
+				this.getCharities(selected_charity_id);
+				
+				this.checkCharity = true;
+			  }
 
-        // check cuase gauge meter
-        if(this.cause_percentage <= 5) {
-          this.disableCauseMinusBtn = true;
-          this.disableCausePlusBtn = false;
-        }
-        if(this.cause_percentage > 5 && this.cause_percentage < 85){
-          this.disableCausePlusBtn = false;
-          this.disableCauseMinusBtn = false;
-        }
-        if(this.cause_percentage >= 85) {
-          this.disableCausePlusBtn = true;
-          this.disableCauseMinusBtn = false;
-        }
-        
-        if(this.preference_type == 'country') {
-          this.country = data.data.country;
-        }
-        else if(this.preference_type == 'region') {
-          this.region = data.data.region;
-        }
-        else if(this.preference_type == 'both') {
-          this.country = data.data.country;
-          this.region = data.data.region;
-        }
-        
-        this.userid = data.data.user_id;
-        this.profile_pic_src = data.data.profile_pic_src;
-        this.dial_code = data.data.country_dial_code;
-        this.old_dial_code = data.data.country_dial_code;
-        this.donation_amount = parseInt(data.data.us_donation_amount);
-        
-        // check donation gauge meter
-        if (this.donation_amount <= 25) {
-          this.disableMinusBtn = true;
-          this.disablePlusBtn = false;
-        }
-        if(this.donation_amount > 25 && this.donation_amount < 950) {
-          this.disableMinusBtn = false;
-          this.disablePlusBtn = false;
-        }
-        if (this.donation_amount >= 950) {
-          this.disableMinusBtn = false;
-          this.disablePlusBtn = true;
-        }
-        
-        let selected_charity_id: any = [];
-        data.selected_charities.forEach(element => {
-          // string to array conversion
-          this.charities.push(element.name.trim());
-          selected_charity_id.push(element.id);
-        });
-        
-        // call getCharities
-        this.getCharities(selected_charity_id);
-        
-        this.checkCharity = true;
-      }
+			  this.global.dismissLoader();
+			}, err => {
+			  this.global.dismissLoader();
+			  console.log(err);
+			});
+		}else{
+			  this.userService.getLoggedUserByUserId(this.global.GetUserId()).subscribe((data) => {
+			  // check if msg success
+			  if (data.msg == 'success') {
+				this.userObj = data.data;
+				this.fname = data.data.fname;
+				this.lname = data.data.lname;
+				this.mobileno = data.data.mobile_no;
+				this.old_mobno = data.data.mobile_no;
+				this.old_email = data.data.email;
+				this.email = data.data.email;
+				this.verification_type = data.data.verification_type;
+				this.cause_percentage = parseInt(data.data.cause_percentage);
+				this.preference_type = data.data.preference_type;
 
-      this.global.dismissLoader();
-    }, err => {
-      this.global.dismissLoader();
-      console.log(err);
-    });
+				// check cuase gauge meter
+				if(this.cause_percentage <= 5) {
+				  this.disableCauseMinusBtn = true;
+				  this.disableCausePlusBtn = false;
+				}
+				if(this.cause_percentage > 5 && this.cause_percentage < 85){
+				  this.disableCausePlusBtn = false;
+				  this.disableCauseMinusBtn = false;
+				}
+				if(this.cause_percentage >= 85) {
+				  this.disableCausePlusBtn = true;
+				  this.disableCauseMinusBtn = false;
+				}
+				
+				if(this.preference_type == 'country') {
+				  this.country = data.data.country;
+				}
+				else if(this.preference_type == 'region') {
+				  this.region = data.data.region;
+				}
+				else if(this.preference_type == 'both') {
+				  this.country = data.data.country;
+				  this.region = data.data.region;
+				}
+				
+				this.userid = data.data.user_id;
+				this.profile_pic_src = data.data.profile_pic_src;
+				this.dial_code = data.data.country_dial_code;
+				this.old_dial_code = data.data.country_dial_code;
+				this.donation_amount = parseInt(data.data.us_donation_amount);
+				
+				// check donation gauge meter
+				if (this.donation_amount <= 25) {
+				  this.disableMinusBtn = true;
+				  this.disablePlusBtn = false;
+				}
+				if(this.donation_amount > 25 && this.donation_amount < 950) {
+				  this.disableMinusBtn = false;
+				  this.disablePlusBtn = false;
+				}
+				if (this.donation_amount >= 950) {
+				  this.disableMinusBtn = false;
+				  this.disablePlusBtn = true;
+				}
+				
+				let selected_charity_id: any = [];
+				data.selected_charities.forEach(element => {
+				  // string to array conversion
+				  this.charities.push(element.name.trim());
+				  selected_charity_id.push(element.id);
+				});
+				
+				// call getCharities
+				this.getCharities(selected_charity_id);
+				
+				this.checkCharity = true;
+			  }
+
+			  this.global.dismissLoader();
+			}, err => {
+			  this.global.dismissLoader();
+			  console.log(err);
+			});
+		} // end of else part get user by user id
+
+    
   }
 
   // updateUserData

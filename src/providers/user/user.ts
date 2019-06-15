@@ -77,6 +77,14 @@ export class UserProvider {
       return this._http.get(this.global.apiUrl('/get_user/' + uuid)).map(res => res.json());
     }
   }
+  
+  // getLoggedUserDataById
+  getLoggedUserByUserId(user_id: any) {
+    // checknetwork
+    if(this.global.checkNetwork() == true) {
+      return this._http.get(this.global.apiUrl('/get_logged_user/' + user_id)).map(res => res.json());
+    }
+  }
 
   // get_user_by_id
   getUserById(user_id: any) {

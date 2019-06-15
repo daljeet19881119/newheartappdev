@@ -133,15 +133,27 @@ export class VolunteerFormPage {
       this.uuid = 'undefined';
     }
 
-    // request to userProvide
-    this.userService.getUserByDeviceId(this.uuid).subscribe(data => {
-      this.userid = data.data.id;
-      this.email = data.data.email;
-      this.fname = data.data.fname;
-      this.lname = data.data.lname;
-    }, err => {
-      console.log(err);
-    });
+    // request to userProvide to get user data 
+	if(this.uuid!='undefined'){
+		this.userService.getUserByDeviceId(this.uuid).subscribe(data => {
+		this.userid = data.data.id;
+		this.email = data.data.email;
+		this.fname = data.data.fname;
+		this.lname = data.data.lname;
+		}, err => {
+		  console.log(err);
+		});
+	}else{
+		this.userService.getLoggedUserByUserId(this.global.GetUserId()).subscribe((data) => {
+		this.userid = data.data.id;
+		this.email = data.data.email;
+		this.fname = data.data.fname;
+		this.lname = data.data.lname;
+		}, err => {
+		  console.log(err);
+		});
+	}
+   
   }
 
   // validateEmail

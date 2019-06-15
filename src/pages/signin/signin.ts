@@ -57,9 +57,13 @@ export class SigninPage {
           }        
           // check if user is bigheart or not
           if (response.user_type == 'bh_user') {
+			// store user id in globall 
+			this.global.SetUserId(response.user_id);  
             this.navCtrl.setRoot(BhHomePage);
           }
           if (response.user_type == 'user') {
+			// store user id in globall 
+			this.global.SetUserId(response.user_id); 
             this.navCtrl.setRoot(HomePage);
           }
           this.global.dismissLoader();

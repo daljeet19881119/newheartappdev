@@ -152,30 +152,59 @@ export class CauseFormPage {
       this.uuid = 'undefined';
     }
 
-    // request to userProvide
-    this.userService.getUserByDeviceId(this.uuid).subscribe(data => {
-      this.userid = data.data.user_id;
-      this.prefType = data.data.preference_type;
-      this.email = data.data.email;
-      this.fname = data.data.fname;
-      this.lname = data.data.lname;
-      
-      // put value if it is country
-      if (this.prefType == 'country') {
-        this.country = data.data.country;
+    // request to userProvider to get user data 
+	if(this.uuid!='undefined'){
+		  this.userService.getUserByDeviceId(this.uuid).subscribe(data => {
+		  this.userid = data.data.user_id;
+		  this.prefType = data.data.preference_type;
+		  this.email = data.data.email;
+		  this.fname = data.data.fname;
+		  this.lname = data.data.lname;
+		  
+		  // put value if it is country
+		  if (this.prefType == 'country') {
+			this.country = data.data.country;
 
-        this.getCountries();
-      }
+			this.getCountries();
+		  }
 
-      // put value if it is region
-      if (this.prefType == 'region' || this.prefType == "") {
-        this.regionId = data.data.region;
-        
-        this.getRegions();        
-      }
-    }, err => {
-      console.log(err);
-    });
+		  // put value if it is region
+		  if (this.prefType == 'region' || this.prefType == "") {
+			this.regionId = data.data.region;
+			
+			this.getRegions();        
+		  }
+		}, err => {
+		  console.log(err);
+		});
+	}else{
+		  this.userService.getLoggedUserByUserId(this.global.GetUserId()).subscribe((data) => {
+		  this.userid = data.data.user_id;
+		  this.prefType = data.data.preference_type;
+		  this.email = data.data.email;
+		  this.fname = data.data.fname;
+		  this.lname = data.data.lname;
+		  
+		  // put value if it is country
+		  if (this.prefType == 'country') {
+			this.country = data.data.country;
+
+			this.getCountries();
+		  }
+
+		  // put value if it is region
+		  if (this.prefType == 'region' || this.prefType == "") {
+			this.regionId = data.data.region;
+			
+			this.getRegions();        
+		  }
+		}, err => {
+		  console.log(err);
+		});
+		
+	} // end of else part -- get user data by user id 
+	
+    
   }
 
   // saveData
